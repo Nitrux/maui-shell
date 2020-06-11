@@ -1,0 +1,32 @@
+{
+	"BUILD_DIR" : "/home/camilo/test/grefsen/build/imports/caskplugin_autogen",
+	"CMAKE_BINARY_DIR" : "/home/camilo/test/grefsen/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/camilo/test/grefsen/build/imports",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/camilo/test/grefsen/imports",
+	"CMAKE_SOURCE_DIR" : "/home/camilo/test/grefsen",
+	"INCLUDE_DIR" : "/home/camilo/test/grefsen/build/imports/caskplugin_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/camilo/test/grefsen/imports/Cask/calamares_wallpaper.jpg",
+		"/home/camilo/test/grefsen/imports/Cask/calamares_wallpaper.png",
+		"/home/camilo/test/grefsen/imports/Cask/qml/Cask.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/panels/statusbar/StatusBar.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/panels/tasksbar/TaskBar.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/templates/PanelCard.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/templates/PanelItem.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/templates/PopupSection.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/templates/PanelSection.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/templates/Panel.qml",
+		"/home/camilo/test/grefsen/imports/Cask/qml/templates/PanelPopup.qml"
+	],
+	"LOCK_FILE" : "/home/camilo/test/grefsen/build/imports/CMakeFiles/caskplugin_autogen.dir/AutoRcc_qml_6YAZEQJICW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "qml" ],
+	"OUTPUT_CHECKSUM" : "6YAZEQJICW",
+	"OUTPUT_NAME" : "qrc_qml.cpp",
+	"RCC_EXECUTABLE" : "/usr/bin/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/camilo/test/grefsen/build/imports/CMakeFiles/caskplugin_autogen.dir/AutoRcc_qml_6YAZEQJICW_Used.txt",
+	"SOURCE" : "/home/camilo/test/grefsen/imports/Cask/qml.qrc",
+	"VERBOSITY" : 0
+}

@@ -74,11 +74,11 @@ CMAKE_BINARY_DIR = /home/camilo/test/grefsen/build
 include CMakeFiles/fetch-translations.dir/progress.make
 
 CMakeFiles/fetch-translations: releaseme
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/camilo/test/grefsen/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Downloading translations for grefsen branch trunk..."
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/camilo/test/grefsen/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Downloading translations for maui-shell branch trunk..."
 	git -C /home/camilo/test/grefsen/build/releaseme pull
 	cmake -E remove_directory /home/camilo/test/grefsen/build/po
 	cmake -E remove_directory /home/camilo/test/grefsen/build/poqm
-	ruby /home/camilo/test/grefsen/build/releaseme/fetchpo.rb --origin trunk --project grefsen --output-dir /home/camilo/test/grefsen/build/po --output-poqm-dir /home/camilo/test/grefsen/build/poqm /home/camilo/test/grefsen
+	ruby /home/camilo/test/grefsen/build/releaseme/fetchpo.rb --origin trunk --project maui-shell --output-dir /home/camilo/test/grefsen/build/po --output-poqm-dir /home/camilo/test/grefsen/build/poqm /home/camilo/test/grefsen
 
 releaseme:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/camilo/test/grefsen/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Fetching releaseme scripts to download translations..."

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/Keyboard.qml</file>
+        <file>qml/Screen.qml</file>
+        <file>qml/Chrome.qml</file>
+    </qresource>
+</RCC>

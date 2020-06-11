@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/camilo/test/grefsen/imports/Cask/models/appsmodel.cpp" "/home/camilo/test/grefsen/build/imports/CMakeFiles/caskplugin.dir/Cask/models/appsmodel.cpp.o"
   "/home/camilo/test/grefsen/imports/Cask/plugin.cpp" "/home/camilo/test/grefsen/build/imports/CMakeFiles/caskplugin.dir/Cask/plugin.cpp.o"
+  "/home/camilo/test/grefsen/build/imports/caskplugin_autogen/6YAZEQJICW/qrc_qml.cpp" "/home/camilo/test/grefsen/build/imports/CMakeFiles/caskplugin.dir/caskplugin_autogen/6YAZEQJICW/qrc_qml.cpp.o"
   "/home/camilo/test/grefsen/build/imports/caskplugin_autogen/mocs_compilation.cpp" "/home/camilo/test/grefsen/build/imports/CMakeFiles/caskplugin.dir/caskplugin_autogen/mocs_compilation.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

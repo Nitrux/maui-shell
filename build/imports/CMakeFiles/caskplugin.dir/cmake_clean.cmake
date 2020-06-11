@@ -4,7 +4,9 @@ file(REMOVE_RECURSE
   "caskplugin_autogen"
   "CMakeFiles/caskplugin.dir/Cask/models/appsmodel.cpp.o"
   "CMakeFiles/caskplugin.dir/Cask/plugin.cpp.o"
+  "CMakeFiles/caskplugin.dir/caskplugin_autogen/6YAZEQJICW/qrc_qml.cpp.o"
   "CMakeFiles/caskplugin.dir/caskplugin_autogen/mocs_compilation.cpp.o"
+  "caskplugin_autogen/6YAZEQJICW/qrc_qml.cpp"
   "libcaskplugin.pdb"
   "libcaskplugin.so"
 )

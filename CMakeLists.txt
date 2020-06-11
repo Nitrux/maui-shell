@@ -32,8 +32,7 @@ if (ANDROID)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS AndroidExtras)
 endif()
 
-add_subdirectory(compositor)
-add_subdirectory(imports)
+add_subdirectory(src)
 
 #install(FILES org.kde.pix.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 

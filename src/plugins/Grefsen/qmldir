@@ -1,0 +1,16 @@
+module Grefsen
+plugin grefsenplugin
+classname GrefsenPlugin
+typeinfo plugins.qmltypes
+ConnmanPopover 1.0 ConnmanPopover.qml
+LauncherIcon 1.0 LauncherIcon.qml
+LauncherMenu 1.0 LauncherMenu.qml
+LauncherMenuIcon 1.0 LauncherMenuIcon.qml
+LeftSlidePanel 1.0 LeftSlidePanel.qml
+PanelClock 1.0 PanelClock.qml
+Popover 1.0 Popover.qml
+PopoverTrayIcon 1.0 PopoverTrayIcon.qml
+PopoverPanelItem 1.0 PopoverPanelItem.qml
+QuitButton 1.0 QuitButton.qml
+RightSlidePanel 1.0 RightSlidePanel.qml
+TuioTouchPanel 1.0 TuioTouchPanel.qml

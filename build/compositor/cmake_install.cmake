@@ -47,6 +47,10 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xcaskx" OR NOT CMAKE_INSTALL_COMPONE
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/camilo/test/grefsen/build/bin/cask")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cask" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cask")
+    file(RPATH_CHANGE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cask"
+         OLD_RPATH "/home/camilo/test/grefsen/build/imports:"
+         NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cask")
     endif()

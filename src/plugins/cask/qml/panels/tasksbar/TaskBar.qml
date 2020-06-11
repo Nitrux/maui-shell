@@ -1,0 +1,192 @@
+import QtQuick 2.12
+import QtQuick.Window 2.12
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.5
+import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.2 as Maui
+import org.maui.cask 1.0 as Cask
+import com.theqtcompany.wlprocesslauncher 1.0
+
+Cask.PanelSection
+{
+    id: control
+    Layout.fillWidth: true
+    //    backgroundColor: "transparent"
+    spacing: Maui.Style.space.medium
+
+    Cask.PanelItem
+    {
+        Layout.fillWidth: false
+        implicitWidth: height
+        Layout.fillHeight: true
+        icon.name: "view-list-icons"
+        visible: !isMobile
+        onClicked:
+        {
+            control.open()
+            _searchBar.forceActiveFocus()
+        }
+
+        card: Cask.PanelCard
+        {
+            width: parent.width
+            height: 500
+            padding: 0
+
+            Maui.Page
+            {
+                anchors.fill: parent
+                anchors.margins: 1
+                headBar.visible: true
+                flickable: _launcherGrid.flickable
+                headBar.middleContent: Maui.TextField
+                {
+                    id: _searchBar
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Search for apps and files...")
+                    onAccepted: _launcherGrid.model.filter = text
+                    onCleared: _launcherGrid.model.filter = ""
+                }
+
+                ProcessLauncher {
+                    id: launcher
+                }
+
+                background: Rectangle
+                {
+                    color: Kirigami.Theme.backgroundColor
+                    opacity: 0.7
+                    radius: Maui.Style.radiusV
+                }
+
+                headBar.leftContent: Maui.ToolActions
+                {
+                    autoExclusive: true
+                    expanded: isWide
+                    currentIndex : control.viewType === Maui.AltBrowser.ViewType.List ? 0 : 1
+                    enabled: list.count > 0
+                    display: ToolButton.TextBesideIcon
+                    Action
+                    {
+                        text: i18n("List")
+                        icon.name: "view-list-details"
+                        onTriggered: _launcherGrid.viewType = Maui.AltBrowser.ViewType.List
+                    }
+
+                    Action
+                    {
+                        text: i18n("Grid")
+                        icon.name: "view-list-icons"
+                        onTriggered: _launcherGrid.viewType= Maui.AltBrowser.ViewType.Grid
+                    }
+                }
+
+                Maui.AltBrowser
+                {
+                    id: _launcherGrid
+                    anchors.fill: parent
+
+                    model: Maui.BaseModel
+                    {
+                        filter: _searchBar.text
+                        sortOrder: Qt.DescendingOrder
+                        recursiveFilteringEnabled: true
+                        sortCaseSensitivity: Qt.CaseInsensitive
+                        filterCaseSensitivity: Qt.CaseInsensitive
+                        list: Cask.AppsModel
+                        {
+
+                        }
+                    }
+                    viewType: Maui.AltBrowser.ViewType.Grid
+                    gridView.itemSize: 100
+                    gridView.margins: Maui.Style.space.medium
+
+                    gridDelegate: Maui.ItemDelegate
+                    {
+                        width: _launcherGrid.gridView.cellWidth
+                        height: _launcherGrid.gridView.cellHeight
+
+                        Maui.GridItemTemplate
+                        {
+                            height: _launcherGrid.gridView.itemSize
+                            width: height
+                            anchors.centerIn: parent
+                            iconSource:  model.icon
+                            iconSizeHint: 48
+                            label1.text: model.label
+                        }
+
+                        onClicked:
+                        {
+                            console.log(model.executable)
+//                                                        launcher.launch(model.executable)
+                            Maui.KDE.launchApp(model.path)
+                            control.close()
+                        }
+                    }
+
+                    listDelegate: Maui.ItemDelegate
+                    {
+                        width: parent.width
+                        height: 48
+                        leftPadding: Maui.Style.space.small
+                        rightPadding: Maui.Style.space.small
+                        Maui.ListItemTemplate
+                        {
+                            anchors.fill: parent
+                            iconSource:  model.icon
+                            iconSizeHint: 32
+                            label1.text: model.label
+                            label2.text: model.comment
+                        }
+
+                        onClicked:
+                        {
+                            console.log(model.executable)
+                            //                            launcher.launch(model.executable)
+                            Maui.KDE.launchApp(model.path)
+                            control.close()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Item
+    {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        RowLayout
+        {
+            width: Math.min(parent.width, implicitWidth)
+            height: parent.height
+
+            Repeater
+            {
+                model: ["index", "vvave", "nota", "buho", "pix"]
+
+                Maui.ItemDelegate
+                {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: implicitWidth
+                    Layout.fillWidth: false
+                    implicitWidth: height
+
+                    Kirigami.Icon
+                    {
+                        source: modelData
+                        height: isMobile ? 32 :22
+                        width: height
+                        anchors.centerIn: parent
+                    }
+                }
+
+
+            }
+        }
+    }
+
+}

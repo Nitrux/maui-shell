@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libplugins.a  CMakeFiles/plugins.dir/plugins_autogen/mocs_compilation.cpp.o CMakeFiles/plugins.dir/processlauncher.cpp.o CMakeFiles/plugins.dir/stackableitem.cpp.o CMakeFiles/plugins.dir/enviroment.cpp.o
+/usr/bin/ranlib ../../lib/libplugins.a
