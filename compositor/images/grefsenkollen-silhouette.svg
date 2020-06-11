@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   width="667.5"
+   height="667"
+   viewBox="0 0 667.5 667"
+   sodipodi:docname="grefsenkollen.svg">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="0.22760699"
+     inkscape:cx="446.32418"
+     inkscape:cy="572.21573"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <path
+     id="rect4164"
+     style="opacity:1;fill:#36674a;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="m 655.93234,659.17657 -646.0468791,0 0.016657,-494.07091 C 37.208476,154.76312 67.584446,141.70671 93.949317,125.0275 122.26611,107.11345 128.92312,106.54847 175.01536,65.395162 221.1076,24.241852 276.7064,1.3963021 335.65909,5.6635421 c 40.71465,-0.89617 81.23078,2.52516 121.80775,7.2101099 53.19586,6.1419 129.57688,69.32623 198.3338,92.864398 z"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccsscscc" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:316.79693604px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="60.011734"
+     y="605.20453"
+     id="text4168"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan4170"
+       x="60.011734"
+       y="605.20453"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:712.79309082px;font-family:Limelight;-inkscape-font-specification:Limelight">G</tspan></text>
+  <circle
+     style="opacity:1;fill:#36674a;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="path4172"
+     cx="196.06165"
+     cy="251.26146"
+     r="21.418499" />
+</svg>

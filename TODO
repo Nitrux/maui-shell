@@ -1,0 +1,43 @@
+eglfs: touch doesn't work
+raise/lower
+way to get in/out of fullscreen mode
+window decoration theme rather than server-side decorations
+    because access to the QWindow is easier than dealing with limitations of Wayland protocol for window management
+alt-tab
+virtual desktops
+window flinging onto other display
+better hover handling
+other 3-finger window gestures?
+ctrl-alt-f key to get back to other consoles (chvt)
+map caps lock to control (QTBUG-53183)
+touch window drag/resize
+long-press menu
+dbus menubar & tray
+xwayland: root window transparent, or under the grefsen desktop background? or rootless?
+probably hard: decorate X windows (like Weston does)
+device hotplugging?
+show single-ended-arrow cursor over the resize edge if the window can only be enlarged, not shrunken (idea from MS Teams on macOS)
+
+to fix
+------
+redundant cursor problem:
+    - QT_QPA_EGLFS_HIDECURSOR env var works, but
+    - WaylandCursorItem shows only the entered window's cursor, and doesn't change on leave
+    - cursors set on items within the compositor are only shown via the EGLFS cursor, not WaylandCursorItem
+connman configuration - can't always turn technologies on and off
+the crash when killing applications via the titlebar close button
+click outside popups to close
+can't run grefsen inside grefsen (or is it impossible?)
+
+done
+----
+basic sidebar with a basic launcher for konsole
+some custom window decorations
+launcher menu based on desktop files
+launchers for more apps: qtcreator and a browser at least
+-c for config
+clock and calendar
+xdg_shell protocol (weston and gtk apps don't run without it)
+3-finger pinch to resize and move windows
+alt-drag, meta-drag
+

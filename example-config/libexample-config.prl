@@ -1,0 +1,7 @@
+QMAKE_PRL_BUILD_DIR = /home/camilo/test/grefsen/example-config
+QMAKE_PRO_INPUT = example-config.pro
+QMAKE_PRL_TARGET = example-config
+QMAKE_PRL_CONFIG = lex yacc depend_includepath testcase_targets import_plugins import_qpa_plugin prepare_docs qt_docs_targets qt_build_extra file_copies qmake_use warn_on release link_prl incremental shared shared release linux unix posix gcc sse2 aesni sse3 ssse3 sse4_1 sse4_2 avx avx2 avx512f avx512bw avx512cd avx512dq avx512er avx512ifma avx512pf avx512vbmi avx512vl compile_examples enable_new_dtags f16c largefile precompile_header rdrnd rdseed shani x86SimdAlways prefix_build force_independent utf8_source create_prl link_prl no_private_qt_headers_warning QTDIR_build qt_example_installs exceptions_off testcase_exceptions explicitlib
+QMAKE_PRL_VERSION = 1.0.0
+QMAKE_PRL_LIBS =
+QMAKE_PRL_LIBS_FOR_CMAKE = ;

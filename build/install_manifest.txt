@@ -1,0 +1,13 @@
+/usr/bin/cask
+/usr/lib/qt/qml/org/maui/cask/libcaskplugin.so
+/usr/lib/qt/qml/org/maui/cask/templates/PanelPopup.qml
+/usr/lib/qt/qml/org/maui/cask/templates/PopupSection.qml
+/usr/lib/qt/qml/org/maui/cask/templates/PanelSection.qml
+/usr/lib/qt/qml/org/maui/cask/templates/Panel.qml
+/usr/lib/qt/qml/org/maui/cask/templates/PanelCard.qml
+/usr/lib/qt/qml/org/maui/cask/templates/PanelItem.qml
+/usr/lib/qt/qml/org/maui/cask/Cask.qml
+/usr/lib/qt/qml/org/maui/cask/panels/statusbar/StatusBar.qml
+/usr/lib/qt/qml/org/maui/cask/panels/tasksbar/TaskBar.qml
+/usr/lib/qt/qml/org/maui/cask/qmldir
+/usr/lib/qt/qml/org/maui/cask/qmldir

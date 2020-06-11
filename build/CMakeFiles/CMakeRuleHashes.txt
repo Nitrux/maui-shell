@@ -1,0 +1,7 @@
+# Hashes of file build rules.
+052a0edc249be0b2b5cd7abf4977021a CMakeFiles/fetch-translations
+ca734ff57e4f9738a35d56b866a6f690 CMakeFiles/uninstall
+e28a13db3c2f76fd9aa0bf53ce0553e8 compositor/CMakeFiles/cask_autogen
+ef497aba2026314d7e1ebd7591cc32bf compositor/cask_autogen/EWIEGA46WW/qrc_grefsen.cpp
+f16d6df887722f0d97ff9131acbed514 imports/CMakeFiles/caskplugin_autogen
+c60b4ece402867667408b3a1ea823e4d releaseme
