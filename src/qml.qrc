@@ -4,5 +4,9 @@
         <file>qml/Keyboard.qml</file>
         <file>qml/Screen.qml</file>
         <file>qml/Chrome.qml</file>
+        <file>qml/shell/Cask.qml</file>
+        <file>qml/shell/statusbar/StatusBar.qml</file>
+        <file>qml/shell/tasksbar/TaskBar.qml</file>
+        <file>qml/shell/AppsOverview.qml</file>
     </qresource>
 </RCC>

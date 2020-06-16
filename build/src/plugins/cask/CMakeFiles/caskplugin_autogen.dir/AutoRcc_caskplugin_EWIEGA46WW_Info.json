@@ -7,9 +7,6 @@
 	"INCLUDE_DIR" : "/home/camilo/test/grefsen/build/src/plugins/cask/caskplugin_autogen/include",
 	"INPUTS" : 
 	[
-		"/home/camilo/test/grefsen/src/plugins/cask/qml/Cask.qml",
-		"/home/camilo/test/grefsen/src/plugins/cask/qml/panels/statusbar/StatusBar.qml",
-		"/home/camilo/test/grefsen/src/plugins/cask/qml/panels/tasksbar/TaskBar.qml",
 		"/home/camilo/test/grefsen/src/plugins/cask/qml/templates/PanelCard.qml",
 		"/home/camilo/test/grefsen/src/plugins/cask/qml/templates/PanelItem.qml",
 		"/home/camilo/test/grefsen/src/plugins/cask/qml/templates/PanelSection.qml",

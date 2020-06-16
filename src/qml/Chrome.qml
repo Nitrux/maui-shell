@@ -21,11 +21,14 @@ import QtQuick.Window 2.15
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
 import com.theqtcompany.wlcompositor 1.0
+import org.kde.mauikit 1.2 as Maui
 
-StackableItem {
+StackableItem
+{
     id: rootChrome
+
     property alias shellSurface: surfaceItem.shellSurface
-    property var topLevel
+    property var topLevel : shellSurface.toplevel
     property alias moveItem: surfaceItem.moveItem
     property bool decorationVisible: false
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
@@ -42,7 +45,6 @@ StackableItem {
     height: surfaceItem.height
     width: surfaceItem.width
     visible: surfaceItem.valid
-
 
     Rectangle {
         id: decoration
@@ -125,17 +127,7 @@ StackableItem {
     }
 
 
-    DropShadow
-    {
-        transparentBorder: true
-        anchors.fill: decoration
-        horizontalOffset: 0
-        verticalOffset: 0
-        radius: 8.0
-        samples: 17
-        color: "red"
-        source: decoration
-    }
+
 
     SequentialAnimation {
         id: destroyAnimationImpl
@@ -144,7 +136,7 @@ StackableItem {
             NumberAnimation { target: scaleTransform; property: "xScale"; to: 0.4; duration: 150 }
         }
         NumberAnimation { target: scaleTransform; property: "xScale"; to: 0; duration: 150 }
-        ScriptAction { script: { rootChrome.destroy(); } }
+        ScriptAction { script: { _listSurfaces.remove(index) } }
     }
 
     ParallelAnimation {
@@ -173,7 +165,19 @@ StackableItem {
         }
     ]
 
-    ShellSurfaceItem {
+    FastBlur
+    {
+        id: fastBlur
+        anchors.fill: parent
+        source: _cask
+        radius: 100
+        transparentBorder: false
+        cached: true
+    }
+
+
+    ShellSurfaceItem
+    {
         id: surfaceItem
         property bool valid: false
         property bool isPopup: false

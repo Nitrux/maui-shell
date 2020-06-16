@@ -17,18 +17,22 @@ Item
     property alias popHeight : popup.height
 
     property alias backgroundColor: _rec.color
+    property alias radius : _rec.radius
     property alias spacing: _content.spacing
 
     property bool collapsed : false
     property int position : ToolBar.Footer
 
+    property int preferredHeight: Maui.Style.toolBarHeightAlt
+    property int margins : Maui.Style.space.medium
+
     Layout.minimumWidth: implicitWidth
     Layout.preferredWidth: implicitWidth
-    Layout.margins: Maui.Style.space.medium
+    Layout.margins: margins
     Layout.fillWidth: false
 
     implicitWidth: collapsed ? 0 : _content.implicitWidth
-    implicitHeight: collapsed ? 0 : Maui.Style.toolBarHeightAlt
+    implicitHeight: collapsed ? 0 : preferredHeight
 
     Rectangle
     {
@@ -43,7 +47,7 @@ Item
         {
             anchors.fill: parent
             //         anchors.margins: Maui.Style.space.small
-            radius: Maui.Style.radiusV
+            radius: parent.radius
             color: "transparent"
             border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
             opacity: 0.5

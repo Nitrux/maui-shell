@@ -79,9 +79,6 @@ include src/plugins/cask/CMakeFiles/caskplugin.dir/flags.make
 
 src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: ../src/plugins/cask/caskplugin.qrc
 src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: src/plugins/cask/CMakeFiles/caskplugin_autogen.dir/AutoRcc_caskplugin_EWIEGA46WW_Info.json
-src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: ../src/plugins/cask/qml/Cask.qml
-src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: ../src/plugins/cask/qml/panels/statusbar/StatusBar.qml
-src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: ../src/plugins/cask/qml/panels/tasksbar/TaskBar.qml
 src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: ../src/plugins/cask/qml/templates/PanelCard.qml
 src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: ../src/plugins/cask/qml/templates/PanelItem.qml
 src/plugins/cask/caskplugin_autogen/EWIEGA46WW/qrc_caskplugin.cpp: ../src/plugins/cask/qml/templates/PanelSection.qml

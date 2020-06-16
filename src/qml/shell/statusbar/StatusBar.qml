@@ -13,10 +13,18 @@ Cask.Panel
 
     Layout.fillWidth: true
 
+    property int preferredHeight: position ===  ToolBar.Header ? Maui.Style.rowHeight : Maui.Style.toolBarHeightAlt
+    property int margins: position ===  ToolBar.Header ? 0 : Maui.Style.space.medium
+    property int radius: position ===  ToolBar.Header ? 0 : Maui.Style.radiusV
+
     Cask.PanelSection
     {
         visible: win.isWide
         position: control.position
+        preferredHeight: parent.preferredHeight
+        margins: parent.margins
+        radius: parent.radius
+
         Cask.PanelItem
         {
             icon.name: _trayBar.collapsed ? "go-previous" : "go-next"
@@ -29,6 +37,10 @@ Cask.Panel
         id: _trayBar
         visible: win.isWide
         position: control.position
+        preferredHeight: parent.preferredHeight
+        margins: parent.margins
+        radius: parent.radius
+
          Cask.PanelItem
         {
             icon.name: "call-incoming"
@@ -49,6 +61,10 @@ Cask.Panel
     {
         Layout.fillWidth: !win.isWide
         position: control.position
+        preferredHeight: parent.preferredHeight
+        margins: parent.margins
+        radius: parent.radius
+
          Cask.PanelItem
         {
             visible: !isMobile

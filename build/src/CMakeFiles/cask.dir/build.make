@@ -83,6 +83,10 @@ src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/Chrome.qml
 src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/Screen.qml
 src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/Keyboard.qml
 src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/main.qml
+src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/shell/AppsOverview.qml
+src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/shell/Cask.qml
+src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/shell/statusbar/StatusBar.qml
+src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: ../src/qml/shell/tasksbar/TaskBar.qml
 src/cask_autogen/EWIEGA46WW/qrc_qml.cpp: /usr/bin/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/camilo/test/grefsen/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic RCC for qml.qrc"
 	cd /home/camilo/test/grefsen/build/src && /usr/bin/cmake -E cmake_autorcc /home/camilo/test/grefsen/build/src/CMakeFiles/cask_autogen.dir/AutoRcc_qml_EWIEGA46WW_Info.json Debug

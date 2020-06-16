@@ -20,35 +20,21 @@ import QtQuick 2.12
 import QtWayland.Compositor 1.12
 import Qt.labs.settings 1.0
 
-WaylandCompositor {
+WaylandCompositor
+{
     id: comp
 
-    Instantiator {
-        id: screens
-        model: Qt.application.screens
-
-        delegate: Screen {
-            compositor: comp
-            targetScreen: modelData
-            Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
-            position: Qt.point(virtualX, virtualY)
-        }
+    Screen
+    {
+        id: desktop
+        compositor: comp
+        position: Qt.point(virtualX, virtualY)
     }
 
-    Component {
-        id: chromeComponent
-        Chrome {
-        }
-    }
+    ListModel {id: _listSurfaces }
 
-    Component {
-        id: moveItemComponent
-        Item {
-            property bool moving: false
-        }
-    }
-
-    QtWindowManager {
+    QtWindowManager
+    {
         id: qtWindowManager
         onShowIsFullScreenChanged: console.debug("Show is fullscreen hint for Qt applications:", showIsFullScreen)
     }
@@ -57,32 +43,36 @@ WaylandCompositor {
         onWlShellSurfaceCreated: handleShellSurfaceCreated(shellSurface, shellSurface, true)
     }
 
-    XdgShellV6 {
+    XdgShellV6
+    {
         onToplevelCreated: handleShellSurfaceCreated(xdgSurface, toplevel, true)
     }
 
-    XdgShell {
+    XdgShell
+    {
         // void toplevelCreated(QWaylandXdgToplevel *toplevel, QWaylandXdgSurface *xdgSurface);
         onToplevelCreated: handleShellSurfaceCreated(xdgSurface, toplevel, true)
 
     }
 
-    XdgDecorationManagerV1 {
+    XdgDecorationManagerV1
+    {
         preferredMode: XdgToplevel.ServerSideDecoration
-
     }
 
-    TextInputManager {
-    }
+    TextInputManager { }
 
-    defaultSeat.keymap {
+    defaultSeat.keymap
+    {
         layout: keymapSettings.layout
         variant: keymapSettings.variant
         options: keymapSettings.options
         rules: keymapSettings.rules
         model: keymapSettings.model
     }
-    Settings {
+
+    Settings
+    {
         id: keymapSettings
         category: "keymap"
         property string layout: "us"
@@ -92,33 +82,11 @@ WaylandCompositor {
         property string model: ""
     }
 
-    function createShellSurfaceItem(shellSurface, topLevel, moveItem, output, decorate) {
-        var parentSurfaceItem = output.viewsBySurface[shellSurface.parentSurface];
-        var parent = output.surfaceArea;
-        var item = chromeComponent.createObject(parent, {
-            "shellSurface": shellSurface,
-            "topLevel": topLevel,
-            "moveItem": moveItem,
-            "output": output,
-            "screenName": output.targetScreen.name,
-            "decorationVisible": decorate
-        });
-
-        if (parentSurfaceItem) {
-            item.x += output.position.x;
-            item.y +=  output.position.y;
-        }
-        output.viewsBySurface[shellSurface.surface] = item;
-    }
-
-    function handleShellSurfaceCreated(shellSurface, topLevel, decorate) {
-        var moveItem = moveItemComponent.createObject(defaultOutput.surfaceArea, {
-            "x": screens.objectAt(0).position.x,
-            "y": screens.objectAt(0).position.y,
-            "width": Qt.binding(function() { return shellSurface.surface.width; }),
-            "height": Qt.binding(function() { return shellSurface.surface.height; })
-        });
-        for (var i = 0; i < screens.count; ++i)
-            createShellSurfaceItem(shellSurface, topLevel, moveItem, screens.objectAt(i), decorate);
+    function handleShellSurfaceCreated(shellSurface, topLevel, decorate)
+    {
+        shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+        _listSurfaces.append({shellSurface: shellSurface})
+        desktop.swipeView.currentIndex = _listSurfaces.count-1
+        desktop.showDesktop = false
     }
 }

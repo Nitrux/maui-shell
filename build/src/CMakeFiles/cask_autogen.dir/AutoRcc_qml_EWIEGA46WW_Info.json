@@ -10,7 +10,11 @@
 		"/home/camilo/test/grefsen/src/qml/Chrome.qml",
 		"/home/camilo/test/grefsen/src/qml/Screen.qml",
 		"/home/camilo/test/grefsen/src/qml/Keyboard.qml",
-		"/home/camilo/test/grefsen/src/qml/main.qml"
+		"/home/camilo/test/grefsen/src/qml/main.qml",
+		"/home/camilo/test/grefsen/src/qml/shell/AppsOverview.qml",
+		"/home/camilo/test/grefsen/src/qml/shell/Cask.qml",
+		"/home/camilo/test/grefsen/src/qml/shell/statusbar/StatusBar.qml",
+		"/home/camilo/test/grefsen/src/qml/shell/tasksbar/TaskBar.qml"
 	],
 	"LOCK_FILE" : "/home/camilo/test/grefsen/build/src/CMakeFiles/cask_autogen.dir/AutoRcc_qml_EWIEGA46WW_Lock.lock",
 	"MULTI_CONFIG" : false,

@@ -14,8 +14,9 @@ AbstractButton
     property PanelCard card : null
     hoverEnabled: true
     implicitWidth: _layout.implicitWidth
-    implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
+    implicitHeight: Math.min(Maui.Style.iconSizes.medium + Maui.Style.space.small, parent.height)
     background: Item {}
+    Layout.alignment: Qt.AlignVCenter
 
     icon.height:  isMobile ? Maui.Style.iconSizes.small : Maui.Style.iconSizes.medium
     icon.width: isMobile ? Maui.Style.iconSizes.small : Maui.Style.iconSizes.medium

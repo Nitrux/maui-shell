@@ -9,5 +9,4 @@ RowLayout
 {
     id: control
     visible: children.length > 0
-    height: visible ? implicitHeight : 0
 }

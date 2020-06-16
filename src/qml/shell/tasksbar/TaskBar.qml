@@ -14,6 +14,11 @@ Cask.PanelSection
     //    backgroundColor: "transparent"
     spacing: Maui.Style.space.medium
 
+    preferredHeight: !win.isWide ? Maui.Style.toolBarHeight : Maui.Style.toolBarHeightAlt
+    margins: !win.isWide ? 0 : Maui.Style.space.medium
+    radius: !win.isWide ? 0 : Maui.Style.radiusV
+
+
     Cask.PanelItem
     {
         Layout.fillWidth: false
