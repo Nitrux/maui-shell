@@ -51,6 +51,7 @@ Item
                 model: _cards.contentModel
                 snapMode: ListView.SnapOneItem
                 orientation: ListView.Vertical
+                boundsBehavior: ListView.StopAtBounds
             }
         }
     }

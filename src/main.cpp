@@ -154,12 +154,12 @@ static void registerTypes()
 {
     qmlRegisterType<WaylandProcessLauncher>("com.theqtcompany.wlprocesslauncher", 1, 0, "ProcessLauncher");
     qmlRegisterType<StackableItem>("com.theqtcompany.wlcompositor", 1, 0, "StackableItem");
-            qmlRegisterSingletonType<Enviroment>("org.cask.env", 1, 0, "Env", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-                   Q_UNUSED(engine)
-                   Q_UNUSED(scriptEngine)
-                   return new Enviroment;
-               });
-//    CaskPlugin::registerTypes();
+    qmlRegisterSingletonType<Enviroment>("org.cask.env", 1, 0, "Env", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return new Enviroment;
+    });
+    //    CaskPlugin::registerTypes();
 }
 
 static qreal highestDPR(QList<QScreen *> &screens)
@@ -185,8 +185,8 @@ int main(int argc, char *argv[])
         qputenv("QT_LABS_CONTROLS_STYLE", "maui-style");
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
         qputenv("QT_QPA_PLATFORMTHEME", "generic");
-//    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
-//        qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
+    //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
+    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
     QApplication app(argc, argv);
     //QCoreApplication::setApplicationName("grefsen"); // defaults to name of the executable
     QApplication::setOrganizationName("maui");

@@ -293,7 +293,7 @@ Cask.Panel
                   id: _nof
                   width: parent.width
                   height: Math.min(500, contentHeight)
-
+                  boundsBehavior: ListView.StopAtBounds
                   model: 10
                   spacing: Maui.Style.space.medium
                   delegate: Maui.ItemDelegate

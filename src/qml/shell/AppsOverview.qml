@@ -45,7 +45,8 @@ Maui.Page
         }
     }
 
-    footBar.visible: overView
+    footBar.opacity: _overviewList.opacity
+    footBar.visible: true
     footBar.middleContent: [
         Button
         {
@@ -102,7 +103,8 @@ Maui.Page
         {
             width: _overviewList.width * 0.8
             height: _overviewList.height * 0.8
-            anchors.verticalCenter: parent.verticalCenter
+            opacity: (y * -1) > 50 ? 20 / (y * -1): 1
+//            anchors.verticalCenter: parent.verticalCenter
 
             Maui.ListItemTemplate
             {
@@ -110,7 +112,7 @@ Maui.Page
                 Layout.preferredHeight: Maui.Style.rowHeight
                 iconSource: "vvave"
                 iconSizeHint: Maui.Style.iconSizes.medium
-                label1.text: modelData.toplevel.title
+                label1.text: modelData.toplevel.title + " - " + parent.y
             }
 
             ItemDelegate
@@ -169,7 +171,6 @@ Maui.Page
                         color: "transparent"
                         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
                         opacity: 0.5
-
 
                         Rectangle
                         {
@@ -231,8 +232,9 @@ Maui.Page
                 xAxis.enabled: false
                 onActiveChanged:
                 {
-                    if(!active && (centroid.position.y) > 100)
+                    if(!active && (target.y * -1) > 100)
                         modelData.surface.client.close()
+                    else target.y = 0
                 }
             }
         }
