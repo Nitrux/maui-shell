@@ -67,7 +67,7 @@ WaylandOutput
                 id: _cask
                 anchors.fill: parent
                 anchors.bottomMargin: 20
-//                rise: output.overView
+                rise: output.overView
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
                 bottomPanel.children: win.isWide ? [_taskBar, _statusBar] :  [_taskBar]
                 topPanel.children: win.isWide ? [] :  [statusBar]

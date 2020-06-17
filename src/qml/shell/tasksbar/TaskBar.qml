@@ -18,7 +18,6 @@ Cask.PanelSection
     margins: !win.isWide ? 0 : Maui.Style.space.medium
     radius: !win.isWide ? 0 : Maui.Style.radiusV
 
-
     Cask.PanelItem
     {
         Layout.fillWidth: false
@@ -26,9 +25,10 @@ Cask.PanelSection
         Layout.fillHeight: true
         icon.name: "view-list-icons"
         visible: !isMobile
+
         onClicked:
         {
-            control.open()
+            control.open(card.index)
             _searchBar.forceActiveFocus()
         }
 
@@ -159,6 +159,17 @@ Cask.PanelSection
         }
     }
 
+    Cask.PanelItem
+    {
+        Layout.fillWidth: false
+        implicitWidth: height
+        Layout.fillHeight: true
+        icon.name: "window-copy"
+        visible: !isMobile
+
+        onClicked: overView = true
+    }
+
     Item
     {
         Layout.fillWidth: true
@@ -188,10 +199,7 @@ Cask.PanelSection
                         anchors.centerIn: parent
                     }
                 }
-
-
             }
         }
     }
-
 }

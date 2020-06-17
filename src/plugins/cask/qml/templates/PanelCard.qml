@@ -13,12 +13,14 @@ Item
     default property alias content: _layout.data
     implicitHeight: _layout.implicitHeight + _page.header.height + _page.footer.height + _page.padding + Maui.Style.space.big
     width: popWidth
-    height: implicitHeight
+    height: visible ? implicitHeight : 0
 
     property alias title : _page.title
     property alias padding : _page.padding
     property alias headBar: _page.headBar
     property alias footBar: _page.footBar
+
+    property int index : -1
 
     Item
     {

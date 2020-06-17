@@ -45,7 +45,7 @@ Maui.Page
         }
     }
 
-    footBar.visible: true
+    footBar.visible: overView
     footBar.middleContent: [
         Button
         {

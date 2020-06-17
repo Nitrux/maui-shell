@@ -59,6 +59,7 @@ Cask.Panel
 
     Cask.PanelSection
     {
+        id: _statusBar
         Layout.fillWidth: !win.isWide
         position: control.position
         preferredHeight: parent.preferredHeight
@@ -75,16 +76,18 @@ Cask.Panel
         {
             visible: !isMobile
             icon.name: "mic-ready"
+            onClicked: _statusBar.open(card.index)
+
             card: Cask.PanelCard
             {
                 width: parent.width
-                height: _tooglesGrid.contentHeight + Maui.Style.space.medium
+                implicitHeight: _tooglesGrid.contentHeight + Maui.Style.space.big
 
                 Maui.GridView
                 {
                     id:_tooglesGrid
                     width: parent.width
-                    height: contentHeight
+                    height: _tooglesGrid.contentHeight
                     anchors.centerIn: parent
                     itemSize: 64
                     verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff
@@ -112,6 +115,7 @@ Cask.Panel
         {
             visible: !isMobile
             icon.name: "headphones"
+            onClicked: _statusBar.open(card.index)
 
             card: Cask.PanelCard
             {
@@ -174,31 +178,40 @@ Cask.Panel
         {
             visible: !isMobile
             icon.name: "audio-volume-medium"
+            onClicked: _statusBar.open(card.index)
+
             card: Cask.PanelCard
             {
                 width: parent.width
-                height: 100
 
-                Label
+                Column
                 {
-                    text: qsTr("Volume")
-                }
-
-                Slider
-                {
+                    height: 100
                     width: parent.width
+
+                    Label
+                    {
+                        text: qsTr("Volume")
+                    }
+
+                    Slider
+                    {
+                        width: parent.width
+                    }
+
+                    Label
+                    {
+                        text: qsTr("Brigtness")
+                    }
+
+
+                    Slider
+                    {
+                        width: parent.width
+                    }
                 }
 
-                Label
-                {
-                    text: qsTr("Brigtness")
-                }
 
-
-                Slider
-                {
-                    width: parent.width
-                }
             }
         }
 
@@ -212,15 +225,16 @@ Cask.Panel
             display: ToolButton.TextBesideIcon
             icon.name: "battery-080"
             text: "80%"
+            onClicked: _statusBar.open(card.index)
 
             card: Cask.PanelCard
             {
-                width: parent.width
-                height: 64
+                width: parent.width                
 
                 RowLayout
                 {
-                    anchors.fill: parent
+                    width: parent.width
+                    height: 64
                     Repeater
                     {
                         model: ["system-reboot", "system-shutdown", "system-lock-screen","webcam", "system-suspend"]
@@ -256,10 +270,11 @@ Cask.Panel
         Cask.PanelItem
         {
             icon.name: "notifications"
+            onClicked: _statusBar.open(card.index)
+
             card: Cask.PanelCard
             {
               width: parent.width
-              height: Math.min(500, _nof.contentHeight)
               padding: 0
               title: _nof.count + " " + qsTr("Notifications")
               headBar.visible: true
@@ -276,7 +291,9 @@ Cask.Panel
               ListView
               {
                   id: _nof
-                  anchors.fill: parent
+                  width: parent.width
+                  height: Math.min(500, contentHeight)
+
                   model: 10
                   spacing: Maui.Style.space.medium
                   delegate: Maui.ItemDelegate

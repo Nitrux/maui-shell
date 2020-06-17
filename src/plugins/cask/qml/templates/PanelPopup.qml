@@ -18,16 +18,19 @@ Item
     property alias implicitHeight: _cardsList.contentHeight
     property alias contentChildren : _cards.contentChildren
 
+
     Rectangle
     {
+        parent: surfaceArea
+        anchors.fill: parent
+        opacity: Math.min(0.7, control.height / cask.height)
         Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-        anchors.fill: parent
         color: Kirigami.Theme.backgroundColor
         radius: Maui.Style.radiusV
         //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-        opacity: 0.4
     }
+
 
     ScrollView
     {
@@ -44,7 +47,7 @@ Item
             contentItem: ListView
             {
                 id:_cardsList
-                spacing: Maui.Style.space.medium
+                spacing: 0
                 model: _cards.contentModel
                 snapMode: ListView.SnapOneItem
                 orientation: ListView.Vertical

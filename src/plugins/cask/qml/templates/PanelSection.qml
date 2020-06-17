@@ -26,6 +26,8 @@ Item
     property int preferredHeight: Maui.Style.toolBarHeightAlt
     property int margins : Maui.Style.space.medium
 
+    property int currentCard : -1
+
     Layout.minimumWidth: implicitWidth
     Layout.preferredWidth: implicitWidth
     Layout.margins: margins
@@ -85,6 +87,8 @@ Item
             const obj = _content.children[i]
             if(obj.card)
             {
+                obj.card.index = popup.count
+                obj.card.visible = Qt.binding(function(){return (control.currentCard >= 0 ? control.currentCard === obj.card.index : true) })
                 popup.container.insertItem(popup.count, obj.card)
             }
         }
@@ -128,12 +132,20 @@ Item
     {
         console.log("Close it")
         popup.suggestedHeight = 0
+        control.currentCard = -1
 
     }
 
     function open(index)
     {
-        console.log("Pop it up")
+        console.log("Pop it up", index)
+        if(index >= 0 && index  <= popup.count)
+        {
+            control.currentCard = index
+        }else
+        {
+            control.currentCard = -1
+        }
 
         popup.suggestedHeight= 500
     }

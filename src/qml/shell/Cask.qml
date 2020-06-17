@@ -17,7 +17,7 @@ Item
     readonly property alias contentY: _content.y
     readonly property alias surface : _content
 
-    property alias overlay : _overlay.data
+    property alias background : _rec
 
     property alias backgroundColor : _rec.color
     property alias backgroundImage: _img.source
@@ -115,8 +115,6 @@ Item
         }
     }
 
-
-
     ColumnLayout
     {
         anchors.fill: parent
@@ -162,11 +160,5 @@ Item
             Layout.fillWidth: true
             Layout.preferredHeight: visible ? implicitHeight : 0
         }
-    }
-
-    ColumnLayout
-    {
-        id: _overlay
-        anchors.fill: parent
     }
 }
