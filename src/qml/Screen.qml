@@ -41,7 +41,7 @@ WaylandOutput
     property bool showDesktop : true
     sizeFollowsWindow: true
     availableGeometry : Qt.rect(surfaceArea.x, surfaceArea.y, surfaceArea.width, surfaceArea.height)
-        scaleFactor: 2
+        scaleFactor: 1
 //transform: WaylandOutput.Transform180
     readonly property bool isMobile : win.width < 500
     property bool overView: false
@@ -54,7 +54,7 @@ WaylandOutput
         color: "transparent"
         title: "Cask on " + Screen.name
         headBar.visible: false
-        isWide: width > 1200
+        isWide: width > 1000
 
         WaylandMouseTracker
         {
@@ -68,7 +68,6 @@ WaylandOutput
                 id: _cask
                 anchors.fill: parent
                 anchors.bottomMargin: _swiper.height
-                rise: output.overView
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
                 bottomPanel.children: win.isWide ? [_taskBar, _statusBar] :  [_taskBar]
                 topPanel.children: win.isWide ? [] :  [statusBar]

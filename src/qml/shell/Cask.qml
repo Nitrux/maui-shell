@@ -27,7 +27,7 @@ Item
 
     signal desktopPressed(var mouse)
 
-    property bool rise : _dropArea.containsDrag
+    readonly property bool rise : _dropArea.containsDrag
 
     Rectangle
     {
