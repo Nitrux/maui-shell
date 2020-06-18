@@ -18,10 +18,13 @@
 
 import QtQuick 2.15
 import QtQuick.Window 2.15
+import QtQuick.Controls 2.14
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
 import com.theqtcompany.wlcompositor 1.0
 import org.kde.mauikit 1.2 as Maui
+import org.kde.kirigami 2.8 as Kirigami
+import QtQuick.Layouts 1.3
 
 StackableItem
 {
@@ -35,24 +38,116 @@ StackableItem
     property alias destroyAnimation : destroyAnimationImpl
 
     property int marginWidth : surfaceItem.isFullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
-    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
+    //    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
+    property int titlebarHeight : 36
     property string screenName: ""
 
     property real resizeAreaWidth: 12
 
     x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
     y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
-    height: surfaceItem.height
+
+
+    height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
     visible: surfaceItem.valid
 
-    Rectangle {
+    Rectangle
+    {
         id: decoration
+        Kirigami.Theme.inherit: false
+        Kirigami.Theme.colorSet: Kirigami.Theme.Window
         anchors.fill: parent
-        anchors.margins: 20
+        border.width: 1
         radius: Maui.Style.radiusV
-        color: "transparent"
+        border.color: (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
+        color: Kirigami.Theme.backgroundColor
         visible: true
+
+        Item
+        {
+            id:  titleBar
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.leftMargin: Maui.Style.space.medium
+            anchors.rightMargin: Maui.Style.space.medium
+            height: titlebarHeight - marginWidth
+            visible: !surfaceItem.isPopup
+
+            DragHandler {
+                id: titlebarDrag
+                target: rootChrome
+                cursorShape: Qt.ClosedHandCursor
+                property var movingBinding: Binding {
+                    target: surfaceItem.moveItem
+                    property: "moving"
+                    value: titlebarDrag.active
+                }
+            }
+
+            HoverHandler {
+                cursorShape: Qt.OpenHandCursor
+            }
+
+            TapHandler {
+                acceptedButtons: Qt.LeftButton
+                gesturePolicy: TapHandler.DragThreshold
+                onTapped: rootChrome.raise()
+            }
+
+            TapHandler {
+                acceptedButtons: Qt.MiddleButton
+                gesturePolicy: TapHandler.DragThreshold
+                onTapped: rootChrome.lower()
+            }
+
+            RowLayout
+            {
+                anchors.fill: parent
+
+                Loader
+                {
+                    id: _leftControlsLoader
+                    visible: active
+                    active: Maui.App.leftWindowControls.length
+                    Layout.preferredWidth: active ? implicitWidth : 0
+                    Layout.fillHeight: true
+                    sourceComponent: Maui.WindowControls
+                    {
+                        order: Maui.App.leftWindowControls
+                    }
+                }
+
+                Label
+                {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    text: surfaceItem.shellSurface.toplevel.title !== undefined ? surfaceItem.shellSurface.toplevel.title : ""
+                    horizontalAlignment: Qt.AlignHCenter
+                    elide: Text.ElideMiddle
+                    wrapMode: Text.NoWrap
+                    color: Kirigami.Theme.textColor
+                }
+
+                Loader
+                {
+                    id: _rightControlsLoader
+                    visible: active
+                    active: Maui.App.rightWindowControls.length
+                    Layout.preferredWidth: active ? implicitWidth : 0
+                    Layout.fillHeight: true
+                    sourceComponent: Maui.WindowControls
+                    {
+                        order:  Maui.App.rightWindowControls
+                    }
+                }
+
+            }
+
+
+        }
+
 
         // TODO write a ResizeHandler for this purpose? otherwise there are up to 8 components for edges and corners
         Item {
@@ -124,6 +219,7 @@ StackableItem
         // end of resizing components
 
 
+
     }
 
 
@@ -165,15 +261,15 @@ StackableItem
         }
     ]
 
-    FastBlur
-    {
-        id: fastBlur
-        anchors.fill: parent
-        source: _cask
-        radius: 100
-        transparentBorder: false
-        cached: true
-    }
+    //    FastBlur
+    //    {
+    //        id: fastBlur
+    //        anchors.fill: parent
+    //        source: _cask
+    //        radius: 100
+    //        transparentBorder: false
+    //        cached: true
+    //    }
 
 
     ShellSurfaceItem
@@ -184,7 +280,8 @@ StackableItem
         property bool isTransient: false
         property bool isFullscreen: true
 
-//sizeFollowsSurface: surfaceItem.output.width < 500
+        y: titlebarHeight
+        //sizeFollowsSurface: surfaceItem.output.width < 500
         opacity: moving ? 0.5 : 1.0
         inputEventsEnabled: !pinch3.active && !metaDragHandler.active && !altDragHandler.active
 
@@ -242,15 +339,36 @@ StackableItem
         }
 
         onWidthChanged: {
-            valid =  !surface.cursorSurface && surface.size.width > 0 && surface.size.height > 0            
+            valid =  !surface.cursorSurface && surface.size.width > 0 && surface.size.height > 0
         }
 
         onValidChanged: if (valid) {
-            if (isFullscreen) {
-                topLevel.sendFullscreen(output.geometry)
-            } else if (decorationVisible) {
-                createAnimationImpl.start()
-            }
+                            if (isFullscreen) {
+                                topLevel.sendFullscreen(output.geometry)
+                            } else if (decorationVisible) {
+                                createAnimationImpl.start()
+                            }
+                        }
+    }
+
+    Rectangle
+    {
+        anchors.fill: parent
+        z: surfaceItem.z + 9999999999
+        //         anchors.margins: Maui.Style.space.small
+        radius: Maui.Style.radiusV
+        color: "transparent"
+        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+        opacity: 0.8
+
+        Rectangle
+        {
+            anchors.fill: parent
+            anchors.margins: 1
+            color: "transparent"
+            radius: parent.radius - 0.5
+            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            opacity: 0.7
         }
     }
 
@@ -263,11 +381,11 @@ StackableItem
         minimumRotation: 0
         maximumRotation: 0
         onActiveChanged: if (!active) {
-            // just a silly way of getting a QSize for sendConfigure()
-            var size = topLevel.sizeForResize(Qt.size(width * scale, height * scale), Qt.point(0, 0), 0);
-            topLevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/);
-            rootChrome.scale = 1
-        }
+                             // just a silly way of getting a QSize for sendConfigure()
+                             var size = topLevel.sizeForResize(Qt.size(width * scale, height * scale), Qt.point(0, 0), 0);
+                             topLevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/);
+                             rootChrome.scale = 1
+                         }
     }
 
     Rectangle {

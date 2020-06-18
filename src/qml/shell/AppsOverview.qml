@@ -1,11 +1,11 @@
 import QtQuick 2.14
 import QtQml 2.14
-
 import QtQuick.Controls 2.14
 import QtQuick.Window 2.3
 import QtGraphicalEffects 1.0
 import QtWayland.Compositor 1.0
 import QtQuick.Layouts 1.3
+
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import org.cask.env 1.0 as Env
@@ -99,27 +99,12 @@ Maui.Page
                 overView = false
         }
 
-        delegate: ColumnLayout
-        {
-            width: _overviewList.width * 0.8
-            height: _overviewList.height * 0.8
-            opacity: (y * -1) > 50 ? 20 / (y * -1): 1
-//            anchors.verticalCenter: parent.verticalCenter
-
-            Maui.ListItemTemplate
-            {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Maui.Style.rowHeight
-                iconSource: "vvave"
-                iconSizeHint: Maui.Style.iconSizes.medium
-                label1.text: modelData.toplevel.title + " - " + parent.y
-            }
-
-            ItemDelegate
+        delegate: ItemDelegate
             {
                 id: _itemDelegate
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                width: _overviewList.width * 0.8
+                height: _overviewList.height * 0.8
+                opacity: (y * -1) > 50 ? 20 / (y * -1): 1
                 background: null
                 onClicked:
                 {
@@ -131,20 +116,35 @@ Maui.Page
 
                 clip: false
 
+                Maui.ListItemTemplate
+                {
+                    anchors.bottom: _thumbnail.top
+                    anchors.left: _thumbnail.left
+                    anchors.right: _thumbnail.right
+                    height: Maui.Style.rowHeight
+                    iconSource: "vvave"
+                    iconSizeHint: Maui.Style.iconSizes.medium
+                    label1.text: modelData.toplevel.title
+                }
+
                 Item
                 {
-                    anchors.fill: parent
+                    anchors.centerIn: parent
+                    height: Math.min(_surface.surface.sourceGeometry.height , parent.height)
+                    width: Math.min(_surface.surface.sourceGeometry.width, parent.width)
                     id: _thumbnail
 
                     WaylandQuickItem
                     {
+                        id: _surface
                         surface: modelData.surface
                         touchEventsEnabled: false
                         focusOnClick: false
                         enabled: false
                         sizeFollowsSurface: false
-                        anchors.fill: parent
                         smooth: true
+                        anchors.fill: parent
+
 
                         layer.enabled: true
                         layer.effect: OpacityMask
@@ -198,6 +198,7 @@ Maui.Page
 
                 Maui.Badge
                 {
+                    parent: _thumbnail
                     id: _closeButton
                     color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
 
@@ -223,21 +224,19 @@ Maui.Page
                     onClicked:  modelData.surface.client.close()
                 }
 
-            }
-
-
-            DragHandler
-            {
-                target: parent
-                xAxis.enabled: false
-                onActiveChanged:
+                DragHandler
                 {
-                    if(!active && (target.y * -1) > 100)
-                        modelData.surface.client.close()
-                    else target.y = 0
+                    target: parent
+                    xAxis.enabled: false
+                    onActiveChanged:
+                    {
+                        if(!active && (target.y * -1) > 100)
+                            modelData.surface.client.close()
+                        else target.y = 0
+                    }
                 }
+
             }
-        }
     }
 }
 

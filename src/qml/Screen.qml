@@ -16,7 +16,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.14
+import QtQuick 2.15
 import QtQml 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Window 2.3
@@ -29,6 +29,7 @@ import org.cask.env 1.0 as Env
 import "shell"
 import "shell/statusbar"
 import "shell/tasksbar"
+import "." as S
 
 WaylandOutput
 {
@@ -41,10 +42,20 @@ WaylandOutput
     property bool showDesktop : true
     sizeFollowsWindow: true
     availableGeometry : Qt.rect(surfaceArea.x, surfaceArea.y, surfaceArea.width, surfaceArea.height)
-        scaleFactor: 1
-//transform: WaylandOutput.Transform180
+    scaleFactor: 1
+    //transform: WaylandOutput.Transform180
     readonly property bool isMobile : win.width < 500
     property bool overView: false
+
+
+    enum FormFactor
+    {
+        Phone,
+        Tablet,
+        Desktop
+    }
+
+
 
     window: Maui.ApplicationWindow
     {
@@ -52,9 +63,19 @@ WaylandOutput
         visibility: Window.Windowed
         Maui.App.enableCSD: true
         color: "transparent"
-        title: "Cask on " + Screen.name
+        title: formFactor
         headBar.visible: false
         isWide: width > 1000
+
+        readonly property int formFactor :  {
+            if(width > 1500)
+                return 0
+            else if(width > 500)
+                 return 1
+            else
+                return 2
+        }
+
 
         WaylandMouseTracker
         {
@@ -76,22 +97,22 @@ WaylandOutput
                 readonly property QtObject statusBar : StatusBar {id: _statusBar}
                 readonly property QtObject taskManagerBar: TaskBar {id: _taskBar}
 
-                //                Rectangle
-                //                {
-                //                    color: "orange"
-                //                    height: 64
-                //                    width: 100
-                //                    anchors.horizontalCenter: parent.horizontalCenter
-                //                    anchors.bottom: parent.bottom
-                //                    anchors.bottomMargin: height
+                                Rectangle
+                                {
+                                    color: "orange"
+                                    height: 64
+                                    width: 100
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.bottom: parent.bottom
+                                    anchors.bottomMargin: height
 
-                //                    Label
-                //                    {
-                //                        color: "white"
-                //                        anchors.fill: parent
-                //                        text: isMobile + " / " + win.width + " / " + Kirigami.Settings.isMobile
-                //                    }
-                //                }
+                                    Label
+                                    {
+                                        color: "white"
+                                        anchors.fill: parent
+                                        text: win.formFactor
+                                    }
+                                }
 
 
 
@@ -122,7 +143,7 @@ WaylandOutput
                     highlightMoveDuration: 0
                     highlightResizeDuration: 0
 
-//                    preferredHighlightEnd: width
+                    //                    preferredHighlightEnd: width
                     // 		highlight: Item {}
                     highlightMoveVelocity: -1
                     highlightResizeVelocity: -1
@@ -139,27 +160,33 @@ WaylandOutput
                     }
 
                     model: _listSurfaces
-                    delegate: Chrome
+                    delegate: Item
                     {
 
-                        id: _chromeDelegate
-                        shellSurface: modelData
                         height: _swipeView.height
                         width: _swipeView.width
-                        moveItem: Item
-                        {
-                            property bool moving: false
-                            x: output.x
-                            y: output.y
-                            height: shellSurface.surface.height
-                            width: shellSurface.surface.width
-                        }
+                        clip: true
 
-                        Connections
+                        Chrome
                         {
-                            target: output.surfaceArea
-                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
-//                            onWidthChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+                            id: _chromeDelegate
+                            shellSurface: modelData
+                            moveItem: Item
+                            {
+                                property bool moving: false
+                                parent: surfaceArea
+                                x: output.position.x
+                                y: output.position.y
+                                height: _chromeDelegate.shellSurface.surface.height
+                                width: _chromeDelegate.shellSurface.surface.width
+                            }
+
+                            Connections
+                            {
+                                target: output.surfaceArea
+                                //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
+                                //                            onWidthChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+                            }
                         }
                     }
 
@@ -182,20 +209,20 @@ WaylandOutput
                     anchors.right: parent.right
                 }
 
-                MouseArea
+                HoverHandler
                 {
-                    anchors.fill: parent
-                    hoverEnabled: true
+                    id: _hadleHandler
+                    cursorShape: Qt.OpenHandCursor
+                }
 
-                    Rectangle
-                    {
-                        height: parent.height - 12
-                        width: Math.min(100, parent.width * 0.5)
-                        color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : "white"
-                        radius: 4
-                        anchors.centerIn: parent
-                    }
-
+                Rectangle
+                {
+                    x: ((parent.width/2) - width/2) - ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height - 12
+                    width: Math.min(100, parent.width * 0.5)
+                    color: _hadleHandler.hovered ? Kirigami.Theme.highlightColor : "white"
+                    radius: 4
                 }
 
                 Label

@@ -84,7 +84,7 @@ WaylandCompositor
 
     function handleShellSurfaceCreated(shellSurface, topLevel, decorate)
     {
-        shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+//        shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
         _listSurfaces.append({shellSurface: shellSurface})
         desktop.swipeView.currentIndex = _listSurfaces.count-1
         desktop.showDesktop = false

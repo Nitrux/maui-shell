@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
         qputenv("QT_QPA_PLATFORMTHEME", "generic");
     //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
-    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
+//    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
     QApplication app(argc, argv);
     //QCoreApplication::setApplicationName("grefsen"); // defaults to name of the executable
     QApplication::setOrganizationName("maui");
