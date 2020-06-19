@@ -48,15 +48,6 @@ WaylandOutput
     property bool overView: false
 
 
-    enum FormFactor
-    {
-        Phone,
-        Tablet,
-        Desktop
-    }
-
-
-
     window: Maui.ApplicationWindow
     {
         id: win
@@ -69,11 +60,11 @@ WaylandOutput
 
         readonly property int formFactor :  {
             if(width > 1500)
-                return 0
+                return Env.Env.Desktop
             else if(width > 500)
-                 return 1
+                 return Env.Env.Tablet
             else
-                return 2
+                return Env.Env.Phone
         }
 
 
@@ -184,8 +175,10 @@ WaylandOutput
                             Connections
                             {
                                 target: output.surfaceArea
+                                ignoreUnknownSignals: true
+                                enabled: win.formFactor !== Env.Env.Desktop
                                 //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
-                                //                            onWidthChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+                                onWidthChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
                             }
                         }
                     }

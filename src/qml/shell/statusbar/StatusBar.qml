@@ -5,6 +5,8 @@ import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import "items"
+import "items/calendar"
 
 Cask.Panel
 {
@@ -256,15 +258,14 @@ Cask.Panel
             }
         }
 
-        Cask.PanelItem
+        NetworkItem
         {
-            icon.name: "network-wireless"
+            onClicked: _statusBar.open(card.index)
         }
 
-        Cask.PanelItem
+        CalendarItem
         {
-            Layout.fillHeight: true
-            text: new Date().toTimeString()
+            onClicked: _statusBar.open(card.index)
         }
 
         Cask.PanelItem

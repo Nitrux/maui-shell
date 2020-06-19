@@ -8,5 +8,7 @@
         <file>qml/shell/statusbar/StatusBar.qml</file>
         <file>qml/shell/tasksbar/TaskBar.qml</file>
         <file>qml/shell/AppsOverview.qml</file>
+        <file>qml/shell/statusbar/items/NetworkItem.qml</file>
+        <file>qml/shell/statusbar/items/calendar/CalendarItem.qml</file>
     </qresource>
 </RCC>

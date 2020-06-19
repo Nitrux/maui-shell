@@ -24,6 +24,7 @@ import QtGraphicalEffects 1.15
 import com.theqtcompany.wlcompositor 1.0
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
+import org.cask.env 1.0 as Env
 import QtQuick.Layouts 1.3
 
 StackableItem
@@ -33,13 +34,13 @@ StackableItem
     property alias shellSurface: surfaceItem.shellSurface
     property var topLevel : shellSurface.toplevel
     property alias moveItem: surfaceItem.moveItem
-    property bool decorationVisible: false
+    property bool decorationVisible: win.formFactor === Env.Env.Desktop
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
     property alias destroyAnimation : destroyAnimationImpl
 
     property int marginWidth : surfaceItem.isFullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
     //    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
-    property int titlebarHeight : 36
+    property int titlebarHeight : decorationVisible ? 36 : 0
     property string screenName: ""
 
     property real resizeAreaWidth: 12
@@ -62,7 +63,7 @@ StackableItem
         radius: Maui.Style.radiusV
         border.color: (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
         color: Kirigami.Theme.backgroundColor
-        visible: true
+        visible: decorationVisible
 
         Item
         {
