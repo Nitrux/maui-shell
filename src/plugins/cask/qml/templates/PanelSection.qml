@@ -36,6 +36,24 @@ Item
     implicitWidth: collapsed ? 0 : _content.implicitWidth
     implicitHeight: collapsed ? 0 : preferredHeight
 
+    Behavior on margins
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Behavior on preferredHeight
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
     Rectangle
     {
         id: _rec
@@ -44,6 +62,15 @@ Item
         radius: Maui.Style.radiusV
         opacity: 0.8
         color: Kirigami.Theme.backgroundColor
+
+        Behavior on radius
+        {
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         Rectangle
         {

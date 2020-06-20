@@ -46,6 +46,7 @@ WaylandOutput
     //transform: WaylandOutput.Transform180
     readonly property bool isMobile : win.width < 500
     property bool overView: false
+    readonly property alias formFactor : win.formFactor
 
 
     window: Maui.ApplicationWindow
@@ -62,7 +63,7 @@ WaylandOutput
             if(width > 1500)
                 return Env.Env.Desktop
             else if(width > 500)
-                 return Env.Env.Tablet
+                return Env.Env.Tablet
             else
                 return Env.Env.Phone
         }
@@ -83,29 +84,27 @@ WaylandOutput
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
                 bottomPanel.children: win.isWide ? [_taskBar, _statusBar] :  [_taskBar]
                 topPanel.children: win.isWide ? [] :  [statusBar]
-                bottomPanel.visible: win.isWide ? true : showDesktop || _listSurfaces.count <= 0
+                bottomPanel.visible: win.formFactor === Env.Env.Phone ? showDesktop || _listSurfaces.count <= 0 : true
 
                 readonly property QtObject statusBar : StatusBar {id: _statusBar}
                 readonly property QtObject taskManagerBar: TaskBar {id: _taskBar}
 
-                                Rectangle
-                                {
-                                    color: "orange"
-                                    height: 64
-                                    width: 100
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.bottom: parent.bottom
-                                    anchors.bottomMargin: height
+                Rectangle
+                {
+                    color: "orange"
+                    height: 64
+                    width: 100
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: height
 
-                                    Label
-                                    {
-                                        color: "white"
-                                        anchors.fill: parent
-                                        text: win.formFactor
-                                    }
-                                }
-
-
+                    Label
+                    {
+                        color: "white"
+                        anchors.fill: parent
+                        text: win.formFactor
+                    }
+                }
 
                 ListView
                 {

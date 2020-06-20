@@ -18,8 +18,19 @@ AbstractButton
     background: Item {}
     Layout.alignment: Qt.AlignVCenter
 
-    icon.height:  isMobile ? Maui.Style.iconSizes.small : Maui.Style.iconSizes.medium
-    icon.width: isMobile ? Maui.Style.iconSizes.small : Maui.Style.iconSizes.medium
+    property int iconSize : isMobile ? Maui.Style.iconSizes.small : Maui.Style.iconSizes.medium
+
+    icon.height: iconSize
+    icon.width: iconSize
+
+    Behavior on iconSize
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
 
      RowLayout
     {

@@ -5,6 +5,8 @@ import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import org.cask.env 1.0 as Env
+
 import "items"
 import "items/calendar"
 
@@ -15,9 +17,9 @@ Cask.Panel
 
     Layout.fillWidth: true
 
-    property int preferredHeight: position ===  ToolBar.Header ? Maui.Style.rowHeight : Maui.Style.toolBarHeightAlt
-    property int margins: position ===  ToolBar.Header ? 0 : Maui.Style.space.medium
-    property int radius: position ===  ToolBar.Header ? 0 : Maui.Style.radiusV
+    property int preferredHeight: win.formFactor === Env.Env.Phone ?  Maui.Style.rowHeight: Maui.Style.toolBarHeightAlt
+    property int margins: win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
+    property int radius: win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
 
     Cask.PanelSection
     {

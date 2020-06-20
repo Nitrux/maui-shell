@@ -5,6 +5,8 @@ import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import org.cask.env 1.0 as Env
+
 import com.theqtcompany.wlprocesslauncher 1.0
 
 Cask.PanelSection
@@ -14,9 +16,10 @@ Cask.PanelSection
     //    backgroundColor: "transparent"
     spacing: Maui.Style.space.medium
 
-    preferredHeight: !win.isWide ? Maui.Style.toolBarHeight : Maui.Style.toolBarHeightAlt
-    margins: !win.isWide ? 0 : Maui.Style.space.medium
-    radius: !win.isWide ? 0 : Maui.Style.radiusV
+    preferredHeight: win.formFactor === Env.Env.Phone ? Maui.Style.toolBarHeight : Maui.Style.toolBarHeightAlt
+    margins:  win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
+    radius:  win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
+//visible: !(win.formFactor === Env.Env.Phone)
 
     Cask.PanelItem
     {

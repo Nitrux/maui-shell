@@ -19,6 +19,7 @@
 import QtQuick 2.12
 import QtWayland.Compositor 1.12
 import Qt.labs.settings 1.0
+import org.cask.env 1.0 as Env
 
 WaylandCompositor
 {
@@ -84,7 +85,9 @@ WaylandCompositor
 
     function handleShellSurfaceCreated(shellSurface, topLevel, decorate)
     {
-//        shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+        if(desktop.formFactor !== Env.Env.Desktop)
+            shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+
         _listSurfaces.append({shellSurface: shellSurface})
         desktop.swipeView.currentIndex = _listSurfaces.count-1
         desktop.showDesktop = false
