@@ -11,7 +11,7 @@ import org.kde.mauikit 1.2 as Maui
 Item
 {
     id: control
-    default property alias content : _content.data
+    default property alias content : _content.content
     property alias cards : popup.contentChildren
     property int popWidth : Math.min(_cask.avaliableWidth, Math.max(100, control.width))
     property alias popHeight : popup.height
@@ -19,22 +19,26 @@ Item
     property alias backgroundColor: _rec.color
     property alias radius : _rec.radius
     property alias spacing: _content.spacing
+    property alias leftContent: _content.leftContent
+    property alias middleContent: _content.middleContent
+    property alias rightContent: _content.rightContent
 
     property bool collapsed : false
-    property int position : ToolBar.Footer
+    property alias position :_content.position
 
-    property int preferredHeight: Maui.Style.toolBarHeightAlt
+    property alias preferredHeight: _content.preferredHeight
     property int margins : Maui.Style.space.medium
 
     property int currentCard : -1
 
-    Layout.minimumWidth: implicitWidth
+    Layout.minimumWidth: 0
     Layout.preferredWidth: implicitWidth
     Layout.margins: margins
-    Layout.fillWidth: false
 
-    implicitWidth: collapsed ? 0 : _content.implicitWidth
-    implicitHeight: collapsed ? 0 : preferredHeight
+    Layout.fillWidth: false
+    Layout.preferredHeight: preferredHeight
+
+    implicitWidth: collapsed ? 0 : _content.implicitWidth + Maui.Style.space.big
 
     Behavior on margins
     {
@@ -54,52 +58,48 @@ Item
         }
     }
 
-    Rectangle
+    Maui.ToolBar
     {
-        id: _rec
+        id: _content
         anchors.fill: parent
-
-        radius: Maui.Style.radiusV
-        opacity: 0.8
-        color: Kirigami.Theme.backgroundColor
-
-        Behavior on radius
+        preferredHeight: Maui.Style.toolBarHeightAlt
+        spacing: Maui.Style.space.tiny
+        position: ToolBar.Footer
+        background: Rectangle
         {
-            NumberAnimation
+            id: _rec
+            radius: Maui.Style.radiusV
+            opacity: 0.8
+            color: Kirigami.Theme.backgroundColor
+
+            Behavior on radius
             {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
+                NumberAnimation
+                {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
             }
-        }
-
-        Rectangle
-        {
-            anchors.fill: parent
-            //         anchors.margins: Maui.Style.space.small
-            radius: parent.radius
-            color: "transparent"
-            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-            opacity: 0.5
 
             Rectangle
             {
                 anchors.fill: parent
-                anchors.margins: 1
+                radius: parent.radius
                 color: "transparent"
-                radius: parent.radius - 0.5
-                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                opacity: 0.7
+                border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+                opacity: 0.5
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    anchors.margins: 1
+                    color: "transparent"
+                    radius: parent.radius - 0.5
+                    border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                    opacity: 0.7
+                }
             }
         }
-    }
-
-    RowLayout
-    {
-        id: _content
-        anchors.fill: parent
-        spacing: Maui.Style.space.tiny
-        clip: true
-        Item {Layout.fillHeight: true}
     }
 
     function isPanelItem(obj)
@@ -109,9 +109,31 @@ Item
 
     Component.onCompleted:
     {
-        for(var i in _content.children)
+        for(var i in _content.leftLayout.children)
         {
-            const obj = _content.children[i]
+            const obj = _content.leftLayout.children[i]
+            if(obj.card)
+            {
+                obj.card.index = popup.count
+                obj.card.visible = Qt.binding(function(){return (control.currentCard >= 0 ? control.currentCard === obj.card.index : true) })
+                popup.container.insertItem(popup.count, obj.card)
+            }
+        }
+
+        for(var i in _content.middleLayout.children)
+        {
+            const obj = _content.middleLayout.children[i]
+            if(obj.card)
+            {
+                obj.card.index = popup.count
+                obj.card.visible = Qt.binding(function(){return (control.currentCard >= 0 ? control.currentCard === obj.card.index : true) })
+                popup.container.insertItem(popup.count, obj.card)
+            }
+        }
+
+        for(var i in _content.rightLayout.children)
+        {
+            const obj = _content.rightLayout.children[i]
             if(obj.card)
             {
                 obj.card.index = popup.count
@@ -141,6 +163,7 @@ Item
     {
         id: handler
         target: null
+        grabPermissions: PointerHandler.CanTakeOverFromAnything
     }
 
     Connections

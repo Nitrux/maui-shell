@@ -98,11 +98,23 @@ WaylandOutput
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: height
 
+                    radius: Maui.Style.radiusV
+
                     Label
                     {
-                        color: "white"
-                        anchors.fill: parent
-                        text: win.formFactor
+                        color: "#333"
+                        width: parent.width
+                        horizontalAlignment: Qt.AlignHCenter
+                        font.bold: true
+                        font.pointSize: Maui.Style.fontSizes.big
+                        font.weight: Font.Bold
+                        anchors.centerIn: parent
+                        text:  switch(win.formFactor)
+                               {
+                               case Env.Env.Desktop : "Desktop \n" + win.width +" x " + win.height ; break;
+                               case Env.Env.Tablet : "Tablet \n" + win.width +" x " + win.height; break;
+                               case Env.Env.Phone : "Phone \n" + win.width +" x " + win.height; break;
+                               }
                     }
                 }
 
@@ -171,14 +183,7 @@ WaylandOutput
                                 width: _chromeDelegate.shellSurface.surface.width
                             }
 
-                            Connections
-                            {
-                                target: output.surfaceArea
-                                ignoreUnknownSignals: true
-                                enabled: win.formFactor !== Env.Env.Desktop
-                                //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
-                                onWidthChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
-                            }
+
                         }
                     }
 

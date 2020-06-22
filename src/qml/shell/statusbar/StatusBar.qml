@@ -10,71 +10,27 @@ import org.cask.env 1.0 as Env
 import "items"
 import "items/calendar"
 
-Cask.Panel
+
+Cask.PanelSection
 {
     id: control
+    Layout.fillWidth: !win.isWide
+
+
     property int position : win.isWide ? ToolBar.Footer : ToolBar.Header
 
-    Layout.fillWidth: true
 
-    property int preferredHeight: win.formFactor === Env.Env.Phone ?  Maui.Style.rowHeight: Maui.Style.toolBarHeightAlt
-    property int margins: win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
-    property int radius: win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
+    preferredHeight: win.formFactor === Env.Env.Phone ?  Maui.Style.rowHeight: Maui.Style.toolBarHeightAlt
+    margins: win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
+    radius: win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
 
-    Cask.PanelSection
-    {
-        visible: win.isWide
-        position: control.position
-        preferredHeight: parent.preferredHeight
-        margins: parent.margins
-        radius: parent.radius
 
+    leftContent: [
         Cask.PanelItem
-        {
-            icon.name: _trayBar.collapsed ? "go-previous" : "go-next"
-            onClicked: _trayBar.collapsed = !_trayBar.collapsed
-        }
-    }
-
-    Cask.PanelSection
-    {
-        id: _trayBar
-        visible: win.isWide
-        position: control.position
-        preferredHeight: parent.preferredHeight
-        margins: parent.margins
-        radius: parent.radius
-
-         Cask.PanelItem
-        {
-            icon.name: "call-incoming"
-        }
-
-         Cask.PanelItem
-        {
-            icon.name: "input-keyboard"
-        }
-
-         Cask.PanelItem
-        {
-            icon.name: "anchor"
-        }
-    }
-
-    Cask.PanelSection
-    {
-        id: _statusBar
-        Layout.fillWidth: !win.isWide
-        position: control.position
-        preferredHeight: parent.preferredHeight
-        margins: parent.margins
-        radius: parent.radius
-
-         Cask.PanelItem
         {
             visible: !isMobile
             icon.name: "camera-ready"
-        }
+        },
 
         Cask.PanelItem
         {
@@ -113,7 +69,7 @@ Cask.Panel
                 }
 
             }
-        }
+        },
 
         Cask.PanelItem
         {
@@ -176,7 +132,7 @@ Cask.Panel
                     }
                 ]
             }
-        }
+        },
 
         Cask.PanelItem
         {
@@ -219,10 +175,9 @@ Cask.Panel
             }
         }
 
-        Item
-        {
-            Layout.fillWidth: !win.isWide
-        }
+    ]
+
+    rightContent:[
 
         Cask.PanelItem
         {
@@ -233,7 +188,7 @@ Cask.Panel
 
             card: Cask.PanelCard
             {
-                width: parent.width                
+                width: parent.width
 
                 RowLayout
                 {
@@ -258,17 +213,17 @@ Cask.Panel
                     }
                 }
             }
-        }
+        },
 
         NetworkItem
         {
             onClicked: _statusBar.open(card.index)
-        }
+        },
 
         CalendarItem
         {
             onClicked: _statusBar.open(card.index)
-        }
+        },
 
         Cask.PanelItem
         {
@@ -277,51 +232,49 @@ Cask.Panel
 
             card: Cask.PanelCard
             {
-              width: parent.width
-              padding: 0
-              title: _nof.count + " " + qsTr("Notifications")
-              headBar.visible: true
-              headBar.leftContent: ToolButton
-              {
-                  icon.name: "configure"
-              }
+                width: parent.width
+                padding: 0
+                title: _nof.count + " " + qsTr("Notifications")
+                headBar.visible: true
+                headBar.leftContent: ToolButton
+                {
+                    icon.name: "configure"
+                }
 
-              headBar.rightContent: ToolButton
-              {
-                  icon.name: "edit-clear-all"
-              }
+                headBar.rightContent: ToolButton
+                {
+                    icon.name: "edit-clear-all"
+                }
 
-              ListView
-              {
-                  id: _nof
-                  width: parent.width
-                  height: Math.min(500, contentHeight)
-                  boundsBehavior: ListView.StopAtBounds
-                  model: 10
-                  spacing: Maui.Style.space.medium
-                  delegate: Maui.ItemDelegate
-                  {
-                      width: parent.width
-                      height: 80
+                ListView
+                {
+                    id: _nof
+                    width: parent.width
+                    height: Math.min(500, contentHeight)
+                    boundsBehavior: ListView.StopAtBounds
+                    model: 10
+                    spacing: Maui.Style.space.medium
+                    delegate: Maui.ItemDelegate
+                    {
+                        width: parent.width
+                        height: 80
 
-                      Maui.ListItemTemplate
-                      {
-                          anchors.fill: parent
-                          iconSource: "documentinfo"
-                          label1.text: "Notification Title"
-                          label2.text: "Blach some infor about the notification"
-                          iconSizeHint: Maui.Style.iconSizes.medium
-                          spacing: Maui.Style.space.medium
-                      }
+                        Maui.ListItemTemplate
+                        {
+                            anchors.fill: parent
+                            iconSource: "documentinfo"
+                            label1.text: "Notification Title"
+                            label2.text: "Blach some infor about the notification"
+                            iconSizeHint: Maui.Style.iconSizes.medium
+                            spacing: Maui.Style.space.medium
+                        }
 
-                      onClicked: _nof.model--
+                        onClicked: _nof.model--
 
-                  }
-              }
-
+                    }
+                }
             }
-        }
+        } ]
 
-
-    }
 }
+

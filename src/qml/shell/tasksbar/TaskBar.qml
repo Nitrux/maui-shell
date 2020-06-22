@@ -19,9 +19,8 @@ Cask.PanelSection
     preferredHeight: win.formFactor === Env.Env.Phone ? Maui.Style.toolBarHeight : Maui.Style.toolBarHeightAlt
     margins:  win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
     radius:  win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
-//visible: !(win.formFactor === Env.Env.Phone)
 
-    Cask.PanelItem
+    leftContent:[ Cask.PanelItem
     {
         Layout.fillWidth: false
         implicitWidth: height
@@ -160,7 +159,7 @@ Cask.PanelSection
                 }
             }
         }
-    }
+    },
 
     Cask.PanelItem
     {
@@ -169,40 +168,26 @@ Cask.PanelSection
         Layout.fillHeight: true
         icon.name: "window-copy"
         visible: !isMobile
-
+        checked: overView
         onClicked: overView = true
-    }
+    }]
 
-    Item
+    middleContent:  [ Repeater
     {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        model: ["index", "vvave", "nota", "buho", "pix"]
 
-        RowLayout
+        Maui.ItemDelegate
         {
-            width: Math.min(parent.width, implicitWidth)
-            height: parent.height
+            Layout.fillHeight: true
+            implicitWidth: height
 
-            Repeater
+            Kirigami.Icon
             {
-                model: ["index", "vvave", "nota", "buho", "pix"]
-
-                Maui.ItemDelegate
-                {
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: implicitWidth
-                    Layout.fillWidth: false
-                    implicitWidth: height
-
-                    Kirigami.Icon
-                    {
-                        source: modelData
-                        height: isMobile ? 32 :22
-                        width: height
-                        anchors.centerIn: parent
-                    }
-                }
+                source: modelData
+                height: isMobile ? 32 :22
+                width: height
+                anchors.centerIn: parent
             }
         }
-    }
+    }]
 }

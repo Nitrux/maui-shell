@@ -45,8 +45,10 @@ StackableItem
 
     property real resizeAreaWidth: 12
 
-    x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
-    y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+    property rect previousRect: Qt.rect(0,0,0,0)
+
+    x: surfaceItem.moveItem.x
+    y: surfaceItem.moveItem.y
 
 
     height: surfaceItem.height + titlebarHeight
@@ -143,10 +145,7 @@ StackableItem
                         order:  Maui.App.rightWindowControls
                     }
                 }
-
             }
-
-
         }
 
 
@@ -223,7 +222,40 @@ StackableItem
 
     }
 
+    Connections
+    {
+        target: output.surfaceArea
+        ignoreUnknownSignals: true
+        enabled: win.formFactor !== Env.Env.Desktop
+        //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
+        onWidthChanged:
+        {
+            if(win.formFactor !== Env.Env.Desktop)
+            {
+                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+            }
+        }
+    }
 
+    Connections
+    {
+        target: win
+        ignoreUnknownSignals: true
+        onFormFactorChanged:
+        {
+            if(win.formFactor === Env.Env.Desktop)
+            {
+                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(previousRect.width, previousRect.height), [XdgToplevel.ResizingState])
+                rootChrome.x = previousRect.x
+                rootChrome.y = previousRect.y
+            }else
+            {
+                 previousRect = Qt.rect(rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
+                rootChrome.x = output.geometry.x
+                rootChrome.y = output.geometry.y
+            }
+        }
+    }
 
 
     SequentialAnimation {
