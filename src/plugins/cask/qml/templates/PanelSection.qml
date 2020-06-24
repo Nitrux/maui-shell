@@ -40,6 +40,8 @@ Item
 
     implicitWidth: collapsed ? 0 : _content.implicitWidth + Maui.Style.space.big
 
+    signal contentDropped(var drop)
+
     Behavior on margins
     {
         NumberAnimation
@@ -100,6 +102,25 @@ Item
                 }
             }
         }
+    }
+
+    Maui.Rectangle
+    {
+        anchors.fill: parent
+        anchors.margins: Maui.Style.space.tiny
+        solidBorder: false
+        borderColor: Kirigami.Theme.textColor
+        borderWidth: 1
+        visible: _dropArea.containsDrag
+        color: "transparent"
+        opacity: 0.3
+    }
+
+    DropArea
+    {
+        id: _dropArea
+        anchors.fill: parent
+        onDropped: control.contentDropped(drop)
     }
 
     function isPanelItem(obj)

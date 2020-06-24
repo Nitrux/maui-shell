@@ -20,6 +20,7 @@ public:
 public slots:
     static void putenv(QString key, QString value);
     static void setIsMobile(const bool &value);
+    static QString appIconName(const QString &appId);
 signals:
 
 };
