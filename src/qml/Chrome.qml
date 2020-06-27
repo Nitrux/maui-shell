@@ -26,6 +26,7 @@ import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import org.cask.env 1.0 as Env
 import QtQuick.Layouts 1.3
+import org.kde.appletdecoration 0.1 as AppletDecoration
 
 StackableItem
 {
@@ -54,6 +55,17 @@ StackableItem
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
     visible: surfaceItem.valid
+
+    function performActiveWindowAction(type)
+    {
+        if (type === AppletDecoration.Types.Close) {
+            surfaceItem.surface.client.close()
+        } else if (type === AppletDecoration.Types.Maximize) {
+           surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(output.availableGeometry.width, output.availableGeometry.height))
+        } else if (type ===  AppletDecoration.Types.Minimize) {
+            rootChrome.visible = false
+        }
+    }
 
     Rectangle
     {
@@ -105,6 +117,8 @@ StackableItem
                 onTapped: rootChrome.lower()
             }
 
+
+
             RowLayout
             {
                 anchors.fill: parent
@@ -116,9 +130,10 @@ StackableItem
                     active: Maui.App.leftWindowControls.length
                     Layout.preferredWidth: active ? implicitWidth : 0
                     Layout.fillHeight: true
-                    sourceComponent: Maui.WindowControls
+                    sourceComponent: Maui.CSDControls
                     {
                         order: Maui.App.leftWindowControls
+                        onButtonClicked: performActiveWindowAction(type)
                     }
                 }
 
@@ -140,9 +155,10 @@ StackableItem
                     active: Maui.App.rightWindowControls.length
                     Layout.preferredWidth: active ? implicitWidth : 0
                     Layout.fillHeight: true
-                    sourceComponent: Maui.WindowControls
+                    sourceComponent: Maui.CSDControls
                     {
                         order:  Maui.App.rightWindowControls
+                        onButtonClicked: performActiveWindowAction(type)
                     }
                 }
             }
