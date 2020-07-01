@@ -61,7 +61,10 @@ StackableItem
         if (type === AppletDecoration.Types.Close) {
             surfaceItem.surface.client.close()
         } else if (type === AppletDecoration.Types.Maximize) {
-           surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(output.availableGeometry.width, output.availableGeometry.height))
+           rootChrome.x = 0
+           rootChrome.y = 0
+            rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [XdgToplevel.MaximizedState])
+
         } else if (type ===  AppletDecoration.Types.Minimize) {
             rootChrome.visible = false
         }
@@ -400,9 +403,26 @@ StackableItem
                         }
     }
 
+    layer.enabled: true
+    layer.effect: OpacityMask
+    {
+        maskSource: Item
+        {
+            width: rootChrome.width
+            height: rootChrome.height
+
+            Rectangle
+            {
+                anchors.fill: parent
+                radius: Maui.Style.radiusV
+            }
+        }
+    }
+
     Rectangle
     {
         anchors.fill: parent
+        visible: decoration.visible
         z: surfaceItem.z + 9999999999
         //         anchors.margins: Maui.Style.space.small
         radius: Maui.Style.radiusV
