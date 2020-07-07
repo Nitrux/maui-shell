@@ -81,9 +81,11 @@ WaylandOutput
                 id: _cask
                 anchors.fill: parent
                 anchors.bottomMargin: _swiper.height
+
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
-                bottomPanel.children: win.isWide ? [_taskBar, _statusBar] :  [_taskBar]
-                topPanel.children: win.isWide ? [] :  [statusBar]
+
+                bottomPanel.children: [_taskBar]
+                topPanel.children: [statusBar]
                 bottomPanel.visible: win.formFactor === Env.Env.Phone ? showDesktop || _listSurfaces.count <= 0 : true
 
                 readonly property QtObject statusBar : StatusBar {id: _statusBar}
@@ -162,29 +164,12 @@ WaylandOutput
                     }
 
                     model: _listSurfaces
-                    delegate: Item
+                    delegate: Space
                     {
-
                         height: _swipeView.height
-                        width: _swipeView.width
-                        clip: true
-
-                        Chrome
-                        {
-                            id: _chromeDelegate
-                            shellSurface: modelData
-                            moveItem: Item
-                            {
-                                property bool moving: false
-                                parent: surfaceArea
-                                x: output.position.x
-                                y: output.position.y
-                                height: _chromeDelegate.shellSurface.surface.height
-                                width: _chromeDelegate.shellSurface.surface.width
-                            }
-
-
-                        }
+                        width: _cask.width
+                        x: 0
+                        Component.onCompleted: insert(modelData)
                     }
 
                 }

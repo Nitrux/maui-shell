@@ -20,7 +20,7 @@ Maui.Page
     background: FastBlur
     {
         id: fastBlur
-        source: _cask
+        source: _cask.background
         radius: overView ?  100 :  Math.min(100, overviewHandler.centroid.position.y * -1)
         transparentBorder: false
         cached: true
@@ -144,7 +144,6 @@ Maui.Page
                         sizeFollowsSurface: false
                         smooth: true
                         anchors.fill: parent
-
 
                         layer.enabled: true
                         layer.effect: OpacityMask

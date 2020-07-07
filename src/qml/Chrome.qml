@@ -47,13 +47,13 @@ StackableItem
     property real resizeAreaWidth: 12
 
     property rect previousRect: Qt.rect(0,0,0,0)
+    clip: true
 
-    x: surfaceItem.moveItem.x
-    y: surfaceItem.moveItem.y
+//    x: surfaceItem.moveItem.x
+//    y: surfaceItem.moveItem.y
 
-
-    height: surfaceItem.height + titlebarHeight
-    width: surfaceItem.width
+//    height: surfaceItem.height + titlebarHeight
+//    width: surfaceItem.width
     visible: surfaceItem.valid
 
     function performActiveWindowAction(type)
@@ -240,7 +240,8 @@ StackableItem
 
     Connections
     {
-        target: output.surfaceArea
+//        target: output.surfaceArea
+        target: rootChrome
         ignoreUnknownSignals: true
         enabled: win.formFactor !== Env.Env.Desktop
         //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
@@ -248,7 +249,7 @@ StackableItem
         {
             if(win.formFactor !== Env.Env.Desktop)
             {
-                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(rootChrome.width,rootChrome.height), [0])
             }
         }
     }
@@ -398,7 +399,31 @@ StackableItem
                                 createAnimationImpl.start()
                             }
                         }
+
+        Component.onCompleted:
+        {
+            if(win.formFactor !== Env.Env.Desktop)
+            {
+                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(rootChrome.width,rootChrome.height), [0])
+            }
+        }
     }
+
+//    layer.enabled: true
+//    layer.effect: OpacityMask
+//    {
+//        maskSource: Item
+//        {
+//            width: surfaceItem.width
+//            height: surfaceItem.height
+
+//            Rectangle
+//            {
+//                anchors.fill: parent
+//                radius: Maui.Style.radiusV
+//            }
+//        }
+//    }
 
     Rectangle
     {

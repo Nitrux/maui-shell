@@ -10,5 +10,6 @@
         <file>qml/shell/AppsOverview.qml</file>
         <file>qml/shell/statusbar/items/NetworkItem.qml</file>
         <file>qml/shell/statusbar/items/calendar/CalendarItem.qml</file>
+        <file>qml/shell/Space.qml</file>
     </qresource>
 </RCC>

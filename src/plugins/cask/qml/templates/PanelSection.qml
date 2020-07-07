@@ -13,7 +13,7 @@ Item
     id: control
     default property alias content : _content.content
     property alias cards : popup.contentChildren
-    property int popWidth : Math.min(_cask.avaliableWidth, Math.max(100, control.width))
+    property int popWidth : Math.min(_cask.avaliableWidth, control.width)
     property alias popHeight : popup.height
 
     property alias backgroundColor: _rec.color
@@ -22,9 +22,9 @@ Item
     property alias leftContent: _content.leftContent
     property alias middleContent: _content.middleContent
     property alias rightContent: _content.rightContent
+    property alias position :_content.position
 
     property bool collapsed : false
-    property alias position :_content.position
 
     property alias preferredHeight: _content.preferredHeight
     property int margins : Maui.Style.space.medium

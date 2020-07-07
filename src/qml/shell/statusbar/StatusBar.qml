@@ -14,16 +14,18 @@ import "items/calendar"
 Cask.PanelSection
 {
     id: control
-    Layout.fillWidth: !win.isWide
+   position : ToolBar.Header
 
-
-    property int position : win.isWide ? ToolBar.Footer : ToolBar.Header
-
+    Layout.fillWidth: true
 
     preferredHeight: win.formFactor === Env.Env.Phone ?  Maui.Style.rowHeight: Maui.Style.toolBarHeightAlt
     margins: win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
     radius: win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
 
+    middleContent: CalendarItem
+    {
+        onClicked: _statusBar.open(card.index)
+    }
 
     leftContent: [
         Cask.PanelItem
@@ -34,15 +36,15 @@ Cask.PanelSection
 
         Cask.PanelItem
         {
+            id: _micItem
             visible: !isMobile
             icon.name: "mic-ready"
             onClicked: _statusBar.open(card.index)
 
             card: Cask.PanelCard
             {
-                width: parent.width
                 implicitHeight: _tooglesGrid.contentHeight + Maui.Style.space.big
-
+                alignment: _micItem.parent.alignment
                 Maui.GridView
                 {
                     id:_tooglesGrid
@@ -216,11 +218,6 @@ Cask.PanelSection
         },
 
         NetworkItem
-        {
-            onClicked: _statusBar.open(card.index)
-        },
-
-        CalendarItem
         {
             onClicked: _statusBar.open(card.index)
         },

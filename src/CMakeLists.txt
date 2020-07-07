@@ -1,5 +1,9 @@
 set(cask_SRCS
     main.cpp
+    models/zpacemodel.cpp
+    models/appsmodel.cpp
+    models/zpaceitem.cpp
+    models/appitem.cpp
     )
 
 set(cask_ASSETS

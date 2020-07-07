@@ -13,10 +13,10 @@ Cask.PanelItem
     text: new Date().toTimeString()
     card: Cask.PanelCard
     {
-        width: parent.width
         padding: 0
         title: listview.currentItem.month + " - " + listview.currentItem.year
         headBar.visible: true
+        alignment: control.parent.alignment
 
         ListView
         {

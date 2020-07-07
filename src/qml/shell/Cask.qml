@@ -17,17 +17,17 @@ Item
     readonly property alias contentY: _content.y
     readonly property alias surface : _content
 
-    property alias background : _rec
-
-    property alias backgroundColor : _rec.color
-    property alias backgroundImage: _img.source
-
     property alias topPanel: _topPanel
     property alias bottomPanel: _bottomPanel
 
     signal desktopPressed(var mouse)
 
     readonly property bool rise : _dropArea.containsDrag
+
+    property alias background : _rec
+
+    property alias backgroundColor : _rec.color
+    property alias backgroundImage: _img.source
 
     Rectangle
     {
@@ -114,6 +114,8 @@ Item
             }
         }
     }
+
+
 
     ColumnLayout
     {
