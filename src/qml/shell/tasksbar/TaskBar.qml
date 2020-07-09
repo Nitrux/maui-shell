@@ -36,8 +36,8 @@ Cask.PanelSection
 
             card: Cask.PanelCard
             {
-                width: parent.width
-                height: 500
+                alignment: Qt.AlignLeft
+                implicitHeight: 500
                 padding: 0
 
                 Maui.Page
@@ -212,6 +212,12 @@ Cask.PanelSection
                 draggable: true
 
                 onClicked: _swipeView.currentIndex = index
+
+                Maui.ListItemTemplate
+                {
+                    width: 60
+                    
+                }
 
                 Kirigami.Icon
                 {

@@ -44,24 +44,18 @@ Item
         id: _splitView
       anchors.fill: parent
       orientation: Qt.Horizontal
-      Rectangle
+      background: null
+      Item
       {
-          color: "orange"
+//          color: "orange"
           SplitView.fillHeight: true
           SplitView.fillWidth: true
           SplitView.minimumHeight: 100
           SplitView.minimumWidth: 100
+          opacity : 0.2
       }
 
 
-      Rectangle
-      {
-          color: "blue"
-          SplitView.fillHeight: true
-          SplitView.fillWidth: true
-          SplitView.minimumHeight: 100
-          SplitView.minimumWidth: 100
-      }
     }
 
     function insert(item)
