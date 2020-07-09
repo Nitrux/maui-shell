@@ -10,6 +10,7 @@ import MeeGo.Connman 0.2
 
 Cask.PanelItem
 {
+    id: control
     icon.name: "network-wireless"
 
     NetworkManager
@@ -32,7 +33,7 @@ Cask.PanelItem
 
     card: Cask.PanelCard
     {
-      width: parent.width
+       alignment: control.parent.alignment
       implicitHeight: 500
       padding: 0
       title: qsTr("Network")

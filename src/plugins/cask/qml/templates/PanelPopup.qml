@@ -18,7 +18,6 @@ Item
     property alias implicitHeight: _cardsList.contentHeight
     property alias contentChildren : _cards.contentChildren
 
-
     Rectangle
     {
         parent: surfaceArea
@@ -29,8 +28,9 @@ Item
         color: Kirigami.Theme.backgroundColor
         radius: Maui.Style.radiusV
         //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-    }
 
+
+    }
 
     ScrollView
     {
@@ -52,6 +52,11 @@ Item
                 snapMode: ListView.SnapOneItem
                 orientation: ListView.Vertical
                 boundsBehavior: ListView.StopAtBounds
+
+                TapHandler
+                {
+                    onTapped: close()
+                }
             }
         }
     }

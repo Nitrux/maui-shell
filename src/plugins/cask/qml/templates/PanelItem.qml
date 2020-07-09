@@ -24,6 +24,9 @@ AbstractButton
 
     icon.height: iconSize
     icon.width: iconSize
+    icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+
+    checked: card ? currentCard === card.index : false
 
     Behavior on iconSize
     {
@@ -50,11 +53,11 @@ AbstractButton
             Kirigami.Icon
             {
                 id: _icon
-                source: control.icon.name
+                source: control.icon.name                
                 height: control.icon.height
                 width: control.icon.width
                 anchors.centerIn: parent
-                color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                color: control.checked || control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
             }
         }
 
@@ -69,6 +72,7 @@ AbstractButton
             wrapMode: Text.NoWrap
             elide: Text.ElideRight
             color: _icon.color
+            font: control.font
         }
     }
 }

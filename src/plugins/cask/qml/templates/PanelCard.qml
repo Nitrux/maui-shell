@@ -14,16 +14,22 @@ Item
     implicitHeight: _layout.implicitHeight + _page.header.height + _page.footer.height + _page.padding + Maui.Style.space.big
     implicitWidth: 500
 
-    width: Math.min(control.parent.width, implicitWidth)
+    width: currentCard === index ? Math.min(control.parent.width, implicitWidth) :  control.parent.width
     height: visible ? implicitHeight : 0
 
-    x: switch(alignment)
-       {
-       case Qt.AlignLeft: return  0;
-       case Qt.AlignCenter: return  (control.parent.width / 2) - (control.width / 2);
-       case Qt.AlignRight: return  (control.parent.width) - (control.width);
+    x:
+    {
+        if(currentCard === index)
+        {
+            switch(alignment)
+            {
+            case Qt.AlignLeft: return  0;
+            case Qt.AlignCenter: return  (control.parent.width / 2) - (control.width / 2);
+            case Qt.AlignRight: return  (control.parent.width) - (control.width);
 
-       }
+            }
+        }else return 0
+    }
 
     property alias title : _page.title
     property alias padding : _page.padding

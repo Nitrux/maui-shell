@@ -60,12 +60,13 @@ Cask.PanelSection
                         height: _tooglesGrid.cellHeight
                         width: _tooglesGrid.cellWidth
                         background: null
-                        Kirigami.Icon
+                        ToolButton
                         {
-                            source: modelData
-                            anchors.centerIn: parent
-                            height: Maui.Style.iconSizes.medium
-                            width: height
+                            icon.name: modelData
+
+                            anchors.fill: parent
+                            icon.width: Maui.Style.iconSizes.medium
+                            icon.height:  Maui.Style.iconSizes.medium
                         }
                     }
                 }
@@ -75,13 +76,14 @@ Cask.PanelSection
 
         Cask.PanelItem
         {
+            id: _playbackItem
             visible: !isMobile
             icon.name: "headphones"
             onClicked: _statusBar.open(card.index)
 
             card: Cask.PanelCard
             {
-                width: parent.width
+                alignment: _playbackItem.parent.alignment
                 padding: 0
 
                 Maui.ListItemTemplate
@@ -138,13 +140,14 @@ Cask.PanelSection
 
         Cask.PanelItem
         {
+            id: _volumeItem
             visible: !isMobile
             icon.name: "audio-volume-medium"
             onClicked: _statusBar.open(card.index)
 
             card: Cask.PanelCard
             {
-                width: parent.width
+                alignment: _volumeItem.parent.alignment
 
                 Column
                 {
@@ -183,6 +186,7 @@ Cask.PanelSection
 
         Cask.PanelItem
         {
+            id: _powerItem
             display: ToolButton.TextBesideIcon
             icon.name: "battery-080"
             text: "80%"
@@ -190,7 +194,7 @@ Cask.PanelSection
 
             card: Cask.PanelCard
             {
-                width: parent.width
+                 alignment: _powerItem.parent.alignment
 
                 RowLayout
                 {
@@ -224,12 +228,13 @@ Cask.PanelSection
 
         Cask.PanelItem
         {
+            id: _notificationsItem
             icon.name: "notifications"
             onClicked: _statusBar.open(card.index)
 
             card: Cask.PanelCard
             {
-                width: parent.width
+                alignment: _notificationsItem.parent.alignment
                 padding: 0
                 title: _nof.count + " " + qsTr("Notifications")
                 headBar.visible: true

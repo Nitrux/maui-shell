@@ -11,6 +11,8 @@ Cask.PanelItem
 {
     id: control
     text: new Date().toTimeString()
+    font.bold: true
+    font.weight: Font.Bold
     card: Cask.PanelCard
     {
         padding: 0

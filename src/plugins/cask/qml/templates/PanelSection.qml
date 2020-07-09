@@ -167,7 +167,8 @@ Item
     PanelPopup
     {
         id: popup
-
+        visible: opacity > 0.1
+        opacity: handler.active ? height/ 200 : 1
         y: control.position === ToolBar.Footer ? 0 - (height + Maui.Style.space.medium) : control.height + Maui.Style.space.medium
         //x: Math.min(0, control.width - width)
         Binding on suggestedHeight
