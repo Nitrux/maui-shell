@@ -427,6 +427,7 @@ StackableItem
 
     Rectangle
     {
+        visible: decorationVisible
         anchors.fill: parent
         z: surfaceItem.z + 9999999999
         //         anchors.margins: Maui.Style.space.small
@@ -475,8 +476,9 @@ StackableItem
             id: moveGeometryText
             color: "white"
             anchors.centerIn: parent
-            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + surfaceItem.output.cask.bottomPanel.height
+            text: topLevel.minSize.width
+        }
         }
 
-    }
+//    }
 }

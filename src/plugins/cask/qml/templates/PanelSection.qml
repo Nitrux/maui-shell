@@ -186,6 +186,10 @@ Item
         id: handler
         target: null
         grabPermissions: PointerHandler.CanTakeOverFromAnything
+        xAxis.enabled: false
+        yAxis.minimum: control.position === ToolBar.Footer ? 0-_cask.avaliableHeight : 0
+        yAxis.maximum: control.position === ToolBar.Footer ? 0 : _cask.avaliableHeight
+
     }
 
     Connections

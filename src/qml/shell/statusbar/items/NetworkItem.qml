@@ -1,3 +1,4 @@
+
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.3
@@ -6,30 +7,30 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 import org.kde.plasma.networkmanagement 0.2 as PlasmaNM
-import MeeGo.Connman 0.2
+//import MeeGo.Connman 0.2
 
 Cask.PanelItem
 {
     id: control
     icon.name: "network-wireless"
 
-    NetworkManager
-    {
-        id: manager
-        function checkTechnologies() {
-            var tl = manager.technologiesList()
-            if (tl.length > 0)
-                techList.model = tl
-            console.log("state " + state + " available? " + available + " enabled svcs " + servicesEnabled + " techs " + technologiesEnabled)
-            console.log("   list " + tl)
-        }
+//    NetworkManager
+//    {
+//        id: manager
+//        function checkTechnologies() {
+//            var tl = manager.technologiesList()
+//            if (tl.length > 0)
+//                techList.model = tl
+//            console.log("state " + state + " available? " + available + " enabled svcs " + servicesEnabled + " techs " + technologiesEnabled)
+//            console.log("   list " + tl)
+//        }
 
-        onAvailabilityChanged: checkTechnologies()
-        onStateChanged: checkTechnologies()
-        onOfflineModeChanged: checkTechnologies()
-        onTechnologiesChanged: checkTechnologies()
-        onTechnologiesEnabledChanged: checkTechnologies()
-    }
+//        onAvailabilityChanged: checkTechnologies()
+//        onStateChanged: checkTechnologies()
+//        onOfflineModeChanged: checkTechnologies()
+//        onTechnologiesChanged: checkTechnologies()
+//        onTechnologiesEnabledChanged: checkTechnologies()
+//    }
 
     card: Cask.PanelCard
     {
@@ -71,7 +72,7 @@ Cask.PanelItem
                   width: parent.width
                   height: 40
                   color: "#222"
-                  property NetworkTechnology tech: manager.getTechnology(modelData)
+//                  property NetworkTechnology tech: manager.getTechnology(modelData)
                   Text {
                       text: tech.name
                       color: "white"
@@ -101,13 +102,13 @@ Cask.PanelItem
           ListView {
               id: wifiList
               spacing: 2
-              model: TechnologyModel {
-                  id: techModel
-                  name: "wifi"
-                  onAvailabilityChanged: {
-                      console.log(name + " powered? " + powered + " available? " + available)
-                  }
-              }
+//              model: TechnologyModel {
+//                  id: techModel
+//                  name: "wifi"
+//                  onAvailabilityChanged: {
+//                      console.log(name + " powered? " + powered + " available? " + available)
+//                  }
+//              }
               delegate: Rectangle {
                   width: parent.width
                   height: 40
