@@ -56,7 +56,9 @@ WaylandOutput
         Maui.App.enableCSD: true
         color: "transparent"
         title: formFactor
-        headBar.visible: false
+//        floatingHeader: true
+        autoHideHeader: true
+
         isWide: width > 1000
 
         readonly property int formFactor :  {
@@ -67,6 +69,60 @@ WaylandOutput
             else
                 return Env.Env.Phone
         }
+
+        headBar.leftContent: [
+
+        Maui.ToolActions
+            {
+                autoExclusive: true
+                expanded: true
+                display: ToolButton.TextBesideIcon
+                Action
+                {
+                    checked: formFactor === Env.Env.Phone
+                    text: qsTr("Phone")
+                    icon.name: "phone"
+                    onTriggered:
+                    {
+                        win.width = 400
+                        win.height = 800
+                    }
+                }
+
+                Action
+                {
+                    checked: formFactor === Env.Env.Tablet
+                    text: qsTr("Tablet")
+                    icon.name: "tablet"
+                    onTriggered:
+                    {
+                        win.width = 1200
+                        win.height = 800
+                    }
+                }
+
+                Action
+                {
+                    checked: formFactor === Env.Env.Desktop
+                    text: qsTr("Desktop")
+                    icon.name: "desktop"
+                    onTriggered:
+                    {
+                        win.width = 1800
+                        win.height = 900
+                    }
+                }
+            },
+
+            Button
+            {
+                checked: win.visibility === Window.FullScreen
+                text: qsTr("Fullscreen")
+                icon.name: "fullscreen"
+                onClicked: win.visibility = (win.visibility === Window.FullScreen ? Window.Windowed : Window.FullScreen)
+            }
+
+        ]
 
 
         WaylandMouseTracker
