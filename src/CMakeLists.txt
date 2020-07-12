@@ -4,12 +4,16 @@ set(cask_SRCS
     models/appsmodel.cpp
     models/zpaceitem.cpp
     models/appitem.cpp
+    controllers/cask.cpp
     )
 
 set(cask_ASSETS
     qml.qrc
     assets/assets.qrc
     )
+
+include_directories(controllers)
+include_directories(models)
 
 add_subdirectory(plugins)
 
@@ -19,7 +23,7 @@ add_executable(cask
     ${cask_ASSETS}
     )
 
-target_link_libraries(cask plugins Qt5::Qml Qt5::Quick Qt5::Svg KF5::I18n)
+target_link_libraries(cask plugins Qt5::Qml Qt5::Quick Qt5::Svg Qt5::WaylandCompositor KF5::I18n)
 
 if(ANDROID)
     target_link_libraries(cask Qt5::AndroidExtras)

@@ -20,6 +20,7 @@ import QtQuick 2.12
 import QtWayland.Compositor 1.12
 import Qt.labs.settings 1.0
 import org.cask.env 1.0 as Env
+import org.maui.cask 1.0 as Cask
 
 WaylandCompositor
 {
@@ -83,20 +84,29 @@ WaylandCompositor
         property string model: ""
     }
 
+    Env.Cask
+    {
+        id: _manager
+        output: desktop
+    }
+
     function handleShellSurfaceCreated(shellSurface, topLevel, decorate)
     {
         if(desktop.formFactor !== Env.Env.Desktop)
             shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
 
-        if(_listSurfaces.count === 1)
-        {
-            console.log("Current item", desktop.swipeView.count, desktop.swipeView.currentItem.count)
-            desktop.swipeView.currentItem.insert( shellSurface)
-            return
-        }
+
+//        if(_listSurfaces.count === 1)
+//        {
+//            console.log("Current item", desktop.swipeView.count, desktop.swipeView.currentItem.count)
+//            desktop.swipeView.currentItem.insert( shellSurface)
+//            return
+//        }
 
         _listSurfaces.append({shellSurface: shellSurface})
         desktop.swipeView.currentIndex = _listSurfaces.count-1
         desktop.showDesktop = false
+        _manager.insertSurface(shellSurface)
+
     }
 }

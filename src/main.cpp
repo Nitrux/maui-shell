@@ -34,6 +34,8 @@
 #include "plugins/stackableitem.h"
 #include "plugins/enviroment.h"
 
+#include "cask.h"
+
 #include <errno.h>
 #include <signal.h>
 #include <string.h>
@@ -265,6 +267,7 @@ int main(int argc, char *argv[])
 	registerTypes();
 	qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
 
+    qmlRegisterType<Cask>("org.cask.env", 1, 0, "Cask");
 	QQmlApplicationEngine appEngine;
 	appEngine.load(QUrl("qrc:/qml/main.qml"));
 	QObject *root = appEngine.rootObjects().first();
