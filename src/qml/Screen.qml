@@ -180,18 +180,19 @@ WaylandOutput
                 {
                     id: _swipeView
                     anchors.fill: parent
-                    visible: !showDesktop
+//                    visible: !showDesktop
 
                     Binding on currentIndex
                     {
-                        delayed: true
-                        value:  _appsOverview.currentIndex
+//                        delayed: true
+                        value: _manager.zpaces.currentIndex
                         restoreMode: Binding.RestoreBinding
                     }
 
                     onCurrentIndexChanged:
                     {
                         _swipeView.lastPos = _swipeView.contentX
+                        model.currentIndex = currentIndex
                     }
 
                     orientation: ListView.Horizontal
@@ -219,13 +220,25 @@ WaylandOutput
                         restoreMode: Binding.RestoreBinding
                     }
 
-                    model: _listSurfaces
+                    model: _manager.zpaces
                     delegate: Space
                     {
                         height: _swipeView.height
                         width: _cask.width
                         x: 0
-                        Component.onCompleted: insert(modelData)
+                        property var space : model.space
+
+                        Rectangle
+                        {
+                            height: 100
+                            width: 200
+                            color: "green"
+                            Label
+                            {
+                                color: "orange"
+                                text: _swipeView.count
+                            }
+                        }
                     }
 
                 }

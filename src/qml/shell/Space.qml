@@ -15,30 +15,6 @@ Item
     clip: true
     property alias count : _splitView.count
 
-    Component
-    {
-        id: _chrome
-
-        Chrome
-        {
-            id: _chromeDelegate
-            //         shellSurface: modelData
-            SplitView.fillHeight: true
-            SplitView.fillWidth: true
-            SplitView.minimumHeight: Math.max(100, topLevel,minSize.height)
-            SplitView.minimumWidth: Math.max(100, topLevel.minSize.width)
-
-            //         moveItem: Item
-            //         {
-            //             property bool moving: false
-            //             parent: surfaceArea
-            //             x: output.position.x
-            //             y: output.position.y
-            //             height: _chromeDelegate.shellSurface.surface.height
-            //             width: _chromeDelegate.shellSurface.surface.width
-            //         }
-        }
-    }
 
     SplitView
     {
@@ -56,12 +32,68 @@ Item
         //          opacity : 0.2
         //      }
 
+        handle: Rectangle
+        {
+            implicitWidth: 10
+            implicitHeight: 10
+            color: SplitHandle.pressed ? Kirigami.Theme.highlightColor
+                                       : (SplitHandle.hovered ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.1) : Kirigami.Theme.backgroundColor)
+
+            Rectangle
+            {
+                anchors.centerIn: parent
+                height: 48
+                width: parent.width
+                color: _splitSeparator.color
+            }
+
+            Kirigami.Separator
+            {
+                id: _splitSeparator
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+            }
+
+            Kirigami.Separator
+            {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+            }
+        }
+
+        Repeater
+        {
+            model: space.surfaces
+
+            Chrome
+            {
+                id: _chromeDelegate
+                         shellSurface: model.surface
+                SplitView.fillHeight: true
+                SplitView.fillWidth: true
+                SplitView.minimumHeight: Math.max(100, topLevel,minSize.height)
+                SplitView.minimumWidth: Math.max(100, topLevel.minSize.width)
+
+                         moveItem: Item
+                         {
+                             property bool moving: false
+                             parent: surfaceArea
+                             x: output.position.x
+                             y: output.position.y
+                             height: _chromeDelegate.shellSurface.surface.height
+                             width: _chromeDelegate.shellSurface.surface.width
+                         }
+            }
+        }
+
 
     }
 
-    function insert(item)
-    {
-        _splitView.insertItem(0,_chrome.createObject(_splitView, { shellSurface: item}))
-    }
+//    function insert(item)
+//    {
+//        _splitView.insertItem(0,_chrome.createObject(_splitView, { shellSurface: item}))
+//    }
 
 }

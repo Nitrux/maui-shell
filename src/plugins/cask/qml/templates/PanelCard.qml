@@ -14,7 +14,7 @@ Item
     implicitHeight: _layout.implicitHeight + _page.header.height + _page.footer.height + _page.padding + Maui.Style.space.big
     implicitWidth: 500
 
-    width: currentCard === index ? Math.min(control.parent.width, implicitWidth) :  control.parent.width
+    width: currentCard === index ? Math.min(control.parent.width, implicitWidth) :  Math.min(500, control.parent.width)
     height: visible ? implicitHeight : 0
 
     x:
@@ -28,7 +28,7 @@ Item
             case Qt.AlignRight: return  (control.parent.width) - (control.width);
 
             }
-        }else return 0
+        }else return  (control.parent.width / 2) - (control.width / 2)
     }
 
     property alias title : _page.title

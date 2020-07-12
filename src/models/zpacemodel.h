@@ -6,18 +6,17 @@
 #include <QWaylandXdgSurface>
 #include <QDebug>
 
-#include "appsmodel.h"
 #include "zpace.h"
 
 class ZpaceModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(AppsModel *appsModel READ appsModel CONSTANT FINAL)
-
+    Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     enum Roles
     {
-        Apps,
+        Space,
         Name,
         Id,
         Count
@@ -30,14 +29,37 @@ public:
 
     void insert(QWaylandXdgSurface *surface);
 
-    AppsModel * appsModel() const
-    {
-        return m_appsModel;
-    }
+    /**
+     * @brief currentIndex
+     * current space index
+     * @return
+     */
+    int currentIndex() const;
+
+    Zpace* currentSpace();
+
+    int count() const;
+
+public slots:
+    /**
+     * @brief setCurrentIndex
+     * set the current space index
+     * @param index
+     * index of the current space being used
+     */
+    void setCurrentIndex(int currentIndex);
 
 private:
     QVector<Zpace*> m_zpaces;
-    AppsModel * m_appsModel;
+    int m_currentIndex = -1;
+    int m_count = 0;
+
+    void setCount();
+
+signals:
+    void currentIndexChanged(int currentIndex);
+
+    void countChanged(int count);
 };
 
 #endif // ZPACEMODEL_H

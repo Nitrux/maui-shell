@@ -103,9 +103,9 @@ WaylandCompositor
 //            return
 //        }
 
-        _listSurfaces.append({shellSurface: shellSurface})
-        desktop.swipeView.currentIndex = _listSurfaces.count-1
-        desktop.showDesktop = false
+//        _listSurfaces.append({shellSurface: shellSurface})
+//        desktop.swipeView.currentIndex = _listSurfaces.count-1
+//        desktop.showDesktop = false
         _manager.insertSurface(shellSurface)
 
     }

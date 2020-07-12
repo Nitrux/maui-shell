@@ -3,6 +3,7 @@ set(cask_SRCS
     models/zpacemodel.cpp
     models/appsmodel.cpp
     models/zpaceitem.cpp
+    models/zpace.cpp
     models/appitem.cpp
     controllers/cask.cpp
     )
