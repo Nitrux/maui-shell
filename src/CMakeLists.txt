@@ -24,7 +24,7 @@ add_executable(cask
     ${cask_ASSETS}
     )
 
-target_link_libraries(cask plugins Qt5::Qml Qt5::Quick Qt5::Svg Qt5::WaylandCompositor KF5::I18n)
+target_link_libraries(cask caskplugin plugins Qt5::Qml Qt5::Quick Qt5::Svg Qt5::WaylandCompositor KF5::I18n)
 
 if(ANDROID)
     target_link_libraries(cask Qt5::AndroidExtras)
@@ -36,3 +36,18 @@ install(TARGETS cask ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 #TODO: port to ecm_install_icons()
 #install(FILES assets/pix.svg DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor/scalable/apps)
+
+
+add_executable(
+    startcask
+
+    startcask.cpp
+)
+
+target_link_libraries(
+    startcask
+
+    Qt5::Core
+)
+
+install(TARGETS startcask DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
