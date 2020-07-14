@@ -1,0 +1,5 @@
+[Desktop Entry]
+Exec=/usr/bin/startcask
+TryExec=/usr/bin/startcask
+Name=Maui Shell
+Comment=Maui Shell
