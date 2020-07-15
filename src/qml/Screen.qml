@@ -56,7 +56,7 @@ WaylandOutput
         Maui.App.enableCSD: true
         color: "transparent"
         title: formFactor
-//        floatingHeader: true
+        //        floatingHeader: true
         autoHideHeader: true
 
         isWide: width > 1000
@@ -72,7 +72,7 @@ WaylandOutput
 
         headBar.leftContent: [
 
-        Maui.ToolActions
+            Maui.ToolActions
             {
                 autoExclusive: true
                 expanded: true
@@ -180,11 +180,11 @@ WaylandOutput
                 {
                     id: _swipeView
                     anchors.fill: parent
-//                    visible: !showDesktop
+                    //                    visible: !showDesktop
 
                     Binding on currentIndex
                     {
-//                        delayed: true
+                        //                        delayed: true
                         value: _manager.zpaces.currentIndex
                         restoreMode: Binding.RestoreBinding
                     }
@@ -199,7 +199,7 @@ WaylandOutput
                     interactive: false
                     snapMode: ListView.SnapOneItem
                     boundsBehavior: Flickable.StopAtBounds
-
+                    cacheBuffer: width * count
                     highlightFollowsCurrentItem: true
                     highlightMoveDuration: 0
                     highlightResizeDuration: 0

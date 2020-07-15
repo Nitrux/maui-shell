@@ -85,10 +85,10 @@ Maui.Page
             restoreMode: Binding.RestoreBinding
         }
         height: parent.height * 0.8
-        width: parent.width * 0.8
+        width: parent.width
         anchors.centerIn: parent
         orientation: ListView.Horizontal
-        model: _listSurfaces
+        model: _manager.zpaces
         snapMode: ListView.SnapToItem
         spacing: Maui.Style.space.big
 
@@ -99,143 +99,167 @@ Maui.Page
                 overView = false
         }
 
-        delegate: ItemDelegate
+        delegate: Rectangle
+         {
+             height: _overviewList.height
+             width: _spaceDelegate.implicitWidth
+             radius: Maui.Style.radiusV
+             color: "#333"
+
+            Row
+        {
+            id: _spaceDelegate
+            height: parent.height * 0.8
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Maui.Style.space.big
+            property var space : model.space
+            Repeater
             {
-                id: _itemDelegate
-                width: _overviewList.width * 0.8
-                height: _overviewList.height * 0.8
-                opacity: (y * -1) > 50 ? 20 / (y * -1): 1
-                background: null
-                onClicked:
+
+                model: _spaceDelegate.space.surfaces
+
+                ItemDelegate
                 {
-                    overView = false
-                    showDesktop = false
-                    _overviewList.currentIndex = index
-
-                }
-
-                clip: false
-
-                Maui.ListItemTemplate
-                {
-                    anchors.bottom: _thumbnail.top
-                    anchors.left: _thumbnail.left
-                    anchors.right: _thumbnail.right
-                    height: Maui.Style.rowHeight
-                    iconSource: "vvave"
-                    iconSizeHint: Maui.Style.iconSizes.medium
-                    label1.text: modelData.toplevel.title
-                }
-
-                Item
-                {
-                    anchors.centerIn: parent
-                    height: Math.min(_surface.surface.sourceGeometry.height , parent.height)
-                    width: Math.min(_surface.surface.sourceGeometry.width, parent.width)
-                    id: _thumbnail
-
-                    WaylandQuickItem
+                    id: _itemDelegate
+                    implicitWidth: height
+                    height: _spaceDelegate.height
+                    opacity: (y * -1) > 50 ? 20 / (y * -1): 1
+                    background: null
+                    onClicked:
                     {
-                        id: _surface
-                        surface: modelData.surface
-                        touchEventsEnabled: false
-                        focusOnClick: false
-                        enabled: false
-                        sizeFollowsSurface: false
-                        smooth: true
-                        anchors.fill: parent
+                        overView = false
+                        showDesktop = false
+                        _overviewList.currentIndex = index
 
-                        layer.enabled: true
-                        layer.effect: OpacityMask
+                    }
+
+                    property var surface : model.surface
+
+                    clip: false
+
+                    Maui.ListItemTemplate
+                    {
+                        anchors.bottom: _thumbnail.top
+                        anchors.left: _thumbnail.left
+                        anchors.right: _thumbnail.right
+                        height: Maui.Style.rowHeight
+                        iconSource: "vvave"
+                        iconSizeHint: Maui.Style.iconSizes.medium
+                        label1.text: modelData.toplevel.title
+                    }
+
+                    Item
+                    {
+                        anchors.centerIn: parent
+                        height: Math.min(_surface.surface.sourceGeometry.height , parent.height)
+                        width: Math.min(_surface.surface.sourceGeometry.width, parent.width)
+                        id: _thumbnail
+
+                        ShellSurfaceItem
                         {
-                            maskSource: Item
-                            {
-                                width: _thumbnail.width
-                                height: _thumbnail.height
+                            id: _surface
+                            shellSurface: _itemDelegate.surface
+                            touchEventsEnabled: false
+                            focusOnClick: false
+                            enabled: false
+                            sizeFollowsSurface: false
+                            smooth: true
+                            anchors.fill: parent
 
-                                Rectangle
+                            layer.enabled: true
+                            layer.effect: OpacityMask
+                            {
+                                maskSource: Item
                                 {
-                                    anchors.fill: parent
-                                    radius: Maui.Style.radiusV
+                                    width: _thumbnail.width
+                                    height: _thumbnail.height
+
+                                    Rectangle
+                                    {
+                                        anchors.fill: parent
+                                        radius: Maui.Style.radiusV
+                                    }
                                 }
                             }
                         }
-                    }
-
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        //         anchors.margins: Maui.Style.space.small
-                        radius: Maui.Style.radiusV
-                        color: "transparent"
-                        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-                        opacity: 0.5
 
                         Rectangle
                         {
                             anchors.fill: parent
-                            anchors.margins: 1
+                            //         anchors.margins: Maui.Style.space.small
+                            radius: Maui.Style.radiusV
                             color: "transparent"
-                            radius: parent.radius - 0.5
-                            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                            opacity: 0.7
+                            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+                            opacity: 0.5
+
+                            Rectangle
+                            {
+                                anchors.fill: parent
+                                anchors.margins: 1
+                                color: "transparent"
+                                radius: parent.radius - 0.5
+                                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                                opacity: 0.7
+                            }
                         }
                     }
-                }
 
-                DropShadow
-                {
-                    transparentBorder: true
-                    anchors.fill: _thumbnail
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: 8.0
-                    samples: 17
-                    color: Qt.rgba(0,0,0,0.5)
-                    source: _thumbnail
-                }
-
-                Maui.Badge
-                {
-                    parent: _thumbnail
-                    id: _closeButton
-                    color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
-
-                    property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
-
-                    Maui.X
+                    DropShadow
                     {
-                        height: Maui.Style.iconSizes.tiny
-                        width: height
-                        anchors.centerIn: parent
-                        color: Kirigami.Theme.textColor
+                        transparentBorder: true
+                        anchors.fill: _thumbnail
+                        horizontalOffset: 0
+                        verticalOffset: 0
+                        radius: 8.0
+                        samples: 17
+                        color: Qt.rgba(0,0,0,0.5)
+                        source: _thumbnail
                     }
 
-                    border.color: Kirigami.Theme.textColor
-
-                    anchors
+                    Maui.Badge
                     {
-                        verticalCenter: parent.top
-                        horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
+                        parent: _thumbnail
+                        id: _closeButton
+                        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+
+                        property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
+
+                        Maui.X
+                        {
+                            height: Maui.Style.iconSizes.tiny
+                            width: height
+                            anchors.centerIn: parent
+                            color: Kirigami.Theme.textColor
+                        }
+
+                        border.color: Kirigami.Theme.textColor
+
+                        anchors
+                        {
+                            verticalCenter: parent.top
+                            horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
+                        }
+
+                        z: _itemDelegate.z+999
+                        onClicked:  model.surface.surface.client.close()
                     }
 
-                    z: _itemDelegate.z+999
-                    onClicked:  modelData.surface.client.close()
-                }
-
-                DragHandler
-                {
-                    target: parent
-                    xAxis.enabled: false
-                    onActiveChanged:
+                    DragHandler
                     {
-                        if(!active && (target.y * -1) > 100)
-                            modelData.surface.client.close()
-                        else target.y = 0
+                        target: parent
+                        xAxis.enabled: false
+                        onActiveChanged:
+                        {
+                            if(!active && (target.y * -1) > 100)
+                                model.surface.surface.client.close()
+                            else target.y = 0
+                        }
                     }
-                }
 
+                }
             }
+        }
+    }
     }
 }
 
