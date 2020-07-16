@@ -33,8 +33,6 @@ WaylandCompositor
         position: Qt.point(virtualX, virtualY)
     }
 
-    ListModel {id: _listSurfaces }
-
     QtWindowManager
     {
         id: qtWindowManager
@@ -95,17 +93,7 @@ WaylandCompositor
         if(desktop.formFactor !== Env.Env.Desktop)
             shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
 
-
-//        if(_listSurfaces.count === 1)
-//        {
-//            console.log("Current item", desktop.swipeView.count, desktop.swipeView.currentItem.count)
-//            desktop.swipeView.currentItem.insert( shellSurface)
-//            return
-//        }
-
-//        _listSurfaces.append({shellSurface: shellSurface})
-//        desktop.swipeView.currentIndex = _listSurfaces.count-1
-//        desktop.showDesktop = false
+        desktop.showDesktop = false
         _manager.insertSurface(shellSurface)
 
     }

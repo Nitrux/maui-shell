@@ -282,7 +282,7 @@ StackableItem
             NumberAnimation { target: scaleTransform; property: "xScale"; to: 0.4; duration: 150 }
         }
         NumberAnimation { target: scaleTransform; property: "xScale"; to: 0; duration: 150 }
-        ScriptAction { script: { _listSurfaces.remove(index) } }
+        ScriptAction { script: { space.surfaces.remove(index) } }
     }
 
     ParallelAnimation {

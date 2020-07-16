@@ -3,7 +3,15 @@
 Zpace::Zpace(QObject *parent) : QObject(parent)
   , m_appsModel(new AppsModel(this) )
 {
+    connect(m_appsModel, &AppsModel::rowsRemoved, [&](QModelIndex, int, int)
+    {
+        emit countChanged(count());
+    });
 
+    connect(m_appsModel, &AppsModel::rowsInserted, [&](QModelIndex, int, int)
+    {
+        emit countChanged(count());
+    });
 }
 
 AppsModel *Zpace::appsModel() const
@@ -36,3 +44,5 @@ int Zpace::count() const
 {
     return appsModel()->rowCount(QModelIndex());
 }
+
+

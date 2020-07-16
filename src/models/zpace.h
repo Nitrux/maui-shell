@@ -10,6 +10,7 @@ class Zpace : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(AppsModel *surfaces READ appsModel CONSTANT FINAL)
+    Q_PROPERTY(int count READ count NOTIFY countChanged CONSTANT)
 
 public:
     explicit Zpace(QObject *parent = nullptr);
@@ -54,6 +55,7 @@ signals:
     void surfaceMoved();
     void surfaceRemoved();
 
+    void countChanged(int count);
 };
 
 #endif // ZPACE_H

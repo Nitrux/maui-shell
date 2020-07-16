@@ -124,6 +124,22 @@ Zpace * ZpaceModel::createZpace(const int &index)
 {
 	auto zpace_ = new Zpace(this);
 
+    connect(zpace_, &Zpace::countChanged, [this, &zpace_](int count)
+    {
+        auto index = zpaceIndex(zpace_);
+        if(count == 0 && (index < rowCount(QModelIndex()) || index > 0))
+        {
+            qDebug()  << "Remove zpace" << index;
+            emit beginRemoveRows(QModelIndex(), index, index);
+//            zpace_->deleteLater();
+            m_zpaces.removeAt(index);
+            emit endRemoveRows();
+
+//            setCount();
+//            setCurrentIndex(m_count >= 1 ? m_currentIndex-1 : -1);
+        }
+    });
+
 	emit beginInsertRows(QModelIndex(), index, index);
 	m_zpaces.insert(index, zpace_);
 	emit endInsertRows();

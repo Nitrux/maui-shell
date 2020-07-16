@@ -25,6 +25,11 @@ public:
 
     void insert(QWaylandXdgSurface *surface);
 
+    int surfaceIndex(const QWaylandXdgSurface *surface) const;
+
+public slots:
+    void remove(const int &index);
+
 private:
     QVector<QWaylandXdgSurface*> m_surfaces;
 };

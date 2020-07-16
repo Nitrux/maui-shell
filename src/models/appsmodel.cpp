@@ -39,16 +39,30 @@ void AppsModel::insert(QWaylandXdgSurface *surface)
 		qDebug() << "Surface changed";
 	});
 
+//    connect(surface, &QWaylandXdgSurface::destroyed, [&]()
+//	{
+//        auto index = surfaceIndex(surface);
 
-	connect(surface, &QWaylandXdgSurface::destroyed, [&, index = rowCount (QModelIndex())]()
-	{
-		qDebug() << "Surface destroyed" << index;
-		emit beginRemoveRows (QModelIndex(), index, index);
-		m_surfaces.removeAt (index);
-		emit endRemoveRows ();
 
-	});
+//	});
 
 	m_surfaces << surface;
-	emit endInsertRows();
+    emit endInsertRows();
+}
+
+void AppsModel::remove(const int &index)
+{
+    qDebug() << "Surface destroyed" << index << m_surfaces.count();
+
+            if(index < rowCount(QModelIndex()) || index > 0)
+            {
+                emit beginRemoveRows (QModelIndex(), index, index);
+                m_surfaces.removeAt (index);
+                emit endRemoveRows ();
+            }
+}
+
+int AppsModel::surfaceIndex(const QWaylandXdgSurface * surface) const
+{
+    return -1;
 }

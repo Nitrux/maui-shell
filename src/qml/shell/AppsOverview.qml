@@ -124,7 +124,12 @@ Maui.Page
                     implicitWidth: height
                     height: _spaceDelegate.height
                     opacity: (y * -1) > 50 ? 20 / (y * -1): 1
-                    background: null
+                    background: Rectangle
+                    {
+                        radius: Maui.Style.radiusV
+                        color: Kirigami.Theme.backgroundColor
+                    }
+
                     onClicked:
                     {
                         overView = false
@@ -137,6 +142,24 @@ Maui.Page
 
                     clip: false
 
+                    transform: [
+                        Scale {
+                            id:scaleTransform
+                            origin.x: _itemDelegate.width / 2
+                            origin.y: _itemDelegate.height / 2
+                        }
+                    ]
+
+
+                    SequentialAnimation {
+                        id: destroyAnimationImpl
+                        ParallelAnimation {
+                            NumberAnimation { target: scaleTransform; property: "yScale"; to: 2/height; duration: 150 }
+                            NumberAnimation { target: scaleTransform; property: "xScale"; to: 0.4; duration: 150 }
+                        }
+                        NumberAnimation { target: scaleTransform; property: "xScale"; to: 0; duration: 150 }
+                    }
+
                     Maui.ListItemTemplate
                     {
                         anchors.bottom: _thumbnail.top
@@ -145,7 +168,7 @@ Maui.Page
                         height: Maui.Style.rowHeight
                         iconSource: "vvave"
                         iconSizeHint: Maui.Style.iconSizes.medium
-                        label1.text: modelData.toplevel.title
+                        label1.text: surface.toplevel.title
                     }
 
                     Item
@@ -180,6 +203,10 @@ Maui.Page
                                         radius: Maui.Style.radiusV
                                     }
                                 }
+                            }
+
+                            onSurfaceDestroyed: {
+                                destroyAnimationImpl.start();
                             }
                         }
 
