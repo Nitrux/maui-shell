@@ -124,19 +124,19 @@ Zpace * ZpaceModel::createZpace(const int &index)
 {
 	auto zpace_ = new Zpace(this);
 
-    connect(zpace_, &Zpace::countChanged, [this, &zpace_](int count)
+    connect(zpace_, &Zpace::countChanged, [this, z = zpace_](int count)
     {
-        auto index = zpaceIndex(zpace_);
+        auto index = zpaceIndex(z);
+        qDebug() << "Find index" << index;
         if(count == 0 && (index < rowCount(QModelIndex()) || index > 0))
         {
-            qDebug()  << "Remove zpace" << index;
             emit beginRemoveRows(QModelIndex(), index, index);
-//            zpace_->deleteLater();
+            z->deleteLater();
             m_zpaces.removeAt(index);
             emit endRemoveRows();
 
-//            setCount();
-//            setCurrentIndex(m_count >= 1 ? m_currentIndex-1 : -1);
+            setCount();
+            setCurrentIndex(m_count >= 1 ? m_currentIndex-1 : -1);
         }
     });
 
@@ -152,7 +152,9 @@ Zpace * ZpaceModel::createZpace(const int &index)
 
 int ZpaceModel::zpaceIndex(const Zpace * zpace) const
 {
-	const auto it = std::find(m_zpaces.constBegin (), m_zpaces.constEnd (), zpace);
-	return std::distance(m_zpaces.constBegin (), it);
+    qDebug() << zpace;
+
+    auto it = std::find(m_zpaces.constBegin(), m_zpaces.constEnd(), zpace);
+return std::distance(m_zpaces.constBegin(), it);
 }
 
