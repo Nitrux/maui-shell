@@ -75,7 +75,8 @@ Item
                 SplitView.fillWidth: true
                 SplitView.minimumHeight: Math.max(100, topLevel,minSize.height)
                 SplitView.minimumWidth: Math.max(100, topLevel.minSize.width)
-
+SplitView.preferredWidth: _splitView.orientation === Qt.Horizontal ? control.width / control.count : control.width
+SplitView.preferredHeight: _splitView.orientation === Qt.Vertical ? control.height / control.count : control.height
                          moveItem: Item
                          {
                              property bool moving: false

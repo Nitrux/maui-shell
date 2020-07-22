@@ -252,6 +252,14 @@ StackableItem
                 rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(rootChrome.width,rootChrome.height), [0])
             }
         }
+
+        onHeightChanged:
+        {
+            if(win.formFactor !== Env.Env.Desktop)
+            {
+                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(rootChrome.width,rootChrome.height), [0])
+            }
+        }
     }
 
     Connections
