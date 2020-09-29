@@ -16,14 +16,11 @@ Cask.PanelSection
     id: control
     Layout.fillWidth: !win.isWide
 
-
     property int position : win.isWide ? ToolBar.Footer : ToolBar.Header
-
 
     preferredHeight: win.formFactor === Env.Env.Phone ?  Maui.Style.rowHeight: Maui.Style.toolBarHeightAlt
     margins: win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
     radius: win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
-
 
     leftContent: [
         Cask.PanelItem
@@ -50,7 +47,7 @@ Cask.PanelSection
                     height: _tooglesGrid.contentHeight
                     anchors.centerIn: parent
                     itemSize: 64
-                    verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff
+//                    verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff
 
                     model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
                     delegate: ItemDelegate

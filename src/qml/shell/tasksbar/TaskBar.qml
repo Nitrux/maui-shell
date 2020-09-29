@@ -117,7 +117,7 @@ Cask.PanelSection
                             draggable: true
                             Drag.keys: ["text/uri-list"]
                             Drag.mimeData: { "text/uri-list": model.path }
-
+                            background: Item {}
 
                             Maui.GridItemTemplate
                             {
