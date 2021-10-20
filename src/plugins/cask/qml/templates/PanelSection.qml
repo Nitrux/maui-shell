@@ -197,7 +197,6 @@ Item
         onDesktopPressed:
         {
             control.close()
-            mouse.accepted = false
         }
     }
 

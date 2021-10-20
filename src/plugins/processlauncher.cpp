@@ -18,6 +18,8 @@
 
 #include "processlauncher.h"
 #include <QDebug>
+#include <KService>
+#include <KRun>
 
 WaylandProcessLauncher::WaylandProcessLauncher(QObject *parent)
     : QObject(parent)
@@ -26,6 +28,12 @@ WaylandProcessLauncher::WaylandProcessLauncher(QObject *parent)
 
 WaylandProcessLauncher::~WaylandProcessLauncher()
 {
+}
+
+void WaylandProcessLauncher::launchApp(const QString &app)
+{
+    KService service(app);
+    KRun::runApplication(service, {}, nullptr);
 }
 
 void WaylandProcessLauncher::launch(const QString &program)

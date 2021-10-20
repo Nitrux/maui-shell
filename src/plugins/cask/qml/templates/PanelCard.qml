@@ -34,7 +34,7 @@ Item
             headBar.visible: false
             anchors.fill: parent
 
-            padding:   Maui.Style.space.small
+            padding: Maui.Style.space.small
             background: Rectangle
             {
                 color: Kirigami.Theme.backgroundColor

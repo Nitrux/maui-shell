@@ -45,7 +45,6 @@ Cask.PanelSection
                     id:_tooglesGrid
                     width: parent.width
                     height: _tooglesGrid.contentHeight
-                    anchors.centerIn: parent
                     itemSize: 64
 //                    verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff
 

@@ -163,10 +163,10 @@ WaylandOutput
                     model: _listSurfaces
                     delegate: Item
                     {
-
-                        height: _swipeView.height
-                        width: _swipeView.width
+                        height: ListView.view.height
+                        width: ListView.view.width
                         clip: true
+                        property alias chrome : _chromeDelegate
 
                         Chrome
                         {
@@ -181,11 +181,8 @@ WaylandOutput
                                 height: _chromeDelegate.shellSurface.surface.height
                                 width: _chromeDelegate.shellSurface.surface.width
                             }
-
-
                         }
                     }
-
                 }
             }
 

@@ -26,7 +26,7 @@ Cask.PanelSection
             implicitWidth: height
             Layout.fillHeight: true
             icon.name: "view-list-icons"
-            visible: !isMobile
+            //            visible: !isMobile
 
             onClicked:
             {
@@ -42,8 +42,8 @@ Cask.PanelSection
 
                 Maui.Page
                 {
-                    anchors.fill: parent
-                    anchors.margins: 1
+                    height: parent.height
+                    width: parent.width
                     headBar.visible: true
                     flickable: _launcherGrid.flickable
                     headBar.middleContent: Maui.TextField
@@ -131,8 +131,8 @@ Cask.PanelSection
                             onClicked:
                             {
                                 console.log(model.executable)
-                                //                                                        launcher.launch(model.executable)
-                                Maui.KDE.launchApp(model.path)
+                                launcher.launchApp(model.path)
+                                //                                Maui.KDE.launchApp(model.path)
                                 control.close()
                             }
                         }
@@ -171,13 +171,13 @@ Cask.PanelSection
             implicitWidth: height
             Layout.fillHeight: true
             icon.name: "window-copy"
-            visible: !isMobile
+            //            visible: !isMobile
             checked: overView
             onClicked: overView = true
         }]
 
     ListModel {id: _tasksModel}
-//    ListModel {id: _runninTasksModel}
+    //    ListModel {id: _runninTasksModel}
 
     middleContent:  [ Repeater
         {
@@ -200,33 +200,51 @@ Cask.PanelSection
                 }
             }
         },
+
         Repeater
         {
             model: _listSurfaces
 
-            Maui.ItemDelegate
+            AbstractButton
             {
                 Layout.fillHeight: true
                 implicitWidth: height
-                draggable: true
+                //                draggable: true
 
-                onClicked: _swipeView.currentIndex = index
-
-                Kirigami.Icon
+                onClicked:
                 {
-                    source: Env.Env.appIconName(modelData.toplevel.appId)
-                    height: isMobile ? 32 :22
-                    width: height
-                    anchors.centerIn: parent
+                    var toggleMinimize = false
+                    if(_swipeView.currentIndex === index)
+                    {
+                        toggleMinimize = true
+                    }
+
+                    _swipeView.currentIndex = index
+
+                    if(toggleMinimize)
+                    {
+                        _swipeView.itemAtIndex(index).chrome.visible = !_swipeView.itemAtIndex(index).chrome.visible
+                    }
                 }
 
-                Rectangle
+                contentItem: Item
                 {
-                    width: parent.width
-                    height: 2
-                    anchors.bottom: parent.bottom
-                    visible: index === _swipeView.currentIndex
-                    color: Kirigami.Theme.highlightColor
+
+                    Kirigami.Icon
+                    {
+                        source: Env.Env.appIconName(modelData.toplevel.appId)
+                        height: isMobile ? 32 :22
+                        width: height
+                        anchors.centerIn: parent
+                    }
+                    Rectangle
+                    {
+                        width: parent.width
+                        height: 2
+                        anchors.bottom: parent.bottom
+                        visible: index === _swipeView.currentIndex
+                        color: Kirigami.Theme.highlightColor
+                    }
                 }
             }
         }

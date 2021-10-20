@@ -25,7 +25,7 @@ Item
     property alias topPanel: _topPanel
     property alias bottomPanel: _bottomPanel
 
-    signal desktopPressed(var mouse)
+    signal desktopPressed()
 
     readonly property bool rise : _dropArea.containsDrag
 
@@ -140,15 +140,12 @@ Item
                 anchors.fill: parent
             }
 
-            MouseArea
+            TapHandler
             {
-                anchors.fill: parent
-                propagateComposedEvents: true
-                preventStealing: false
-                onPressed:
+
+                onTapped:
                 {
-                    control.desktopPressed(mouse)
-                    mouse.accepted = false
+                    control.desktopPressed()
                 }
             }
         }

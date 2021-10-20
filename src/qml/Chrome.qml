@@ -22,11 +22,10 @@ import QtQuick.Controls 2.14
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
 import com.theqtcompany.wlcompositor 1.0
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import org.cask.env 1.0 as Env
 import QtQuick.Layouts 1.3
-import org.kde.appletdecoration 0.1 as AppletDecoration
 
 StackableItem
 {
@@ -35,7 +34,7 @@ StackableItem
     property alias shellSurface: surfaceItem.shellSurface
     property var topLevel : shellSurface.toplevel
     property alias moveItem: surfaceItem.moveItem
-    property bool decorationVisible: win.formFactor === Env.Env.Desktop
+    property bool decorationVisible: win.formFactor === Env.Env.Desktop && surfaceItem.shellSurface.toplevel.decorationMode === XdgToplevel.ServerSideDecoration
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
     property alias destroyAnimation : destroyAnimationImpl
 
@@ -56,16 +55,42 @@ StackableItem
     width: surfaceItem.width
     visible: surfaceItem.valid
 
+    property rect oldPos
+
     function performActiveWindowAction(type)
     {
-        if (type === AppletDecoration.Types.Close) {
+        if (type === Maui.CSDButton.Close)
+        {
             surfaceItem.surface.client.close()
-        } else if (type === AppletDecoration.Types.Maximize) {
-           rootChrome.x = 0
-           rootChrome.y = 0
-            rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [XdgToplevel.MaximizedState])
+        } else if (type === Maui.CSDButton.Maximize)
+        {
 
-        } else if (type ===  AppletDecoration.Types.Minimize) {
+            if(surfaceItem.isMaximized)
+            {
+                rootChrome.x = oldPos.x
+                rootChrome.y = oldPos.y
+                 surfaceItem.shellSurface.toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
+                surfaceItem.isMaximized = false
+
+            }else
+            {
+
+
+            oldPos.x = rootChrome.x
+            oldPos.y = rootChrome.y
+            oldPos.width = rootChrome.width
+            oldPos.height = rootChrome.height
+
+            rootChrome.x = 0
+            rootChrome.y = 0
+
+            surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height))
+
+                surfaceItem.isMaximized = true
+
+            }
+
+        } if (type ===  Maui.CSDButton.Minimize) {
             rootChrome.visible = false
         }
     }
@@ -132,7 +157,6 @@ StackableItem
                     visible: active
                     active: Maui.App.leftWindowControls.length
                     Layout.preferredWidth: active ? implicitWidth : 0
-                    Layout.fillHeight: true
                     sourceComponent: Maui.CSDControls
                     {
                         side: Qt.LeftEdge
@@ -157,11 +181,10 @@ StackableItem
                     visible: active
                     active: Maui.App.rightWindowControls.length
                     Layout.preferredWidth: active ? implicitWidth : 0
-                    Layout.fillHeight: true
                     sourceComponent: Maui.CSDControls
                     {
                         side: Qt.RightEdge
-                        onButtonClicked: performActiveWindowAction(type)
+                        onButtonClicked: rootChrome.performActiveWindowAction(type)
                     }
                 }
             }
@@ -247,7 +270,7 @@ StackableItem
         ignoreUnknownSignals: true
         enabled: win.formFactor !== Env.Env.Desktop
         //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
-        onWidthChanged:
+        function onWidthChanged()
         {
             if(win.formFactor !== Env.Env.Desktop)
             {
@@ -260,7 +283,7 @@ StackableItem
     {
         target: win
         ignoreUnknownSignals: true
-        onFormFactorChanged:
+        function onFormFactorChanged()
         {
             if(win.formFactor === Env.Env.Desktop)
             {
@@ -269,7 +292,7 @@ StackableItem
                 rootChrome.y = previousRect.y
             }else
             {
-                 previousRect = Qt.rect(rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
+                previousRect = Qt.rect(rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
                 rootChrome.x = output.geometry.x
                 rootChrome.y = output.geometry.y
             }
@@ -331,6 +354,7 @@ StackableItem
         property bool isPopup: false
         property bool isTransient: false
         property bool isFullscreen: true
+        property bool isMaximized: false
 
         y: titlebarHeight
         //sizeFollowsSurface: surfaceItem.output.width < 500
@@ -359,7 +383,8 @@ StackableItem
             }
         }
 
-        Connections {
+        Connections
+        {
             target: shellSurface
             ignoreUnknownSignals: true
 
@@ -367,22 +392,38 @@ StackableItem
                 if (shellSurface.activated)
                     receivedFocusAnimation.start();
             }
+
             onSetPopup: {
                 surfaceItem.isPopup = true
                 decoration.visible = false
             }
+
             onSetTransient: {
                 surfaceItem.isTransient = true
             }
+
             onSetFullScreen: {
                 surfaceItem.isFullscreen = true
                 rootChrome.x = 0
                 rootChrome.y = 0
             }
 
+            onSetMaximized:
+            {
+                console.log("EVENT SEND MAXIMIZED CATCHED <<<<<<<<<<")
+
+
+            }
+
+            onUnsetMaximized:
+            {
+
+            }
+
             onSetMinimized:
             {
                 surfaceItem.valid = false
+                rootChrome.visible = false
             }
         }
 
@@ -403,7 +444,7 @@ StackableItem
                         }
     }
 
-    layer.enabled: true
+    layer.enabled: rootChrome.decorationVisible
     layer.effect: OpacityMask
     {
         maskSource: Item
@@ -414,7 +455,7 @@ StackableItem
             Rectangle
             {
                 anchors.fill: parent
-                radius: Maui.Style.radiusV
+                radius: Maui.App.controls.borderRadius
             }
         }
     }
@@ -425,7 +466,7 @@ StackableItem
         visible: decoration.visible
         z: surfaceItem.z + 9999999999
         //         anchors.margins: Maui.Style.space.small
-        radius: Maui.Style.radiusV
+        radius: Maui.App.controls.borderRadius
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
         opacity: 0.8
