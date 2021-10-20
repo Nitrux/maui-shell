@@ -4,14 +4,14 @@ import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.2 as Maui
+import org.mauikit.controls 1.2 as Maui
 
 Item
 {
     id: control
 
     default property alias content: _layout.data
-    implicitHeight: _layout.implicitHeight + _page.header.height + _page.footer.height + _page.padding + Maui.Style.space.big
+    implicitHeight: _layout.implicitHeight + _page.header.implicitHeight + _page.footer.implicitHeight + _page.topPadding + _page.bottomPadding  + Maui.Style.space.big
     width: popWidth
     height: visible ? implicitHeight : 0
 
@@ -31,7 +31,7 @@ Item
         Maui.Page
         {
             id: _page
-            showTitle: true
+            headBar.visible: false
             anchors.fill: parent
 
             padding:   Maui.Style.space.small

@@ -1,10 +1,10 @@
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml Quick Sql Svg QuickControls2)
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO Attica)
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO Service)
 
 find_package(ECM ${KF5_MIN_VER} REQUIRED NO_MODULE)
 find_package(ECM 0.0.11 REQUIRED NO_MODULE)
-find_package(MauiKit REQUIRED)
+find_package(MauiKit REQUIRED FileBrowsing)
 
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
@@ -29,7 +29,11 @@ set(caskplugin_ASSETS
 add_library(caskplugin SHARED ${caskplugin_SRCS} ${caskplugin_HDRS} ${caskplugin_ASSETS})
 target_link_libraries(caskplugin
                       MauiKit
-                      KF5::Attica
+                      MauiKit::FileBrowsing
+                      KF5::Service
+                      KF5::ConfigCore
+                      KF5::KIOCore
+                      KF5::KIOFileWidgets
                       Qt5::Core
                       Qt5::DBus
                       Qt5::Quick)

@@ -17,10 +17,6 @@ add_executable(cask
 
 target_link_libraries(cask plugins Qt5::Qml Qt5::Quick Qt5::Svg KF5::I18n)
 
-if(ANDROID)
-    target_link_libraries(cask Qt5::AndroidExtras)
-#    kde_source_files_enable_exceptions(cask pix.cpp)
-endif()
 
 install(TARGETS cask ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 #install(FILES org.kde.pix.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

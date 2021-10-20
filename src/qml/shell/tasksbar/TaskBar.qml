@@ -3,7 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.2 as Maui
+import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 import org.cask.env 1.0 as Env
 
@@ -69,9 +69,9 @@ Cask.PanelSection
                     headBar.leftContent: Maui.ToolActions
                     {
                         autoExclusive: true
-                        expanded: isWide
+                        expanded: win.isWide
                         currentIndex : control.viewType === Maui.AltBrowser.ViewType.List ? 0 : 1
-                        enabled: list.count > 0
+                        enabled: _launcherGrid.count > 0
                         display: ToolButton.TextBesideIcon
                         Action
                         {
@@ -107,7 +107,6 @@ Cask.PanelSection
                         }
                         viewType: Maui.AltBrowser.ViewType.Grid
                         gridView.itemSize: 100
-                        gridView.margins: Maui.Style.space.medium
 
                         gridDelegate: Maui.ItemDelegate
                         {

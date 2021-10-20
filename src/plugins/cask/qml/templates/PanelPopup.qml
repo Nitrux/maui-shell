@@ -6,7 +6,7 @@ import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.2 as Maui
+import org.mauikit.controls 1.2 as Maui
 
 Item
 {
@@ -17,7 +17,6 @@ Item
     property alias count: _cards.count
     property alias implicitHeight: _cardsList.contentHeight
     property alias contentChildren : _cards.contentChildren
-
 
     Rectangle
     {
@@ -30,7 +29,6 @@ Item
         radius: Maui.Style.radiusV
         //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     }
-
 
     ScrollView
     {

@@ -22,7 +22,7 @@ import QtQuick.Controls 2.14
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
 import com.theqtcompany.wlcompositor 1.0
-import org.kde.mauikit 1.2 as Maui
+import org.mauikit.controls 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import org.cask.env 1.0 as Env
 import QtQuick.Layouts 1.3
@@ -135,7 +135,7 @@ StackableItem
                     Layout.fillHeight: true
                     sourceComponent: Maui.CSDControls
                     {
-                        order: Maui.App.leftWindowControls
+                        side: Qt.LeftEdge
                         onButtonClicked: performActiveWindowAction(type)
                     }
                 }
@@ -160,7 +160,7 @@ StackableItem
                     Layout.fillHeight: true
                     sourceComponent: Maui.CSDControls
                     {
-                        order:  Maui.App.rightWindowControls
+                        side: Qt.RightEdge
                         onButtonClicked: performActiveWindowAction(type)
                     }
                 }

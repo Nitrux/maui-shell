@@ -6,7 +6,7 @@ import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.2 as Maui
+import org.mauikit.controls 1.2 as Maui
 
 Item
 {
@@ -130,9 +130,9 @@ Item
 
     Component.onCompleted:
     {
-        for(var i in _content.leftLayout.children)
+        for(var k in _content.rightLayout.layout.children)
         {
-            const obj = _content.leftLayout.children[i]
+            const obj = _content.rightLayout.layout.children[k]
             if(obj.card)
             {
                 obj.card.index = popup.count
@@ -141,9 +141,10 @@ Item
             }
         }
 
-        for(var i in _content.middleLayout.children)
+        for(var i in _content.leftLayout.layout.children)
         {
-            const obj = _content.middleLayout.children[i]
+            const obj = _content.leftLayout.layout.children[i]
+
             if(obj.card)
             {
                 obj.card.index = popup.count
@@ -152,9 +153,9 @@ Item
             }
         }
 
-        for(var i in _content.rightLayout.children)
+        for(var j in _content.middleLayout.layout.children)
         {
-            const obj = _content.rightLayout.children[i]
+            const obj = _content.middleLayout.layout.children[j]
             if(obj.card)
             {
                 obj.card.index = popup.count
@@ -162,6 +163,8 @@ Item
                 popup.container.insertItem(popup.count, obj.card)
             }
         }
+
+
     }
 
     PanelPopup
