@@ -22,9 +22,6 @@ Cask.PanelSection
 
     leftContent:[ Cask.PanelItem
         {
-            Layout.fillWidth: false
-            implicitWidth: height
-            Layout.fillHeight: true
             icon.name: "view-list-icons"
             //            visible: !isMobile
 
@@ -40,8 +37,11 @@ Cask.PanelSection
                 height: 500
                 padding: 0
 
-                Maui.Page
-                {
+
+
+                    Maui.AltBrowser
+                    {
+                        id: _launcherGrid
                     height: parent.height
                     width: parent.width
                     headBar.visible: true
@@ -87,11 +87,6 @@ Cask.PanelSection
                             onTriggered: _launcherGrid.viewType= Maui.AltBrowser.ViewType.Grid
                         }
                     }
-
-                    Maui.AltBrowser
-                    {
-                        id: _launcherGrid
-                        anchors.fill: parent
 
                         model: Maui.BaseModel
                         {
@@ -161,15 +156,12 @@ Cask.PanelSection
                             }
                         }
                     }
-                }
+
             }
         },
 
         Cask.PanelItem
         {
-            Layout.fillWidth: false
-            implicitWidth: height
-            Layout.fillHeight: true
             icon.name: "window-copy"
             //            visible: !isMobile
             checked: overView

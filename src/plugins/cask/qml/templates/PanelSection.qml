@@ -82,25 +82,6 @@ Item
                     easing.type: Easing.InOutQuad
                 }
             }
-
-            Rectangle
-            {
-                anchors.fill: parent
-                radius: parent.radius
-                color: "transparent"
-                border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-                opacity: 0.5
-
-                Rectangle
-                {
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    color: "transparent"
-                    radius: parent.radius - 0.5
-                    border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                    opacity: 0.7
-                }
-            }
         }
     }
 
