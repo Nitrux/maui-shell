@@ -25,7 +25,7 @@ import QtWayland.Compositor 1.0
 import QtQuick.Layouts 1.3
 import org.mauikit.controls 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
-import org.cask.env 1.0 as Env
+import org.maui.cask 1.0 as Cask
 import "shell"
 import "shell/statusbar"
 import "shell/tasksbar"
@@ -60,11 +60,11 @@ WaylandOutput
 
         readonly property int formFactor :  {
             if(width > 1500)
-                return Env.Env.Desktop
+                return Cask.Env.Desktop
             else if(width > 500)
-                return Env.Env.Tablet
+                return Cask.Env.Tablet
             else
-                return Env.Env.Phone
+                return Cask.Env.Phone
         }
 
 
@@ -75,7 +75,7 @@ WaylandOutput
             anchors.fill: parent
             windowSystemCursorEnabled: false
 
-            Cask
+            CaskDashBoard
             {
                 id: _cask
                 anchors.fill: parent
@@ -83,7 +83,7 @@ WaylandOutput
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
                 bottomPanel.children: win.isWide ? [_taskBar, _statusBar] :  [_taskBar]
                 topPanel.children: win.isWide ? [] :  [statusBar]
-                bottomPanel.visible: win.formFactor === Env.Env.Phone ? showDesktop || _listSurfaces.count <= 0 : true
+                bottomPanel.visible: win.formFactor === Cask.Env.Phone ? showDesktop || _listSurfaces.count <= 0 : true
 
                 readonly property QtObject statusBar : StatusBar {id: _statusBar}
                 readonly property QtObject taskManagerBar: TaskBar {id: _taskBar}
@@ -110,9 +110,9 @@ WaylandOutput
                         anchors.centerIn: parent
                         text:  switch(win.formFactor)
                                {
-                               case Env.Env.Desktop : "Desktop \n" + win.width +" x " + win.height ; break;
-                               case Env.Env.Tablet : "Tablet \n" + win.width +" x " + win.height; break;
-                               case Env.Env.Phone : "Phone \n" + win.width +" x " + win.height; break;
+                               case Cask.Env.Desktop : "Desktop \n" + win.width +" x " + win.height ; break;
+                               case Cask.Env.Tablet : "Tablet \n" + win.width +" x " + win.height; break;
+                               case Cask.Env.Phone : "Phone \n" + win.width +" x " + win.height; break;
                                }
                     }
                 }

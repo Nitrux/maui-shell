@@ -5,9 +5,6 @@ import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
-import org.cask.env 1.0 as Env
-
-import com.theqtcompany.wlprocesslauncher 1.0
 
 Cask.PanelSection
 {
@@ -16,9 +13,9 @@ Cask.PanelSection
     //    backgroundColor: "transparent"
     spacing: Maui.Style.space.medium
 
-    preferredHeight: win.formFactor === Env.Env.Phone ? Maui.Style.toolBarHeight : Maui.Style.toolBarHeightAlt
-    margins:  win.formFactor === Env.Env.Desktop ? Maui.Style.space.medium : 0
-    radius:  win.formFactor === Env.Env.Desktop ? Maui.Style.radiusV : 0
+    preferredHeight: win.formFactor === Cask.Env.Phone ? Maui.Style.toolBarHeight : Maui.Style.toolBarHeightAlt
+    margins:  win.formFactor === Cask.Env.Desktop ? Maui.Style.space.medium : 0
+    radius:  win.formFactor === Cask.Env.Desktop ? Maui.Style.radiusV : 0
 
     leftContent:[ Cask.PanelItem
         {
@@ -55,7 +52,7 @@ Cask.PanelSection
                         onCleared: _launcherGrid.model.filter = ""
                     }
 
-                    ProcessLauncher {
+                    Cask.ProcessLauncher {
                         id: launcher
                     }
 
@@ -224,7 +221,7 @@ Cask.PanelSection
 
                     Kirigami.Icon
                     {
-                        source: Env.Env.appIconName(modelData.toplevel.appId)
+                        source: Cask.Env.appIconName(modelData.toplevel.appId)
                         height: isMobile ? 32 :22
                         width: height
                         anchors.centerIn: parent

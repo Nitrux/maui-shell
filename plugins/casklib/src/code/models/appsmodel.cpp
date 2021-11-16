@@ -4,7 +4,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMimeTypeTrader>
-#include <KRun>
 #include <KService>
 #include <KServiceGroup>
 #include <KToolInvocation>
@@ -14,8 +13,6 @@
 #include <QModelIndex>
 #include <QVariantList>
 
-
-#include <MauiKit/FileBrowsing/fmstatic.h>
 
 AppsModel::AppsModel(QObject *parent) : MauiList(parent)
 {
@@ -43,7 +40,7 @@ static FMH::MODEL_LIST getApps()
             KServiceGroup::Ptr s(static_cast<KServiceGroup *>(p.data()));
 
             if (!s->noDisplay() && s->childCount() > 0) {
-                res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, FMStatic::PATHTYPE_URI[FMStatic::PATHTYPE_KEY::APPS_PATH] + s->entryPath()}};
+                res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
 
             }
         }
@@ -83,7 +80,7 @@ static FMH::MODEL_LIST getApps(const QString &groupStr)
 
             if (s->childCount() == 0)
                 continue;
-            res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::EXECUTABLE, "true"}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, FMStatic::PATHTYPE_URI[FMStatic::PATHTYPE_KEY::APPS_PATH] + s->entryPath()}};
+            res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::EXECUTABLE, "true"}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
         }
     }
 
@@ -95,7 +92,7 @@ void AppsModel::setList()
     emit preListChanged();
     m_data.clear();
 
-    for(const auto item : getApps())
+    for(const auto &item : getApps())
     {
         m_data << getApps(item[FMH::MODEL_KEY::LABEL]);
     }

@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/caskplugin">
-        <file>qml/templates/Panel.qml</file>
-        <file>qml/templates/PanelCard.qml</file>
-        <file>qml/templates/PanelItem.qml</file>
-        <file>qml/templates/PanelPopup.qml</file>
-        <file>qml/templates/PanelSection.qml</file>
-    </qresource>
-</RCC>

@@ -30,10 +30,6 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
-#include "plugins/processlauncher.h"
-#include "plugins/stackableitem.h"
-#include "plugins/enviroment.h"
-
 #include <errno.h>
 #include <signal.h>
 #include <string.h>
@@ -41,8 +37,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
-//#include "plugins/cask/caskplugin.h"
 
 static QByteArray grefsonExecutablePath;
 static qint64 grefsonPID;
@@ -150,17 +144,6 @@ void qtMsgLog(QtMsgType type, const QMessageLogContext &context, const QString &
         abort();
 }
 
-static void registerTypes()
-{
-    qmlRegisterType<WaylandProcessLauncher>("com.theqtcompany.wlprocesslauncher", 1, 0, "ProcessLauncher");
-    qmlRegisterType<StackableItem>("com.theqtcompany.wlcompositor", 1, 0, "StackableItem");
-    qmlRegisterSingletonType<Enviroment>("org.cask.env", 1, 0, "Env", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-        return new Enviroment;
-    });
-    //    CaskPlugin::registerTypes();
-}
 
 static qreal highestDPR(QList<QScreen *> &screens)
 {
@@ -194,7 +177,7 @@ int main(int argc, char *argv[])
     //    app.setAttribute(Qt::AA_DisableHighDpiScaling); // better use the env variable... but that's not enough on eglfs
     grefsonExecutablePath = app.applicationFilePath().toLocal8Bit();
     grefsonPID = QCoreApplication::applicationPid();
-    bool windowed = true;
+    bool windowed = false;
 
     QList<QScreen *> screens = QGuiApplication::screens();
     {
@@ -262,7 +245,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    registerTypes();
     qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
 
     QQmlApplicationEngine appEngine;

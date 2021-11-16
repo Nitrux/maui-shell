@@ -18,7 +18,7 @@ public:
     explicit Enviroment(QObject *parent = nullptr);
 
 public slots:
-    static void putenv(QString key, QString value);
+    static void putenv(QString, QString);
     static void setIsMobile(const bool &value);
     static QString appIconName(const QString &appId);
 signals:

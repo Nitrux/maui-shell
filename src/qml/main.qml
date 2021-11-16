@@ -19,7 +19,7 @@
 import QtQuick 2.12
 import QtWayland.Compositor 1.12
 import Qt.labs.settings 1.0
-import org.cask.env 1.0 as Env
+import org.maui.cask 1.0 as Cask
 
 WaylandCompositor
 {
@@ -85,7 +85,7 @@ WaylandCompositor
 
     function handleShellSurfaceCreated(shellSurface, topLevel, decorate)
     {
-        if(desktop.formFactor !== Env.Env.Desktop)
+        if(desktop.formFactor !== Cask.Env.Desktop)
             shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
 
         _listSurfaces.append({shellSurface: shellSurface})

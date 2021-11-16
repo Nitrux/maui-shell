@@ -1,0 +1,4 @@
+module org.maui.cask
+plugin CaskLib
+classname CaskPlugin
+typeinfo plugins.qmltypes

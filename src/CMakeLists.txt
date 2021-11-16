@@ -7,18 +7,16 @@ set(cask_ASSETS
     assets/assets.qrc
     )
 
-add_subdirectory(plugins)
-
-add_executable(cask
+add_executable(${PROJECT_NAME}
     ${cask_SRCS}
     ${cask_HDRS}
     ${cask_ASSETS}
     )
 
-target_link_libraries(cask plugins Qt5::Qml Qt5::Quick Qt5::Svg KF5::I18n)
+target_link_libraries(${PROJECT_NAME} CaskLib Qt5::Qml Qt5::Quick Qt5::Svg KF5::I18n)
 
 
-install(TARGETS cask ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 #install(FILES org.kde.pix.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 #TODO: port to ecm_install_icons()

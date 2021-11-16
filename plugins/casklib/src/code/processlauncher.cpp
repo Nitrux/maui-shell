@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <KService>
 #include <KRun>
+#include <KIO/ApplicationLauncherJob>
 
 WaylandProcessLauncher::WaylandProcessLauncher(QObject *parent)
     : QObject(parent)
@@ -32,8 +33,12 @@ WaylandProcessLauncher::~WaylandProcessLauncher()
 
 void WaylandProcessLauncher::launchApp(const QString &app)
 {
-    KService service(app);
-    KRun::runApplication(service, {}, nullptr);
+    KService::Ptr service(new KService(app));
+       if (!service->isValid())
+           return;
+
+    auto job = KIO::ApplicationLauncherJob(service);
+    job.start();
 }
 
 void WaylandProcessLauncher::launch(const QString &program)

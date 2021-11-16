@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.0)
-set(CASK_VERSION 1.0.0)
+cmake_minimum_required(VERSION 3.16)
+
+set(CASK_VERSION 0.0.5)
 project(cask VERSION ${CASK_VERSION})
 
 set(REQUIRED_QT_VERSION 5.14.0)
@@ -11,7 +12,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml Quick Svg QuickControls2)
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO)
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n)
 
 include(KDEInstallDirs)
 include(KDECompilerSettings NO_POLICY_SCOPE)
@@ -28,11 +29,12 @@ ecm_setup_version(${CASK_VERSION}
     SOVERSION 5
     )
 
-if (ANDROID)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS AndroidExtras)
-endif()
 
+set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/plugins ${CMAKE_BINARY_DIR}/org CACHE STRING "" FORCE)
+
+add_subdirectory(plugins)
 add_subdirectory(src)
+
 
 #install(FILES org.kde.pix.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 

@@ -1,4 +1,4 @@
-/****************************************************************************
+    /****************************************************************************
 **
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Copyright (C) 2020 Shawn Rutledge
@@ -24,7 +24,6 @@ import QtGraphicalEffects 1.15
 import com.theqtcompany.wlcompositor 1.0
 import org.mauikit.controls 1.3 as Maui
 import org.kde.kirigami 2.8 as Kirigami
-import org.cask.env 1.0 as Env
 import QtQuick.Layouts 1.3
 
 StackableItem
@@ -34,7 +33,7 @@ StackableItem
     property alias shellSurface: surfaceItem.shellSurface
     property var topLevel : shellSurface.toplevel
     property alias moveItem: surfaceItem.moveItem
-    property bool decorationVisible: win.formFactor === Env.Env.Desktop && surfaceItem.shellSurface.toplevel.decorationMode === XdgToplevel.ServerSideDecoration
+    property bool decorationVisible: win.formFactor === Cask.Env.Desktop && surfaceItem.shellSurface.toplevel.decorationMode === XdgToplevel.ServerSideDecoration
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
     property alias destroyAnimation : destroyAnimationImpl
 
@@ -144,8 +143,6 @@ StackableItem
                 gesturePolicy: TapHandler.DragThreshold
                 onTapped: rootChrome.lower()
             }
-
-
 
             RowLayout
             {
@@ -268,11 +265,11 @@ StackableItem
     {
         target: output.surfaceArea
         ignoreUnknownSignals: true
-        enabled: win.formFactor !== Env.Env.Desktop
+        enabled: win.formFactor !== Cask.Env.Desktop
         //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
         function onWidthChanged()
         {
-            if(win.formFactor !== Env.Env.Desktop)
+            if(win.formFactor !== Cask.Env.Desktop)
             {
                 rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
             }
@@ -285,7 +282,7 @@ StackableItem
         ignoreUnknownSignals: true
         function onFormFactorChanged()
         {
-            if(win.formFactor === Env.Env.Desktop)
+            if(win.formFactor === Cask.Env.Desktop)
             {
                 rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(previousRect.width, previousRect.height), [XdgToplevel.ResizingState])
                 rootChrome.x = previousRect.x

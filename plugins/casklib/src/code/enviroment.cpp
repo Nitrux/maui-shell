@@ -7,7 +7,7 @@ Enviroment::Enviroment(QObject *parent) : QObject(parent)
 
 }
 
-void Enviroment::putenv(QString key, QString value)
+void Enviroment::putenv(QString , QString )
 {
 
 }

@@ -8,7 +8,6 @@ import QtQuick.Layouts 1.3
 
 import org.mauikit.controls 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
-import org.cask.env 1.0 as Env
 
 Maui.Page
 {
@@ -144,7 +143,6 @@ Maui.Page
                         sizeFollowsSurface: false
                         smooth: true
                         anchors.fill: parent
-
 
                         layer.enabled: true
                         layer.effect: OpacityMask
