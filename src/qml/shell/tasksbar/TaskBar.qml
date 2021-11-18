@@ -9,157 +9,48 @@ import org.maui.cask 1.0 as Cask
 Cask.PanelSection
 {
     id: control
-    Layout.fillWidth: true
+//    Layout.fillWidth: false
+    Layout.alignment: Qt.AlignCenter
+//    Layout.preferredWidth: 400
+    Layout.maximumWidth: _cask.avaliableWidth
     //    backgroundColor: "transparent"
     spacing: Maui.Style.space.medium
 
-    preferredHeight: win.formFactor === Cask.Env.Phone ? Maui.Style.toolBarHeight : Maui.Style.toolBarHeightAlt
-    margins:  win.formFactor === Cask.Env.Desktop ? Maui.Style.space.medium : 0
-    radius:  win.formFactor === Cask.Env.Desktop ? Maui.Style.radiusV : 0
+    preferredHeight: 64
+    margins: 20
+    radius:  20
+    popWidth: Math.min(_cask.avaliableWidth, 800)
 
-    leftContent:[ Cask.PanelItem
+    Connections
+    {
+        target: _cask
+
+        function onDesktopPressed()
         {
-            icon.name: "view-list-icons"
-            //            visible: !isMobile
+            console.log("DEsktop pressed")
+            control.close()
+        }
+    }
 
+    leftContent:[
+        LauncherPanelItem
+        {
             onClicked:
             {
-                control.open(card.index)
-                _searchBar.forceActiveFocus()
-            }
-
-            card: Cask.PanelCard
-            {
-                width: parent.width
-                height: 500
-                padding: 0
-
-
-
-                    Maui.AltBrowser
-                    {
-                        id: _launcherGrid
-                    height: parent.height
-                    width: parent.width
-                    headBar.visible: true
-                    flickable: _launcherGrid.flickable
-                    headBar.middleContent: Maui.TextField
-                    {
-                        id: _searchBar
-                        Layout.fillWidth: true
-                        placeholderText: qsTr("Search for apps and files...")
-                        onAccepted: _launcherGrid.model.filter = text
-                        onCleared: _launcherGrid.model.filter = ""
-                    }
-
-                    Cask.ProcessLauncher {
-                        id: launcher
-                    }
-
-                    background: Rectangle
-                    {
-                        color: Kirigami.Theme.backgroundColor
-                        opacity: 0.7
-                        radius: Maui.Style.radiusV
-                    }
-
-                    headBar.leftContent: Maui.ToolActions
-                    {
-                        autoExclusive: true
-                        expanded: win.isWide
-                        currentIndex : control.viewType === Maui.AltBrowser.ViewType.List ? 0 : 1
-                        enabled: _launcherGrid.count > 0
-                        display: ToolButton.TextBesideIcon
-                        Action
-                        {
-                            text: i18n("List")
-                            icon.name: "view-list-details"
-                            onTriggered: _launcherGrid.viewType = Maui.AltBrowser.ViewType.List
-                        }
-
-                        Action
-                        {
-                            text: i18n("Grid")
-                            icon.name: "view-list-icons"
-                            onTriggered: _launcherGrid.viewType= Maui.AltBrowser.ViewType.Grid
-                        }
-                    }
-
-                        model: Maui.BaseModel
-                        {
-                            filter: _searchBar.text
-                            sortOrder: Qt.DescendingOrder
-                            recursiveFilteringEnabled: true
-                            sortCaseSensitivity: Qt.CaseInsensitive
-                            filterCaseSensitivity: Qt.CaseInsensitive
-                            list: Cask.AppsModel
-                            {
-
-                            }
-                        }
-                        viewType: Maui.AltBrowser.ViewType.Grid
-                        gridView.itemSize: 100
-
-                        gridDelegate: Maui.ItemDelegate
-                        {
-                            width: _launcherGrid.gridView.cellWidth
-                            height: _launcherGrid.gridView.cellHeight
-
-                            draggable: true
-                            Drag.keys: ["text/uri-list"]
-                            Drag.mimeData: { "text/uri-list": model.path }
-                            background: Item {}
-
-                            Maui.GridItemTemplate
-                            {
-                                height: _launcherGrid.gridView.itemSize
-                                width: height
-                                anchors.centerIn: parent
-                                iconSource:  model.icon
-                                iconSizeHint: 48
-                                label1.text: model.label
-                            }
-
-                            onClicked:
-                            {
-                                console.log(model.executable)
-                                launcher.launchApp(model.path)
-                                //                                Maui.KDE.launchApp(model.path)
-                                control.close()
-                            }
-                        }
-
-                        listDelegate: Maui.ItemDelegate
-                        {
-                            width: parent.width
-                            height: 48
-                            leftPadding: Maui.Style.space.small
-                            rightPadding: Maui.Style.space.small
-                            Maui.ListItemTemplate
-                            {
-                                anchors.fill: parent
-                                iconSource:  model.icon
-                                iconSizeHint: 32
-                                label1.text: model.label
-                                label2.text: model.comment
-                            }
-
-                            onClicked:
-                            {
-                                console.log(model.executable)
-                                //                            launcher.launch(model.executable)
-                                Maui.KDE.launchApp(model.path)
-                                control.close()
-                            }
-                        }
-                    }
-
+                if(popup.visible)
+                    control.close()
+                else
+                {
+                    control.open(card.index)
+                    forceActiveFocus()
+                }
             }
         },
 
         Cask.PanelItem
         {
-            icon.name: "window-copy"
+            icon.name: "cs-workspaces"
+            iconSize: 48
             //            visible: !isMobile
             checked: overView
             onClicked: overView = true
@@ -179,11 +70,10 @@ Cask.PanelSection
 
                 draggable: true
 
-
                 Kirigami.Icon
                 {
                     source: model.icon
-                    height: isMobile ? 32 :22
+                    height: isMobile ? 32 : 22
                     width: height
                     anchors.centerIn: parent
                 }
@@ -218,14 +108,14 @@ Cask.PanelSection
 
                 contentItem: Item
                 {
-
                     Kirigami.Icon
                     {
                         source: Cask.Env.appIconName(modelData.toplevel.appId)
-                        height: isMobile ? 32 :22
+                        height: 48
                         width: height
                         anchors.centerIn: parent
                     }
+
                     Rectangle
                     {
                         width: parent.width
@@ -243,5 +133,10 @@ Cask.PanelSection
     {
         console.log("Dropped things" , drop.urls)
         _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
+    }
+
+    function closeCard()
+    {
+        control.close()
     }
 }

@@ -13,6 +13,7 @@ Item
     id: control
     default property alias content : _content.content
     property alias cards : popup.contentChildren
+    property alias popup : popup
     property int popWidth : Math.min(_cask.avaliableWidth, Math.max(100, control.width))
     property alias popHeight : popup.height
 
@@ -144,16 +145,14 @@ Item
                 popup.container.insertItem(popup.count, obj.card)
             }
         }
-
-
     }
 
     PanelPopup
     {
         id: popup
 
-        y: control.position === ToolBar.Footer ? 0 - (height + Maui.Style.space.medium) : control.height + Maui.Style.space.medium
-        //x: Math.min(0, control.width - width)
+        y: control.position === ToolBar.Footer ? 0 - (height + Maui.Style.space.medium + control.height) : control.height + Maui.Style.space.medium
+        x: Math.floor(parent.width/2 - width /2)
         Binding on suggestedHeight
         {
             value:  handler.active ? (control.position === ToolBar.Footer ? 0 - handler.centroid.position.y : handler.centroid.position.y) : popup.height
@@ -161,7 +160,7 @@ Item
         }
 
         height: suggestedHeight > 200 ? Math.min (_cask.avaliableHeight, popup.implicitHeight) : Math.min(suggestedHeight, handler.active ?  500 : 0)
-        width: control.popWidth - x
+        width: control.popWidth
     }
 
     DragHandler
@@ -170,17 +169,6 @@ Item
         target: null
         grabPermissions: PointerHandler.CanTakeOverFromAnything
     }
-
-    Connections
-    {
-        target: _cask
-
-        onDesktopPressed:
-        {
-            control.close()
-        }
-    }
-
 
     function close()
     {

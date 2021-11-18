@@ -10,5 +10,7 @@
         <file>qml/shell/AppsOverview.qml</file>
         <file>qml/shell/statusbar/items/NetworkItem.qml</file>
         <file>qml/shell/statusbar/items/calendar/CalendarItem.qml</file>
+        <file>qml/shell/tasksbar/Launcher.qml</file>
+        <file>qml/shell/tasksbar/LauncherPanelItem.qml</file>
     </qresource>
 </RCC>

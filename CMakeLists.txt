@@ -26,7 +26,7 @@ ecm_setup_version(${CASK_VERSION}
     VARIABLE_PREFIX CASK
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/cask_version.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/CaskConfigVersion.cmake"
-    SOVERSION 5
+    SOVERSION 1
     )
 
 

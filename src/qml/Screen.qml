@@ -81,8 +81,8 @@ WaylandOutput
                 anchors.fill: parent
                 anchors.bottomMargin: _swiper.height
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
-                bottomPanel.children: win.isWide ? [_taskBar, _statusBar] :  [_taskBar]
-                topPanel.children: win.isWide ? [] :  [statusBar]
+                bottomPanel.children: [_taskBar]
+                topPanel.children: [statusBar]
                 bottomPanel.visible: win.formFactor === Cask.Env.Phone ? showDesktop || _listSurfaces.count <= 0 : true
 
                 readonly property QtObject statusBar : StatusBar {id: _statusBar}

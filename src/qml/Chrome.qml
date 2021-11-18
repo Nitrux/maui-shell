@@ -21,12 +21,12 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.14
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
-import com.theqtcompany.wlcompositor 1.0
 import org.mauikit.controls 1.3 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import QtQuick.Layouts 1.3
+import org.maui.cask 1.0 as Cask
 
-StackableItem
+Cask.StackableItem
 {
     id: rootChrome
 

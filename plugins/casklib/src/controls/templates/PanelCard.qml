@@ -19,7 +19,7 @@ Item
     property alias padding : _page.padding
     property alias headBar: _page.headBar
     property alias footBar: _page.footBar
-
+    property alias background: _page.background
     property int index : -1
 
     Item
@@ -65,11 +65,12 @@ Item
 
         Rectangle
         {
+            visible: control.background
             anchors.fill: parent
             //         anchors.margins: Maui.Style.space.small
-            radius: Maui.Style.radiusV
+            radius: control.background.radius
             color: "transparent"
-            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            border.color: Qt.darker(control.background.Kirigami.Theme.backgroundColor, 2.7)
             opacity: 0.5
 
 
@@ -79,7 +80,7 @@ Item
                 anchors.margins: 1
                 color: "transparent"
                 radius: parent.radius - 0.5
-                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                border.color: Qt.lighter(control.background.Kirigami.Theme.backgroundColor, 2)
                 opacity: 0.7
             }
         }

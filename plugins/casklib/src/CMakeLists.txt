@@ -38,12 +38,12 @@ add_library(${PROJECT_NAME}
     ${caskplugin_QML_QRC}
     )
 
-generate_export_header(${PROJECT_NAME} BASE_NAME CaskLib)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    VERSION ${CASK_VERSION_STRING}
-    SOVERSION ${CASK_SOVERSION}
-    EXPORT_NAME CaskLib
-    )
+#generate_export_header(${PROJECT_NAME} BASE_NAME CaskLib)
+#set_target_properties(${PROJECT_NAME} PROPERTIES
+#    VERSION ${CASKLIB_VERSION_STRING}
+#    SOVERSION ${CASKLIB_SOVERSION}
+#    EXPORT_NAME CaskLib
+#    )
 
 target_include_directories(${PROJECT_NAME}
     INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/Maui/Cask>")
@@ -76,19 +76,14 @@ if (BUILD_SHARED_LIBS)
         COMMAND ${CMAKE_COMMAND} -E
         copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/controls ${CMAKE_BINARY_DIR}/bin/org/maui/cask/
         COMMAND ${CMAKE_COMMAND} -E
-        copy $<TARGET_FILE:${PROJECT_NAME}> ${CMAKE_BINARY_DIR}/bin/org/maui/cask/
+        copy $<TARGET_FILE:CaskLib> ${CMAKE_BINARY_DIR}/bin/org/maui/cask/
         )
 
-    if(QUICK_COMPILER AND NOT ANDROID )
+    if(QUICK_COMPILER)
         install(FILES controls/qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/maui/cask)
     else()
         install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/maui/cask)
     endif()
-
-    #include(ECMGeneratePriFile)
-    #ecm_generate_pri_file(BASE_NAME KQuickImageEditor LIB_NAME KQuickImageEditor DEPS "core qml quick svg" FILENAME_VAR PRI_FILENAME )
-    #install(FILES ${PRI_FILENAME}
-    #DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
 endif()
 

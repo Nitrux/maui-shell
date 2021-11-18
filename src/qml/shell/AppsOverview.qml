@@ -5,6 +5,7 @@ import QtQuick.Window 2.3
 import QtGraphicalEffects 1.0
 import QtWayland.Compositor 1.0
 import QtQuick.Layouts 1.3
+import org.maui.cask 1.0 as Cask
 
 import org.mauikit.controls 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
@@ -83,6 +84,7 @@ Maui.Page
             value:  _swipeView.currentIndex
             restoreMode: Binding.RestoreBinding
         }
+
         height: parent.height * 0.8
         width: parent.width * 0.8
         anchors.centerIn: parent
@@ -90,7 +92,6 @@ Maui.Page
         model: _listSurfaces
         snapMode: ListView.SnapToItem
         spacing: Maui.Style.space.big
-
 
         onCountChanged:
         {
@@ -121,7 +122,7 @@ Maui.Page
                     anchors.left: _thumbnail.left
                     anchors.right: _thumbnail.right
                     height: Maui.Style.rowHeight
-                    iconSource: "vvave"
+                    iconSource: Cask.Env.appIconName(modelData.toplevel.appId)
                     iconSizeHint: Maui.Style.iconSizes.medium
                     label1.text: modelData.toplevel.title
                 }

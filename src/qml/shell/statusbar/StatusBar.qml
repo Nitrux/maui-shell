@@ -13,13 +13,25 @@ import "items/calendar"
 Cask.PanelSection
 {
     id: control
-    Layout.fillWidth: !win.isWide
+    Layout.fillWidth: true
 
-    position : win.isWide ? ToolBar.Footer : ToolBar.Header
+    position : ToolBar.Header
 
-    preferredHeight: win.formFactor === Cask.Env.Phone ?  Maui.Style.rowHeight: Maui.Style.toolBarHeightAlt
-    margins: win.formFactor === Cask.Env.Desktop ? Maui.Style.space.medium : 0
-    radius: win.formFactor === Cask.Env.Desktop ? Maui.Style.radiusV : 0
+    preferredHeight: Maui.Style.toolBarHeightAlt
+    margins:  0
+    radius:  0
+
+    popWidth: 500
+    Connections
+    {
+        target: _cask
+
+        function onDesktopPressed()
+        {
+            console.log("DEsktop pressed")
+            control.close()
+        }
+    }
 
     leftContent: [
         Cask.PanelItem

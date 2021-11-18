@@ -34,11 +34,9 @@ AbstractButton
         }
     }
 
-     RowLayout
+    contentItem :RowLayout
     {
         id: _layout
-        anchors.centerIn: parent
-        height: parent.height
         spacing: 0
         clip: true
 

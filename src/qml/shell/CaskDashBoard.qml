@@ -120,6 +120,7 @@ Item
         anchors.fill: parent
         spacing: 0
 
+
         Cask.Panel
         {
             id: _topPanel
@@ -140,22 +141,39 @@ Item
                 anchors.fill: parent
             }
 
-            TapHandler
-            {
+            //            TapHandler
+            //            {
+            //                grabPermissions: PointerHandler.CanTakeOverFromAnything
+            //                gesturePolicy: TapHandler.ReleaseWithinBounds | TapHandler.WithinBounds
+            //                onTapped:
+            //                {
+            //                    console.log("Dekstop tapped")
+            //                    control.desktopPressed()
+            //                }
+            //            }
 
-                onTapped:
+            MouseArea
+            {
+                anchors.fill: parent
+                onPressed:
                 {
                     control.desktopPressed()
+                    mouse.accepted = false
                 }
             }
         }
 
-        Cask.Panel
+        Item
         {
-            id: _bottomPanel
             z: _topPanel.z+1
+            //            color: "yellow"
             Layout.fillWidth: true
-            Layout.preferredHeight: visible ? implicitHeight : 0
+            Layout.preferredHeight: _bottomPanel.visible ? _bottomPanel.implicitHeight : 0
+            Cask.Panel
+            {
+                id: _bottomPanel
+                anchors.fill: parent
+            }
         }
     }
 }
