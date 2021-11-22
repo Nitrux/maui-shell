@@ -8,27 +8,25 @@ import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
-Item
+Control
 {
     id: control
-    default property alias content : _content.content
+    default property alias content : _content.data
+
     property alias cards : popup.contentChildren
     property alias popup : popup
-    property int popWidth : Math.min(_cask.avaliableWidth, Math.max(100, control.width))
+    property int popWidth : Math.max(100, control.width)
     property alias popHeight : popup.height
+    property alias alignment: popup.alignment
+    property color backgroundColor: Kirigami.Theme.backgroundColor
+    property int radius : 0
+    spacing: Maui.Style.space.tiny
 
-    property alias backgroundColor: _rec.color
-    property alias radius : _rec.radius
-    property alias spacing: _content.spacing
-    property alias leftContent: _content.leftContent
-    property alias middleContent: _content.middleContent
-    property alias rightContent: _content.rightContent
 
-    property bool collapsed : false
-    property alias position :_content.position
+    property int position
 
-    property alias preferredHeight: _content.preferredHeight
-    property int margins : Maui.Style.space.medium
+    property int margins : 0
+
 
     property int currentCard : -1
 
@@ -37,11 +35,28 @@ Item
     Layout.margins: margins
 
     Layout.fillWidth: false
-    Layout.preferredHeight: preferredHeight
+    Layout.preferredHeight: implicitHeight
 
-    implicitWidth: collapsed ? 0 : _content.implicitWidth + Maui.Style.space.big
+    implicitWidth: _content.implicitWidth + Maui.Style.space.big
 
-    signal contentDropped(var drop)
+    implicitHeight: _content.implicitHeight
+
+    background: Rectangle
+    {
+        id: _rec
+        radius: control.radius
+        opacity: 0.8
+        color: control.backgroundColor
+
+        Behavior on radius
+        {
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
 
     Behavior on margins
     {
@@ -52,57 +67,84 @@ Item
         }
     }
 
-    Behavior on preferredHeight
+    PanelPopup
     {
-        NumberAnimation
+        id: popup
+        property int alignment: Qt.AlignCenter
+        z: _content.z -2
+        Label
         {
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.InOutQuad
+            color: "orange"
+            text:  handler.centroid.pressPosition.x + " / " + handler.centroid.scenePressPosition.y
+            anchors.bottom: parent.bottom
+        }
+
+        //visible: handler.active && y>0
+        opacity: control.position === ToolBar.Footer ? y/finalYPos : Math.abs((y+height)/(0-(height)))
+        Binding on y
+        {
+            when: !handler.active
+            value: popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height
+            restoreMode: Binding.RestoreBindingOrValue
+        }
+
+        x: handler.active && win.formFactor === Cask.Env.Desktop ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
+
+        function setXAlignment(alignment)
+        {
+            switch(alignment)
+            {
+            case Qt.AlignLeft: return 0;
+            case Qt.AlignCenter: return Math.round((control.width/2 ) - (popup.width/2));
+            case Qt.AlignRight: return 0-(width - control.width);
+            default: return 0;
+            }
+
+        }
+
+        readonly property int finalYPos : control.position === ToolBar.Footer ? 0 - (popup.height) : control.height + Maui.Style.space.medium
+
+        height: Math.min (_cask.avaliableHeight, popup.implicitHeight)
+        width: Math.min(control.popWidth, _cask.avaliableWidth)
+
+        function close()
+        {
+            popup.opened = false
+        }
+
+        function open()
+        {
+            popup.opened = true
         }
     }
 
-    Maui.ToolBar
+    DragHandler
     {
-        id: _content
-        anchors.fill: parent
-        preferredHeight: Maui.Style.toolBarHeightAlt
-        spacing: Maui.Style.space.tiny
-        position: ToolBar.Footer
-        background: Rectangle
+        id: handler
+        target: popup
+        //        yAxis.minimum: control.position === ToolBar.Footer ? 0-popup.height :0
+        //        xAxis.minimum: 0
+        //        xAxis.maximum: 500
+        xAxis.enabled : false
+        grabPermissions: PointerHandler.CanTakeOverFromAnything
+        onActiveChanged:
         {
-            id: _rec
-            radius: Maui.Style.radiusV
-            opacity: 0.8
-            color: Kirigami.Theme.backgroundColor
-
-            Behavior on radius
+            console.log(Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y))
+            if(!active && Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y) > 200)
             {
-                NumberAnimation
-                {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
+                popup.open()
+            }else
+            {
+                popup.close()
             }
         }
     }
 
-    Maui.Rectangle
+    contentItem: Row
     {
-        anchors.fill: parent
-        anchors.margins: Maui.Style.space.tiny
-        solidBorder: false
-        borderColor: Kirigami.Theme.textColor
-        borderWidth: 1
-        visible: _dropArea.containsDrag
-        color: "transparent"
-        opacity: 0.3
-    }
+        id: _content
+        spacing: control.spacing
 
-    DropArea
-    {
-        id: _dropArea
-        anchors.fill: parent
-        onDropped: control.contentDropped(drop)
     }
 
     function isPanelItem(obj)
@@ -112,32 +154,9 @@ Item
 
     Component.onCompleted:
     {
-        for(var k in _content.rightLayout.layout.children)
+        for(var k in _content.children)
         {
-            const obj = _content.rightLayout.layout.children[k]
-            if(obj.card)
-            {
-                obj.card.index = popup.count
-                obj.card.visible = Qt.binding(function(){return (control.currentCard >= 0 ? control.currentCard === obj.card.index : true) })
-                popup.container.insertItem(popup.count, obj.card)
-            }
-        }
-
-        for(var i in _content.leftLayout.layout.children)
-        {
-            const obj = _content.leftLayout.layout.children[i]
-
-            if(obj.card)
-            {
-                obj.card.index = popup.count
-                obj.card.visible = Qt.binding(function(){return (control.currentCard >= 0 ? control.currentCard === obj.card.index : true) })
-                popup.container.insertItem(popup.count, obj.card)
-            }
-        }
-
-        for(var j in _content.middleLayout.layout.children)
-        {
-            const obj = _content.middleLayout.layout.children[j]
+            const obj = _content.children[k]
             if(obj.card)
             {
                 obj.card.index = popup.count
@@ -147,34 +166,12 @@ Item
         }
     }
 
-    PanelPopup
-    {
-        id: popup
-
-        y: control.position === ToolBar.Footer ? 0 - (height + Maui.Style.space.medium + control.height) : control.height + Maui.Style.space.medium
-        x: Math.floor(parent.width/2 - width /2)
-        Binding on suggestedHeight
-        {
-            value:  handler.active ? (control.position === ToolBar.Footer ? 0 - handler.centroid.position.y : handler.centroid.position.y) : popup.height
-            restoreMode: Binding.RestoreBinding
-        }
-
-        height: suggestedHeight > 200 ? Math.min (_cask.avaliableHeight, popup.implicitHeight) : Math.min(suggestedHeight, handler.active ?  500 : 0)
-        width: control.popWidth
-    }
-
-    DragHandler
-    {
-        id: handler
-        target: null
-        grabPermissions: PointerHandler.CanTakeOverFromAnything
-    }
 
     function close()
     {
         console.log("Close it")
-        popup.suggestedHeight = 0
         control.currentCard = -1
+        popup.close()
 
     }
 
@@ -189,7 +186,7 @@ Item
             control.currentCard = -1
         }
 
-        popup.suggestedHeight= 500
+        popup.open()
     }
 
 }

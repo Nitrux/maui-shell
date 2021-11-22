@@ -6,20 +6,16 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 
+
+
 Cask.PanelSection
 {
-    id: control
-//    Layout.fillWidth: false
-    Layout.alignment: Qt.AlignCenter
-//    Layout.preferredWidth: 400
-    Layout.maximumWidth: _cask.avaliableWidth
-    //    backgroundColor: "transparent"
-    spacing: Maui.Style.space.medium
+    id: _section
+    Layout.fillWidth: false
+Layout.alignment: Qt.AlignCenter
+    implicitHeight: 64
 
-    preferredHeight: 64
-    margins: 20
-    radius:  20
-    popWidth: Math.min(_cask.avaliableWidth, 800)
+    ListModel {id: _tasksModel}
 
     Connections
     {
@@ -28,24 +24,38 @@ Cask.PanelSection
         function onDesktopPressed()
         {
             console.log("DEsktop pressed")
-            control.close()
+            _section.close()
         }
     }
 
-    leftContent:[
+
+    position: ToolBar.Footer
+//    Layout.fillWidth: false
+
+//    Layout.preferredWidth: 400
+//    Layout.maximumWidth: _cask.avaliableWidth
+    //    backgroundColor: "transparent"
+    spacing: Maui.Style.space.medium
+    alignment: Qt.AlignCenter
+
+    margins: 20
+    radius:  20
+    popWidth: Math.min(_cask.avaliableWidth, 800)
+
+
         LauncherPanelItem
         {
             onClicked:
             {
-                if(popup.visible)
-                    control.close()
+                if(popup.opened)
+                    _section.close()
                 else
                 {
-                    control.open(card.index)
+                    _section.open(card.index)
                     forceActiveFocus()
                 }
             }
-        },
+        }
 
         Cask.PanelItem
         {
@@ -54,20 +64,18 @@ Cask.PanelSection
             //            visible: !isMobile
             checked: overView
             onClicked: overView = true
-        }]
+        }
 
-    ListModel {id: _tasksModel}
     //    ListModel {id: _runninTasksModel}
 
-    middleContent:  [ Repeater
+   Repeater
         {
             model: _tasksModel
 
             Maui.ItemDelegate
-            {
-                Layout.fillHeight: true
+            {                
                 implicitWidth: height
-
+ implicitHeight: 48
                 draggable: true
 
                 Kirigami.Icon
@@ -78,15 +86,15 @@ Cask.PanelSection
                     anchors.centerIn: parent
                 }
             }
-        },
+        }
 
         Repeater
         {
             model: _listSurfaces
 
             AbstractButton
-            {
-                Layout.fillHeight: true
+            {                
+                implicitHeight: 48
                 implicitWidth: height
                 //                draggable: true
 
@@ -126,17 +134,17 @@ Cask.PanelSection
                     }
                 }
             }
-        }
-    ]
 
-    onContentDropped:
-    {
-        console.log("Dropped things" , drop.urls)
-        _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
-    }
 
+
+//    onContentDropped:
+//    {
+//        console.log("Dropped things" , drop.urls)
+//        _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
+//    }
+}
     function closeCard()
     {
-        control.close()
+        _section.close()
     }
 }

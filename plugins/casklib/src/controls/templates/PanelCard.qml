@@ -11,9 +11,7 @@ Item
     id: control
 
     default property alias content: _layout.data
-    implicitHeight: _layout.implicitHeight + _page.header.implicitHeight + _page.footer.implicitHeight + _page.topPadding + _page.bottomPadding  + Maui.Style.space.big
-    width: popWidth
-    height: visible ? implicitHeight : 0
+    implicitHeight: visible ? _layout.implicitHeight + _page.header.implicitHeight + _page.footer.implicitHeight + _page.topPadding + _page.bottomPadding  + Maui.Style.space.big : 0
 
     property alias title : _page.title
     property alias padding : _page.padding
@@ -63,27 +61,27 @@ Item
             }
         }
 
-        Rectangle
-        {
-            visible: control.background
-            anchors.fill: parent
-            //         anchors.margins: Maui.Style.space.small
-            radius: control.background.radius
-            color: "transparent"
-            border.color: Qt.darker(control.background.Kirigami.Theme.backgroundColor, 2.7)
-            opacity: 0.5
+//        Rectangle
+//        {
+//            visible: control.background
+//            anchors.fill: parent
+//            //         anchors.margins: Maui.Style.space.small
+//            radius: control.background.radius
+//            color: "transparent"
+//            border.color: Qt.darker(control.background.Kirigami.Theme.backgroundColor, 2.7)
+//            opacity: 0.5
 
 
-            Rectangle
-            {
-                anchors.fill: parent
-                anchors.margins: 1
-                color: "transparent"
-                radius: parent.radius - 0.5
-                border.color: Qt.lighter(control.background.Kirigami.Theme.backgroundColor, 2)
-                opacity: 0.7
-            }
-        }
+//            Rectangle
+//            {
+//                anchors.fill: parent
+//                anchors.margins: 1
+//                color: "transparent"
+//                radius: parent.radius - 0.5
+//                border.color: Qt.lighter(control.background.Kirigami.Theme.backgroundColor, 2)
+//                opacity: 0.7
+//            }
+//        }
     }
 
     DropShadow

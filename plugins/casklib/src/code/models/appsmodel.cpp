@@ -16,7 +16,7 @@
 
 AppsModel::AppsModel(QObject *parent) : MauiList(parent)
 {
-    this->setList();
+
 }
 
 const FMH::MODEL_LIST &AppsModel::items() const
@@ -36,7 +36,8 @@ static FMH::MODEL_LIST getApps()
     for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++) {
         const KSycocaEntry::Ptr p = (*it);
 
-        if (p->isType(KST_KServiceGroup)) {
+        if (p->isType(KST_KServiceGroup))
+        {
             KServiceGroup::Ptr s(static_cast<KServiceGroup *>(p.data()));
 
             if (!s->noDisplay() && s->childCount() > 0) {
@@ -48,11 +49,12 @@ static FMH::MODEL_LIST getApps()
     return res;
 }
 
-static FMH::MODEL_LIST getApps(const QString &groupStr)
+static FMH::MODEL_LIST getApps(const QString &groupStr, const int &limit)
 {
     const auto grp = QString(groupStr).replace("/", "") + "/";
     qDebug() << "APP GROUDP" << groupStr << grp;
 
+    int i = 0;
     if (grp.isEmpty())
         return getApps();
 
@@ -64,23 +66,36 @@ static FMH::MODEL_LIST getApps(const QString &groupStr)
     for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++) {
         const KSycocaEntry::Ptr p = (*it);
 
-        if (p->isType(KST_KService)) {
+        if (p->isType(KST_KService))
+        {
             const KService::Ptr s(static_cast<KService *>(p.data()));
 
             if (s->noDisplay())
                 continue;
 
-            res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::EXECUTABLE, "true"}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
+            if(i>=limit)
+                break;
 
-        } else if (p->isType(KST_KServiceSeparator)) {
+             res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
+             i++;
+
+        } else if (p->isType(KST_KServiceSeparator))
+        {
             qDebug() << "separator wtf";
 
-        } else if (p->isType(KST_KServiceGroup)) {
+        } else if (p->isType(KST_KServiceGroup))
+        {
             const KServiceGroup::Ptr s(static_cast<KServiceGroup *>(p.data()));
+
+            if(i>=limit)
+                break;
 
             if (s->childCount() == 0)
                 continue;
-            res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::EXECUTABLE, "true"}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
+            res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::CATEGORY, s->baseGroupName()}, {FMH::MODEL_KEY::MESSAGE, s->caption()}, {FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
+
+            i++;
+
         }
     }
 
@@ -92,10 +107,65 @@ void AppsModel::setList()
     emit preListChanged();
     m_data.clear();
 
-    for(const auto &item : getApps())
+    if(m_group.isEmpty())
     {
-        m_data << getApps(item[FMH::MODEL_KEY::LABEL]);
+        const auto apps = getApps();
+        for(const auto &item : std::as_const(apps))
+        {
+           const auto apps = getApps(item[FMH::MODEL_KEY::LABEL], m_limit);
+
+           m_data << apps;
+        }
+    }else
+    {
+        const auto apps = getApps(m_group, m_limit);
+        m_data << apps;
     }
 
+
+
+
     emit postListChanged();
+    emit this->countChanged();
+}
+
+
+void AppsModel::componentComplete()
+{
+    connect(this, &AppsModel::groupChanged, this, &AppsModel::setList);
+    connect(this, &AppsModel::limitChanged, this, &AppsModel::setList);
+     this->setList();
+}
+
+QString AppsModel::group() const
+{
+    return m_group;
+}
+
+QVariantList AppsModel::groups() const
+{
+    return FMH::toMapList(getApps());
+}
+
+int AppsModel::limit() const
+{
+    return m_limit;
+}
+
+void AppsModel::setGroup(QString group)
+{
+    if (m_group == group)
+        return;
+
+    m_group = group;
+    emit groupChanged();
+}
+
+void AppsModel::setLimit(int limit)
+{
+    if (m_limit == limit)
+        return;
+
+    m_limit = limit;
+    emit limitChanged();
 }

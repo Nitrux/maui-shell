@@ -120,13 +120,17 @@ Item
         anchors.fill: parent
         spacing: 0
 
-
-        Cask.Panel
+        Item
         {
-            id: _topPanel
             z: _content.z+ 1
+            //            color: "yellow"
             Layout.fillWidth: true
-            Layout.preferredHeight: visible ? implicitHeight : 0
+            Layout.preferredHeight: _topPanel.visible ? _topPanel.implicitHeight : 0
+            Cask.Panel
+            {
+                id: _topPanel
+                anchors.fill: parent
+            }
         }
 
         Item

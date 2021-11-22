@@ -11,9 +11,8 @@ import org.mauikit.controls 1.2 as Maui
 Item
 {
     id: control
-    visible: suggestedHeight > 0
-    property int suggestedHeight : 0
-
+//    visible: y > 0
+    property bool opened : false
     property alias container : _cards
     property alias count: _cards.count
     property alias implicitHeight: _cardsList.contentHeight
@@ -22,15 +21,17 @@ Item
 
     Rectangle
     {
-        visible: control.visible
+
+        visible: control.opened
         parent: surfaceArea
         anchors.fill: parent
-        opacity: Math.min(0.7, control.height / cask.height)
+        opacity: Math.min(0.7,  parent.opacity)
         Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
         color: Kirigami.Theme.backgroundColor
         radius: Maui.Style.radiusV
         //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))      
+
     }
 
     ScrollView
@@ -39,12 +40,13 @@ Item
         contentHeight: _cardsList.contentHeight
         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
         background: null
+//        clip: false
 
         Container
         {
             id: _cards
             anchors.fill: parent
-            clip: true
+//            clip: true
 
             contentItem: ListView
             {
