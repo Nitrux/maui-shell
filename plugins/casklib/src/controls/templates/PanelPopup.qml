@@ -36,7 +36,7 @@ Item
         {
             NumberAnimation
             {
-                duration: Kirigami.Units.longDuration*3
+                duration: Kirigami.Units.longDuration
                 easing.type: Easing.OutInQuad
             }
         }
