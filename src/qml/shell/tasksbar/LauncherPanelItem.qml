@@ -15,19 +15,16 @@ Cask.PanelItem
     card: Cask.PanelCard
     {
         implicitWidth: parent.width
-        height: Math.min(_cask.avaliableHeight, 800)
-        background: Rectangle
-        {
-            color: Kirigami.Theme.backgroundColor
-            opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 1
-        }
-
+        implicitHeight: Math.min(_cask.avaliableHeight, 800)
+        background: Item{}
         Launcher
         {
             id: _launcherGrid
             height: parent.height
             width: Math.min(800, parent.width)
             anchors.centerIn: parent
+
+//           scale: parent.opacity
         }
     }
 }

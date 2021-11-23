@@ -12,8 +12,8 @@ import "items/calendar"
 Rectangle
 {
     id: control
-Layout.fillWidth: true
-implicitHeight: 32
+    Layout.fillWidth: true
+    implicitHeight: 32
     RowLayout
     {
         anchors.fill: parent
@@ -21,11 +21,11 @@ implicitHeight: 32
         Cask.PanelSection
         {
             id: _notificationsSection
-            Layout.alignment: Qt.AlignLeft
+            Layout.fillWidth: true
             Layout.fillHeight: true
             position : ToolBar.Header
-popWidth: 500
-alignment: Qt.AlignLeft
+            popWidth: 500
+            alignment: Qt.AlignLeft
 
             CalendarItem
             {

@@ -9,7 +9,8 @@ import org.maui.cask 1.0 as Cask
 Maui.Page
 {
     id: control
-
+Kirigami.Theme.inherit: false
+Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     headBar.visible: true
     flickable: _gridView.flickable
     headBar.background: null
@@ -28,7 +29,13 @@ Maui.Page
         id: launcher
     }
 
-    background: null
+    background:  Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
+        opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.7
+        radius: 12
+    }
+
 
     SwipeView
     {
@@ -45,6 +52,8 @@ Maui.Page
 
             verticalScrollBarPolicy: ScrollBar.AlwaysOff
 
+            onAreaClicked: closeCard()
+
             delegate: Item
             {
                 id: _delegate
@@ -60,6 +69,8 @@ Maui.Page
                     template.labelSizeHint: 22
                     iconSource:  modelData.icon
                     iconSizeHint: width
+                    label1.font.bold: true
+                    label1.font.weight: Font.ExtraBold
                     label1.text: modelData.label.replace("/", "")
                     background: null
 

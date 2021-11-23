@@ -1,4 +1,4 @@
-import QtQuick 2.13
+import QtQuick 2.15
 import QtQml 2.14
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.3
@@ -7,6 +7,7 @@ import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
+import org.maui.cask 1.0 as Cask
 
 Control
 {
@@ -20,7 +21,7 @@ Control
     property alias alignment: popup.alignment
     property color backgroundColor: Kirigami.Theme.backgroundColor
     property int radius : 0
-    spacing: Maui.Style.space.tiny
+    spacing: Maui.Style.space.medium
 
 
     property int position
@@ -71,7 +72,8 @@ Control
     {
         id: popup
         property int alignment: Qt.AlignCenter
-        z: _content.z -2
+        z: _content.z + 1
+
         Label
         {
             color: "orange"
@@ -79,8 +81,9 @@ Control
             anchors.bottom: parent.bottom
         }
 
-        //visible: handler.active && y>0
-        opacity: control.position === ToolBar.Footer ? y/finalYPos : Math.abs((y+height)/(0-(height)))
+        visible: handler.active || opened
+        opacity: control.position === ToolBar.Footer ? (y/finalYPos)  : Math.abs((y+height)/(0-(height)))
+
         Binding on y
         {
             when: !handler.active
@@ -88,7 +91,25 @@ Control
             restoreMode: Binding.RestoreBindingOrValue
         }
 
-        x: handler.active && win.formFactor === Cask.Env.Desktop ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
+        Behavior on y
+        {
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration*3
+                easing.type: Easing.OutInQuad
+            }
+        }
+
+//        Behavior on x
+//        {
+//            NumberAnimation
+//            {
+//                duration: Kirigami.Units.longDuration*10
+//                easing.type: Easing.InOutQuad
+//            }
+//        }
+
+        x: handler.active && win.formFactor === Cask.Env.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
 
         function setXAlignment(alignment)
         {
@@ -115,16 +136,42 @@ Control
         function open()
         {
             popup.opened = true
+            popup.y= popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height
+        }
+
+        DragHandler
+        {
+            id: handler2
+            dragThreshold: 100
+            enabled: popup.opened
+            target: popup
+            yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos : undefined
+            yAxis.maximum: control.position === ToolBar.Footer  ? undefined : popup.finalYPos
+
+            xAxis.enabled : false
+            grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
+            onActiveChanged:
+            {
+                const condition = control.position === ToolBar.Footer ? handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y > 200 : handler2.centroid.scenePressPosition.y - handler2.centroid.scenePosition.y > -200
+                if(!active && condition)
+                {
+                    popup.close()
+                }else
+                {
+                    popup.open()
+                }
+            }
         }
     }
 
     DragHandler
     {
         id: handler
+        dragThreshold: 100
+        enabled: !popup.opened
         target: popup
-        //        yAxis.minimum: control.position === ToolBar.Footer ? 0-popup.height :0
-        //        xAxis.minimum: 0
-        //        xAxis.maximum: 500
+        yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos - 10 : undefined
+        yAxis.maximum: control.position === ToolBar.Footer  ? undefined : popup.finalYPos + 10
         xAxis.enabled : false
         grabPermissions: PointerHandler.CanTakeOverFromAnything
         onActiveChanged:
