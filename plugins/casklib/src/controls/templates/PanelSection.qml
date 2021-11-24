@@ -91,14 +91,14 @@ Control
             restoreMode: Binding.RestoreBindingOrValue
         }
 
-        Behavior on y
-        {
-            NumberAnimation
-            {
-                duration: Kirigami.Units.longDuration*3
-                easing.type: Easing.OutInQuad
-            }
-        }
+//        Behavior on y
+//        {
+//            NumberAnimation
+//            {
+//                duration: Kirigami.Units.longDuration*3
+//                easing.type: Easing.OutInQuad
+//            }
+//        }
 
 //        Behavior on x
 //        {
