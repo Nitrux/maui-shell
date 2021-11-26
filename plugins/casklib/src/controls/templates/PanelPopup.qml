@@ -20,27 +20,49 @@ Item
     //    property alias implicitWidth: _cardsList.contentHeight
     property alias contentChildren : _cards.contentChildren
 
-    Rectangle
+    Item
     {
+        opacity: Math.min(0.7, control.opacity)
 
         visible: opacity > 0
-        parent: _cask.background
+        parent: _cask.overlay
         anchors.fill: parent
-        opacity: Math.min(0.7, control.opacity)
-        Kirigami.Theme.inherit: false
-        Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-        color: Kirigami.Theme.backgroundColor
-        radius: Maui.Style.radiusV
-        //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-        Behavior on opacity
-        {
-            NumberAnimation
-            {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.OutInQuad
-            }
+
+        Image {
+            id: _img
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            source: _cask.backgroundImage
         }
 
+
+        FastBlur
+        {
+            anchors.fill: parent
+            id: fastBlur
+            source: _img
+            radius: 64
+            transparentBorder: false
+            cached: true
+        }
+
+        Rectangle
+        {
+            anchors.fill: parent
+            Kirigami.Theme.inherit: false
+            Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+            color: Kirigami.Theme.backgroundColor
+            radius: Maui.Style.radiusV
+            //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+            Behavior on opacity
+            {
+                NumberAnimation
+                {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.OutInQuad
+                }
+            }
+        }
     }
 
 
@@ -49,18 +71,18 @@ Item
     {
         id: _cards
         anchors.fill: parent
-                    clip: true
+        clip: true
 
         contentItem: ListView
-            {
-                id: _cardsList
-                spacing: 0
-                model: _cards.contentModel
-                snapMode: ListView.SnapOneItem
-                orientation: ListView.Vertical
-//                interactive: Kirigami.Settings.hasTransientTouchInput
-                boundsBehavior: ListView.StopAtBounds
-            }
+        {
+            id: _cardsList
+            spacing: 0
+            model: _cards.contentModel
+            snapMode: ListView.SnapOneItem
+            orientation: ListView.Vertical
+            //                interactive: Kirigami.Settings.hasTransientTouchInput
+            boundsBehavior: ListView.StopAtBounds
+        }
 
     }
 }

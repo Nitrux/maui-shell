@@ -18,7 +18,7 @@ Item
     readonly property alias surface : _content
 
     property alias background : _rec
-
+    property alias overlay : _overlay
     property alias backgroundColor : _rec.color
     property alias backgroundImage: _img.source
 
@@ -165,7 +165,17 @@ Item
                     mouse.accepted = false
                 }
             }
+
+            Item
+            {
+                id: _overlay
+                z: _topPanel.z+1
+                height: control.height
+                width: control.width
+            }
         }
+
+
 
         Item
         {
@@ -180,4 +190,6 @@ Item
             }
         }
     }
+
+
 }

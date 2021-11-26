@@ -19,6 +19,8 @@
 import QtQuick 2.12
 import QtWayland.Compositor 1.12
 import Qt.labs.settings 1.0
+import org.mauikit.controls 1.3 as Maui
+
 import org.maui.cask 1.0 as Cask
 
 WaylandCompositor
