@@ -73,13 +73,15 @@ Control
         id: popup
         property int alignment: Qt.AlignCenter
         z: _content.z + 1
-
+position: control.position
         Label
         {
             color: "orange"
             text:  handler.centroid.pressPosition.x + " / " + handler.centroid.scenePressPosition.y
             anchors.bottom: parent.bottom
         }
+
+        onOverlayClicked: control.close()
 
         visible: handler.active || opened
         opacity: control.position === ToolBar.Footer ? (y/finalYPos)  : Math.abs((y+height)/(0-(height)))
@@ -125,7 +127,7 @@ Control
 
         readonly property int finalYPos : control.position === ToolBar.Footer ? 0 - (popup.height) : control.height + Maui.Style.space.medium
 
-        height: Math.min (_cask.avaliableHeight, popup.implicitHeight)
+        height: Math.min (_cask.avaliableHeight-control.height, popup.implicitHeight)
         width: Math.min(control.popWidth, _cask.avaliableWidth)
 
         function close()

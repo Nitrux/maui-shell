@@ -17,16 +17,6 @@ Cask.PanelSection
 
     ListModel {id: _tasksModel}
 
-    Connections
-    {
-        target: _cask
-
-        function onDesktopPressed()
-        {
-            console.log("DEsktop pressed")
-            _section.close()
-        }
-    }
 
 
     position: ToolBar.Footer

@@ -20,21 +20,44 @@ Item
     //    property alias implicitWidth: _cardsList.contentHeight
     property alias contentChildren : _cards.contentChildren
 
+    property int position
+
+    signal overlayClicked()
+
     Item
     {
-        opacity: Math.min(0.7, control.opacity)
+        id:_overlay
+        opacity:  control.opacity
 
-        visible: opacity > 0
-        parent: _cask.overlay
+        visible: control.opacity > 0.5
         anchors.fill: parent
 
-        Image {
+        states: [
+            State {
+                when: control.position === ToolBar.Header
+                ParentChange
+                {
+                    target: _overlay;
+                    parent: _cask.overlayTopPanel ;
+                }
+            },
+
+            State {
+                when: control.position === ToolBar.Footer
+                ParentChange
+                {
+                    target: _overlay; parent: _cask.overlayBottomPanel; x: 10; y: 10
+                }
+            }
+        ]
+
+        Image
+        {
             id: _img
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
             source: _cask.backgroundImage
         }
-
 
         FastBlur
         {
@@ -48,6 +71,8 @@ Item
 
         Rectangle
         {
+            opacity: Math.min(0.7, control.opacity)
+
             anchors.fill: parent
             Kirigami.Theme.inherit: false
             Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
@@ -63,9 +88,17 @@ Item
                 }
             }
         }
+
+        MouseArea
+        {
+            anchors.fill: parent
+            onClicked: {
+
+                control.overlayClicked()
+                mouse.accepted = false
+            }
+        }
     }
-
-
 
     Container
     {
@@ -76,7 +109,7 @@ Item
         contentItem: ListView
         {
             id: _cardsList
-            spacing: 0
+            spacing: Maui.Style.space.medium
             model: _cards.contentModel
             snapMode: ListView.SnapOneItem
             orientation: ListView.Vertical

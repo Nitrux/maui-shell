@@ -5,5 +5,8 @@
         <file alias="templates/PanelPopup.qml">controls/templates/PanelPopup.qml</file>
         <file alias="templates/PanelCard.qml">controls/templates/PanelCard.qml</file>
         <file alias="templates/PanelSection.qml">controls/templates/PanelSection.qml</file>
+        <file alias="Dashboard.qml">controls/Dashboard.qml</file>
+        <file>controls/WorkZpace.qml</file>
+        <file>controls/Zpace.qml</file>
     </qresource>
 </RCC>

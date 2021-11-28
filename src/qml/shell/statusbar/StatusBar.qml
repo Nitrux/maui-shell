@@ -93,25 +93,9 @@ Rectangle
             position : ToolBar.Header
             alignment: Qt.AlignRight
 
-            popWidth: 500
-            Connections
-            {
-                target: _cask
+            popWidth: 500            
 
-                function onDesktopPressed()
-                {
-                    console.log("DEsktop pressed")
-                    _statusSection.close()
-                }
-            }
 
-            Cask.PanelItem
-            {
-                visible: !isMobile
-                iconSize: 16
-
-                icon.name: "camera-ready"
-            }
 
             Cask.PanelItem
             {
@@ -123,25 +107,53 @@ Rectangle
                 card: Cask.PanelCard
                 {
                     width: parent.width
-                    implicitHeight: _tooglesGrid.contentHeight + Maui.Style.space.big
+//                    implicitHeight: _tooglesGrid.implicitHeight
 
-                    Maui.GridView
+                    Grid
                     {
                         id:_tooglesGrid
                         width: parent.width
-                        height: _tooglesGrid.contentHeight
-                        itemSize: 64
-                        //                    verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff
+                        height: implicitHeight
+                        columnSpacing: Maui.Style.space.medium
+                        rowSpacing: columnSpacing
+                        columns: 3
+                        rows: 2
 
-                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
-                        delegate: ItemDelegate
+//                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
+                         ItemDelegate
                         {
-                            height: _tooglesGrid.cellHeight
-                            width: _tooglesGrid.cellWidth
-                            background: null
+                            height: 64
+                            width: height
+                            background: Rectangle
+                            {
+                                color: Qt.darker(Kirigami.Theme.backgroundColor)
+                                opacity: 0.8
+                                radius: 12
+                            }
+
                             Kirigami.Icon
                             {
-                                source: modelData
+                                source: "network-bluetooth"
+                                anchors.centerIn: parent
+                                height: Maui.Style.iconSizes.medium
+                                width: height
+                            }
+                        }
+
+                         ItemDelegate
+                        {
+                            height: 64
+                            width: 120
+                            background: Rectangle
+                            {
+                                color: Qt.darker(Kirigami.Theme.backgroundColor)
+                                opacity: 0.8
+                                radius: 12
+                            }
+
+                            Kirigami.Icon
+                            {
+                                source: "network-bluetooth"
                                 anchors.centerIn: parent
                                 height: Maui.Style.iconSizes.medium
                                 width: height

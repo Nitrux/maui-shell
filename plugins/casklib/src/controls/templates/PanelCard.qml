@@ -11,7 +11,7 @@ Item
     id: control
 
     default property alias content: _layout.data
-    implicitHeight: visible ? _layout.implicitHeight + _page.header.implicitHeight + _page.footer.implicitHeight + _page.topPadding + _page.bottomPadding  + Maui.Style.space.big : 0
+    implicitHeight: visible ? _layout.implicitHeight + _page.headerContainer.implicitHeight + _page.footerContainer.implicitHeight + _page.topPadding + _page.bottomPadding : 0
 
     property alias title : _page.title
     property alias padding : _page.padding
@@ -24,7 +24,7 @@ Item
     {
         id: _rec
         anchors.fill: parent
-        anchors.margins: Maui.Style.space.tiny
+//        anchors.margins: Maui.Style.space.tiny
 
         Maui.Page
         {

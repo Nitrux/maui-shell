@@ -22,6 +22,13 @@ Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
         placeholderText: qsTr("Search for apps and files...")
         onAccepted: _launcherGrid.model.filter = text
         onCleared: _launcherGrid.model.filter = ""
+
+        background: Rectangle
+        {
+            color: Qt.lighter(Kirigami.Theme.backgroundColor)
+            opacity: 0.7
+            radius: 10
+        }
     }
 
     Cask.ProcessLauncher

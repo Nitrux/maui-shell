@@ -75,7 +75,7 @@ WaylandOutput
             anchors.fill: parent
             windowSystemCursorEnabled: false
 
-            CaskDashBoard
+            Cask.Dashboard
             {
                 id: _cask
                 anchors.fill: parent
