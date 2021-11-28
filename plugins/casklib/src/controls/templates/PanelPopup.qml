@@ -16,8 +16,7 @@ Item
     property bool opened : false
     property alias container : _cards
     property alias count: _cards.count
-    property alias implicitHeight: _cardsList.contentHeight
-    //    property alias implicitWidth: _cardsList.contentHeight
+     implicitHeight: _cardsList.contentHeight + (_cards.padding*2)
     property alias contentChildren : _cards.contentChildren
 
     property int position
@@ -105,6 +104,7 @@ Item
         id: _cards
         anchors.fill: parent
         clip: true
+        padding: Maui.Style.space.medium
 
         contentItem: ListView
         {

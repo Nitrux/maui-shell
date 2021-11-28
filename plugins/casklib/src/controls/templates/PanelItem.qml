@@ -18,6 +18,7 @@ AbstractButton
 
     background: Item {}
 
+    default property alias content : _layout.data
 
     property int iconSize : isMobile ? Maui.Style.iconSizes.small : Maui.Style.iconSizes.medium
 

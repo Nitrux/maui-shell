@@ -35,6 +35,14 @@ Rectangle
             Cask.PanelItem
             {
                 icon.name: "notifications"
+
+                Maui.Badge
+                {
+                    Layout.fillHeight: true
+                    text: _nof.count
+                    radius: 4
+                }
+
                 onClicked: _notificationsSection.open(card.index)
 
                 card: Cask.PanelCard
@@ -93,73 +101,177 @@ Rectangle
             position : ToolBar.Header
             alignment: Qt.AlignRight
 
-            popWidth: 500            
+            popWidth: 500
 
 
 
             Cask.PanelItem
             {
+                id: _togglesItem
                 visible: !isMobile
-                icon.name: "mic-ready"
                 iconSize: 16
                 onClicked: _statusSection.open(card.index)
+
+                Row
+                {
+                    spacing: Maui.Style.space.medium
+                    Kirigami.Icon
+                    {
+                        source: "settings-configure"
+                        height: _togglesItem.iconSize
+                        width: height
+                        color: _togglesItem.hovered || _togglesItem.down || _togglesItem.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    }
+                    Kirigami.Icon
+                    {
+                        source: "network-bluetooth"
+                        height: _togglesItem.iconSize
+                        width: height
+                        color: _togglesItem.hovered || _togglesItem.down || _togglesItem.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    }
+
+                    Kirigami.Icon
+                    {
+                        source: "network-wireless"
+                        height: _togglesItem.iconSize
+                        width: height
+                        color: _togglesItem.hovered || _togglesItem.down || _togglesItem.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    }
+                }
 
                 card: Cask.PanelCard
                 {
                     width: parent.width
-//                    implicitHeight: _tooglesGrid.implicitHeight
 
-                    Grid
+                    Flow
                     {
                         id:_tooglesGrid
                         width: parent.width
                         height: implicitHeight
-                        columnSpacing: Maui.Style.space.medium
-                        rowSpacing: columnSpacing
-                        columns: 3
-                        rows: 2
+                        spacing: Maui.Style.space.medium
 
-//                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
-                         ItemDelegate
+
+                        //                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
+                        ToggleTemplate
                         {
-                            height: 64
-                            width: height
-                            background: Rectangle
-                            {
-                                color: Qt.darker(Kirigami.Theme.backgroundColor)
-                                opacity: 0.8
-                                radius: 12
-                            }
-
-                            Kirigami.Icon
-                            {
-                                source: "network-bluetooth"
-                                anchors.centerIn: parent
-                                height: Maui.Style.iconSizes.medium
-                                width: height
-                            }
+                            icon.name: "network-bluetooth"
+                            template.label2.text: "PinePhone-Pro-2x"
+                            template.label1.text: i18n("Bluetooth")
                         }
 
-                         ItemDelegate
+                        ToggleTemplate
+                        {
+                            icon.name: "continuous"
+                        }
+
+                        ToggleTemplate
                         {
                             height: 64
-                            width: 120
-                            background: Rectangle
+                            icon.name: "network-wireless"
+                            template.label2.text: "Camilo-5G"
+                            template.label1.text: i18n("WiFi")
+                            template.content: Item
                             {
-                                color: Qt.darker(Kirigami.Theme.backgroundColor)
-                                opacity: 0.8
-                                radius: 12
+                                Layout.fillHeight: true
+                                Layout.preferredWidth: height
+                                Kirigami.Icon
+                                {
+                                    anchors.centerIn: parent
+                                    source: "arrow-right"
+                                    height: 16
+                                    width: 16
+                                }
                             }
 
-                            Kirigami.Icon
-                            {
-                                source: "network-bluetooth"
-                                anchors.centerIn: parent
-                                height: Maui.Style.iconSizes.medium
-                                width: height
-                            }
+                        }
+
+                        ToggleTemplate
+                        {
+                            icon.name:  "mic-ready"
+                        }
+
+                        ToggleTemplate
+                        {
+                            icon.name:  "network-flightmode-on"
+                        }
+
+                        ToggleTemplate
+                        {
+                            icon.name:  "contrast"
+                            text: "Dark Mode"
                         }
                     }
+
+                }
+            }
+
+            Cask.PanelItem
+            {
+                id: _slidersItem
+                visible: !isMobile
+                iconSize: 16
+
+                onClicked: _statusSection.open(card.index)
+
+                Row
+                {
+                    spacing: Maui.Style.space.medium
+                    Kirigami.Icon
+                    {
+                        source: "audio-volume-medium"
+                        height: _slidersItem.iconSize
+                        width: height
+                        color: _slidersItem.hovered || _slidersItem.down || _slidersItem.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    }
+
+                    Kirigami.Icon
+                    {
+                        source: "mic-ready"
+                        height: _slidersItem.iconSize
+                        width: height
+                        color: _slidersItem.hovered || _slidersItem.down || _slidersItem.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    }
+
+                    Kirigami.Icon
+                    {
+                        source: "high-brightness"
+                        height: _slidersItem.iconSize
+                        width: height
+                        color: _slidersItem.hovered || _slidersItem.down || _slidersItem.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    }
+                }
+
+                card: Cask.PanelCard
+                {
+                    width: parent.width
+
+                    Column
+                    {
+                        height: 100
+                        width: parent.width
+
+                        Label
+                        {
+                            text: qsTr("Volume")
+                        }
+
+                        Slider
+                        {
+                            width: parent.width
+                        }
+
+                        Label
+                        {
+                            text: qsTr("Brigtness")
+                        }
+
+
+                        Slider
+                        {
+                            width: parent.width
+                        }
+                    }
+
 
                 }
             }
@@ -232,51 +344,6 @@ Rectangle
 
             Cask.PanelItem
             {
-                visible: !isMobile
-                iconSize: 16
-
-                icon.name: "audio-volume-medium"
-                onClicked: _statusSection.open(card.index)
-
-                card: Cask.PanelCard
-                {
-                    width: parent.width
-
-                    Column
-                    {
-                        height: 100
-                        width: parent.width
-
-                        Label
-                        {
-                            text: qsTr("Volume")
-                        }
-
-                        Slider
-                        {
-                            width: parent.width
-                        }
-
-                        Label
-                        {
-                            text: qsTr("Brigtness")
-                        }
-
-
-                        Slider
-                        {
-                            width: parent.width
-                        }
-                    }
-
-
-                }
-            }
-
-
-
-            Cask.PanelItem
-            {
                 display: ToolButton.TextBesideIcon
                 icon.name: "battery-080"
                 text: "80%"
@@ -311,10 +378,10 @@ Rectangle
                 }
             }
 
-            NetworkItem
-            {
-                onClicked: _statusSection.open(card.index)
-            }
+            //            NetworkItem
+            //            {
+            //                onClicked: _statusSection.open(card.index)
+            //            }
 
         }
     }

@@ -23,3 +23,9 @@ QString Enviroment::appIconName(const QString &appId)
     qDebug() << "AppIcon name" << file.readIcon() << appId << file.fileName() ;
     return file.readIcon();
 }
+
+bool Enviroment::intersects(const QRectF first, const QRectF &second)
+{
+    qDebug() << "Checkign intersection" << first << second;
+    return first.intersects(second);
+}

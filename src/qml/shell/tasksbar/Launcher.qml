@@ -17,6 +17,8 @@ Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     headBar.middleContent: Maui.TextField
     {
         id: _searchBar
+        Kirigami.Theme.inherit: false
+        Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
         Layout.maximumWidth: 500
         Layout.fillWidth: true
         placeholderText: qsTr("Search for apps and files...")
@@ -91,7 +93,7 @@ Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
                     {
                         background: Rectangle
                         {
-                            color: Kirigami.Theme.backgroundColor
+                            color:  Qt.lighter(Kirigami.Theme.backgroundColor)
                             opacity: 0.5
                             radius: 12
                         }

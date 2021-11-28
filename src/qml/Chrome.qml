@@ -30,6 +30,7 @@ Cask.StackableItem
 {
     id: rootChrome
 
+    property bool intersects : y+height > _cask.height-80
     property alias shellSurface: surfaceItem.shellSurface
     property var topLevel : shellSurface.toplevel
     property alias moveItem: surfaceItem.moveItem
@@ -48,7 +49,6 @@ Cask.StackableItem
 
     x: surfaceItem.moveItem.x
     y: surfaceItem.moveItem.y
-
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
@@ -103,7 +103,7 @@ Cask.StackableItem
         border.width: 1
         radius: Maui.Style.radiusV
         border.color: (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
-        color: Kirigami.Theme.backgroundColor
+        color: rootChrome.intersects ? "red" : Kirigami.Theme.backgroundColor
         visible: decorationVisible
 
         Item

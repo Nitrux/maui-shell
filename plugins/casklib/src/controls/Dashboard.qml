@@ -248,7 +248,7 @@ Item
             grabPermissions: PointerHandler.CanTakeOverFromAnything | PointerHandler.ApprovesTakeOverByHandlersOfSameType
             onActiveChanged:
             {
-                if(!active && Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y) > 200)
+                if(!active && handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y > 60)
                 {
                     _bottomPanel.show()
                 }else
