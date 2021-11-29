@@ -210,8 +210,8 @@ Item
             {
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration*3
-                    easing.type: Easing.OutInQuad
+                    duration: 140
+                    easing.type: Easing.OutBounce
                 }
             }
 

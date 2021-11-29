@@ -49,17 +49,17 @@ Rectangle
                 {
                     width: parent.width
                     padding: 0
-                    title: _nof.count + " " + qsTr("Notifications")
-                    headBar.visible: true
-                    headBar.leftContent: ToolButton
-                    {
-                        icon.name: "configure"
-                    }
+                    //                    title: _nof.count + " " + qsTr("Notifications")
+                    //                    headBar.visible: true
+                    //                    headBar.leftContent: ToolButton
+                    //                    {
+                    //                        icon.name: "configure"
+                    //                    }
 
-                    headBar.rightContent: ToolButton
-                    {
-                        icon.name: "edit-clear-all"
-                    }
+                    //                    headBar.rightContent: ToolButton
+                    //                    {
+                    //                        icon.name: "edit-clear-all"
+                    //                    }
 
                     ListView
                     {
@@ -103,8 +103,6 @@ Rectangle
 
             popWidth: 500
 
-
-
             Cask.PanelItem
             {
                 id: _togglesItem
@@ -143,65 +141,87 @@ Rectangle
                 {
                     width: parent.width
 
-                    Flow
+                    StackView
                     {
-                        id:_tooglesGrid
+                        id : _togglesStack
                         width: parent.width
-                        height: implicitHeight
-                        spacing: Maui.Style.space.medium
-
-
-                        //                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
-                        ToggleTemplate
+                        height: currentItem.implicitHeight
+                        clip: true
+                        initialItem: Flow
                         {
-                            icon.name: "network-bluetooth"
-                            template.label2.text: "PinePhone-Pro-2x"
-                            template.label1.text: i18n("Bluetooth")
-                        }
+                            id:_tooglesGrid
 
-                        ToggleTemplate
-                        {
-                            icon.name: "continuous"
-                        }
+                            spacing: Maui.Style.space.medium
 
-                        ToggleTemplate
-                        {
-                            height: 64
-                            icon.name: "network-wireless"
-                            template.label2.text: "Camilo-5G"
-                            template.label1.text: i18n("WiFi")
-                            template.content: Item
+
+                            //                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
+                            ToggleTemplate
                             {
-                                Layout.fillHeight: true
-                                Layout.preferredWidth: height
-                                Kirigami.Icon
-                                {
-                                    anchors.centerIn: parent
-                                    source: "arrow-right"
-                                    height: 16
-                                    width: 16
-                                }
+                                icon.name: "network-bluetooth"
+                                template.label2.text: "PinePhone-Pro-2x"
+                                template.label1.text: i18n("Bluetooth")
                             }
 
+                            ToggleTemplate
+                            {
+                                icon.name: "continuous"
+                            }
+
+                            ToggleTemplate
+                            {
+                                height: 64
+                                icon.name: "network-wireless"
+                                template.label2.text: "Camilo-5G"
+                                template.label1.text: i18n("WiFi")
+                                template.content: Item
+                                {
+                                    Layout.fillHeight: true
+                                    Layout.preferredWidth: height
+                                    Kirigami.Icon
+                                    {
+                                        anchors.centerIn: parent
+                                        source: "arrow-right"
+                                        height: 16
+                                        width: 16
+                                    }
+                                }
+
+                                onClicked: _togglesStack.push(page)
+
+                                page: Maui.Page
+                                {
+                                    headBar.farLeftContent: ToolButton
+                                    {
+                                        icon.name: "go-previous"
+                                        onClicked: _togglesStack.pop()
+                                    }
+
+                                    implicitHeight: 400
+                                }
+
+                            }
+
+                            ToggleTemplate
+                            {
+                                icon.name:  "mic-ready"
+                            }
+
+                            ToggleTemplate
+                            {
+                                icon.name:  "network-flightmode-on"
+                            }
+
+                            ToggleTemplate
+                            {
+                                icon.name:  "contrast"
+                                text: "Dark Mode"
+                            }
                         }
 
-                        ToggleTemplate
-                        {
-                            icon.name:  "mic-ready"
-                        }
 
-                        ToggleTemplate
-                        {
-                            icon.name:  "network-flightmode-on"
-                        }
 
-                        ToggleTemplate
-                        {
-                            icon.name:  "contrast"
-                            text: "Dark Mode"
-                        }
+
                     }
-
                 }
             }
 
@@ -289,56 +309,60 @@ Rectangle
                     width: parent.width
                     padding: 0
 
-                    Maui.ListItemTemplate
+                    Maui.Page
                     {
                         width: parent.width
                         height: 100
-
-                        imageSource: "qrc:/Nina Simone_I Put A Spell On You_1965.jpg"
-                        imageSizeHint: 90
-                        spacing: Maui.Style.space.medium
-
-                        label1.text: "That's Him Over There"
-                        label2.text: "Nina Simone"
-                    }
-
-                    footBar.visible: true
-                    footBar.middleContent: [
-                        ToolButton
+                        Maui.ListItemTemplate
                         {
-                            id: babeBtnIcon
-                            icon.name: "love"
-                        },
+                            anchors.fill: parent
 
-                        Maui.ToolActions
-                        {
-                            expanded: true
-                            autoExclusive: false
-                            checkable: false
+                            imageSource: "qrc:/Nina Simone_I Put A Spell On You_1965.jpg"
+                            imageSizeHint: 90
+                            spacing: Maui.Style.space.medium
 
-                            Action
-                            {
-                                icon.name: "media-skip-backward"
-                            }
-
-                            Action
-                            {
-                                text: qsTr("Play and pause")
-                                icon.name: "media-playback-start"
-                            }
-
-                            Action
-                            {
-                                text: qsTr("Next")
-                                icon.name: "media-skip-forward"
-                            }
-                        },
-
-                        ToolButton
-                        {
-                            icon.name: "media-playlist-shuffle"
+                            label1.text: "That's Him Over There"
+                            label2.text: "Nina Simone"
                         }
-                    ]
+
+                        footBar.visible: true
+                        footBar.middleContent: [
+                            ToolButton
+                            {
+                                id: babeBtnIcon
+                                icon.name: "love"
+                            },
+
+                            Maui.ToolActions
+                            {
+                                expanded: true
+                                autoExclusive: false
+                                checkable: false
+
+                                Action
+                                {
+                                    icon.name: "media-skip-backward"
+                                }
+
+                                Action
+                                {
+                                    text: qsTr("Play and pause")
+                                    icon.name: "media-playback-start"
+                                }
+
+                                Action
+                                {
+                                    text: qsTr("Next")
+                                    icon.name: "media-skip-forward"
+                                }
+                            },
+
+                            ToolButton
+                            {
+                                icon.name: "media-playlist-shuffle"
+                            }
+                        ]
+                    }
                 }
             }
 

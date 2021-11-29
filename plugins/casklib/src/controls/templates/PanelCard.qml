@@ -11,78 +11,57 @@ Item
     id: control
 
     default property alias content: _layout.data
-    implicitHeight: visible ? _layout.implicitHeight + _page.headerContainer.implicitHeight + _page.footerContainer.implicitHeight + _page.topPadding + _page.bottomPadding : 0
+    implicitHeight: visible ? _layout.implicitHeight + _rec.topPadding + _rec.bottomPadding : 0
 
-    property alias title : _page.title
-    property alias padding : _page.padding
-    property alias headBar: _page.headBar
-    property alias footBar: _page.footBar
-    property alias background: _page.background
     property int index : -1
+    property alias padding : _rec.padding
+    property alias background : _rec.background
 
-    Item
+    Behavior on implicitHeight
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.OutInQuad
+        }
+    }
+
+    Control
     {
         id: _rec
         anchors.fill: parent
-//        anchors.margins: Maui.Style.space.tiny
-
-        Maui.Page
+        padding: Maui.Style.space.medium
+        clip: true
+        //        anchors.margins: Maui.Style.space.tiny
+        background: Rectangle
         {
-            id: _page
-            headBar.visible: false
-            anchors.fill: parent
-
-            padding: Maui.Style.space.small
-            background: Rectangle
-            {
-                color: Kirigami.Theme.backgroundColor
-            }
-
-            Column
-            {
-                id: _layout
-                anchors.fill: parent
-            }
-
-            layer.enabled: true
-            layer.effect: OpacityMask
-            {
-                maskSource: Item
-                {
-                    width: control.width
-                    height: control.height
-
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        radius: Maui.Style.radiusV
-                    }
-                }
-            }
+            color: Kirigami.Theme.backgroundColor
+            radius: Maui.Style.radiusV
         }
 
-//        Rectangle
-//        {
-//            visible: control.background
-//            anchors.fill: parent
-//            //         anchors.margins: Maui.Style.space.small
-//            radius: control.background.radius
-//            color: "transparent"
-//            border.color: Qt.darker(control.background.Kirigami.Theme.backgroundColor, 2.7)
-//            opacity: 0.5
+        contentItem: Column
+        {
+            id: _layout
+        }
 
 
-//            Rectangle
-//            {
-//                anchors.fill: parent
-//                anchors.margins: 1
-//                color: "transparent"
-//                radius: parent.radius - 0.5
-//                border.color: Qt.lighter(control.background.Kirigami.Theme.backgroundColor, 2)
-//                opacity: 0.7
-//            }
-//        }
     }
+
+    //    layer.enabled: true
+    //    layer.effect: OpacityMask
+    //    {
+    //        maskSource: Item
+    //        {
+    //            width: control.width
+    //            height: control.height
+
+    //            Rectangle
+    //            {
+    //                anchors.fill: parent
+    //                radius: Maui.Style.radiusV
+    //            }
+    //        }
+    //    }
 
     DropShadow
     {

@@ -13,6 +13,8 @@ AbstractButton
 
     property alias template : _template
 
+    property Component page : null
+
     background: Rectangle
     {
         readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))

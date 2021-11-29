@@ -37,7 +37,7 @@ AbstractButton
     contentItem :RowLayout
     {
         id: _layout
-        spacing: 0
+        spacing: Maui.Style.space.medium
         clip: true
 
         Item

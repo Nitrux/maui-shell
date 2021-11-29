@@ -18,8 +18,8 @@ Cask.PanelItem
     {
         width: parent.width
         padding: 0
-        title: new Date().toDateString()
-        headBar.visible: true
+//        title: new Date().toDateString()
+//        headBar.visible: true
 
         Item
         {
