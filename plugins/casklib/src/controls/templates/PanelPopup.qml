@@ -4,6 +4,7 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.0
+import org.maui.cask 1.0 as Cask
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -16,7 +17,7 @@ Item
     property bool opened : false
     property alias container : _cards
     property alias count: _cards.count
-     implicitHeight: _cardsList.contentHeight + (_cards.padding*2)
+    implicitHeight: _cardsList.contentHeight + (_cards.padding*2)
     property alias contentChildren : _cards.contentChildren
 
     property int position
@@ -50,40 +51,45 @@ Item
             }
         ]
 
-        Image
+        Item
         {
-            id: _img
+            visible: win.formFactor !== Cask.Env.Desktop
             anchors.fill: parent
-            fillMode: Image.PreserveAspectCrop
-            source: _cask.backgroundImage
-        }
-
-        FastBlur
-        {
-            anchors.fill: parent
-            id: fastBlur
-            source: _img
-            radius: 64
-            transparentBorder: false
-            cached: true
-        }
-
-        Rectangle
-        {
-            opacity: Math.min(0.7, control.opacity)
-
-            anchors.fill: parent
-            Kirigami.Theme.inherit: false
-            Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-            color: Kirigami.Theme.backgroundColor
-            radius: Maui.Style.radiusV
-            //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-            Behavior on opacity
+            Image
             {
-                NumberAnimation
+                id: _img
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                source: _cask.backgroundImage
+            }
+
+            FastBlur
+            {
+                anchors.fill: parent
+                id: fastBlur
+                source: _img
+                radius: 64
+                transparentBorder: false
+                cached: true
+            }
+
+            Rectangle
+            {
+                opacity: Math.min(0.7, control.opacity)
+
+                anchors.fill: parent
+                Kirigami.Theme.inherit: false
+                Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+                color: Kirigami.Theme.backgroundColor
+                radius: Maui.Style.radiusV
+                //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+                Behavior on opacity
                 {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.OutInQuad
+                    NumberAnimation
+                    {
+                        duration: Kirigami.Units.longDuration
+                        easing.type: Easing.OutInQuad
+                    }
                 }
             }
         }
@@ -91,8 +97,10 @@ Item
         MouseArea
         {
             anchors.fill: parent
-            onClicked: {
-
+            propagateComposedEvents: true
+            preventStealing: false
+            onPressed:
+            {
                 control.overlayClicked()
                 mouse.accepted = false
             }

@@ -144,7 +144,7 @@ position: control.position
         DragHandler
         {
             id: handler2
-            dragThreshold: 100
+//            dragThreshold: 100
             enabled: popup.opened
             target: popup
             yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos : undefined
@@ -157,7 +157,7 @@ position: control.position
                 const condition = control.position === ToolBar.Footer ? handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y > 200 : handler2.centroid.scenePressPosition.y - handler2.centroid.scenePosition.y > -200
                 if(!active && condition)
                 {
-                    popup.close()
+                    control.close()
                 }else
                 {
                     popup.open()
@@ -184,7 +184,7 @@ position: control.position
                 popup.open()
             }else
             {
-                popup.close()
+                control.close()
             }
         }
     }

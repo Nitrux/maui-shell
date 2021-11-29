@@ -199,6 +199,7 @@ Item
             id: _bottomPanel
             focus: true
             readonly property int hidden : y === height
+            property bool autohide: false
             //            y: _dockHoverHandler.hovered ? 0 : height
 
 
@@ -262,6 +263,7 @@ Item
         {
             id: _dockRevealTimer
             interval: 2500
+
             //            triggeredOnStart: true
             onTriggered:
             {
@@ -278,7 +280,7 @@ Item
         HoverHandler
         {
             id: _dockHoverHandler
-            enabled: !handler.active
+            enabled: !handler.active && _bottomPanel.autohide
             acceptedPointerTypes: PointerDevice.GenericPointer
             onHoveredChanged:
             {

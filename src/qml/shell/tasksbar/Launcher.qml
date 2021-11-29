@@ -41,7 +41,7 @@ Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     background:  Rectangle
     {
         color: Kirigami.Theme.backgroundColor
-        opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.7
+        opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 1
         radius: 12
     }
 

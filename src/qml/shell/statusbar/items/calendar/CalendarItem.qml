@@ -18,47 +18,35 @@ Cask.PanelItem
     {
         width: parent.width
         padding: 0
-        title: listview.currentItem.month + " - " + listview.currentItem.year
+        title: new Date().toDateString()
         headBar.visible: true
 
-        ListView
+        Item
         {
-            id: listview
             width: parent.width
             height: 250
-            snapMode: ListView.SnapOneItem
-            orientation: ListView.Horizontal
-            highlightFollowsCurrentItem: true
-            highlightRangeMode: ListView.StrictlyEnforceRange
+        MonthGrid
+                   {
+                       id: _monthGrid
+                        width: parent.width
+                        height: implicitHeight
+                        anchors.centerIn: parent
 
-            model: CalendarModel
-            {
-                from: new Date(2018, 0, 1)
-                to: new Date(2022, 11, 31)
-            }
-
-            delegate: MonthGrid
-            {
-                id: _monthGrid
-                width: listview.width
-                height: listview.height
-
-                month: model.month
-                year: model.year
-                locale: Qt.locale("en_US")
-                delegate: Label
-                {
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    opacity: model.month === _monthGrid.month ? 1 : 0
-                    text: model.day
-                    font: _monthGrid.font
-                    color: Kirigami.Theme.textColor
-                }
-            }
-
-            ScrollIndicator.horizontal: ScrollIndicator { }
+                       month: new Date().getMonth()
+                       year: new Date().getFullYear()
+                       locale: Qt.locale("en_US")
+                       delegate: Label
+                       {
+                           horizontalAlignment: Text.AlignHCenter
+                           verticalAlignment: Text.AlignVCenter
+                           opacity: model.month === _monthGrid.month ? 1 : 0
+                           text: model.day
+                           font: _monthGrid.font
+                           color: model.day ===  new Date().getDay() ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                       }
+                   }
         }
+
     }
 
     Timer {
