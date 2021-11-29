@@ -29,7 +29,7 @@ Item
         id:_overlay
         opacity:  control.opacity
 
-        visible: control.opacity > 0.5
+        visible: control.opacity > 0
         anchors.fill: parent
 
         states: [

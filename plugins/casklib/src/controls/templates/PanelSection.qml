@@ -77,7 +77,7 @@ position: control.position
         Label
         {
             color: "orange"
-            text:  handler.centroid.pressPosition.x + " / " + handler.centroid.scenePressPosition.y
+            text:  handler2.centroid.scenePressPosition.y + " / " + handler2.centroid.scenePosition.y
             anchors.bottom: parent.bottom
         }
 
@@ -154,7 +154,7 @@ position: control.position
             grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
             onActiveChanged:
             {
-                const condition = control.position === ToolBar.Footer ? handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y > 200 : handler2.centroid.scenePressPosition.y - handler2.centroid.scenePosition.y > -200
+                const condition = control.position === ToolBar.Footer ? (handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y > 200) : (handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y < -200)
                 if(!active && condition)
                 {
                     control.close()
