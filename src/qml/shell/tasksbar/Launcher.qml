@@ -9,10 +9,10 @@ import org.maui.cask 1.0 as Cask
 Maui.Page
 {
     id: control
-Kirigami.Theme.inherit: false
-Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     headBar.visible: true
-    flickable: _gridView.flickable
+//    flickable: _gridView.flickable
     headBar.background: null
     headBar.middleContent: Maui.TextField
     {
@@ -44,7 +44,6 @@ Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
         opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 1
         radius: 12
     }
-
 
     SwipeView
     {
@@ -89,7 +88,7 @@ Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
                         _allAppsModel.group = modelData.label
                     }
 
-                    template.iconComponent: Control
+                    template.iconComponent: Pane
                     {
                         background: Rectangle
                         {
@@ -188,7 +187,6 @@ Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
             }
         }
     }
-
 
     PageIndicator
     {

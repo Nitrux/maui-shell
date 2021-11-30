@@ -119,11 +119,17 @@ Item
             id: _cardsList
             spacing: Maui.Style.space.medium
             model: _cards.contentModel
-            snapMode: ListView.SnapOneItem
             orientation: ListView.Vertical
-            //                interactive: Kirigami.Settings.hasTransientTouchInput
-            boundsBehavior: ListView.StopAtBounds
-        }
+            snapMode: ListView.NoSnap
 
+            boundsBehavior: Flickable.StopAtBounds
+            boundsMovement :Flickable.StopAtBounds
+
+//            interactive: Kirigami.Settings.hasTransientTouchInput /*&& (control.selectionMode ? _listView.position.x > 84 : true)*/
+            highlightFollowsCurrentItem: true
+            highlightMoveDuration: 0
+            highlightResizeDuration : 0
+//            pressDelay: 1000
+        }
     }
 }

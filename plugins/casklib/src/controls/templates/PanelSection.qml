@@ -144,7 +144,7 @@ position: control.position
         DragHandler
         {
             id: handler2
-//            dragThreshold: 100
+            dragThreshold: 100
             enabled: popup.opened
             target: popup
             yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos : undefined
@@ -169,7 +169,7 @@ position: control.position
     DragHandler
     {
         id: handler
-        dragThreshold: 100
+//        dragThreshold: 100
         enabled: !popup.opened
         target: popup
         yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos - 10 : undefined

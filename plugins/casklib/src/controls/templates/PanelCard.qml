@@ -21,12 +21,12 @@ Item
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Kirigami.Units.shortDuration
             easing.type: Easing.OutInQuad
         }
     }
 
-    Control
+    Pane
     {
         id: _rec
         anchors.fill: parent
