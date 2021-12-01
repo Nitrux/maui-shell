@@ -10,13 +10,12 @@ import Qt.labs.calendar 1.0
 Cask.PanelItem
 {
     id: control
-    implicitWidth: 80
     icon.name: "clock"
     font.bold: true
     text: new Date().toTimeString()
     card: Cask.PanelCard
     {
-        width: parent.width
+        width: ListView.view.width
         padding: 0
 //        title: new Date().toDateString()
 //        headBar.visible: true

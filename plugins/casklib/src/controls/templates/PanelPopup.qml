@@ -13,7 +13,7 @@ Item
 {
     id: control
     //    visible: y > 0
-
+focus: true
     property bool opened : false
     property alias container : _cards
     property alias count: _cards.count
@@ -23,6 +23,10 @@ Item
     property int position
 
     signal overlayClicked()
+
+    Keys.enabled: true
+    Keys.onEscapePressed: control.overlayClicked()
+Keys.onSpacePressed: control.overlayClicked()
 
     Item
     {

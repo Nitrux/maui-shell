@@ -1,0 +1,126 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.5
+
+import org.kde.kirigami 2.14 as Kirigami
+import org.mauikit.controls 1.2 as Maui
+import org.maui.cask 1.0 as Cask
+import org.kde.plasma.core 2.0 as PlasmaCore
+
+Cask.PanelItem
+{
+    id: control
+    iconSize: 16
+    icon.name: "headphones"
+    property var mprisSourcesModel: []
+
+
+
+    PlasmaCore.DataSource
+    {
+        id: mpris2Source
+
+        readonly property string multiplexSource: "@multiplex"
+
+        engine: "mpris2"
+        connectedSources: sources
+
+        onSourceAdded: {
+            updateMprisSourcesModel()
+        }
+
+        onSourceRemoved: {
+            // if player is closed, reset to multiplex source
+            if (source === current) {
+                current = multiplexSource
+            }
+            updateMprisSourcesModel()
+        }
+    }
+
+    Component.onCompleted: {
+        mpris2Source.serviceForSource("@multiplex").enableGlobalShortcuts()
+        updateMprisSourcesModel()
+    }
+
+
+    function updateMprisSourcesModel () {
+
+        var model = [{
+                         'text': i18n("Choose player automatically"),
+                         'icon': 'emblem-favorite',
+                         'source': mpris2Source.multiplexSource
+                     }]
+
+        var sources = mpris2Source.sources
+        for (var i = 0, length = sources.length; i < length; ++i) {
+            var source = sources[i]
+            if (source === mpris2Source.multiplexSource) {
+                continue
+            }
+
+            const playerData = mpris2Source.data[source];
+            // source data is removed before its name is removed from the list
+            if (!playerData) {
+                continue;
+            }
+
+            model.push({
+                           'text': playerData["Identity"],
+                           'icon': playerData["Desktop Icon Name"] || playerData["DesktopEntry"] || "emblem-music-symbolic",
+                           'source': source
+                       });
+        }
+
+        control.mprisSourcesModel = model;
+    }
+
+    card: Cask.PanelCard
+    {
+        width: ListView.view.width
+        padding: Maui.Style.space.big
+        Kirigami.Theme.inherit: false
+        Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
+        ListView
+        {
+            id: _playersList
+
+//            currentIndex: pageIndicator.currentIndex
+            width: parent.width
+            height: 120
+            spacing: Maui.Style.space.medium
+            highlightFollowsCurrentItem: true
+            orientation: ListView.Horizontal
+            snapMode: ListView.SnapOneItem
+            clip: true
+            model: mprisSourcesModel
+
+            delegate: Loader
+            {
+                width: ListView.view.width
+                height: ListView.view.height
+                asynchronous: true
+                active: ListView.view.isCurrentItem
+
+                sourceComponent: PlayerCard
+                {
+                    source: modelData["source"]
+                    playerName: modelData["text"]
+                    playerIcon: modelData["icon"]
+                    sourceData: mpris2Source.data[source]
+                }
+            }
+
+            PageIndicator
+            {
+                id: pageIndicator
+//                interactive: true
+                count: _playersList.count
+                currentIndex: _playersList.currentIndex
+
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+    }
+}

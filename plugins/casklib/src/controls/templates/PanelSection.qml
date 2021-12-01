@@ -139,6 +139,7 @@ position: control.position
         {
             popup.opened = true
             popup.y= popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height
+            popup.forceActiveFocus()
         }
 
         DragHandler
@@ -169,10 +170,10 @@ position: control.position
     DragHandler
     {
         id: handler
-//        dragThreshold: 100
+        dragThreshold: control.position === ToolBar.Footer ? 64 : 20
         enabled: !popup.opened
         target: popup
-        yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos - 10 : undefined
+        yAxis.minimum: control.position === ToolBar.Footer ? popup.finalYPos - 10 : undefined
         yAxis.maximum: control.position === ToolBar.Footer  ? undefined : popup.finalYPos + 10
         xAxis.enabled : false
         grabPermissions: PointerHandler.CanTakeOverFromAnything

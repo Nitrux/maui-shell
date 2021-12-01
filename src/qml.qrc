@@ -11,6 +11,14 @@
         <file>qml/shell/statusbar/items/calendar/CalendarItem.qml</file>
         <file>qml/shell/tasksbar/Launcher.qml</file>
         <file>qml/shell/tasksbar/LauncherPanelItem.qml</file>
-        <file>qml/shell/statusbar/ToggleTemplate.qml</file>
+        <file>qml/shell/statusbar/items/sliders/SlidersItem.qml</file>
+        <file>qml/shell/statusbar/items/sliders/SliderTemplate.qml</file>
+        <file>qml/shell/statusbar/items/player/AudioPlayerItem.qml</file>
+        <file>qml/shell/statusbar/items/toggles/ToggleTemplate.qml</file>
+        <file>qml/shell/statusbar/items/toggles/TogglesItem.qml</file>
+        <file>qml/shell/statusbar/items/player/PlayerCard.qml</file>
+        <file>qml/shell/statusbar/items/toggles/TogglePage.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/network/NetworkToggle.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/bluetooth/BluetoothToggle.qml</file>
     </qresource>
 </RCC>

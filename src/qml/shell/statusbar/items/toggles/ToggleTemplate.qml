@@ -1,6 +1,7 @@
 import QtQuick 2.13
 import QtQml 2.14
 import QtQuick.Controls 2.13
+import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
@@ -34,6 +35,23 @@ AbstractButton
         iconSizeHint: Maui.Style.iconSizes.big
         headerSizeHint: control.implicitHeight
 
+        Loader
+        {
+            asynchronous: true
+            active: control.page
+            visible: active
+            Layout.fillHeight: true
+            Layout.preferredWidth: height
+            sourceComponent: Item
+            {
+                Kirigami.Icon
+                {
+                    anchors.centerIn: parent
+                    source: "arrow-right"
+                    height: 16
+                    width: 16
+                }
+            }
+        }
     }
-
 }
