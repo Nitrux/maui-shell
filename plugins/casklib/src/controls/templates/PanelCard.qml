@@ -36,15 +36,13 @@ Item
         background: Rectangle
         {
             color: Kirigami.Theme.backgroundColor
-            radius: Maui.Style.radiusV
+            radius: isMobile ? 0 : Maui.Style.radiusV
         }
 
         contentItem: Column
         {
             id: _layout
         }
-
-
     }
 
     //    layer.enabled: true
@@ -65,6 +63,7 @@ Item
 
     DropShadow
     {
+        visible: !isMobile
         transparentBorder: true
         anchors.fill: _rec
         horizontalOffset: 0
@@ -74,4 +73,11 @@ Item
         color: Qt.rgba(0,0,0,0.2)
         source: _rec
     }
+
+
+    Component.onDestruction:
+    {
+        console.log("DESTROY PANEL CARD")
+    }
+
 }

@@ -12,18 +12,22 @@ AbstractButton
 {
     id: control
     property PanelCard card : null
-    hoverEnabled: true
-    implicitWidth: _layout.implicitWidth
-    implicitHeight: Math.max(Maui.Style.iconSizes.medium, iconSize)
 
-    background: Item {}
+    hoverEnabled: true
+
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(iconSize+ Maui.Style.space.medium, 32) + topPadding + bottomPadding //keep it fixed size
 
     default property alias content : _layout.data
 
-    property int iconSize : isMobile ? Maui.Style.iconSizes.small : Maui.Style.iconSizes.medium
+    property int iconSize :Maui.Style.iconSizes.small
 
     icon.height: iconSize
     icon.width: iconSize
+
+    leftPadding: isMobile ? 0 : Maui.Style.space.medium
+    rightPadding: leftPadding
 
     Behavior on iconSize
     {
@@ -34,17 +38,26 @@ AbstractButton
         }
     }
 
-    contentItem :RowLayout
+    background: Rectangle
+
+    {
+        visible: !isMobile
+        color: card.visible ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+        radius: 6
+    }
+
+    contentItem: RowLayout
     {
         id: _layout
-        spacing: Maui.Style.space.medium
+        spacing: Maui.Style.space.small
         clip: true
 
         Item
         {
             visible: control.icon.name.length
-            Layout.fillHeight: true
             Layout.preferredWidth: height
+            implicitHeight: Math.min(control.iconSize+ Maui.Style.space.medium, control.height)
+
             Kirigami.Icon
             {
                 id: _icon
@@ -59,7 +72,6 @@ AbstractButton
         Label
         {
             visible: text.length && (control.display === ToolButton.TextBesideIcon)
-            Layout.fillHeight: true
             Layout.preferredWidth: implicitWidth
             text: control.text
             horizontalAlignment: Qt.AlignLeft
@@ -69,4 +81,5 @@ AbstractButton
             color: _icon.color
         }
     }
+
 }

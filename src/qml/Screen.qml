@@ -122,6 +122,7 @@ WaylandOutput
                     id: _swipeView
                     anchors.fill: parent
                     visible: !showDesktop
+                    clip: false
 
                     Binding on currentIndex
                     {
@@ -165,7 +166,7 @@ WaylandOutput
                     {
                         height: ListView.view.height
                         width: ListView.view.width
-                        clip: true
+                        clip: false
                         property alias chrome : _chromeDelegate
 
                         Chrome
@@ -257,4 +258,11 @@ WaylandOutput
             }
         }
     }
+
+
+    Component.onDestruction:
+    {
+        console.log("DESTROY SCREEN")
+    }
+
 }

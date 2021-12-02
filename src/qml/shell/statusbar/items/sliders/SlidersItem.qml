@@ -9,7 +9,6 @@ import org.maui.cask 1.0 as Cask
 Cask.PanelItem
 {
     id: control
-    iconSize: 16
 
     Row
     {

@@ -12,68 +12,52 @@ import org.maui.cask 1.0 as Cask
 Control
 {
     id: control
+
     default property alias content : _content.data
 
     property alias cards : popup.contentChildren
     property alias popup : popup
+
     property int popWidth : Math.max(100, control.width)
     property alias popHeight : popup.height
     property alias alignment: popup.alignment
-    property color backgroundColor: Kirigami.Theme.backgroundColor
-    property int radius : 0
-    spacing: Maui.Style.space.medium
 
+     spacing:  Maui.Style.space.medium
 
     property int position
-
-    property int margins : 0
 
 
     property int currentCard : -1
 
-    Layout.minimumWidth: 0
-    Layout.preferredWidth: implicitWidth
-    Layout.margins: margins
+     padding: 0
+     topPadding: padding
+     bottomPadding: padding
+     leftPadding: padding
+     rightPadding: padding
 
-    Layout.fillWidth: false
-    Layout.preferredHeight: implicitHeight
+    implicitWidth: implicitContentWidth + leftPadding + rightPadding
 
-    implicitWidth: _content.implicitWidth + Maui.Style.space.big
+    implicitHeight: _content.implicitHeight + topPadding + bottomPadding
 
-    implicitHeight: _content.implicitHeight
-
-    background: Rectangle
-    {
-        id: _rec
-        radius: control.radius
-        opacity: 0.8
-        color: control.backgroundColor
-
-        Behavior on radius
-        {
-            NumberAnimation
-            {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
-    }
-
-    Behavior on margins
-    {
-        NumberAnimation
-        {
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.InOutQuad
-        }
-    }
+    //    property int margins : 0
+    //    Layout.minimumWidth: 0
+    //    Layout.preferredWidth: implicitWidth
+    //    Layout.margins: margins
+    //    Behavior on margins
+    //    {
+    //        NumberAnimation
+    //        {
+    //            duration: Kirigami.Units.longDuration
+    //            easing.type: Easing.InOutQuad
+    //        }
+    //    }
 
     PanelPopup
     {
         id: popup
         property int alignment: Qt.AlignCenter
         z: _content.z + 1
-position: control.position
+        position: control.position
         Label
         {
             color: "orange"
@@ -93,23 +77,23 @@ position: control.position
             restoreMode: Binding.RestoreBindingOrValue
         }
 
-//        Behavior on y
-//        {
-//            NumberAnimation
-//            {
-//                duration: Kirigami.Units.longDuration*3
-//                easing.type: Easing.OutInQuad
-//            }
-//        }
+        //        Behavior on y
+        //        {
+        //            NumberAnimation
+        //            {
+        //                duration: Kirigami.Units.longDuration*3
+        //                easing.type: Easing.OutInQuad
+        //            }
+        //        }
 
-//        Behavior on x
-//        {
-//            NumberAnimation
-//            {
-//                duration: Kirigami.Units.longDuration*10
-//                easing.type: Easing.InOutQuad
-//            }
-//        }
+        //        Behavior on x
+        //        {
+        //            NumberAnimation
+        //            {
+        //                duration: Kirigami.Units.longDuration*10
+        //                easing.type: Easing.InOutQuad
+        //            }
+        //        }
 
         x: handler.active && win.formFactor === Cask.Env.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
 
@@ -128,7 +112,7 @@ position: control.position
         readonly property int finalYPos : control.position === ToolBar.Footer ? 0 - (popup.height) : control.height + Maui.Style.space.medium
 
         height: Math.min (_cask.avaliableHeight-control.height, popup.implicitHeight)
-        width: Math.min(control.popWidth, _cask.avaliableWidth)
+        width: Math.min(control.popWidth, _cask.width)
 
         function close()
         {
@@ -180,7 +164,8 @@ position: control.position
         onActiveChanged:
         {
             console.log(Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y))
-            if(!active && Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y) > 200)
+
+            if(!active && Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y) > 60)
             {
                 popup.open()
             }else
@@ -190,11 +175,16 @@ position: control.position
         }
     }
 
+
+//    Label
+//    {
+//        text: control.implicitHeight
+//    }
+
     contentItem: Row
     {
         id: _content
         spacing: control.spacing
-
     }
 
     function isPanelItem(obj)
@@ -207,10 +197,11 @@ position: control.position
         for(var k in _content.children)
         {
             const obj = _content.children[k]
-            if(obj.card)
+            if(obj.card && isPanelItem(obj.card))
             {
                 obj.card.index = popup.count
                 obj.card.visible = Qt.binding(function(){return (control.currentCard >= 0 ? control.currentCard === obj.card.index : true) })
+                obj.card.parent = popup
                 popup.container.insertItem(popup.count, obj.card)
             }
         }
@@ -222,7 +213,6 @@ position: control.position
         console.log("Close it")
         control.currentCard = -1
         popup.close()
-
     }
 
     function open(index)
@@ -237,6 +227,12 @@ position: control.position
         }
 
         popup.open()
+    }
+
+
+    Component.onDestruction:
+    {
+        console.log("DESTROY PANEL SECTION")
     }
 
 }

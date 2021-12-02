@@ -11,8 +11,8 @@ import org.maui.cask 1.0 as Cask
 Maui.Page
 {
     id: control
-    implicitHeight: 400
 
+    headBar.background: null
     headBar.farLeftContent: ToolButton
     {
         icon.name: "go-previous"

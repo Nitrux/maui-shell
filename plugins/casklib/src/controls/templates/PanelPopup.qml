@@ -13,12 +13,14 @@ Item
 {
     id: control
     //    visible: y > 0
-focus: true
+    focus: true
+
     property bool opened : false
     property alias container : _cards
     property alias count: _cards.count
     implicitHeight: _cardsList.contentHeight + (_cards.padding*2)
     property alias contentChildren : _cards.contentChildren
+    property alias padding : _cards.padding
 
     property int position
 
@@ -26,7 +28,7 @@ focus: true
 
     Keys.enabled: true
     Keys.onEscapePressed: control.overlayClicked()
-Keys.onSpacePressed: control.overlayClicked()
+    Keys.onSpacePressed: control.overlayClicked()
 
     Item
     {
@@ -116,7 +118,11 @@ Keys.onSpacePressed: control.overlayClicked()
         id: _cards
         anchors.fill: parent
         clip: true
-        padding: Maui.Style.space.medium
+        padding: isMobile ? 0 : Maui.Style.space.medium
+        leftPadding: padding
+        rightPadding: padding
+        bottomPadding: padding
+        topPadding: padding
 
         contentItem: ListView
         {
@@ -129,11 +135,18 @@ Keys.onSpacePressed: control.overlayClicked()
             boundsBehavior: Flickable.StopAtBounds
             boundsMovement :Flickable.StopAtBounds
 
-//            interactive: Kirigami.Settings.hasTransientTouchInput /*&& (control.selectionMode ? _listView.position.x > 84 : true)*/
+            //            interactive: Kirigami.Settings.hasTransientTouchInput /*&& (control.selectionMode ? _listView.position.x > 84 : true)*/
             highlightFollowsCurrentItem: true
             highlightMoveDuration: 0
             highlightResizeDuration : 0
-//            pressDelay: 1000
+            //            pressDelay: 1000
         }
     }
+
+
+    Component.onDestruction:
+    {
+        console.log("DESTROY PANEL POPUP")
+    }
+
 }

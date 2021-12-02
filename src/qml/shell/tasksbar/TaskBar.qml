@@ -6,132 +6,174 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 
-
-
-Cask.PanelSection
+Control
 {
-    id: _section
+    id: control
+
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
     Layout.fillWidth: false
     Layout.alignment: Qt.AlignCenter
+    implicitWidth: _section.implicitWidth + leftPadding + rightPadding
+
+    Layout.margins: 20
     implicitHeight: 64
 
     ListModel {id: _tasksModel}
 
-
-
-    position: ToolBar.Footer
-    //    Layout.fillWidth: false
-
-    //    Layout.preferredWidth: 400
-    //    Layout.maximumWidth: _cask.avaliableWidth
-    //    backgroundColor: "transparent"
-    spacing: Maui.Style.space.medium
-    alignment: Qt.AlignCenter
-
-    margins: 20
-    radius:  20
-    popWidth: Math.min(_cask.avaliableWidth, 800)
-
-    LauncherPanelItem
+    background: Rectangle
     {
-        onClicked:
-        {
-            if(popup.opened)
-                _section.close()
-            else
-            {
-                _section.open(card.index)
-                forceActiveFocus()
-            }
-        }
+        color: Kirigami.Theme.backgroundColor
+        opacity: 0.8
+        radius: 10
     }
 
-    Cask.PanelItem
+    contentItem: Cask.PanelSection
     {
-        icon.name: "cs-workspaces"
-        iconSize: 48
-        //            visible: !isMobile
-        checked: overView
-        onClicked: overView = true
-    }
+        id: _section
 
-    //    ListModel {id: _runninTasksModel}
+        position: ToolBar.Footer
+        Layout.fillHeight: true
+        //    Layout.fillWidth: false
 
-    Repeater
-    {
-        model: _tasksModel
+        //    Layout.preferredWidth: 400
+        //    Layout.maximumWidth: _cask.avaliableWidth
+        //    backgroundColor: "transparent"
+        spacing: Maui.Style.space.medium
+        alignment: Qt.AlignCenter
 
-        Maui.ItemDelegate
+        popWidth: 800
+
+        LauncherPanelItem
         {
-            implicitWidth: height
-            implicitHeight: 48
-            draggable: true
-
-            Kirigami.Icon
-            {
-                source: model.icon
-                height: isMobile ? 32 : 22
-                width: height
-                anchors.centerIn: parent
-            }
-        }
-    }
-
-    Repeater
-    {
-        model: _listSurfaces
-
-        AbstractButton
-        {
-            implicitHeight: 48
-            implicitWidth: height
-            //                draggable: true
+            height: parent.height
 
             onClicked:
             {
-                var toggleMinimize = false
-                if(_swipeView.currentIndex === index)
+                if(_section.popup.opened)
+                    _section.close()
+                else
                 {
-                    toggleMinimize = true
-                }
-
-                _swipeView.currentIndex = index
-
-                if(toggleMinimize)
-                {
-                    _swipeView.itemAtIndex(index).chrome.visible = !_swipeView.itemAtIndex(index).chrome.visible
-                }
-            }
-
-            contentItem: Item
-            {
-                Kirigami.Icon
-                {
-                    source: Cask.Env.appIconName(modelData.toplevel.appId)
-                    height: 48
-                    width: height
-                    anchors.centerIn: parent
-                }
-
-                Rectangle
-                {
-                    width: parent.width
-                    height: 2
-                    anchors.bottom: parent.bottom
-                    visible: index === _swipeView.currentIndex
-                    color: Kirigami.Theme.highlightColor
+                    _section.open(card.index)
+                    forceActiveFocus()
                 }
             }
         }
 
+        Cask.PanelItem
+        {
+            iconSize: 48
+            height: parent.height
+            leftPadding: 0
+            rightPadding: 0
+            background: Rectangle
+            {
+                color: Qt.darker(Kirigami.Theme.backgroundColor)
+                radius: 10
+            }
+
+            Item
+            {
+                Layout.preferredHeight: 48
+                Layout.preferredWidth: height
 
 
-        //    onContentDropped:
-        //    {
-        //        console.log("Dropped things" , drop.urls)
-        //        _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
-        //    }
+                Kirigami.Icon
+                {
+                    source: "view-file-columns"
+                    color: Kirigami.Theme.textColor
+                    height: 22
+                    width: height
+                    anchors.centerIn: parent
+                }
+            }
+
+            //            visible: !isMobile
+            checked: overView
+            onClicked: overView = true
+        }
+
+        //    ListModel {id: _runninTasksModel}
+
+        Repeater
+        {
+            model: _tasksModel
+
+            Maui.ItemDelegate
+            {
+                implicitWidth: height
+                implicitHeight: 48
+                draggable: true
+
+                Kirigami.Icon
+                {
+                    source: model.icon
+                    height: isMobile ? 32 : 22
+                    width: height
+                    anchors.centerIn: parent
+                }
+            }
+        }
+
+        Repeater
+        {
+            model: _listSurfaces
+
+            AbstractButton
+            {
+                implicitHeight: 48
+                implicitWidth: height
+                //                draggable: true
+
+                onClicked:
+                {
+                    var toggleMinimize = false
+                    if(_swipeView.currentIndex === index)
+                    {
+                        toggleMinimize = true
+                    }
+
+                    _swipeView.currentIndex = index
+
+                    if(toggleMinimize)
+                    {
+                        _swipeView.itemAtIndex(index).chrome.visible = !_swipeView.itemAtIndex(index).chrome.visible
+                    }
+                }
+
+                contentItem: Item
+                {
+                    Kirigami.Icon
+                    {
+                        source: Cask.Env.appIconName(modelData.toplevel.appId)
+                        height: 48
+                        width: height
+                        anchors.centerIn: parent
+                    }
+
+                    Rectangle
+                    {
+                        width: parent.width
+                        height: 2
+                        anchors.bottom: parent.bottom
+                        visible: index === _swipeView.currentIndex
+                        color: Kirigami.Theme.highlightColor
+                    }
+                }
+            }
+
+
+
+            //    onContentDropped:
+            //    {
+            //        console.log("Dropped things" , drop.urls)
+            //        _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
+            //    }
+        }
+
     }
+
     function closeCard()
     {
         _section.close()

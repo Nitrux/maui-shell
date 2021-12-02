@@ -292,5 +292,10 @@ Item
     }
 
 
+    Component.onDestruction:
+    {
+        console.log("DESTROY DASHBOARD")
+    }
+
 
 }

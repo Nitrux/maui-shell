@@ -46,6 +46,7 @@ AbstractButton
             {
                 Kirigami.Icon
                 {
+                    color: Kirigami.Theme.textColor
                     anchors.centerIn: parent
                     source: "arrow-right"
                     height: 16

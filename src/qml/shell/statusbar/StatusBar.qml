@@ -2,170 +2,158 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
+import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
 import org.maui.cask 1.0 as Cask
 
-import "items"
 import "items/calendar"
 import "items/player"
 import "items/sliders"
 import "items/toggles"
+import "items/notifications"
+import "items/session"
 
-Rectangle
+Control
 {
     id: control
+
+    readonly property bool floating : win.formFactor === Cask.Env.Desktop
     Layout.fillWidth: true
-    implicitHeight: 32
-    RowLayout
+    Layout.margins: floating ? Maui.Style.space.medium : 0
+
+    implicitHeight:  implicitContentHeight + topPadding + bottomPadding
+
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
+    padding: floating ? Maui.Style.space.tiny : 0
+    topPadding: padding
+    bottomPadding: padding
+    leftPadding: padding
+    rightPadding: padding
+
+        Behavior on  Layout.margins
+        {
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+//    Label
+//    {
+//        text: control.height + " / " +  _notificationsSection.height
+//        anchors.centerIn: parent
+//    }
+
+    background: Item
     {
-        anchors.fill: parent
+        Rectangle
+        {
+            id: _rec
+            anchors.fill: parent
+            radius: control.floating ? 6 : 0
+
+            color: Kirigami.Theme.backgroundColor
+        }
+
+        DropShadow
+        {
+            visible: control.floating
+            transparentBorder: true
+            anchors.fill: parent
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 17
+            color: Qt.rgba(0,0,0,0.5)
+            source: _rec
+        }
+    }
+
+    contentItem: RowLayout
+    {
+        id: _layout
 
         Cask.PanelSection
         {
             id: _notificationsSection
+
             Layout.fillWidth: true
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
+
             position : ToolBar.Header
             popWidth: 500
             alignment: Qt.AlignLeft
+//            background: Rectangle
+//            {
+//                color: "red"
+//            }
+
+
+            NotificationsItem
+            {
+                onClicked: _notificationsSection.open(card.index)
+//                anchors.verticalCenter: parent.verticalCenter
+            }
 
             CalendarItem
             {
                 onClicked: _notificationsSection.open(card.index)
-            }
-
-            Cask.PanelItem
-            {
-                icon.name: "notifications"
-
-                Maui.Badge
-                {
-                    Layout.fillHeight: true
-                    text: _nof.count
-                    radius: 4
-                }
-
-                onClicked: _notificationsSection.open(card.index)
-
-                card: Cask.PanelCard
-                {
-                    width: parent.width
-                    padding: 0
-                    //                    title: _nof.count + " " + qsTr("Notifications")
-                    //                    headBar.visible: true
-                    //                    headBar.leftContent: ToolButton
-                    //                    {
-                    //                        icon.name: "configure"
-                    //                    }
-
-                    //                    headBar.rightContent: ToolButton
-                    //                    {
-                    //                        icon.name: "edit-clear-all"
-                    //                    }
-
-                    ListView
-                    {
-                        id: _nof
-                        width: parent.width
-                        height: Math.min(500, contentHeight)
-                        boundsBehavior: ListView.StopAtBounds
-                        model: 10
-                        spacing: Maui.Style.space.medium
-                        delegate: Maui.ItemDelegate
-                        {
-                            width: parent.width
-                            height: 80
-
-                            Maui.ListItemTemplate
-                            {
-                                anchors.fill: parent
-                                iconSource: "documentinfo"
-                                label1.text: "Notification Title"
-                                label2.text: "Blach some infor about the notification"
-                                iconSizeHint: Maui.Style.iconSizes.medium
-                                spacing: Maui.Style.space.medium
-                            }
-
-                            onClicked: _nof.model--
-
-                        }
-                    }
-                }
+//                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
         Cask.PanelSection
         {
             id: _statusSection
-            Layout.fillHeight: true
             Layout.alignment: Qt.AlignRight
+//            Layout.fillHeight: true
 
             position : ToolBar.Header
             alignment: Qt.AlignRight
 
             popWidth: 500
+//            background: Rectangle
+//            {
+//                color: "red"
+//            }
 
             TogglesItem
             {
                 onClicked: _statusSection.open(card.index)
-//                visible: !isMobile
+//                anchors.verticalCenter: parent.verticalCenter
+
+                //                visible: !isMobile
             }
 
             SlidersItem
             {
                 onClicked: _statusSection.open(card.index)
-//                visible: !isMobile
+//                anchors.verticalCenter: parent.verticalCenter
+
+                                visible: !isMobile
             }
+
             AudioPlayerItem
             {
-//                visible: !isMobile
+                                visible: !isMobile
                 onClicked: _statusSection.open(card.index)
+//                anchors.verticalCenter: parent.verticalCenter
+
             }
 
-            Cask.PanelItem
+            SessionItem
             {
-                display: ToolButton.TextBesideIcon
-                icon.name: "battery-080"
-                text: "80%"
                 onClicked: _statusSection.open(card.index)
+                anchors.verticalCenter: parent.verticalCenter
 
-                card: Cask.PanelCard
-                {
-                    width: parent.width
 
-                    RowLayout
-                    {
-                        width: parent.width
-                        height: 64
-                        Repeater
-                        {
-                            model: ["system-reboot", "system-shutdown", "system-lock-screen","webcam", "system-suspend"]
-                            delegate:  Item
-                            {
-                                Layout.fillHeight: true
-                                Layout.fillWidth: true
-
-                                Kirigami.Icon
-                                {
-                                    anchors.centerIn: parent
-                                    source: modelData
-                                    height: Maui.Style.iconSizes.medium
-                                    width: height
-                                }
-                            }
-                        }
-                    }
-                }
             }
-
-            //            NetworkItem
-            //            {
-            //                onClicked: _statusSection.open(card.index)
-            //            }
-
         }
     }
 }

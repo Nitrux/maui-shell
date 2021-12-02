@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtQuick.Window 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 
@@ -13,7 +12,6 @@ import "sections/bluetooth"
 Cask.PanelItem
 {
     id: control
-    iconSize: 16
 
     Row
     {
@@ -52,6 +50,7 @@ Cask.PanelItem
             width: parent.width
             height: currentItem.implicitHeight
             clip: true
+
             initialItem: Flow
             {
                 id:_tooglesGrid
@@ -60,20 +59,25 @@ Cask.PanelItem
 
 
                 //                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
-                BluetoothToggle
-                {
-                    onClicked: _togglesStack.push(page)
-                }
-
-                ToggleTemplate
-                {
-                    icon.name: "continuous"
-                }
-
                 NetworkToggle
                 {
                     onClicked: _togglesStack.push(page)
+                    width:  Math.floor(parent.width/2) - parent.spacing
                 }
+
+                BluetoothToggle
+                {
+                    onClicked: _togglesStack.push(page)
+                    width:  Math.floor(parent.width/2)- parent.spacing
+
+                }
+
+//                ToggleTemplate
+//                {
+//                    icon.name: "continuous"
+//                }
+
+
 
                 ToggleTemplate
                 {
@@ -87,13 +91,19 @@ Cask.PanelItem
 
                 ToggleTemplate
                 {
+                    icon.name:  "edit-image-face-detect"
+                }
+
+                ToggleTemplate
+                {
                     icon.name:  "contrast"
-                    text: "Dark Mode"
+                }
+
+                ToggleTemplate
+                {
+                    icon.name:  "settings-configure"
                 }
             }
-
-
-
 
         }
     }

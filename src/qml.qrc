@@ -7,7 +7,6 @@
         <file>qml/shell/statusbar/StatusBar.qml</file>
         <file>qml/shell/tasksbar/TaskBar.qml</file>
         <file>qml/shell/AppsOverview.qml</file>
-        <file>qml/shell/statusbar/items/NetworkItem.qml</file>
         <file>qml/shell/statusbar/items/calendar/CalendarItem.qml</file>
         <file>qml/shell/tasksbar/Launcher.qml</file>
         <file>qml/shell/tasksbar/LauncherPanelItem.qml</file>
@@ -20,5 +19,8 @@
         <file>qml/shell/statusbar/items/toggles/TogglePage.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/network/NetworkToggle.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/bluetooth/BluetoothToggle.qml</file>
+        <file>qml/shell/statusbar/items/notifications/NotificationsItem.qml</file>
+        <file>qml/shell/statusbar/items/session/SessionItem.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/network/NetworkPage.qml</file>
     </qresource>
 </RCC>

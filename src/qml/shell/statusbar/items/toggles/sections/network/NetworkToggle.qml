@@ -15,7 +15,7 @@ ToggleTemplate
     template.label2.text: "Camilo-5G"
     template.label1.text: i18n("WiFi")
 
-    page: TogglePage
+    page: NetworkPage
     {
 
     }
