@@ -137,8 +137,7 @@ Item
         anchors.top: _topPanelContainer.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
+        anchors.bottom: _bottomPanelContainer.top
 
         Item
         {
@@ -190,7 +189,7 @@ Item
         z: _overlayBottomPanel.z+2
 
         anchors.left: parent.left
-        anchors.bottom: _container.bottom
+        anchors.bottom: parent.bottom
         anchors.right: parent.right
         height: _bottomPanel.visible ? _bottomPanel.implicitHeight : 0
 

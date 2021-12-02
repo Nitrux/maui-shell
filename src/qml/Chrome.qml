@@ -30,7 +30,7 @@ Cask.StackableItem
 {
     id: rootChrome
 
-    property bool intersects : y+height > _cask.height-80
+    property bool intersects : y+height > availableGeometry.height && surfaceItem.activeFocus
     property alias shellSurface: surfaceItem.shellSurface
     property var topLevel : shellSurface.toplevel
     property alias moveItem: surfaceItem.moveItem
@@ -52,7 +52,17 @@ Cask.StackableItem
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
-    visible: surfaceItem.valid
+    visible: surfaceItem.valid && surfaceItem.paintEnabled
+
+    onIntersectsChanged:
+    {
+
+            if(intersects)
+            _cask.bottomPanel.hide()
+            else
+                _cask.bottomPanel.show()
+
+    }
 
     property rect oldPos
 
@@ -83,7 +93,7 @@ Cask.StackableItem
             rootChrome.x = 0
             rootChrome.y = 0
 
-            surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height))
+            surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
 
                 surfaceItem.isMaximized = true
 
@@ -97,14 +107,20 @@ Cask.StackableItem
     Rectangle
     {
         id: decoration
+
         Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: Kirigami.Theme.Window
         anchors.fill: parent
         border.width: 1
         radius: Maui.Style.radiusV
         border.color: (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
-        color: rootChrome.intersects ? "red" : Kirigami.Theme.backgroundColor
+        color: Kirigami.Theme.backgroundColor
         visible: decorationVisible
+
+        TapHandler
+        {
+            onTapped: surfaceItem.forceActiveFocus()
+        }
 
         Item
         {
@@ -274,6 +290,14 @@ Cask.StackableItem
                 rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
             }
         }
+
+        function onHeightChanged()
+        {
+            if(win.formFactor !== Cask.Env.Desktop)
+            {
+                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+            }
+        }
     }
 
     Connections
@@ -344,6 +368,8 @@ Cask.StackableItem
     //    }
 
 
+
+
     ShellSurfaceItem
     {
         id: surfaceItem
@@ -354,9 +380,13 @@ Cask.StackableItem
         property bool isMaximized: false
 
         y: titlebarHeight
-        //sizeFollowsSurface: surfaceItem.output.width < 500
+        sizeFollowsSurface: true
         opacity: moving ? 0.5 : 1.0
         inputEventsEnabled: !pinch3.active && !metaDragHandler.active && !altDragHandler.active
+        touchEventsEnabled: false
+//paintEnabled: false
+        focusOnClick: true
+        autoCreatePopupItems: true
 
         DragHandler {
             id: metaDragHandler

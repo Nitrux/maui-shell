@@ -81,12 +81,15 @@ WaylandOutput
                 anchors.fill: parent
                 anchors.bottomMargin: _swiper.height
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
-                bottomPanel.children: [_taskBar]
-                topPanel.children: [statusBar]
+
+
+                property alias dock : _statusBar
+
+                bottomPanel.data: TaskBar {id: _taskBar}
+                topPanel.data: StatusBar {id: _statusBar}
+
                 bottomPanel.visible: win.formFactor === Cask.Env.Phone ? showDesktop || _listSurfaces.count <= 0 : true
 
-                readonly property QtObject statusBar : StatusBar {id: _statusBar}
-                readonly property QtObject taskManagerBar: TaskBar {id: _taskBar}
 
                 Rectangle
                 {
@@ -108,12 +111,7 @@ WaylandOutput
                         font.pointSize: Maui.Style.fontSizes.big
                         font.weight: Font.Bold
                         anchors.centerIn: parent
-                        text:  switch(win.formFactor)
-                               {
-                               case Cask.Env.Desktop : "Desktop \n" + win.width +" x " + win.height ; break;
-                               case Cask.Env.Tablet : "Tablet \n" + win.width +" x " + win.height; break;
-                               case Cask.Env.Phone : "Phone \n" + win.width +" x " + win.height; break;
-                               }
+                        text: output.surfaceArea.x + " / " + output.surfaceArea.y + " - " + output.surfaceArea.width + " / " + output.surfaceArea.height
                     }
                 }
 
