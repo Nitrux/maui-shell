@@ -70,7 +70,7 @@ Control
         Label
         {
             color: "orange"
-            text:  handler2.centroid.scenePressPosition.y + " / " + handler2.centroid.scenePosition.y
+            text:  handler.centroid.position.y + " / " + handler2.centroid.scenePosition.y
             anchors.bottom: parent.bottom
         }
 
@@ -88,8 +88,8 @@ Control
 
         Binding on y
         {
-            when: !handler.active
-            value: popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height
+//            when: !handler.active
+            value: handler.active ? (handler.centroid.position.y -(control.position === ToolBar.Footer ? 0 : popup.height) ) : (popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height)
             restoreMode: Binding.RestoreBindingOrValue
         }
 
@@ -172,9 +172,9 @@ Control
         id: handler
         dragThreshold: control.position === ToolBar.Footer ? 64 : 20
         enabled: !popup.opened
-        target: popup
-        yAxis.minimum: control.position === ToolBar.Footer ? popup.finalYPos - 10 : undefined
-        yAxis.maximum: control.position === ToolBar.Footer  ? undefined : popup.finalYPos + 10
+        target: null
+        yAxis.minimum: control.position === ToolBar.Footer ? popup.finalYPos - 10 : 0
+        yAxis.maximum: control.position === ToolBar.Footer  ? 0 : popup.finalYPos + 10
         xAxis.enabled : false
         grabPermissions: PointerHandler.CanTakeOverFromAnything
         onActiveChanged:

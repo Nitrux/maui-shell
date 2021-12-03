@@ -35,20 +35,20 @@ Control
     leftPadding: padding
     rightPadding: padding
 
-        Behavior on  Layout.margins
+    Behavior on  Layout.margins
+    {
+        NumberAnimation
         {
-            NumberAnimation
-            {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
         }
+    }
 
-//    Label
-//    {
-//        text: control.height + " / " +  _notificationsSection.height
-//        anchors.centerIn: parent
-//    }
+    //    Label
+    //    {
+    //        text: control.height + " / " +  _notificationsSection.height
+    //        anchors.centerIn: parent
+    //    }
 
     background: Item
     {
@@ -58,54 +58,117 @@ Control
         {
             id: _rec
             anchors.fill: parent
-//            radius: control.floating ? 6 : 0
+            //            radius: control.floating ? 6 : 0
             color: Kirigami.Theme.backgroundColor
         }
 
-//        DropShadow
-//        {
-//            visible: control.floating
-//            transparentBorder: true
-//            anchors.fill: parent
-//            horizontalOffset: 0
-//            verticalOffset: 0
-//            radius: 8.0
-//            samples: 17
-//            color: Qt.rgba(0,0,0,0.5)
-//            source: _rec
-//        }
+        //        DropShadow
+        //        {
+        //            visible: control.floating
+        //            transparentBorder: true
+        //            anchors.fill: parent
+        //            horizontalOffset: 0
+        //            verticalOffset: 0
+        //            radius: 8.0
+        //            samples: 17
+        //            color: Qt.rgba(0,0,0,0.5)
+        //            source: _rec
+        //        }
+    }
+    function show()
+    {
+        control.contentItem.y = control.topPadding
+        if(autohide)
+        {
+            _timer.restart()
+        }
+    }
+
+    function hide()
+    {
+        control.contentItem.y = 0- control.height
+    }
+    property bool hidden : contentItem.y === 0- control.height
+    property bool autohide: false
+
+    Rectangle
+    {
+        anchors.fill: parent
+        color: "pink"
+        opacity: 0.4
+        visible: control.autohide
+
+        DragHandler
+        {
+            id: _handler
+            enabled: control.hidden && control.autohide
+            target: control.contentItem
+            xAxis.enabled: false
+            yAxis.maximum: control.topPadding
+//            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            onActiveChanged:
+            {
+                if(!active)
+                {
+                    control.show()
+                }
+            }
+        }
+    }
+
+
+    Timer
+    {
+        id: _timer
+        running: control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened)
+        interval: 4000
+//        triggeredOnStart: true
+        onTriggered:
+        {
+            console.log("_timer triggered")
+            if(control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened))
+            {
+                control.hide()
+            }
+        }
+    }
+
+    Label
+    {
+        text: control.contentItem.y + " - " + control.hidden
     }
 
     contentItem: RowLayout
     {
         id: _layout
 
+
         Cask.PanelSection
         {
             id: _notificationsSection
 
             Layout.fillWidth: true
-//            Layout.fillHeight: true
+            //            Layout.fillHeight: true
 
             position : ToolBar.Header
             popWidth: 320
             alignment: Qt.AlignLeft
-//            background: Rectangle
-//            {
-//                color: "red"
-//            }
+            //            background: Rectangle
+            //            {
+            //                color: "red"
+            //            }
 
 
             NotificationsItem
             {
                 onClicked: _notificationsSection.open(card.index)
-//                anchors.verticalCenter: parent.verticalCenter
+                //                anchors.verticalCenter: parent.verticalCenter
             }
 
             CalendarItem
             {
                 onClicked: _notificationsSection.open(card.index)
-//                anchors.verticalCenter: parent.verticalCenter
+                //                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
@@ -113,16 +176,16 @@ Control
         {
             id: _statusSection
             Layout.alignment: Qt.AlignRight
-//            Layout.fillHeight: true
+            //            Layout.fillHeight: true
 
             position : ToolBar.Header
             alignment: Qt.AlignRight
 
             popWidth: 320
-//            background: Rectangle
-//            {
-//                color: "red"
-//            }
+            //            background: Rectangle
+            //            {
+            //                color: "red"
+            //            }
 
 
             Cask.PanelItem
@@ -136,7 +199,7 @@ Control
 
                 Timer
                 {
-                    running: _revealer.checked
+                    running: _revealer.checked && !_statusSection.popup.opened
                     interval: 4000
                     onTriggered: _revealer.toggle()
                 }
@@ -146,7 +209,7 @@ Control
             TogglesItem
             {
                 onClicked: _statusSection.open(card.index)
-//                anchors.verticalCenter: parent.verticalCenter
+                //                anchors.verticalCenter: parent.verticalCenter
 
                 //                visible: !isMobile
             }
@@ -155,17 +218,17 @@ Control
             {
                 visible: _revealer.checked
                 onClicked: _statusSection.open(card.index)
-//                anchors.verticalCenter: parent.verticalCenter
+                //                anchors.verticalCenter: parent.verticalCenter
 
-//                                visible: !isMobile
+                //                                visible: !isMobile
             }
 
             AudioPlayerItem
             {
                 visible: _revealer.checked
-//                                visible: !isMobile
+                //                                visible: !isMobile
                 onClicked: _statusSection.open(card.index)
-//                anchors.verticalCenter: parent.verticalCenter
+                //                anchors.verticalCenter: parent.verticalCenter
 
             }
 

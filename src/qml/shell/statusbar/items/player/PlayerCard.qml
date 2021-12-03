@@ -151,6 +151,20 @@ Pane
                 Layout.fillWidth: true
                 text: control.playerName
             }
+
+            ToolButton
+            {
+                flat: true
+                icon.name: "quickopen"
+                onClicked: control.action_open()
+            }
+
+            ToolButton
+            {
+                flat: true
+                icon.name: "window-close"
+                onClicked: control.action_quit()
+            }
         }
 
         RowLayout
@@ -161,7 +175,7 @@ Pane
 
             Item
             {
-                implicitHeight: 120
+                implicitHeight: 100
                 implicitWidth: implicitHeight
 
                 Maui.IconItem
@@ -171,13 +185,14 @@ Pane
                     iconSource: control.playerIcon
                     iconSizeHint: 48
                     maskRadius: 10
-                    imageSizeHint: 90
+                    imageSizeHint: 80
                 }
             }
 
             ColumnLayout
             {
                 implicitHeight: 120
+                Layout.fillHeight: true
                 Layout.fillWidth: true
 
                 Label
