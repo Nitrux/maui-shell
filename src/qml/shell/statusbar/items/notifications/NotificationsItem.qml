@@ -58,6 +58,7 @@ Cask.PanelItem
                     label2.text: "Blach some infor about the notification"
                     iconSizeHint: Maui.Style.iconSizes.medium
                     spacing: Maui.Style.space.medium
+                    headerSizeHint: iconSizeHint + Maui.Style.space.big
                 }
 
                 onClicked: _nof.model--

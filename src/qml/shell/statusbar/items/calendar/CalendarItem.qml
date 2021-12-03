@@ -26,7 +26,7 @@ Cask.PanelItem
         Item
         {
             width: parent.width
-            height: 250
+            height: 200
             MonthGrid
             {
                 id: _monthGrid

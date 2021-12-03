@@ -7,6 +7,7 @@ import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
+import org.maui.cask 1.0 as Cask
 
 AbstractButton
 {
@@ -17,7 +18,7 @@ AbstractButton
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(iconSize+ Maui.Style.space.medium, 32) + topPadding + bottomPadding //keep it fixed size
+    implicitHeight: Math.max(iconSize+ Maui.Style.space.medium, 16) + topPadding + bottomPadding //keep it fixed size
 
     default property alias content : _layout.data
 
@@ -39,10 +40,9 @@ AbstractButton
     }
 
     background: Rectangle
-
     {
         visible: !isMobile
-        color: card.visible ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+        color: card && card.visible ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
         radius: 6
     }
 

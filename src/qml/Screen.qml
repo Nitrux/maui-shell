@@ -188,7 +188,7 @@ WaylandOutput
             Rectangle
             {
                 id: _swiper
-                height: Maui.Style.rowHeightAlt
+                height: 16
                 opacity: 0.3
                 width: parent.width
                 color: "#333"

@@ -41,8 +41,8 @@ Maui.Page
     background:  Rectangle
     {
         color: Kirigami.Theme.backgroundColor
-        opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 1
-        radius: 12
+        opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.8
+        radius: 10
     }
 
     SwipeView

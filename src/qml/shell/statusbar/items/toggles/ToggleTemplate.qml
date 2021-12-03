@@ -9,7 +9,7 @@ import org.mauikit.controls 1.3 as Maui
 AbstractButton
 {
     id: control
-    implicitHeight: 64
+    implicitHeight: 48
     implicitWidth: Math.max(_template.implicitWidth, implicitHeight)
 
     property alias template : _template
@@ -32,7 +32,7 @@ AbstractButton
         label1.text: control.text
         iconSource: control.icon.name
         iconVisible: true
-        iconSizeHint: Maui.Style.iconSizes.big
+        iconSizeHint: Maui.Style.iconSizes.medium
         headerSizeHint: control.implicitHeight
 
         Loader
@@ -40,7 +40,7 @@ AbstractButton
             asynchronous: true
             active: control.page
             visible: active
-            Layout.fillHeight: true
+            Layout.preferredHeight: 22
             Layout.preferredWidth: height
             sourceComponent: Item
             {

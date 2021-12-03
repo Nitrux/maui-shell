@@ -52,6 +52,15 @@ Control
     //        }
     //    }
 
+    Behavior on implicitWidth
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.OutInQuad
+        }
+    }
+
     PanelPopup
     {
         id: popup
@@ -66,9 +75,16 @@ Control
         }
 
         onOverlayClicked: control.close()
+//        onActiveFocusChanged:
+//        {
+//            if(!activeFocus)
+//                control.close()
+//        }
 
         visible: handler.active || opened
         opacity: control.position === ToolBar.Footer ? (y/finalYPos)  : Math.abs((y+height)/(0-(height)))
+
+
 
         Binding on y
         {
@@ -111,8 +127,8 @@ Control
 
         readonly property int finalYPos : control.position === ToolBar.Footer ? 0 - (popup.height) : control.height + Maui.Style.space.medium
 
-        height: Math.min (_cask.avaliableHeight-control.height, popup.implicitHeight)
-        width: Math.min(control.popWidth, _cask.width)
+        height: Math.min (_cask.avaliableHeight, popup.implicitHeight)
+        width: isMobile ? _cask.width : Math.min(control.popWidth, _cask.width)
 
         function close()
         {

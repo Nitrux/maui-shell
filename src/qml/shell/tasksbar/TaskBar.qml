@@ -17,7 +17,7 @@ Control
     Layout.alignment: Qt.AlignCenter
     implicitWidth: _section.implicitWidth + leftPadding + rightPadding
 
-    Layout.margins: 20
+    Layout.margins: Maui.Style.space.small
     implicitHeight: 64
 
     ListModel {id: _tasksModel}
@@ -67,6 +67,7 @@ Control
             height: parent.height
             leftPadding: 0
             rightPadding: 0
+            visible: !isMobile
             background: Rectangle
             {
                 color: Qt.darker(Kirigami.Theme.backgroundColor)

@@ -22,14 +22,14 @@ Control
 
     readonly property bool floating : win.formFactor === Cask.Env.Desktop
     Layout.fillWidth: true
-    Layout.margins: floating ? Maui.Style.space.medium : 0
+    Layout.margins: floating ? Maui.Style.space.tiny : 0
 
     implicitHeight:  implicitContentHeight + topPadding + bottomPadding
 
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
-    padding: floating ? Maui.Style.space.tiny : 0
+    padding: Maui.Style.space.tiny
     topPadding: padding
     bottomPadding: padding
     leftPadding: padding
@@ -52,27 +52,28 @@ Control
 
     background: Item
     {
+        visible: !control.floating
+        opacity: 0.8
         Rectangle
         {
             id: _rec
             anchors.fill: parent
-            radius: control.floating ? 6 : 0
-
+//            radius: control.floating ? 6 : 0
             color: Kirigami.Theme.backgroundColor
         }
 
-        DropShadow
-        {
-            visible: control.floating
-            transparentBorder: true
-            anchors.fill: parent
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 17
-            color: Qt.rgba(0,0,0,0.5)
-            source: _rec
-        }
+//        DropShadow
+//        {
+//            visible: control.floating
+//            transparentBorder: true
+//            anchors.fill: parent
+//            horizontalOffset: 0
+//            verticalOffset: 0
+//            radius: 8.0
+//            samples: 17
+//            color: Qt.rgba(0,0,0,0.5)
+//            source: _rec
+//        }
     }
 
     contentItem: RowLayout
@@ -87,7 +88,7 @@ Control
 //            Layout.fillHeight: true
 
             position : ToolBar.Header
-            popWidth: 500
+            popWidth: 320
             alignment: Qt.AlignLeft
 //            background: Rectangle
 //            {
@@ -117,11 +118,30 @@ Control
             position : ToolBar.Header
             alignment: Qt.AlignRight
 
-            popWidth: 500
+            popWidth: 320
 //            background: Rectangle
 //            {
 //                color: "red"
 //            }
+
+
+            Cask.PanelItem
+            {
+                id: _revealer
+                icon.name: checked ? "arrow-right" : "arrow-left"
+                checkable: true
+                width: height
+                leftPadding: 0
+                rightPadding: 0
+
+                Timer
+                {
+                    running: _revealer.checked
+                    interval: 4000
+                    onTriggered: _revealer.toggle()
+                }
+
+            }
 
             TogglesItem
             {
@@ -133,15 +153,17 @@ Control
 
             SlidersItem
             {
+                visible: _revealer.checked
                 onClicked: _statusSection.open(card.index)
 //                anchors.verticalCenter: parent.verticalCenter
 
-                                visible: !isMobile
+//                                visible: !isMobile
             }
 
             AudioPlayerItem
             {
-                                visible: !isMobile
+                visible: _revealer.checked
+//                                visible: !isMobile
                 onClicked: _statusSection.open(card.index)
 //                anchors.verticalCenter: parent.verticalCenter
 
@@ -149,6 +171,7 @@ Control
 
             SessionItem
             {
+                visible: _revealer.checked
                 onClicked: _statusSection.open(card.index)
                 anchors.verticalCenter: parent.verticalCenter
 

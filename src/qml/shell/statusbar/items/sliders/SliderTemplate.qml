@@ -8,7 +8,7 @@ import org.mauikit.controls 1.2 as Maui
 T.Slider
 {
     id: control
-    implicitHeight: 32
+    implicitHeight: 22
 
     property alias iconSource : _icon.source
 
@@ -26,7 +26,7 @@ T.Slider
         Rectangle
         {
             width: Math.max(height, control.visualPosition * parent.width)
-            height: 32
+            height: control.height
             anchors.verticalCenter: parent.verticalCenter
             color: Kirigami.Theme.highlightColor
             radius: height/2
@@ -39,15 +39,15 @@ T.Slider
     {
         x: Math.max(0,(control.visualPosition * parent.availableWidth) - width)
         y: control.topPadding + control.availableHeight / 2 - height / 2
-        implicitWidth: 32
-        implicitHeight: 32
+        implicitWidth: control.height
+        implicitHeight: control.height
         color: Kirigami.Theme.highlightColor
-        radius: 16
+        radius: height/2
         Kirigami.Icon
         {
             id: _icon
-            height: 22
-            width : 22
+            height: 16
+            width : 16
             color: Kirigami.Theme.highlightedTextColor
             anchors.centerIn: parent
         }

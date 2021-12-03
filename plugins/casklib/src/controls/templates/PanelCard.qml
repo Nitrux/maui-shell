@@ -36,7 +36,7 @@ Item
         background: Rectangle
         {
             color: Kirigami.Theme.backgroundColor
-            radius: isMobile ? 0 : Maui.Style.radiusV
+            radius: width <= _cask.availableWidth ? 0 : 10
         }
 
         contentItem: Column
@@ -63,7 +63,7 @@ Item
 
     DropShadow
     {
-        visible: !isMobile
+        visible: !(width <= _cask.availableWidth)
         transparentBorder: true
         anchors.fill: _rec
         horizontalOffset: 0
