@@ -25,6 +25,8 @@ Item
     property int position
 
     signal overlayClicked()
+//    signal opened()
+    signal closed()
 
     Keys.enabled: true
     Keys.onEscapePressed: control.overlayClicked()
@@ -103,12 +105,12 @@ Item
         MouseArea
         {
             anchors.fill: parent
-            propagateComposedEvents: true
-            preventStealing: false
+            propagateComposedEvents: win.formFactor === Cask.Env.Desktop
+            preventStealing: win.formFactor !== Cask.Env.Desktop
             onPressed:
             {
                 control.overlayClicked()
-                mouse.accepted = false
+                mouse.accepted = win.formFactor !== Cask.Env.Desktop
             }
         }
     }

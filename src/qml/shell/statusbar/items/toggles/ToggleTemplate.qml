@@ -40,7 +40,7 @@ AbstractButton
             asynchronous: true
             active: control.page
             visible: active
-            Layout.preferredHeight: 22
+            Layout.preferredHeight: 16
             Layout.preferredWidth: height
             sourceComponent: Item
             {
@@ -49,8 +49,8 @@ AbstractButton
                     color: Kirigami.Theme.textColor
                     anchors.centerIn: parent
                     source: "arrow-right"
-                    height: 16
-                    width: 16
+                    height: 8
+                    width: 8
                 }
             }
         }

@@ -8,8 +8,9 @@ import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import QtQuick.Templates 2.15 as T
 
-AbstractButton
+T.AbstractButton
 {
     id: control
     property PanelCard card : null

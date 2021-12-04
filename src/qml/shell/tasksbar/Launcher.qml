@@ -9,9 +9,10 @@ import org.maui.cask 1.0 as Cask
 Maui.Page
 {
     id: control
+    focus: true
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-
+property alias searchBar : _searchBar
     headBar.visible: true
     headBar.background: null
     headBar.middleContent: Maui.TextField
@@ -25,12 +26,6 @@ Maui.Page
         onAccepted: _launcherGrid.model.filter = text
         onCleared: _launcherGrid.model.filter = ""
 
-        background: Rectangle
-        {
-            color: Qt.lighter(Kirigami.Theme.backgroundColor)
-            opacity: 0.7
-            radius: 10
-        }
     }
 
     Cask.ProcessLauncher
@@ -198,6 +193,11 @@ Maui.Page
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
     }
+
+//    function forceActiveFocus()
+//    {
+//        _gridView.forceActiveFocus()
+//    }
 }
 
 

@@ -25,7 +25,6 @@ Cask.PanelItem
         Layout.preferredHeight: control.iconSize
         Layout.preferredWidth: height
 
-
         Kirigami.Icon
         {
             source: "view-list-icons"
@@ -41,6 +40,14 @@ Cask.PanelItem
         width: ListView.view.width
         implicitHeight: Math.min(_cask.avaliableHeight, 800)
         background: Item{}
+
+        onOpened:
+        {
+console.log("CARD OPENED")
+                _launcherGrid.forceActiveFocus()
+
+        }
+
         Launcher
         {
             id: _launcherGrid

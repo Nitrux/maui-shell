@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
+import QtQuick.Templates 2.15 as T
 
 import org.maui.cask 1.0 as Cask
 
@@ -16,7 +17,7 @@ import "items/toggles"
 import "items/notifications"
 import "items/session"
 
-Control
+T.Control
 {
     id: control
 
@@ -181,7 +182,7 @@ Control
             position : ToolBar.Header
             alignment: Qt.AlignRight
 
-            popWidth: 320
+            popWidth: 340
             //            background: Rectangle
             //            {
             //                color: "red"

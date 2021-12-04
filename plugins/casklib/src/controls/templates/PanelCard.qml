@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
+import QtQuick.Templates 2.15 as T
 
 Item
 {
@@ -17,6 +18,21 @@ Item
     property alias padding : _rec.padding
     property alias background : _rec.background
 
+    signal opened()
+    signal closed()
+
+
+    onVisibleChanged:
+    {
+        if(visible)
+        {
+            control.opened()
+        }else
+        {
+            control.closed()
+        }
+    }
+
     Behavior on implicitHeight
     {
         NumberAnimation
@@ -26,7 +42,7 @@ Item
         }
     }
 
-    Pane
+    T.Pane
     {
         id: _rec
         anchors.fill: parent

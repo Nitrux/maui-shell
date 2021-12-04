@@ -19,20 +19,36 @@ Cask.PanelItem
     {
         id: _card
         width: ListView.view.width
-        padding: 0
+//        padding: 0
         //        title: new Date().toDateString()
         //        headBar.visible: true
 
-        Item
+        ColumnLayout
         {
             width: parent.width
-            height: 200
+            height: 220
+            spacing: Maui.Style.space.medium
+
+            Maui.ListItemTemplate
+            {
+                Layout.fillWidth: true
+                label1.text: Qt.formatDateTime(new Date(), "hh:mm")
+                label1.font.bold: true
+                label1.font.weight: Font.Black
+                label1.font.pointSize: Maui.Style.fontSizes.big
+                label2.text: Qt.formatDate(new Date(), "ddd MMMM yyyy")
+
+                ToolButton
+                {
+                    icon.name: "go-next"
+                }
+            }
+
             MonthGrid
             {
                 id: _monthGrid
-                width: parent.width
-                height: implicitHeight
-                anchors.centerIn: parent
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
                 month: new Date().getMonth()
                 year: new Date().getFullYear()
@@ -44,7 +60,7 @@ Cask.PanelItem
                     opacity: model.month === _monthGrid.month ? 1 : 0
                     text: model.day
                     font: _monthGrid.font
-                    color: model.day ===  new Date().getDay() ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    color: model.today ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                 }
             }
         }

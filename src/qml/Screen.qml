@@ -40,11 +40,13 @@ WaylandOutput
     property alias swipeView : _swipeView
 
     property bool showDesktop : true
+
     sizeFollowsWindow: true
     availableGeometry : Qt.rect(surfaceArea.x, surfaceArea.y, surfaceArea.width, surfaceArea.height)
     scaleFactor: 1
-    //transform: WaylandOutput.Transform180
-    readonly property bool isMobile : win.width < 500
+//    transform: WaylandOutput.Transform180
+
+    readonly property bool isMobile : formFactor === Cask.Env.Phone
     property bool overView: false
     readonly property alias formFactor : win.formFactor
 
@@ -78,8 +80,11 @@ WaylandOutput
             Cask.Dashboard
             {
                 id: _cask
-                anchors.fill: parent
-                anchors.bottomMargin: _swiper.height
+                clip: true
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: _swiper.top
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
 
 
@@ -188,7 +193,8 @@ WaylandOutput
             Rectangle
             {
                 id: _swiper
-                height: 16
+                visible: Maui.Handy.isTouch && _swipeView.count > 1
+                height: visible ? 16 : 0
                 opacity: 0.3
                 width: parent.width
                 color: "#333"

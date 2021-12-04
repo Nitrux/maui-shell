@@ -56,12 +56,10 @@ Cask.StackableItem
 
     onIntersectsChanged:
     {
-
             if(intersects)
             _cask.bottomPanel.hide()
             else
                 _cask.bottomPanel.show()
-
     }
 
     property rect oldPos
@@ -285,20 +283,15 @@ Cask.StackableItem
         //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
         function onWidthChanged()
         {
-            if(win.formFactor !== Cask.Env.Desktop)
-            {
-                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
-            }
+            resizeSurface(rootChrome.shellSurface)
         }
 
         function onHeightChanged()
         {
-            if(win.formFactor !== Cask.Env.Desktop)
-            {
-                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
-            }
+            resizeSurface(rootChrome.shellSurface)
         }
     }
+
 
     Connections
     {

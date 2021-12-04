@@ -1,10 +1,10 @@
 import QtQuick 2.15
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+
 import QtGraphicalEffects 1.0
 
 Item
@@ -201,7 +201,6 @@ Item
             property bool autohide: false
             //            y: _dockHoverHandler.hovered ? 0 : height
 
-
             height: parent.height
             width: parent.width
 
@@ -233,30 +232,34 @@ Item
             function show()
             {
                 _bottomPanel.y = 0
+                _bottomPanel.forceActiveFocus()
             }
-        }
 
-        DragHandler
-        {
-            id: handler
-            //            dragThreshold: 100
-            //            enabled: _bottomPanel.hidden
-            target: _bottomPanel
-            yAxis.minimum: 0
-            yAxis.maximum: _bottomPanel.height
-            xAxis.enabled : false
-            grabPermissions: PointerHandler.CanTakeOverFromAnything | PointerHandler.ApprovesTakeOverByHandlersOfSameType
-            onActiveChanged:
+            DragHandler
             {
-                if(!active && handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y > 60)
+                id: handler
+                //            dragThreshold: 100
+                //            enabled: _bottomPanel.hidden
+                target: _bottomPanel
+                margin: 20
+                yAxis.minimum: 0
+                yAxis.maximum: _bottomPanel.height
+                xAxis.enabled : false
+    //            grabPermissions: PointerHandler.CanTakeOverFromAnything | PointerHandler.ApprovesTakeOverByHandlersOfSameType
+                onActiveChanged:
                 {
-                    _bottomPanel.show()
-                }else
-                {
-                    _bottomPanel.hide()
+                    if(!active && handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y > 60)
+                    {
+                        _bottomPanel.show()
+                    }else
+                    {
+                        _bottomPanel.hide()
+                    }
                 }
             }
         }
+
+
 
         Timer
         {

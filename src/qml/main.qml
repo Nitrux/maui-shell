@@ -87,11 +87,18 @@ WaylandCompositor
 
     function handleShellSurfaceCreated(shellSurface, topLevel, decorate)
     {
-        if(desktop.formFactor !== Cask.Env.Desktop)
-            shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height), [0])
+            resizeSurface(shellSurface)
 
         _listSurfaces.append({shellSurface: shellSurface})
         desktop.swipeView.currentIndex = _listSurfaces.count-1
         desktop.showDesktop = false
+    }
+
+    function resizeSurface(surface)
+    {
+        if(desktop.formFactor !== Cask.Env.Desktop)
+        {
+           surface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.cask.height-desktop.cask.topPanel.height), [0])
+        }
     }
 }

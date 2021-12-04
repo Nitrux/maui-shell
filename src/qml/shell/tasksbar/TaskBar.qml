@@ -1,12 +1,14 @@
 import QtQuick 2.12
-import QtQuick.Window 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
+
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 
-Control
+import QtQuick.Templates 2.15 as T
+
+T.Control
 {
     id: control
 
@@ -15,10 +17,12 @@ Control
 
     Layout.fillWidth: false
     Layout.alignment: Qt.AlignCenter
-    implicitWidth: _section.implicitWidth + leftPadding + rightPadding
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
 
-    Layout.margins: Maui.Style.space.small
+    Layout.margins: Maui.Style.space.medium
     implicitHeight: 64
+    padding: Maui.Style.space.small
 
     ListModel {id: _tasksModel}
 

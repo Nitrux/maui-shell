@@ -1,15 +1,16 @@
 import QtQuick 2.15
 import QtQml 2.14
-import QtQuick.Window 2.12
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.13
+import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 
-Control
+import QtQuick.Templates 2.15 as T
+
+T.Control
 {
     id: control
 
@@ -22,35 +23,22 @@ Control
     property alias popHeight : popup.height
     property alias alignment: popup.alignment
 
-     spacing:  Maui.Style.space.medium
+    spacing:  Maui.Style.space.medium
 
     property int position
-
-
     property int currentCard : -1
 
-     padding: 0
-     topPadding: padding
-     bottomPadding: padding
-     leftPadding: padding
-     rightPadding: padding
+    padding: 0
+    topPadding: padding
+    bottomPadding: padding
+    leftPadding: padding
+    rightPadding: padding
 
-    implicitWidth: implicitContentWidth + leftPadding + rightPadding
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
 
     implicitHeight: _content.implicitHeight + topPadding + bottomPadding
 
-    //    property int margins : 0
-    //    Layout.minimumWidth: 0
-    //    Layout.preferredWidth: implicitWidth
-    //    Layout.margins: margins
-    //    Behavior on margins
-    //    {
-    //        NumberAnimation
-    //        {
-    //            duration: Kirigami.Units.longDuration
-    //            easing.type: Easing.InOutQuad
-    //        }
-    //    }
 
     Behavior on implicitWidth
     {
@@ -75,11 +63,11 @@ Control
         }
 
         onOverlayClicked: control.close()
-//        onActiveFocusChanged:
-//        {
-//            if(!activeFocus)
-//                control.close()
-//        }
+        //        onActiveFocusChanged:
+        //        {
+        //            if(!activeFocus)
+        //                control.close()
+        //        }
 
         visible: handler.active || opened
         opacity: control.position === ToolBar.Footer ? (y/finalYPos)  : Math.abs((y+height)/(0-(height)))
@@ -88,7 +76,7 @@ Control
 
         Binding on y
         {
-//            when: !handler.active
+            //            when: !handler.active
             value: handler.active ? (handler.centroid.position.y -(control.position === ToolBar.Footer ? 0 : popup.height) ) : (popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height)
             restoreMode: Binding.RestoreBindingOrValue
         }
@@ -133,6 +121,7 @@ Control
         function close()
         {
             popup.opened = false
+            popup.closed()
         }
 
         function open()
@@ -140,6 +129,7 @@ Control
             popup.opened = true
             popup.y= popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height
             popup.forceActiveFocus()
+            //            popup.opened()
         }
 
         DragHandler
@@ -192,10 +182,10 @@ Control
     }
 
 
-//    Label
-//    {
-//        text: control.implicitHeight
-//    }
+    //    Label
+    //    {
+    //        text: control.implicitHeight
+    //    }
 
     contentItem: Row
     {
