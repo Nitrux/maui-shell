@@ -115,7 +115,7 @@ T.Control
 
         readonly property int finalYPos : control.position === ToolBar.Footer ? 0 - (popup.height) : control.height + Maui.Style.space.medium
 
-        height: Math.min (_cask.avaliableHeight, popup.implicitHeight)
+        height: Math.min (_cask.avaliableHeight, popup.implicitHeight) + _cask.topPanel.implicitHeight
         width: isMobile ? _cask.width : Math.min(control.popWidth, _cask.width)
 
         function close()

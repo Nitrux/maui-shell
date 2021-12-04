@@ -1,4 +1,4 @@
-    /****************************************************************************
+/****************************************************************************
 **
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Copyright (C) 2020 Shawn Rutledge
@@ -56,10 +56,10 @@ Cask.StackableItem
 
     onIntersectsChanged:
     {
-            if(intersects)
+        if(intersects)
             _cask.bottomPanel.hide()
-            else
-                _cask.bottomPanel.show()
+        else
+            _cask.bottomPanel.show()
     }
 
     property rect oldPos
@@ -76,22 +76,22 @@ Cask.StackableItem
             {
                 rootChrome.x = oldPos.x
                 rootChrome.y = oldPos.y
-                 surfaceItem.shellSurface.toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
+                surfaceItem.shellSurface.toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
                 surfaceItem.isMaximized = false
 
             }else
             {
 
 
-            oldPos.x = rootChrome.x
-            oldPos.y = rootChrome.y
-            oldPos.width = rootChrome.width
-            oldPos.height = rootChrome.height
+                oldPos.x = rootChrome.x
+                oldPos.y = rootChrome.y
+                oldPos.width = rootChrome.width
+                oldPos.height = rootChrome.height
 
-            rootChrome.x = 0
-            rootChrome.y = 0
+                rootChrome.x = 0
+                rootChrome.y = 0
 
-            surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
+                surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
 
                 surfaceItem.isMaximized = true
 
@@ -374,10 +374,10 @@ Cask.StackableItem
 
         y: titlebarHeight
         sizeFollowsSurface: true
-        opacity: moving ? 0.5 : 1.0
-        inputEventsEnabled: !pinch3.active && !metaDragHandler.active && !altDragHandler.active
-        touchEventsEnabled: false
-//paintEnabled: false
+        opacity: moving || pinch4.activeScale <= 0.5 ? 0.5 : 1.0
+        inputEventsEnabled: !pinch3.active && !pinch4.active && !metaDragHandler.active && !altDragHandler.active
+        touchEventsEnabled: !pinch3.active && !pinch4.active
+        //paintEnabled: false
         focusOnClick: true
         autoCreatePopupItems: true
 
@@ -464,7 +464,7 @@ Cask.StackableItem
                         }
     }
 
-    layer.enabled: rootChrome.decorationVisible
+    layer.enabled: _borders.visible
     layer.effect: OpacityMask
     {
         maskSource: Item
@@ -475,46 +475,101 @@ Cask.StackableItem
             Rectangle
             {
                 anchors.fill: parent
-                radius: Maui.App.controls.borderRadius
+                radius: _borders.radius
             }
         }
     }
 
     Rectangle
     {
+        id: _borders
         anchors.fill: parent
-        visible: decoration.visible
+        visible: rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active
         z: surfaceItem.z + 9999999999
         //         anchors.margins: Maui.Style.space.small
-        radius: Maui.App.controls.borderRadius
+        radius: 8
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
         opacity: 0.8
-
+        border.width: 1
         Rectangle
         {
             anchors.fill: parent
             anchors.margins: 1
             color: "transparent"
             radius: parent.radius - 0.5
+            border.width: 1
             border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-            opacity: 0.7
+            opacity: 0.2
         }
     }
 
-    PinchHandler {
+    DragHandler {
         id: pinch3
+        enabled: _borders.visible
         objectName: "3-finger pinch"
         minimumPointCount: 3
         maximumPointCount: 3
-        minimumScale: 0.1
+        grabPermissions: PointerHandler.CanTakeOverFromAnything
+
+    }
+
+//    NumberAnimation on x{
+//    id: anim
+//    running: pinch4.activeScale <= 0.5
+//    to: 60
+//    duration: 100
+//    onStopped: {
+//    if(anim.to===60) { anim.from=60; anim.to=50; } else { anim.from=50; anim.to=60 }
+//    start()
+//    }
+//    }
+
+
+    PinchHandler {
+        id: pinch4
+        objectName: "4-finger pinch"
+        minimumPointCount: 4
+        maximumPointCount: 4
+        minimumScale: 0.5
+        maximumScale: 2
         minimumRotation: 0
         maximumRotation: 0
+
         onActiveChanged: if (!active) {
                              // just a silly way of getting a QSize for sendConfigure()
+
+                             if(activeScale <= minimumScale)
+                             {
+                                 surfaceItem.surface.client.close()
+                             }
+
+                             if(width * scale > availableGeometry.width*0.9 && height * scale > availableGeometry.height*0.9)
+                             {
+                                 resizeSurface(rootChrome.shellSurface)
+                                 rootChrome.scale = 1
+                                 rootChrome.x =0
+                                 rootChrome.y = 0
+
+                                 return;
+                             }
+
+                             var minWidth = availableGeometry.width/2
+                             var minHeight = availableGeometry.height/2
+                             if(width*scale <= minWidth && height *scale < minHeight)
+                             {
+
+                                 rootChrome.scale = 1
+
+
+                                 return;
+                             }
+
                              var size = topLevel.sizeForResize(Qt.size(width * scale, height * scale), Qt.point(0, 0), 0);
                              topLevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/);
                              rootChrome.scale = 1
+                             rootChrome.x = pinch4.centroid.scenePosition.x -(size.width/2)
+                             rootChrome.y = pinch4.centroid.scenePosition.y-(size.height/2)
                          }
     }
 
@@ -531,7 +586,7 @@ Cask.StackableItem
             id: moveGeometryText
             color: "white"
             anchors.centerIn: parent
-            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + surfaceItem.output.cask.bottomPanel.height
+            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
         }
 
     }

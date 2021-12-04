@@ -44,8 +44,9 @@ property alias searchBar : _searchBar
     {
         id: _swipeView
         anchors.fill: parent
+        anchors.bottomMargin: pageIndicator.height
         background: null
-
+clip: true
         Maui.GridView
         {
             id: _categoriesGridView

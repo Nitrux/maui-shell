@@ -170,8 +170,8 @@ int main(int argc, char *argv[])
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
         qputenv("QT_QPA_PLATFORMTHEME", "generic");
 
-//        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
-//    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
+        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
+    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
 
          QQuickStyle::setStyle("maui-style");
 

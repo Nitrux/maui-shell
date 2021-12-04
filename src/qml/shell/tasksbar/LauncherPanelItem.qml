@@ -38,8 +38,9 @@ Cask.PanelItem
     card: Cask.PanelCard
     {
         width: ListView.view.width
-        implicitHeight: Math.min(_cask.avaliableHeight, 800)
+        implicitHeight: win.formFactor !== Cask.Env.Desktop ? _cask.avaliableHeight : Math.min(_cask.avaliableHeight, 800)
         background: Item{}
+        padding: 0
 
         onOpened:
         {

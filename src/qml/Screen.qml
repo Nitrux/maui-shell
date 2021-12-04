@@ -43,10 +43,11 @@ WaylandOutput
 
     sizeFollowsWindow: true
     availableGeometry : Qt.rect(surfaceArea.x, surfaceArea.y, surfaceArea.width, surfaceArea.height)
-    scaleFactor: 1
-//    transform: WaylandOutput.Transform180
 
+    scaleFactor: 2
+    //transform: WaylandOutput.Transform180
     readonly property bool isMobile : formFactor === Cask.Env.Phone
+
     property bool overView: false
     readonly property alias formFactor : win.formFactor
 
@@ -147,7 +148,7 @@ WaylandOutput
                     highlightFollowsCurrentItem: true
                     highlightMoveDuration: 0
                     highlightResizeDuration: 0
-
+                    cacheBuffer: count * width
                     //                    preferredHighlightEnd: width
                     // 		highlight: Item {}
                     highlightMoveVelocity: -1
