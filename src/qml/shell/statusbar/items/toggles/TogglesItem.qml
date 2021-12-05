@@ -84,14 +84,49 @@ Cask.PanelItem
                     icon.name:  "mic-ready"
                 }
 
-                ToggleTemplate
+                AirplaneModeToggle
                 {
-                    icon.name:  "network-flightmode-on"
+
                 }
 
                 ToggleTemplate
                 {
+                    id: _screenshotToggle
                     icon.name:  "edit-image-face-detect"
+                    onClicked:
+                    {
+                        animation.start()
+                    }
+
+                    Rectangle
+                    {
+                        id: _rec
+                        visible: _screenshotToggle.visible
+                        parent: _cask.overlayTopPanel
+                        color: "orange"
+                        anchors.fill: parent
+                        opacity: 0
+                        PropertyAnimation
+                        {
+                            id: animation;
+                                                target: _rec;
+                                                property: "opacity";
+                                                to: 90;
+                                                duration: 500
+
+                                                onFinished:
+                                                {
+                                                    _rec.opacity = 0
+                                                    _statusSection.close()
+
+                                                    _cask.grabToImage(function(result) {
+                                                                           result.saveToFile("something-%1.png".arg(new Date().toLocaleTimeString()));
+                                                                       });
+                                                }
+                        }
+
+
+                    }
                 }
 
                 ToggleTemplate

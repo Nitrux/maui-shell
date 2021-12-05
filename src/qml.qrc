@@ -22,5 +22,8 @@
         <file>qml/shell/statusbar/items/notifications/NotificationsItem.qml</file>
         <file>qml/shell/statusbar/items/session/SessionItem.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/network/NetworkPage.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/network/AirplaneModeToggle.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/network/HotspotToggle.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/network/ConnectionDelegate.qml</file>
     </qresource>
 </RCC>

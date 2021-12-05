@@ -301,7 +301,7 @@ Cask.StackableItem
         {
             if(win.formFactor === Cask.Env.Desktop)
             {
-                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(previousRect.width, previousRect.height), [XdgToplevel.ResizingState])
+                rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(previousRect.width, previousRect.height), [3,4])
                 rootChrome.x = previousRect.x
                 rootChrome.y = previousRect.y
             }else
@@ -484,7 +484,7 @@ Cask.StackableItem
     {
         id: _borders
         anchors.fill: parent
-        visible: rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active
+        visible: win.formFactor === Cask.Env.Desktop ? rootChrome.decorationVisible : (rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active)
         z: surfaceItem.z + 9999999999
         //         anchors.margins: Maui.Style.space.small
         radius: 8

@@ -98,7 +98,7 @@ WaylandCompositor
     {
         if(desktop.formFactor !== Cask.Env.Desktop)
         {
-           surface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.cask.height-desktop.cask.topPanel.height), [3])
+           surface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.cask.height-desktop.cask.topPanel.height), [1,3,4])
         }
     }
 }

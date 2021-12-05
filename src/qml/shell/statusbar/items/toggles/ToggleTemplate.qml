@@ -11,7 +11,7 @@ AbstractButton
     id: control
     implicitHeight: 48
     implicitWidth: Math.max(_template.implicitWidth, implicitHeight)
-
+    property string tooltipText
     property alias template : _template
 
     property Component page : null
@@ -20,10 +20,15 @@ AbstractButton
     {
         readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
-        color: control.hovered ? control.Kirigami.Theme.hoverColor :( control.isCurrentItem ||  control.containsPress ? control.Kirigami.Theme.highlightColor : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4))
+        color: control.hovered ? control.Kirigami.Theme.hoverColor :( control.checked ||  control.containsPress ? control.Kirigami.Theme.highlightColor : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4))
 
         radius: 10
     }
+
+    ToolTip.text: control.tooltipText
+    ToolTip.delay: 1000
+    ToolTip.timeout: 5000
+    ToolTip.visible: control.hovered && control.tooltipText
 
     contentItem: Maui.ListItemTemplate
     {
@@ -31,6 +36,7 @@ AbstractButton
         labelsVisible: label1.text.length || label2.text.length
         label1.text: control.text
         iconSource: control.icon.name
+        isMask: false
         iconVisible: true
         iconSizeHint: Maui.Style.iconSizes.medium
         headerSizeHint: control.implicitHeight

@@ -44,7 +44,7 @@ WaylandOutput
     sizeFollowsWindow: true
     availableGeometry : Qt.rect(surfaceArea.x, surfaceArea.y, surfaceArea.width, surfaceArea.height)
 
-    scaleFactor: 2
+    scaleFactor: 1
     //transform: WaylandOutput.Transform180
     readonly property bool isMobile : formFactor === Cask.Env.Phone
 
@@ -94,7 +94,7 @@ WaylandOutput
                 bottomPanel.data: TaskBar {id: _taskBar}
                 topPanel.data: StatusBar {id: _statusBar}
 
-                bottomPanel.visible: win.formFactor === Cask.Env.Phone ? showDesktop || _listSurfaces.count <= 0 : true
+                bottomPanel.visible:  true
 
 
                 Rectangle
