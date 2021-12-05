@@ -53,7 +53,7 @@ T.Control
     {
         id: popup
         property int alignment: Qt.AlignCenter
-        z: _content.z + 1
+        z: _content.z -1
         position: control.position
         Label
         {
@@ -136,7 +136,7 @@ T.Control
         {
             id: handler2
             dragThreshold: 100
-            enabled: popup.opened
+            enabled: popup.opened && Maui.Handy.isTouch
             target: popup
             yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos : undefined
             yAxis.maximum: control.position === ToolBar.Footer  ? undefined : popup.finalYPos
@@ -161,7 +161,7 @@ T.Control
     {
         id: handler
         dragThreshold: control.position === ToolBar.Footer ? 64 : 20
-        enabled: !popup.opened
+        enabled: !popup.opened && Maui.Handy.isTouch
         target: null
         yAxis.minimum: control.position === ToolBar.Footer ? popup.finalYPos - 10 : 0
         yAxis.maximum: control.position === ToolBar.Footer  ? 0 : popup.finalYPos + 10

@@ -259,12 +259,10 @@ Item
             }
         }
 
-
-
         Timer
         {
             id: _dockRevealTimer
-            interval: 2500
+            interval: 800
 
             //            triggeredOnStart: true
             onTriggered:
@@ -272,9 +270,6 @@ Item
                 if(_bottomPanel.hidden)
                 {
                     _bottomPanel.show()
-                }else
-                {
-                    _bottomPanel.hide()
                 }
             }
         }
@@ -282,13 +277,11 @@ Item
         HoverHandler
         {
             id: _dockHoverHandler
-            enabled: !handler.active && _bottomPanel.autohide
+            enabled: !handler.active && _bottomPanel.hidden
             acceptedPointerTypes: PointerDevice.GenericPointer
             onHoveredChanged:
             {
-
                 _dockRevealTimer.restart()
-
             }
         }
     }

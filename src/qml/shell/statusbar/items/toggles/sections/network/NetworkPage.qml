@@ -15,7 +15,7 @@ import "../.."
 TogglePage
 {
     id: control
-    implicitHeight: Math.max(400, _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big)
+    implicitHeight: Math.max(400, Math.min(400, _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
     headerColorSet: control.Kirigami.Theme.colorSet
     title: "Networks"
     showTitle: true
