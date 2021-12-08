@@ -25,14 +25,24 @@ import org.mauikit.controls 1.3 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import QtQuick.Layouts 1.3
 import org.maui.cask 1.0 as Cask
-
+import Zpaces 1.0 as ZP
 Cask.StackableItem
 {
     id: rootChrome
 
     property bool intersects : y+height > availableGeometry.height && surfaceItem.activeFocus
     property alias shellSurface: surfaceItem.shellSurface
-    property var topLevel : shellSurface.toplevel
+
+    property ZP.XdgWindow window
+    property XdgSurface xdgSurface: toplevel.xdgSurface
+    property XdgToplevel toplevel: window.toplevel
+    property WaylandSurface surface: xdgSurface.surface
+    property WaylandSurface parentSurface: toplevel.parentToplevel.xdgSurface.surface
+
+
+    readonly property string appId: window.appId
+    readonly property string title: window.title
+
     property alias moveItem: surfaceItem.moveItem
     property bool decorationVisible: win.formFactor === Cask.Env.Desktop && surfaceItem.shellSurface.toplevel.decorationMode === XdgToplevel.ServerSideDecoration
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
@@ -40,6 +50,7 @@ Cask.StackableItem
 
     property int marginWidth : surfaceItem.isFullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
     //    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
+
     property int titlebarHeight : decorationVisible ? 36 : 0
     property string screenName: ""
 
@@ -72,12 +83,12 @@ Cask.StackableItem
         } else if (type === Maui.CSDButton.Maximize)
         {
 
-            if(surfaceItem.isMaximized)
+            if(toplevel.maximized)
             {
                 rootChrome.x = oldPos.x
                 rootChrome.y = oldPos.y
                 surfaceItem.shellSurface.toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
-                surfaceItem.isMaximized = false
+//                surfaceItem.isMaximized = false
 
             }else
             {
@@ -93,7 +104,7 @@ Cask.StackableItem
 
                 surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
 
-                surfaceItem.isMaximized = true
+//                surfaceItem.isMaximized = true
 
             }
 
@@ -101,6 +112,32 @@ Cask.StackableItem
             rootChrome.visible = false
         }
     }
+
+    Connections
+    {
+        target: rootChrome.toplevel
+        ignoreUnknownSignals: true
+
+
+        function onMaximizedChanged()
+        {
+            console.log("REQUESTED", target.maximized)
+
+        }
+
+        function onFullscreenChanged()
+        {
+            console.log("REQUESTED FULLSCREEN", target.fullscreen)
+        }
+    }
+
+//    Component.onCompleted:
+//    {
+//        if(!rootChrome.toplevel.maximized)
+//        {
+//              surfaceItem.shellSurface.toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
+//        }
+//    }
 
     Rectangle
     {
@@ -179,7 +216,7 @@ Cask.StackableItem
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    text: surfaceItem.shellSurface.toplevel.title !== undefined ? surfaceItem.shellSurface.toplevel.title : ""
+                    text: rootChrome.title
                     horizontalAlignment: Qt.AlignHCenter
                     elide: Text.ElideMiddle
                     wrapMode: Text.NoWrap
@@ -208,10 +245,10 @@ Cask.StackableItem
             x: parent.width - resizeAreaWidth / 2; width: resizeAreaWidth; height: parent.height - resizeAreaWidth
             onXChanged:
                 if (horzDragHandler.active) {
-                    var size = topLevel.sizeForResize(horzDragHandler.initialSize,
+                    var size = toplevel.sizeForResize(horzDragHandler.initialSize,
                                                       Qt.point(horzDragHandler.translation.x, horzDragHandler.translation.y),
                                                       Qt.RightEdge);
-                    topLevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/ )
+                    toplevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/ )
                 }
             DragHandler {
                 id: horzDragHandler
@@ -229,10 +266,10 @@ Cask.StackableItem
             y: parent.height - resizeAreaWidth / 2; height: resizeAreaWidth; width: parent.width - resizeAreaWidth
             onYChanged:
                 if (vertDragHandler.active) {
-                    var size = topLevel.sizeForResize(vertDragHandler.initialSize,
+                    var size = toplevel.sizeForResize(vertDragHandler.initialSize,
                                                       Qt.point(vertDragHandler.translation.x, vertDragHandler.translation.y),
                                                       Qt.BottomEdge);
-                    topLevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/ )
+                    toplevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/ )
                 }
             DragHandler {
                 id: vertDragHandler
@@ -253,10 +290,10 @@ Cask.StackableItem
             onYChanged: resize()
             function resize() {
                 if (bottomRightDragHandler.active) {
-                    var size = topLevel.sizeForResize(bottomRightDragHandler.initialSize,
+                    var size = toplevel.sizeForResize(bottomRightDragHandler.initialSize,
                                                       Qt.point(bottomRightDragHandler.translation.x, bottomRightDragHandler.translation.y),
                                                       Qt.BottomEdge | Qt.RightEdge);
-                    topLevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/ )
+                    toplevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/ )
                 }
             }
             DragHandler {
@@ -270,14 +307,11 @@ Cask.StackableItem
             }
         }
         // end of resizing components
-
-
-
     }
 
     Connections
     {
-        target: output.surfaceArea
+        target: control.surfaceArea
         ignoreUnknownSignals: true
         enabled: win.formFactor !== Cask.Env.Desktop
         //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
@@ -291,7 +325,6 @@ Cask.StackableItem
             resizeSurface(rootChrome.shellSurface)
         }
     }
-
 
     Connections
     {
@@ -321,7 +354,7 @@ Cask.StackableItem
             NumberAnimation { target: scaleTransform; property: "xScale"; to: 0.4; duration: 150 }
         }
         NumberAnimation { target: scaleTransform; property: "xScale"; to: 0; duration: 150 }
-        ScriptAction { script: { _listSurfaces.remove(index) } }
+        ScriptAction { script: { window.close()  } }
     }
 
     ParallelAnimation {
@@ -370,7 +403,6 @@ Cask.StackableItem
         property bool isPopup: false
         property bool isTransient: false
         property bool isFullscreen: true
-        property bool isMaximized: false
 
         y: titlebarHeight
         sizeFollowsSurface: true
@@ -380,6 +412,7 @@ Cask.StackableItem
         //paintEnabled: false
         focusOnClick: true
         autoCreatePopupItems: true
+
 
         DragHandler {
             id: metaDragHandler
@@ -413,20 +446,20 @@ Cask.StackableItem
                     receivedFocusAnimation.start();
             }
 
-            onSetPopup: {
-                surfaceItem.isPopup = true
-                decoration.visible = false
-            }
+//            onSetPopup: {
+//                surfaceItem.isPopup = true
+//                decoration.visible = false
+//            }
 
-            onSetTransient: {
-                surfaceItem.isTransient = true
-            }
+//            onSetTransient: {
+//                surfaceItem.isTransient = true
+//            }
 
-            onSetFullScreen: {
-                surfaceItem.isFullscreen = true
-                rootChrome.x = 0
-                rootChrome.y = 0
-            }
+//            onSetFullScreen: {
+//                surfaceItem.isFullscreen = true
+//                rootChrome.x = 0
+//                rootChrome.y = 0
+//            }
 
             onSetMaximized:
             {
@@ -455,13 +488,13 @@ Cask.StackableItem
             valid =  !surface.cursorSurface && surface.size.width > 0 && surface.size.height > 0
         }
 
-        onValidChanged: if (valid) {
-                            if (isFullscreen) {
-                                topLevel.sendFullscreen(output.geometry)
-                            } else if (decorationVisible) {
-                                createAnimationImpl.start()
-                            }
-                        }
+//        onValidChanged: if (valid) {
+//                            if (isFullscreen) {
+//                                toplevel.sendFullscreen(output.geometry)
+//                            } else if (decorationVisible) {
+//                                createAnimationImpl.start()
+//                            }
+//                        }
     }
 
     layer.enabled: _borders.visible
@@ -514,16 +547,16 @@ Cask.StackableItem
 
     }
 
-//    NumberAnimation on x{
-//    id: anim
-//    running: pinch4.activeScale <= 0.5
-//    to: 60
-//    duration: 100
-//    onStopped: {
-//    if(anim.to===60) { anim.from=60; anim.to=50; } else { anim.from=50; anim.to=60 }
-//    start()
-//    }
-//    }
+    //    NumberAnimation on x{
+    //    id: anim
+    //    running: pinch4.activeScale <= 0.5
+    //    to: 60
+    //    duration: 100
+    //    onStopped: {
+    //    if(anim.to===60) { anim.from=60; anim.to=50; } else { anim.from=50; anim.to=60 }
+    //    start()
+    //    }
+    //    }
 
 
     PinchHandler {
@@ -565,8 +598,8 @@ Cask.StackableItem
                                  return;
                              }
 
-                             var size = topLevel.sizeForResize(Qt.size(width * scale, height * scale), Qt.point(0, 0), 0);
-                             topLevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/);
+                             var size = toplevel.sizeForResize(Qt.size(width * scale, height * scale), Qt.point(0, 0), 0);
+                             toplevel.sendConfigure(size, [3] /*XdgShellToplevel.ResizingState*/);
                              rootChrome.scale = 1
                              rootChrome.x = pinch4.centroid.scenePosition.x -(size.width/2)
                              rootChrome.y = pinch4.centroid.scenePosition.y-(size.height/2)

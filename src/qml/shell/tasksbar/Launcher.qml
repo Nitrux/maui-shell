@@ -166,12 +166,12 @@ clip: true
                     background: Item {}
                     iconSource:  model.icon
                     iconSizeHint: 64
-                    label1.text: model.label
+                    label1.text: model.executable
 
                     onClicked:
                     {
                         console.log(model.executable)
-                        launcher.launchApp(model.path)
+                        launcher.launch(model.executable)
                         closeCard()
                     }
                 }

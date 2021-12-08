@@ -21,6 +21,7 @@
 #include <KService>
 #include <KRun>
 #include <KIO/ApplicationLauncherJob>
+#include <QStringList>
 
 WaylandProcessLauncher::WaylandProcessLauncher(QObject *parent)
     : QObject(parent)
@@ -36,16 +37,20 @@ void WaylandProcessLauncher::launchApp(const QString &app)
     KService::Ptr service(new KService(app));
        if (!service->isValid())
            return;
-
+QProcessEnvironment::systemEnvironment().remove("QT_IM_MODULE");
     auto job = KIO::ApplicationLauncherJob(service);
     job.start();
 }
 
 void WaylandProcessLauncher::launch(const QString &program)
 {
+    if(program.isEmpty())
+        return;
+
     QProcess *process = new QProcess(this);
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.remove("QT_IM_MODULE");
     process->setProcessEnvironment(env);
 
     connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
@@ -55,8 +60,12 @@ void WaylandProcessLauncher::launch(const QString &program)
     connect(process, &QProcess::stateChanged, this, &WaylandProcessLauncher::onStateChanged);
 
     QStringList arguments;
-    arguments << "-platform" << "wayland";
-    process->start(program, arguments);
+//    arguments << "--platform" << "wayland";
+
+    auto execList = program.split(" ");
+    auto exec = execList.first();
+            exec.remove("\"").remove(QRegExp(" %."));
+    process->start(exec, arguments);
 
 }
 

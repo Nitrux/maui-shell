@@ -9,6 +9,7 @@ import org.maui.cask 1.0 as Cask
 
 import org.mauikit.controls 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
+import Zpaces 1.0 as ZP
 
 Maui.Page
 {
@@ -54,7 +55,7 @@ Maui.Page
             onClicked:
             {
                 overView = false
-                _listSurfaces.clear()
+//                _listSurfaces.clear()
             }
         },
 
@@ -84,12 +85,12 @@ Maui.Page
             value:  _swipeView.currentIndex
             restoreMode: Binding.RestoreBinding
         }
-
-        height: parent.height * 0.8
-        width: parent.width * 0.8
+        scale: 0.7
+        height: parent.height
+        width: parent.width
         anchors.centerIn: parent
         orientation: ListView.Horizontal
-        model: _listSurfaces
+        model: _zpaces.tasksModel
         snapMode: ListView.SnapToItem
         spacing: Maui.Style.space.big
 
@@ -102,8 +103,11 @@ Maui.Page
         delegate: ItemDelegate
             {
                 id: _itemDelegate
-                width: _overviewList.width * 0.8
-                height: _overviewList.height * 0.8
+
+                property ZP.XdgWindow xdgWindow :  model.window
+
+                width: ListView.view.width * 0.8
+                height: ListView.view.height * 0.8
                 opacity: (y * -1) > 50 ? 20 / (y * -1): 1
                 background: null
                 onClicked:
@@ -122,22 +126,23 @@ Maui.Page
                     anchors.left: _thumbnail.left
                     anchors.right: _thumbnail.right
                     height: Maui.Style.rowHeight
-                    iconSource: Cask.Env.appIconName(modelData.toplevel.appId)
+                    iconSource: xdgWindow.iconName
                     iconSizeHint: Maui.Style.iconSizes.medium
-                    label1.text: modelData.toplevel.title
+                    label1.text: xdgWindow.appName
                 }
 
                 Item
                 {
                     anchors.centerIn: parent
-                    height: Math.min(_surface.surface.sourceGeometry.height , parent.height)
-                    width: Math.min(_surface.surface.sourceGeometry.width, parent.width)
+                    height: _surface.surface.sourceGeometry.height
+                    width: _surface.surface.sourceGeometry.width
+//                    scale: 0.7
                     id: _thumbnail
 
                     WaylandQuickItem
                     {
                         id: _surface
-                        surface: modelData.surface
+                        surface: xdgWindow.shellSurface.surface
                         touchEventsEnabled: false
                         focusOnClick: false
                         enabled: false
@@ -220,7 +225,7 @@ Maui.Page
                     }
 
                     z: _itemDelegate.z+999
-                    onClicked:  modelData.surface.client.close()
+                    onClicked:  xdgWindow.close()
                 }
 
                 DragHandler
@@ -230,7 +235,7 @@ Maui.Page
                     onActiveChanged:
                     {
                         if(!active && (target.y * -1) > 100)
-                            modelData.surface.client.close()
+                            xdgWindow.close()
                         else target.y = 0
                     }
                 }

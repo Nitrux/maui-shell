@@ -63,7 +63,8 @@ static FMH::MODEL_LIST getApps(const QString &groupStr, const int &limit)
     auto group = new KServiceGroup(grp);
     KServiceGroup::List list = group->entries(true /* sorted */, true /* excludeNoDisplay */, false /* allowSeparators */, true /* sortByGenericName */);
 
-    for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++) {
+    for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++)
+    {
         const KSycocaEntry::Ptr p = (*it);
 
         if (p->isType(KST_KService))
@@ -76,7 +77,7 @@ static FMH::MODEL_LIST getApps(const QString &groupStr, const int &limit)
             if(i>=limit)
                 break;
 
-             res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
+             res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}, {FMH::MODEL_KEY::EXECUTABLE, s->exec()}};
              i++;
 
         } else if (p->isType(KST_KServiceSeparator))

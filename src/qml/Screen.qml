@@ -31,17 +31,21 @@ import "shell/statusbar"
 import "shell/tasksbar"
 import "." as S
 
+import Zpaces 1.0 as ZP
+
 WaylandOutput
 {
-    id: output
+    id: control
+
+    property bool isNestedCompositor: Qt.platform.pluginName.startsWith("wayland") || Qt.platform.pluginName === "xcb"
     property alias surfaceArea: _cask.surface // Chrome instances are parented to compositorArea
     property alias targetScreen: win.screen
     property alias cask: _cask
-    property alias swipeView : _swipeView
+    //    property alias swipeView : _swipeView
 
     property bool showDesktop : true
 
-    sizeFollowsWindow: true
+    sizeFollowsWindow: control.isNestedCompositor
     availableGeometry : Qt.rect(surfaceArea.x, surfaceArea.y, surfaceArea.width, surfaceArea.height)
 
     scaleFactor: 1
@@ -50,16 +54,18 @@ WaylandOutput
 
     property bool overView: false
     readonly property alias formFactor : win.formFactor
+    property alias workspaces : _swipeView
+property alias zpaces : _zpaces
 
+    ZP.Zpaces
+    {
+        id: _zpaces
+        output: control
+    }
 
-    window: Maui.ApplicationWindow
+    window: Window
     {
         id: win
-        visibility: Window.Windowed
-        color: "transparent"
-        title: formFactor
-        headBar.visible: false
-        isWide: width > 1000
 
         readonly property int formFactor :  {
             if(width > 1500)
@@ -76,26 +82,21 @@ WaylandOutput
             id: mouseTracker
             objectName: "wmt on " + Screen.name
             anchors.fill: parent
-            windowSystemCursorEnabled: false
+            // Set this to false to disable the outer mouse cursor when running nested
+            // compositors. Otherwise you would see two mouse cursors, one for each compositor.
+            windowSystemCursorEnabled: control.isNestedCompositor
 
             Cask.Dashboard
             {
                 id: _cask
                 clip: true
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: _swiper.top
+                anchors.fill: parent
                 backgroundImage: "qrc:/calamares_wallpaper.jpg"
 
-
-                property alias dock : _statusBar
+                property alias dock : _taskBar
 
                 bottomPanel.data: TaskBar {id: _taskBar}
                 topPanel.data: StatusBar {id: _statusBar}
-
-                bottomPanel.visible:  true
-
 
                 Rectangle
                 {
@@ -117,15 +118,15 @@ WaylandOutput
                         font.pointSize: Maui.Style.fontSizes.big
                         font.weight: Font.Bold
                         anchors.centerIn: parent
-                        text: output.surfaceArea.x + " / " + output.surfaceArea.y + " - " + output.surfaceArea.width + " / " + output.surfaceArea.height
+                        text: control.surfaceArea.x + " / " + control.surfaceArea.y + " - " + control.surfaceArea.width + " / " + control.surfaceArea.height
                     }
                 }
 
                 ListView
                 {
                     id: _swipeView
+
                     anchors.fill: parent
-                    visible: !showDesktop
                     clip: false
 
                     Binding on currentIndex
@@ -164,37 +165,82 @@ WaylandOutput
                         value: _swipeView.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
                         restoreMode: Binding.RestoreBinding
                     }
-
-                    model: _listSurfaces
-                    delegate: Item
+                    Label
                     {
-                        height: ListView.view.height
-                        width: ListView.view.width
-                        clip: false
-                        property alias chrome : _chromeDelegate
+                        text: _swipeView.count + "/" + _zpaces.zpacesModel.count
+                        color: "orange"
+                        font.bold: true
+                        font.pointSize: 22
+                    }
 
-                        Chrome
+                    model: _zpaces.zpacesModel
+
+                    Connections
+                    {
+                        target: _zpaces.zpacesModel
+                        ignoreUnknownSignals: true
+                        function onZpaceAdded()
                         {
-                            id: _chromeDelegate
-                            shellSurface: modelData
-                            moveItem: Item
-                            {
-                                property bool moving: false
-                                parent: surfaceArea
-                                x: output.position.x
-                                y: output.position.y
-                                height: _chromeDelegate.shellSurface.surface.height
-                                width: _chromeDelegate.shellSurface.surface.width
-                            }
+                            _swipeView.incrementCurrentIndex()
                         }
                     }
+
+                    delegate: Rectangle
+                    {
+                        color: "pink"
+                        height: ListView.view.height
+                        width: ListView.view.width
+
+                        clip: false
+
+                        property ZP.Zpace zpace : model.Zpace
+
+
+                        Label
+                        {
+                            text: zpace.limit
+                            color: "orange"
+                            font.bold: true
+                            font.pointSize: 22
+                            anchors.right: parent.right
+                        }
+
+                        Repeater
+                        {
+                            model: zpace.windows
+
+                            delegate: Chrome
+                            {
+                                id: _chromeDelegate
+                                shellSurface: model.window.shellSurface
+                                window: model.window
+                                moveItem: Item
+                                {
+                                    property bool moving: false
+                                    parent: surfaceArea
+                                    x: control.position.x
+                                    y: control.position.y
+                                    height: _chromeDelegate.shellSurface.surface.height
+                                    width: _chromeDelegate.shellSurface.surface.width
+                                }
+                            }
+
+                        }
+
+                    }
                 }
+            }
+
+            // Virtual Keyboard
+            Loader {
+                anchors.fill: parent
+                source: "Keyboard.qml"
             }
 
             Rectangle
             {
                 id: _swiper
-                visible: Maui.Handy.isTouch && _swipeView.count > 1
+                visible:  _swipeView.count > 1
                 height: visible ? 16 : 0
                 opacity: 0.3
                 width: parent.width
@@ -258,8 +304,8 @@ WaylandOutput
                 id: cursor
                 x: mouseTracker.mouseX
                 y: mouseTracker.mouseY
-                seat: output.compositor.defaultSeat
-                visible: mouseTracker.containsMouse
+                seat: control.compositor.defaultSeat
+                //                visible: mouseTracker.containsMouse
             }
         }
     }

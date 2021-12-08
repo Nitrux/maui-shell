@@ -5,7 +5,7 @@ import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
-
+import Zpaces 1.0 as ZP
 import QtQuick.Templates 2.15 as T
 
 T.Control
@@ -123,35 +123,42 @@ T.Control
 
         Repeater
         {
-            model: _listSurfaces
+            model: _zpaces.tasksModel
 
             AbstractButton
             {
+
+                property ZP.XdgWindow xdgWindow : model.window
                 implicitHeight: 48
                 implicitWidth: height
                 //                draggable: true
+                ToolTip.text: xdgWindow.title
+                ToolTip.delay: 1000
+                ToolTip.timeout: 5000
+                ToolTip.visible: hovered
+
 
                 onClicked:
                 {
-                    var toggleMinimize = false
-                    if(_swipeView.currentIndex === index)
-                    {
-                        toggleMinimize = true
-                    }
+//                    var toggleMinimize = false
+//                    if(_swipeView.currentIndex === index)
+//                    {
+//                        toggleMinimize = true
+//                    }
 
-                    _swipeView.currentIndex = index
+                    _swipeView.currentIndex = model.zpaceIndex
 
-                    if(toggleMinimize)
-                    {
-                        _swipeView.itemAtIndex(index).chrome.visible = !_swipeView.itemAtIndex(index).chrome.visible
-                    }
+//                    if(toggleMinimize)
+//                    {
+//                        _swipeView.itemAtIndex(index).chrome.visible = !_swipeView.itemAtIndex(index).chrome.visible
+//                    }
                 }
 
                 contentItem: Item
                 {
                     Kirigami.Icon
                     {
-                        source: Cask.Env.appIconName(modelData.toplevel.appId)
+                        source: model.window.iconName
                         height: 48
                         width: height
                         anchors.centerIn: parent

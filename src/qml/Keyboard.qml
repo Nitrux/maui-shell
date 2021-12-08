@@ -23,7 +23,7 @@ InputPanel {
     id: inputPanel
     visible: active
     y: active ? parent.height - inputPanel.height : parent.height
-    anchors.left: parent.left
-    anchors.right: parent.right
+    width: Math.min(availableGeometry.width, 800)
+    anchors.horizontalCenter: parent.horizontalCenter
 }
 

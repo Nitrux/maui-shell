@@ -39,6 +39,13 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+//models and controllers by Cask
+#include "code/controllers/zpaces.h"
+#include "code/controllers/zpace.h"
+#include "code/models/zpacesmodel.h"
+#include "code/models/surfacesmodel.h"
+#include "code/controllers/xdgwindow.h"
+
 static QByteArray grefsonExecutablePath;
 static qint64 grefsonPID;
 static void *signalHandlerStack;
@@ -158,9 +165,11 @@ static qreal highestDPR(QList<QScreen *> &screens)
     return ret;
 }
 
+#define ZPACES_URI "Zpaces"
 int main(int argc, char *argv[])
 {
     sinceStartup.start();
+
     if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
         qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
     if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
@@ -173,19 +182,22 @@ int main(int argc, char *argv[])
 //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
 //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
 
-         QQuickStyle::setStyle("maui-style");
+    QQuickStyle::setStyle("maui-style");
+    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
     QApplication app(argc, argv);
     //QCoreApplication::setApplicationName("grefsen"); // defaults to name of the executable
     QApplication::setOrganizationName("maui");
     QApplication::setApplicationVersion("1.0");
     //    app.setAttribute(Qt::AA_DisableHighDpiScaling); // better use the env variable... but that's not enough on eglfs
+
     grefsonExecutablePath = app.applicationFilePath().toLocal8Bit();
     grefsonPID = QCoreApplication::applicationPid();
     bool windowed = false;
 
     QList<QScreen *> screens = QGuiApplication::screens();
-    {
+
         QCommandLineParser parser;
         parser.setApplicationDescription("Grefsen Qt/Wayland compositor");
         parser.addHelpOption();
@@ -248,13 +260,29 @@ int main(int argc, char *argv[])
             qDebug() << "highest DPR" << dpr << "-> cursor size" << cursorSize;
             qputenv("XCURSOR_SIZE", QByteArray::number(cursorSize));
         }
-    }
+
 
     qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
 
-    QQmlApplicationEngine appEngine;
-    appEngine.load(QUrl("qrc:/qml/main.qml"));
-    QObject *root = appEngine.rootObjects().first();
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+
+
+    qmlRegisterUncreatableType<Zpace>(ZPACES_URI, 1, 0, "Zpace", "Use it from a reference form Zpaces object");
+    qmlRegisterAnonymousType<ZpacesModel>(ZPACES_URI, 1);
+    qmlRegisterAnonymousType<SurfacesModel>(ZPACES_URI, 1);
+    qmlRegisterAnonymousType<AbstractWindow>(ZPACES_URI, 1);
+    qmlRegisterType<Zpaces>(ZPACES_URI, 1, 0, "Zpaces");
+    qmlRegisterType<XdgWindow>(ZPACES_URI, 1, 0, "XdgWindow");
+    engine.load(url);
+
+
+    QObject *root = engine.rootObjects().first();
 
     QList<QWindow *> windows = root->findChildren<QWindow *>();
     auto windowIter = windows.begin();
