@@ -31,6 +31,11 @@ T.AbstractButton
     leftPadding: isMobile ? 0 : Maui.Style.space.medium
     rightPadding: leftPadding
 
+    icon.color: control.checked || control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+
+    checked: card ? card.visible : false
+//    checkable: true
+
     Behavior on iconSize
     {
         NumberAnimation
@@ -43,7 +48,7 @@ T.AbstractButton
     background: Rectangle
     {
         visible: !isMobile
-        color: card && card.visible ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+        color: control.checked ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
         radius: 6
     }
 
@@ -66,7 +71,7 @@ T.AbstractButton
                 height: control.icon.height
                 width: control.icon.width
                 anchors.centerIn: parent
-                color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                color: control.icon.color
             }
         }
 
@@ -80,6 +85,7 @@ T.AbstractButton
             wrapMode: Text.NoWrap
             elide: Text.ElideRight
             color: _icon.color
+            font: control.font
         }
     }
 

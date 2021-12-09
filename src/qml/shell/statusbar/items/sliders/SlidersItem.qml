@@ -18,7 +18,7 @@ Cask.PanelItem
             source: "audio-volume-medium"
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
 
         Kirigami.Icon
@@ -26,7 +26,7 @@ Cask.PanelItem
             source: "mic-ready"
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
 
         Kirigami.Icon
@@ -34,7 +34,7 @@ Cask.PanelItem
             source: "high-brightness"
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
     }
 

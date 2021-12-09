@@ -19,7 +19,7 @@ Cask.PanelItem
             source: "headphones"
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
         Kirigami.Icon
         {
@@ -27,7 +27,7 @@ Cask.PanelItem
 
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
     }
 

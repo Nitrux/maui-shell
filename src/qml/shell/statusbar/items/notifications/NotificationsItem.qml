@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
-import org.kde.plasma.core 2.0 as PlasmaCore
 
 Cask.PanelItem
 {

@@ -55,7 +55,7 @@ Zpace *ZpacesModel::addZpace()
 {
     qDebug() << "trying to add a new zpace";
 
-    auto newZpace = new Zpace(this);
+    auto newZpace = new Zpace(this);// this is not the parent but a reference to the model
 
     connect(newZpace, &Zpace::destroyed, [this, newZpace]
     {

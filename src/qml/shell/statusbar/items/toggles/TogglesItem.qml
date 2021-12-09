@@ -21,14 +21,15 @@ Cask.PanelItem
             source: "settings-configure"
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
+
         Kirigami.Icon
         {
             source: "network-bluetooth"
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
 
         Kirigami.Icon
@@ -36,7 +37,7 @@ Cask.PanelItem
             source: "network-wireless"
             height: control.iconSize
             width: height
-            color: control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.icon.color
         }
     }
 

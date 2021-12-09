@@ -38,7 +38,7 @@ add_library(${PROJECT_NAME}
     ${caskplugin_QML_QRC}
     )
 
-#generate_export_header(${PROJECT_NAME} BASE_NAME CaskLib)
+generate_export_header(${PROJECT_NAME} BASE_NAME CaskLib)
 #set_target_properties(${PROJECT_NAME} PROPERTIES
 #    VERSION ${CASKLIB_VERSION_STRING}
 #    SOVERSION ${CASKLIB_SOVERSION}
