@@ -134,10 +134,10 @@ T.Control
         }
     }
 
-    Label
-    {
-        text: control.contentItem.y + " - " + control.hidden
-    }
+//    Label
+//    {
+//        text: control.contentItem.y + " - " + control.hidden
+//    }
 
     contentItem: RowLayout
     {

@@ -70,6 +70,7 @@ T.Control
             {
                 color: Qt.darker(Kirigami.Theme.backgroundColor)
                 radius: 10
+                opacity: 0.7
             }
 
             Item

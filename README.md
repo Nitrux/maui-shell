@@ -5,7 +5,7 @@ Cask is the shell container and elements templates, such as panels, popups, card
 Zpace is the composer, which is the layout and places the windows /surfaces into the Cask container.
 
 
-![a screenshot](screenshots/desktop_mode.jpg "screenshot")
+![a screenshot](screenshots/desktop/screenshot.png "screenshot")
 
 # Requirements
 

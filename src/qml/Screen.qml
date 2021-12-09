@@ -105,29 +105,29 @@ WaylandOutput
                 }
 
 
-                Rectangle
-                {
-                    color: "orange"
-                    height: 64
-                    width: 100
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: height
+//                Rectangle
+//                {
+//                    color: "orange"
+//                    height: 64
+//                    width: 100
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    anchors.bottom: parent.bottom
+//                    anchors.bottomMargin: height
 
-                    radius: Maui.Style.radiusV
+//                    radius: Maui.Style.radiusV
 
-                    Label
-                    {
-                        color: "#333"
-                        width: parent.width
-                        horizontalAlignment: Qt.AlignHCenter
-                        font.bold: true
-                        font.pointSize: Maui.Style.fontSizes.big
-                        font.weight: Font.Bold
-                        anchors.centerIn: parent
-                        text: control.surfaceArea.x + " / " + control.surfaceArea.y + " - " + control.surfaceArea.width + " / " + control.surfaceArea.height
-                    }
-                }
+//                    Label
+//                    {
+//                        color: "#333"
+//                        width: parent.width
+//                        horizontalAlignment: Qt.AlignHCenter
+//                        font.bold: true
+//                        font.pointSize: Maui.Style.fontSizes.big
+//                        font.weight: Font.Bold
+//                        anchors.centerIn: parent
+//                        text: control.surfaceArea.x + " / " + control.surfaceArea.y + " - " + control.surfaceArea.width + " / " + control.surfaceArea.height
+//                    }
+//                }
 
                 ListView
                 {
@@ -172,13 +172,13 @@ WaylandOutput
                         value: _swipeView.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
                         restoreMode: Binding.RestoreBinding
                     }
-                    Label
-                    {
-                        text: _swipeView.count + "/" + _zpaces.zpacesModel.count
-                        color: "orange"
-                        font.bold: true
-                        font.pointSize: 22
-                    }
+//                    Label
+//                    {
+//                        text: _swipeView.count + "/" + _zpaces.zpacesModel.count
+//                        color: "orange"
+//                        font.bold: true
+//                        font.pointSize: 22
+//                    }
 
                     model: _zpaces.zpacesModel
 
@@ -192,9 +192,8 @@ WaylandOutput
                         }
                     }
 
-                    delegate: Rectangle
+                    delegate: Item
                     {
-                        color: "pink"
                         height: ListView.view.height
                         width: ListView.view.width
 
@@ -203,14 +202,14 @@ WaylandOutput
                         property ZP.Zpace zpace : model.Zpace
 
 
-                        Label
-                        {
-                            text: zpace.limit
-                            color: "orange"
-                            font.bold: true
-                            font.pointSize: 22
-                            anchors.right: parent.right
-                        }
+//                        Label
+//                        {
+//                            text: zpace.limit
+//                            color: "orange"
+//                            font.bold: true
+//                            font.pointSize: 22
+//                            anchors.right: parent.right
+//                        }
 
                         Repeater
                         {
