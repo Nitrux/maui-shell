@@ -127,23 +127,15 @@ WaylandCompositor
     //        xwayland.startServer();
     //    }
 
-    Component
-    {
-        id: _xdgWindowComponent
-        ZP.XdgWindow
-        {}
-    }
-
     function handleShellSurfaceCreated(shellSurface, toplevel)
     {
 
         console.log(shellSurface.windowType)
 
-var window = _xdgWindowComponent.createObject(null, {shellSurface: shellSurface, toplevel : toplevel})
 
         console.log("QML TOPLEVEL TYPE", shellSurface.title)
 
-        desktop.workspaces.currentIndex = desktop.zpaces.addWindow(window);
+        desktop.workspaces.currentIndex = desktop.zpaces.addWindow(desktop.zpaces.createXdgWindow(shellSurface, toplevel));
         resizeSurface(shellSurface)
 
 //        _zpaces.addSurface(shellSurface);

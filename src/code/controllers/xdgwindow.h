@@ -23,6 +23,7 @@ class XdgWindow : public AbstractWindow
 
 public:
     explicit XdgWindow(QObject *parent = nullptr);
+    XdgWindow(QWaylandShellSurface *shellSurface, QWaylandXdgToplevel* toplevel);
     ~XdgWindow();
     QWaylandShellSurface * shellSurface() const override final;
     QWaylandXdgToplevel *toplevel() const;

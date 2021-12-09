@@ -20,6 +20,17 @@ XdgWindow::XdgWindow(QObject *parent) : AbstractWindow(parent)
     connect(this, &XdgWindow::toplevelChanged, this, &XdgWindow::setUpToplevelConnections);
 }
 
+XdgWindow::XdgWindow(QWaylandShellSurface * shellSurface, QWaylandXdgToplevel * toplevel) : AbstractWindow(nullptr)
+,m_shellSurface(shellSurface)
+,m_toplevel(toplevel)
+,m_xdgSurface(qobject_cast<QWaylandXdgSurface*>(m_shellSurface))
+,m_waylandSurface( m_xdgSurface->surface())
+,m_client(m_waylandSurface->client())
+,m_compositor(m_waylandSurface->compositor())
+{
+    this->setUpToplevelConnections();
+}
+
 XdgWindow::~XdgWindow()
 {
     qDebug() << "DELETING XDG WINDOW";

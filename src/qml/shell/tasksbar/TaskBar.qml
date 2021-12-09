@@ -24,6 +24,8 @@ T.Control
     implicitHeight: 64
     padding: Maui.Style.space.small
 
+    property alias launcher : _launcherItem
+
     ListModel {id: _tasksModel}
 
     background: Rectangle
@@ -51,18 +53,10 @@ T.Control
 
         LauncherPanelItem
         {
+            id: _launcherItem
             height: parent.height
 
-            onClicked:
-            {
-                if(_section.popup.opened)
-                    _section.close()
-                else
-                {
-                    _section.open(card.index)
-                    forceActiveFocus()
-                }
-            }
+            onClicked: toggleLauncherPopup()
         }
 
         Cask.PanelItem
@@ -169,7 +163,7 @@ T.Control
                         width: parent.width
                         height: 2
                         anchors.bottom: parent.bottom
-                        visible: index === _swipeView.currentIndex
+//                        visible: model.window.
                         color: Kirigami.Theme.highlightColor
                     }
                 }

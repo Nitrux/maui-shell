@@ -25,5 +25,7 @@
         <file>qml/shell/statusbar/items/toggles/sections/network/AirplaneModeToggle.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/network/HotspotToggle.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/network/ConnectionDelegate.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/bluetooth/BluetoothPage.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/bluetooth/ConnectionDelegate.qml</file>
     </qresource>
 </RCC>

@@ -8,6 +8,9 @@
 class AbstractWindow;
 class Zpace;
 class QWaylandOutput;
+class QWaylandXdgToplevel;
+class XdgWindow;
+class QWaylandShellSurface;
 class Zpaces : public QObject
 {
     Q_OBJECT
@@ -100,6 +103,8 @@ public slots:
      * @return
      */
     ZMode zmode() const;
+
+    XdgWindow *createXdgWindow(QWaylandShellSurface *, QWaylandXdgToplevel*);
 
 private:
     ZpacesModel *m_zpacesModel;    

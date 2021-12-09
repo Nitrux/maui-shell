@@ -58,4 +58,15 @@ console.log("CARD OPENED")
             //           scale: parent.opacity
         }
     }
+
+    function toggleLauncherPopup()
+    {
+        if(_section.popup.opened)
+            _section.close()
+        else
+        {
+            _section.open(card.index)
+            forceActiveFocus()
+        }
+    }
 }

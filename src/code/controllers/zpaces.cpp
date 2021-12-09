@@ -5,8 +5,11 @@
 #include <QWaylandOutput>
 #include <QScreen>
 #include <QWindow>
+#include <QTouchDevice>
 
 #include <QtWaylandCompositor/QWaylandShellSurface>
+#include <QtWaylandCompositor/QWaylandXdgToplevel>
+
 #include "code/controllers/xdgwindow.h"
 
 Zpaces::Zpaces(QObject *parent) : QObject(parent)
@@ -167,8 +170,11 @@ void Zpaces::setZpacesMode()
 
 //    auto screen = m_output->window()->screen();
 //    bool devicePixelRatio = screen->devicePixelRatio();
-
-
+    qDebug() << "CHECKING FOR TOUCH DEVICES";
+for(const auto &device : QTouchDevice::devices())
+{
+    qDebug() << "DEVICE" << device->capabilities() <<device->maximumTouchPoints() << device->name() << device->type();
+}
 
     if(geometry.width() > 1500)
     {
@@ -187,4 +193,9 @@ void Zpaces::setZpacesMode()
 Zpaces::ZMode Zpaces::zmode() const
 {
     return m_zmode;
+}
+
+XdgWindow *Zpaces::createXdgWindow(QWaylandShellSurface *shellSurface, QWaylandXdgToplevel * toplevel)
+{
+return new XdgWindow(shellSurface, toplevel);
 }

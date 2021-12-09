@@ -12,7 +12,7 @@ Maui.Page
     focus: true
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-property alias searchBar : _searchBar
+    property alias searchBar : _searchBar
     headBar.visible: true
     headBar.background: null
     headBar.middleContent: Maui.TextField
@@ -46,7 +46,7 @@ property alias searchBar : _searchBar
         anchors.fill: parent
         anchors.bottomMargin: pageIndicator.height
         background: null
-clip: true
+        clip: true
         Maui.GridView
         {
             id: _categoriesGridView
@@ -195,10 +195,10 @@ clip: true
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
-//    function forceActiveFocus()
-//    {
-//        _gridView.forceActiveFocus()
-//    }
+    //    function forceActiveFocus()
+    //    {
+    //        _gridView.forceActiveFocus()
+    //    }
 }
 
 

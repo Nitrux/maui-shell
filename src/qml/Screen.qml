@@ -55,7 +55,7 @@ WaylandOutput
     property bool overView: false
     readonly property alias formFactor : win.formFactor
     property alias workspaces : _swipeView
-property alias zpaces : _zpaces
+    property alias zpaces : _zpaces
 
     ZP.Zpaces
     {
@@ -97,6 +97,13 @@ property alias zpaces : _zpaces
 
                 bottomPanel.data: TaskBar {id: _taskBar}
                 topPanel.data: StatusBar {id: _statusBar}
+
+                Shortcut
+                {
+                    sequence: "Meta+A" // maybe not the best one... or maybe we don't need it at all
+                    onActivated: _taskBar.launcher.toggleLauncherPopup()
+                }
+
 
                 Rectangle
                 {

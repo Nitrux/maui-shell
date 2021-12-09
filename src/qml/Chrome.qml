@@ -405,14 +405,21 @@ Cask.StackableItem
         property bool isFullscreen: true
 
         y: titlebarHeight
-        sizeFollowsSurface: true
+        sizeFollowsSurface: false
         opacity: moving || pinch4.activeScale <= 0.5 ? 0.5 : 1.0
-        inputEventsEnabled: !pinch3.active && !pinch4.active && !metaDragHandler.active && !altDragHandler.active
+        inputEventsEnabled: false
         touchEventsEnabled: !pinch3.active && !pinch4.active
         //paintEnabled: false
-        focusOnClick: true
+        focusOnClick:  !altDragHandler.active
         autoCreatePopupItems: true
 
+        onActiveFocusChanged:
+        {
+            if(activeFocus)
+            {
+                rootChrome.raise()
+            }
+        }
 
         DragHandler {
             id: metaDragHandler
