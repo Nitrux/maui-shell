@@ -14,7 +14,8 @@ T.AbstractButton
 {
     id: control
     property PanelCard card : null
-
+    focus: true
+    focusPolicy: Qt.StrongFocus
     hoverEnabled: true
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,

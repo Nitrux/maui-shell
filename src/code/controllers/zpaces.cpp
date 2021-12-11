@@ -140,11 +140,6 @@ void Zpaces::setOutput(QWaylandOutput *output)
     if (m_output == output)
         return;
 
-    if(!m_output)
-    {
-        m_output->deleteLater();
-    }
-
     m_output = output;
     emit outputChanged();
 }
@@ -171,10 +166,10 @@ void Zpaces::setZpacesMode()
 //    auto screen = m_output->window()->screen();
 //    bool devicePixelRatio = screen->devicePixelRatio();
     qDebug() << "CHECKING FOR TOUCH DEVICES";
-for(const auto &device : QTouchDevice::devices())
-{
-    qDebug() << "DEVICE" << device->capabilities() <<device->maximumTouchPoints() << device->name() << device->type();
-}
+//for(const auto &device : QTouchDevice::devices())
+//{
+//    qDebug() << "DEVICE" << device->capabilities() <<device->maximumTouchPoints() << device->name() << device->type();
+//}
 
     if(geometry.width() > 1500)
     {

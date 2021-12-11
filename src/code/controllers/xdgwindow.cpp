@@ -85,11 +85,55 @@ void XdgWindow::setToplevel(QWaylandXdgToplevel *toplevel)
     emit toplevelChanged(m_toplevel);
 }
 
+void XdgWindow::deactivate()
+{
+    if(!m_toplevel)
+        return;
+
+    auto states = m_toplevel->states();
+    states.removeAll(QWaylandXdgToplevel::ActivatedState);
+    m_toplevel->sendConfigure(QSize(0,0), states);
+}
+
+void XdgWindow::activate()
+{
+    if(!m_toplevel)
+        return;
+
+    auto states = m_toplevel->states();
+
+    if(states.contains(QWaylandXdgToplevel::ActivatedState))
+    {
+        return;
+    }
+
+    states << QWaylandXdgToplevel::ActivatedState;
+    m_toplevel->sendConfigure(QSize(0,0), states);
+
+}
+
 void XdgWindow::close()
 {
         m_toplevel->sendClose();
 //    m_client->close();
-//    this->deleteLater();
+        //    this->deleteLater();
+}
+
+bool XdgWindow::maximized() const
+{
+    if(!m_toplevel)
+        return false;
+
+    return m_toplevel->maximized();
+}
+
+bool XdgWindow::fullscreen() const
+{
+    if(!m_toplevel)
+        return false;
+
+    return m_toplevel->fullscreen();
+
 }
 
 void XdgWindow::setUpClientConnections()
@@ -117,11 +161,16 @@ void XdgWindow::setUpToplevelConnections()
         emit this->appIdChanged();
         emit this->appNameChanged();
         emit this->iconNameChanged();
-
     });
 
-}
+    connect(m_toplevel, &QWaylandXdgToplevel::setMinimized, this, &AbstractWindow::setMinimized);
+    connect(m_toplevel, &QWaylandXdgToplevel::setMaximized, this, &AbstractWindow::setMaximized);
+    connect(m_toplevel, &QWaylandXdgToplevel::unsetMaximized, this, &AbstractWindow::unsetMaximized);
+    connect(m_toplevel, &QWaylandXdgToplevel::unsetFullscreen, this, &AbstractWindow::unsetFullscreen);
 
+    connect(m_toplevel, &QWaylandXdgToplevel::maximizedChanged, this, &AbstractWindow::maximizedChanged);
+    connect(m_toplevel, &QWaylandXdgToplevel::fullscreenChanged, this, &AbstractWindow::fullscreenChanged);
+}
 
 QString XdgWindow::title() const
 {
@@ -155,4 +204,9 @@ QString XdgWindow::appName() const
 
     KDesktopFile file(this->appId()+".desktop");
     return file.readName();
+}
+
+QWaylandXdgSurface *XdgWindow::xdgSurface() const
+{
+    return m_xdgSurface;
 }

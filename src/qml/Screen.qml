@@ -29,7 +29,6 @@ import org.maui.cask 1.0 as Cask
 import "shell"
 import "shell/statusbar"
 import "shell/tasksbar"
-import "." as S
 
 import Zpaces 1.0 as ZP
 
@@ -45,7 +44,7 @@ WaylandOutput
 
     property bool showDesktop : true
 
-    sizeFollowsWindow: control.isNestedCompositor
+    sizeFollowsWindow: isNestedCompositor
     availableGeometry : Qt.rect(surfaceArea.x, surfaceArea.y, surfaceArea.width, surfaceArea.height)
 
     scaleFactor: 1
@@ -84,7 +83,13 @@ WaylandOutput
             anchors.fill: parent
             // Set this to false to disable the outer mouse cursor when running nested
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
-            windowSystemCursorEnabled: control.isNestedCompositor
+            windowSystemCursorEnabled: mouseTracker.containsMouse
+
+            ZP.WaylandCursorGrabber
+            {
+                seat: control.compositor.defaultSeat
+                grab: mouseTracker.containsMouse
+            }
 
             Cask.Dashboard
             {
@@ -226,8 +231,8 @@ WaylandOutput
                                     parent: surfaceArea
                                     x: control.position.x
                                     y: control.position.y
-                                    height: _chromeDelegate.shellSurface.surface.height
-                                    width: _chromeDelegate.shellSurface.surface.width
+                                    height: _chromeDelegate.surface.destinationSize.height
+                                    width: _chromeDelegate.surface.destinationSize.width
                                 }
                             }
 
@@ -305,14 +310,14 @@ WaylandOutput
                 anchors.fill: parent
             }
 
-            WaylandCursorItem
-            {
-                id: cursor
-                x: mouseTracker.mouseX
-                y: mouseTracker.mouseY
-                seat: control.compositor.defaultSeat
-                //                visible: mouseTracker.containsMouse
-            }
+//             WaylandCursorItem
+//             {
+//                 id: cursor
+//                 inputEventsEnabled: false
+//                 x: mouseTracker.mouseX
+//                 y: mouseTracker.mouseY
+//                 seat: control.compositor.defaultSeat
+//             }
         }
     }
 

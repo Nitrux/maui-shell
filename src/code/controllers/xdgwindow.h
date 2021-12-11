@@ -13,6 +13,7 @@ class XdgWindow : public AbstractWindow
     Q_OBJECT
     Q_PROPERTY(QWaylandShellSurface *shellSurface READ shellSurface WRITE setShellSurface NOTIFY shellSurfaceChanged)
     Q_PROPERTY(QWaylandXdgToplevel *toplevel READ toplevel WRITE setToplevel NOTIFY toplevelChanged)
+    Q_PROPERTY(QWaylandXdgSurface *xdgSurface READ xdgSurface NOTIFY xdgSurfaceChanged)
 
     QWaylandShellSurface * m_shellSurface;
     QWaylandXdgToplevel *m_toplevel;
@@ -27,10 +28,15 @@ public:
     ~XdgWindow();
     QWaylandShellSurface * shellSurface() const override final;
     QWaylandXdgToplevel *toplevel() const;
+    bool maximized() const override final;
+    bool fullscreen() const override final;
 
 public slots:
     void setShellSurface(QWaylandShellSurface * shellSurface);
     void setToplevel(QWaylandXdgToplevel *toplevel);
+
+    void deactivate();
+    void activate();
     void close() override final;
 
 private:
@@ -51,6 +57,7 @@ public:
     QString appId() const override final;
     QString iconName() const override final;
     QString appName() const override final;
+    QWaylandXdgSurface *xdgSurface() const;
 };
 
 #endif // XDGWINDOW_H

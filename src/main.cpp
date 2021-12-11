@@ -45,6 +45,7 @@
 #include "code/models/zpacesmodel.h"
 #include "code/models/surfacesmodel.h"
 #include "code/controllers/xdgwindow.h"
+#include "code/controllers/waylandcursorgrabber.h"
 
 static QByteArray grefsonExecutablePath;
 static qint64 grefsonPID;
@@ -184,7 +185,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("maui-style");
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
+//    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
     QApplication app(argc, argv);
     //QCoreApplication::setApplicationName("grefsen"); // defaults to name of the executable
@@ -279,6 +280,7 @@ int main(int argc, char *argv[])
     qmlRegisterAnonymousType<AbstractWindow>(ZPACES_URI, 1);
     qmlRegisterType<Zpaces>(ZPACES_URI, 1, 0, "Zpaces");
     qmlRegisterType<XdgWindow>(ZPACES_URI, 1, 0, "XdgWindow");
+    qmlRegisterType<WaylandCursorGrabber>(ZPACES_URI, 1, 0, "WaylandCursorGrabber");
     engine.load(url);
 
 

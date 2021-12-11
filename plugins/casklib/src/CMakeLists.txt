@@ -9,6 +9,7 @@ set(caskplugin_SRCS
     code/stackableitem.cpp
     code/enviroment.cpp
     code/processlauncher.cpp
+    code/controllers/panelsection.cpp
     )
 
 set(caskplugin_HDRS
@@ -17,6 +18,7 @@ set(caskplugin_HDRS
     code/stackableitem.h
     code/enviroment.h
     code/processlauncher.h
+    code/controllers/panelsection.h
     )
 
 set(caskplugin_ASSETS

@@ -17,27 +17,21 @@ Cask.PanelItem
     {
         width: ListView.view.width
 
-        RowLayout
+        Row
         {
-            width: parent.width
-            height: 64
+            ToolButton
+            {
+                icon.name: "system-log-out"
+                onClicked: Qt.quit()
+            }
 
             Repeater
             {
                 model: ["system-reboot", "system-shutdown", "system-lock-screen","webcam", "system-suspend"]
-                delegate:  Item
+                delegate:  ToolButton
                 {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
 
-                    Kirigami.Icon
-                    {
-                        color: Kirigami.Theme.textColor
-                        anchors.centerIn: parent
-                        source: modelData
-                        height: Maui.Style.iconSizes.medium
-                        width: height
-                    }
+                    icon.name: modelData
                 }
             }
         }

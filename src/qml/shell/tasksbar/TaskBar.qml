@@ -142,6 +142,16 @@ T.Control
 //                    }
 
                     _swipeView.currentIndex = model.zpaceIndex
+//                    xdgWindow.minimize()
+
+                    console.log("MINIMIZED?" , xdgWindow.minimized)
+if(!xdgWindow.minimized)
+{
+    xdgWindow.minimize()
+}else
+{
+     xdgWindow.unminimize()
+}
 
 //                    if(toggleMinimize)
 //                    {

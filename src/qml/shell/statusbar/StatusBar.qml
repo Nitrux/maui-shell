@@ -224,22 +224,16 @@ T.Control
                 //                                visible: !isMobile
             }
 
-            AudioPlayerItem
-            {
-                visible: _revealer.checked
-                //                                visible: !isMobile
-                onClicked: _statusSection.open(card.index)
-                //                anchors.verticalCenter: parent.verticalCenter
-
-            }
+            //AudioPlayerItem
+            //{
+                //visible: _revealer.checked
+                //onClicked: _statusSection.open(card.index)
+            //}
 
             SessionItem
             {
-                visible: _revealer.checked
-                onClicked: _statusSection.open(card.index)
+                onClicked: card.visible ? _statusSection.close() : _statusSection.open(card.index)
                 anchors.verticalCenter: parent.verticalCenter
-
-
             }
         }
     }
