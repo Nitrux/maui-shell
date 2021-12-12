@@ -171,10 +171,12 @@ int main(int argc, char *argv[])
 {
     sinceStartup.start();
 
-    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
-        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
+//    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
+//        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
     if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
         qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
+
+
 //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
 //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
@@ -183,15 +185,31 @@ int main(int argc, char *argv[])
 //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
 //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
 
-    QQuickStyle::setStyle("maui-style");
+
+
+
+    // ShareOpenGLContexts is needed for using the threaded renderer
+       // on NVIDIA EGLStreams and multi output compositors in general
+       // (see QTBUG-63039 and QTBUG-87597)
+       QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+
+       // Automatically support HiDPI
+       QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 //    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
-    QApplication app(argc, argv);
-    //QCoreApplication::setApplicationName("grefsen"); // defaults to name of the executable
+    QGuiApplication app(argc, argv);
+    QCoreApplication::setApplicationName("Cask"); // defaults to name of the executable
     QApplication::setOrganizationName("maui");
     QApplication::setApplicationVersion("1.0");
-    //    app.setAttribute(Qt::AA_DisableHighDpiScaling); // better use the env variable... but that's not enough on eglfs
+#ifndef QT_NO_SESSIONMANAGER
+    app.setFallbackSessionManagementEnabled(false);
+#endif
+    app.setQuitOnLastWindowClosed(false);
+
+    QQuickStyle::setStyle("maui-style");
 
     grefsonExecutablePath = app.applicationFilePath().toLocal8Bit();
     grefsonPID = QCoreApplication::applicationPid();
@@ -264,6 +282,7 @@ int main(int argc, char *argv[])
 
 
     qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
+    qputenv("MOZ_ENABLE_WAYLAND", "1");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));

@@ -125,7 +125,15 @@ Cask.StackableItem
             rootChrome.x = 0
             rootChrome.y = 0
 
-            toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
+            if(desktop.formFactor === Cask.Env.Desktop)
+            {
+                toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
+            }else
+            {
+                toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.cask.height-desktop.cask.topPanel.height))
+            }
+
+//            window.activate()
 
         }
 
@@ -380,12 +388,18 @@ Cask.StackableItem
         //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
         function onWidthChanged()
         {
-            resizeSurface(rootChrome.shellSurface)
+            if(desktop.formFactor !== Cask.Env.Desktop)
+            {
+            window.maximize()
+            }
         }
 
         function onHeightChanged()
         {
-            resizeSurface(rootChrome.shellSurface)
+            if(desktop.formFactor !== Cask.Env.Desktop)
+            {
+               window.maximize()
+            }
         }
     }
 
@@ -655,7 +669,7 @@ Cask.StackableItem
 
                              if(width * scale > availableGeometry.width*0.9 && height * scale > availableGeometry.height*0.9)
                              {
-                                 resizeSurface(rootChrome.shellSurface)
+                                 window.maximize()
                                  rootChrome.scale = 1
                                  rootChrome.x =0
                                  rootChrome.y = 0

@@ -232,6 +232,7 @@ Item
             function show()
             {
                 _bottomPanel.y = 0
+                _bottomPanel.forceActiveFocus()
             }
 
             DragHandler

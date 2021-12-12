@@ -116,6 +116,23 @@ int main()
 
  qputenv("QT_QPA_PLATFORM", "eglfs");
 
+ qputenv("QT_QPA_EGLFS_NO_LIBINPUT", "1");
+ qputenv("QT_QPA_EVDEV_KEYBOARD_PARAMETERS", "grab=1");
+ qputenv("QT_QPA_EVDEV_MOUSE_PARAMETERS", "grab=1");
+
+ qputenv("QT_QPA_EGLFS_DISABLE_INPUT", "1");
+ qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+ qputenv("QT_WAYLAND_CLIENT_BUFFER_INTEGRATION", "wayland-egl");
+
+qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
+
+ qputenv("MOZ_ENABLE_WAYLAND", "1");
+
+ qputenv("XCURSOR_THEME", "breeze_cursors");
+ qputenv("XCURSOR_SIZE", "24");
+
+// qputenv("WAYLAND_DISPLAY", );
+
   qputenv("XDG_SESSION_TYPE", "wayland");
   qputenv("XDG_CURRENT_DESKTOP", "Cask");
   qputenv("XDG_CONFIG_DIRS", "/home/camilo/.config/kdedefaults:/etc/xdg");
@@ -129,8 +146,8 @@ int main()
 //  QString command = "/home/camilo/tests/grefsen/grefsen";
   QString command = "cask";
   QStringList args;
- // args   << "-plugin";
-//args << "libinput";
+  args   << "-plugin";
+args << "libinput";
 //       << "--exit-with-session=/usr/bin/cask";
 //  runEnvironmentScripts();
   return runCommandSync(command, args);
