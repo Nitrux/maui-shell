@@ -122,7 +122,7 @@ T.Control
 
             AbstractButton
             {
-
+                focusPolicy: Qt.NoFocus
                 property ZP.XdgWindow xdgWindow : model.window
                 implicitHeight: 48
                 implicitWidth: height
@@ -145,13 +145,20 @@ T.Control
 //                    xdgWindow.minimize()
 
                     console.log("MINIMIZED?" , xdgWindow.minimized)
-if(!xdgWindow.minimized)
-{
-    xdgWindow.minimize()
-}else
-{
-     xdgWindow.unminimize()
-}
+
+                    if(xdgWindow.toplevel.activated)
+                    {
+                        if(!xdgWindow.minimized)
+                        {
+                            xdgWindow.minimize()
+                        }else
+                        {
+                            xdgWindow.unminimize()
+                        }
+                    }else
+                    {
+                        xdgWindow.unminimize()//also activates it
+                    }
 
 //                    if(toggleMinimize)
 //                    {
@@ -174,7 +181,7 @@ if(!xdgWindow.minimized)
                         width: parent.width
                         height: 2
                         anchors.bottom: parent.bottom
-//                        visible: model.window.
+                        visible: xdgWindow.toplevel.activated
                         color: Kirigami.Theme.highlightColor
                     }
                 }

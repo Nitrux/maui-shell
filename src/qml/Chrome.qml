@@ -153,7 +153,6 @@ Cask.StackableItem
             if (target.activated)
             {
                 receivedFocusAnimation.start();
-                //                 surfaceItem.forceActiveFocus()
             }
         }
 
@@ -437,6 +436,9 @@ Cask.StackableItem
             NumberAnimation { target: scaleTransform; property: "yScale"; to: 1; duration: 100; easing.type: Easing.InOutQuad }
             NumberAnimation { target: scaleTransform; property: "xScale"; to: 1; duration: 100; easing.type: Easing.InOutQuad }
         }
+
+        ScriptAction { script: { surfaceItem.forceActiveFocus()  } }
+
     }
 
     transform: [

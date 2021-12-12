@@ -129,7 +129,8 @@ int main()
 //  QString command = "/home/camilo/tests/grefsen/grefsen";
   QString command = "cask";
   QStringList args;
-//  args   << "-plugin libinput";
+ // args   << "-plugin";
+//args << "libinput";
 //       << "--exit-with-session=/usr/bin/cask";
 //  runEnvironmentScripts();
   return runCommandSync(command, args);
