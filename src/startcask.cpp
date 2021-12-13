@@ -161,10 +161,10 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
   qputenv("XDG_SEAT_PATH", "/org/freedesktop/DisplayManager/Seat0");
   qputenv("XDG_SESSION_PATH", "/org/freedesktop/DisplayManager/Session0");
 
-//  qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
-  qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
-    qunsetenv("QT_SCALE_FACTOR");
-    qunsetenv("QT_SCREEN_SCALE_FACTORS");
+  qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
+//  qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "2"); //if it is mobile., how to calculate this value based on dpi?
+//    qunsetenv("QT_SCALE_FACTOR");
+//    qunsetenv("QT_SCREEN_SCALE_FACTORS");
 
   qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
 

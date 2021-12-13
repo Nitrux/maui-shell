@@ -171,34 +171,34 @@ int main(int argc, char *argv[])
 {
     sinceStartup.start();
 
-//    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
-//        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
+    //    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
+    //        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
     if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
         qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
 
 
-//    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
-//        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+    //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
+    //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
         qputenv("QT_QPA_PLATFORMTHEME", "generic");
 
-//        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
-//    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
+    //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
+    //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
 
 
 
 
     // ShareOpenGLContexts is needed for using the threaded renderer
-       // on NVIDIA EGLStreams and multi output compositors in general
-       // (see QTBUG-63039 and QTBUG-87597)
-       QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    // on NVIDIA EGLStreams and multi output compositors in general
+    // (see QTBUG-63039 and QTBUG-87597)
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
-       // Automatically support HiDPI
-       QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    // Automatically support HiDPI
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
 
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-//    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
+    //    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
     QGuiApplication app(argc, argv);
     QCoreApplication::setApplicationName("Cask"); // defaults to name of the executable
@@ -217,72 +217,78 @@ int main(int argc, char *argv[])
 
     QList<QScreen *> screens = QGuiApplication::screens();
 
-        QCommandLineParser parser;
-        parser.setApplicationDescription("Grefsen Qt/Wayland compositor");
-        parser.addHelpOption();
-        parser.addVersionOption();
+    for(const auto &screen : screens)
+    {
+        qWarning() << screen->devicePixelRatio() << screen->logicalDotsPerInch()<< screen->physicalDotsPerInch() << screen->availableGeometry() << screen->availableSize() <<screen->availableVirtualSize();
+    }
 
-        QCommandLineOption respawnOption(QStringList() << "r" << "respawn",
-                                         QCoreApplication::translate("main", "respawn grefsen after a crash"));
-        parser.addOption(respawnOption);
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Cask Qt/Wayland compositor");
+    parser.addHelpOption();
+    parser.addVersionOption();
 
-        QCommandLineOption logFileOption(QStringList() << "l" << "log",
-                                         QCoreApplication::translate("main", "redirect all debug/warning/error output to a log file"),
-                                         QCoreApplication::translate("main", "file path"));
-        parser.addOption(logFileOption);
+    QCommandLineOption respawnOption(QStringList() << "r" << "respawn",
+                                     QCoreApplication::translate("main", "respawn grefsen after a crash"));
+    parser.addOption(respawnOption);
 
-        QCommandLineOption configDirOption(QStringList() << "c" << "config",
-                                           QCoreApplication::translate("main", "load config files from the given directory (default is ~/.config/grefsen)"),
-                                           QCoreApplication::translate("main", "directory path"));
-        parser.addOption(configDirOption);
+    QCommandLineOption logFileOption(QStringList() << "l" << "log",
+                                     QCoreApplication::translate("main", "redirect all debug/warning/error output to a log file"),
+                                     QCoreApplication::translate("main", "file path"));
+    parser.addOption(logFileOption);
 
-        QCommandLineOption screenOption(QStringList() << "s" << "screen",
-                                        QCoreApplication::translate("main", "send output to the given screen"),
-                                        QCoreApplication::translate("main", "screen"));
-        parser.addOption(screenOption);
+    QCommandLineOption configDirOption(QStringList() << "c" << "config",
+                                       QCoreApplication::translate("main", "load config files from the given directory (default is ~/.config/grefsen)"),
+                                       QCoreApplication::translate("main", "directory path"));
+    parser.addOption(configDirOption);
 
-        QCommandLineOption windowOption(QStringList() << "w" << "window",
-                                        QCoreApplication::translate("main", "run in a window rather than fullscreen"));
-        parser.addOption(windowOption);
+    QCommandLineOption screenOption(QStringList() << "s" << "screen",
+                                    QCoreApplication::translate("main", "send output to the given screen"),
+                                    QCoreApplication::translate("main", "screen"));
+    parser.addOption(screenOption);
 
-        parser.process(app);
-        if (parser.isSet(respawnOption))
-            setupSignalHandler();
-        if (parser.isSet(configDirOption))
-            grefsenConfigDirPath = parser.value(configDirOption);
-        if (parser.isSet(logFileOption)) {
-            logFilePath = parser.value(logFileOption);
-            qInstallMessageHandler(qtMsgLog);
-        }
-        if (parser.isSet(screenOption)) {
-            QStringList scrNames = parser.values(screenOption);
-            QList<QScreen *> keepers;
+    QCommandLineOption windowOption(QStringList() << "w" << "window",
+                                    QCoreApplication::translate("main", "run in a window rather than fullscreen"));
+    parser.addOption(windowOption);
+
+    parser.process(app);
+    if (parser.isSet(respawnOption))
+        setupSignalHandler();
+    if (parser.isSet(configDirOption))
+        grefsenConfigDirPath = parser.value(configDirOption);
+    if (parser.isSet(logFileOption)) {
+        logFilePath = parser.value(logFileOption);
+        qInstallMessageHandler(qtMsgLog);
+    }
+    if (parser.isSet(screenOption))
+    {
+        QStringList scrNames = parser.values(screenOption);
+        QList<QScreen *> keepers;
+        foreach (QScreen *scr, screens)
+            if (scrNames.contains(scr->name(), Qt::CaseInsensitive))
+                keepers << scr;
+        if (keepers.isEmpty()) {
+            qWarning() << "None of the screens" << scrNames << "exist; available screens:";
             foreach (QScreen *scr, screens)
-                if (scrNames.contains(scr->name(), Qt::CaseInsensitive))
-                    keepers << scr;
-            if (keepers.isEmpty()) {
-                qWarning() << "None of the screens" << scrNames << "exist; available screens:";
-                foreach (QScreen *scr, screens)
-                    qWarning() << "   " << scr->name() << scr->geometry();
-                return -1;
-            }
-            screens = keepers;
+                qWarning() << "   " << scr->name() << scr->geometry();
+            return -1;
         }
-        if (parser.isSet(windowOption))
-            windowed = true;
+        screens = keepers;
+    }
+    if (parser.isSet(windowOption))
+        windowed = true;
 
-        qreal dpr = highestDPR(screens);
-        if (!qEnvironmentVariableIsSet("XCURSOR_SIZE")) {
-            // QTBUG-67579: we can't have different cursor sizes on different screens
-            // or different windows yet, but we can override globally
-            int cursorSize = int(32 * dpr);
-            qDebug() << "highest DPR" << dpr << "-> cursor size" << cursorSize;
-            qputenv("XCURSOR_SIZE", QByteArray::number(cursorSize));
-        }
+    qreal dpr = highestDPR(screens);
+    if (!qEnvironmentVariableIsSet("XCURSOR_SIZE")) {
+        // QTBUG-67579: we can't have different cursor sizes on different screens
+        // or different windows yet, but we can override globally
+        int cursorSize = int(32 * dpr);
+        qDebug() << "highest DPR" << dpr << "-> cursor size" << cursorSize;
+        qputenv("XCURSOR_SIZE", QByteArray::number(cursorSize));
+    }
 
 
-        qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
-        qputenv("GDK_BACKEND", "wayland"); // not for grefsen but for child processes
+    qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
+    qputenv("GDK_BACKEND", "wayland"); // not for grefsen but for child processes
     qputenv("MOZ_ENABLE_WAYLAND", "1");
 
     QQmlApplicationEngine engine;
