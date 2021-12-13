@@ -281,7 +281,8 @@ int main(int argc, char *argv[])
         }
 
 
-    qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
+        qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
+        qputenv("GDK_BACKEND", "wayland"); // not for grefsen but for child processes
     qputenv("MOZ_ENABLE_WAYLAND", "1");
 
     QQmlApplicationEngine engine;
