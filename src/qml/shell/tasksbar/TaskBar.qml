@@ -24,7 +24,7 @@ T.Control
     implicitHeight: 64
     padding: Maui.Style.space.small
 
-    property alias launcher : _launcherItem
+//    property alias launcher : _launcherItem
 
     ListModel {id: _tasksModel}
 
@@ -35,28 +35,18 @@ T.Control
         radius: 10
     }
 
-    contentItem: Cask.PanelSection
+    contentItem: Row
     {
         id: _section
 
-        position: ToolBar.Footer
-        Layout.fillHeight: true
-        //    Layout.fillWidth: false
-
-        //    Layout.preferredWidth: 400
-        //    Layout.maximumWidth: _cask.avaliableWidth
-        //    backgroundColor: "transparent"
         spacing: Maui.Style.space.medium
-        alignment: Qt.AlignCenter
 
-        popWidth: 800
 
         LauncherPanelItem
         {
             id: _launcherItem
             height: parent.height
-
-            onClicked: toggleLauncherPopup()
+            onClicked: _launcher.toggle()
         }
 
         Cask.PanelItem
@@ -90,8 +80,8 @@ T.Control
             }
 
             //            visible: !isMobile
-            checked: overView
-            onClicked: overView = true
+            checked: _appsOverview.opened
+            onClicked: _appsOverview.toggle()
         }
 
         //    ListModel {id: _runninTasksModel}
@@ -196,10 +186,5 @@ T.Control
             //    }
         }
 
-    }
-
-    function closeCard()
-    {
-        _section.close()
     }
 }

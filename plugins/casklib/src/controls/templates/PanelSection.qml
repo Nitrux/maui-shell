@@ -23,9 +23,10 @@ T.Control
     property alias popHeight : popup.height
     property alias alignment: popup.alignment
 
+    property rect availableGeometry
+
     spacing:  Maui.Style.space.medium
 
-    property int position
     property int currentCard : -1
 
     padding: 0
@@ -54,7 +55,7 @@ T.Control
         id: popup
         property int alignment: Qt.AlignCenter
         z: _content.z -1
-        position: control.position
+
         Label
         {
             color: "orange"
@@ -70,14 +71,15 @@ T.Control
         //        }
 
         visible: handler.active || opened
-        opacity: control.position === ToolBar.Footer ? (y/finalYPos)  : Math.abs((y+height)/(0-(height)))
+        opacity: Math.abs((y+height)/(0-(height)))
 
 
 
         Binding on y
         {
             //            when: !handler.active
-            value: handler.active ? (handler.centroid.position.y -(control.position === ToolBar.Footer ? 0 : popup.height) ) : (popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height)
+            value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
+
             restoreMode: Binding.RestoreBindingOrValue
         }
 
@@ -113,10 +115,10 @@ T.Control
 
         }
 
-        readonly property int finalYPos : control.position === ToolBar.Footer ? 0 - (popup.height) : control.height + Maui.Style.space.medium
+        readonly property int finalYPos : availableGeometry.y + Maui.Style.space.medium
 
-        height: Math.min (_cask.avaliableHeight, popup.implicitHeight) + _cask.topPanel.implicitHeight
-        width: isMobile ? _cask.width : Math.min(control.popWidth, _cask.width)
+        height: Math.min (availableGeometry.height, popup.implicitHeight)
+        width: isMobile ? availableGeometry.width : Math.min(control.popWidth, availableGeometry.width)
 
         function close()
         {
@@ -127,7 +129,7 @@ T.Control
         function open()
         {
             popup.opened = true
-            popup.y= popup.opened ? popup.finalYPos : control.position === ToolBar.Footer ? 0 : 0-popup.height
+//            popup.y= popup.opened ? popup.finalYPos : 0-popup.height
             popup.forceActiveFocus()
             //            popup.opened()
         }
@@ -138,14 +140,13 @@ T.Control
             dragThreshold: 100
             enabled: popup.opened && Maui.Handy.isTouch
             target: popup
-            yAxis.minimum: control.position === ToolBar.Footer  ? popup.finalYPos : undefined
-            yAxis.maximum: control.position === ToolBar.Footer  ? undefined : popup.finalYPos
+            yAxis.maximum: popup.finalYPos
 
             xAxis.enabled : false
             grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
             onActiveChanged:
             {
-                const condition = control.position === ToolBar.Footer ? (handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y > 200) : (handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y < -200)
+                const condition = (handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y < -200)
                 if(!active && condition)
                 {
                     control.close()
@@ -160,11 +161,11 @@ T.Control
     DragHandler
     {
         id: handler
-        dragThreshold: control.position === ToolBar.Footer ? 64 : 20
-        enabled: !popup.opened && Maui.Handy.isTouch
+        dragThreshold: 20
+        enabled: !popup.opened
         target: null
-        yAxis.minimum: control.position === ToolBar.Footer ? popup.finalYPos - 10 : 0
-        yAxis.maximum: control.position === ToolBar.Footer  ? 0 : popup.finalYPos + 10
+        yAxis.minimum: 0
+        yAxis.maximum: popup.finalYPos + 10
         xAxis.enabled : false
         grabPermissions: PointerHandler.CanTakeOverFromAnything
         onActiveChanged:

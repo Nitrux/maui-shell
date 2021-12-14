@@ -34,39 +34,4 @@ Cask.PanelItem
             anchors.centerIn: parent
         }
     }
-
-    card: Cask.PanelCard
-    {
-        width: ListView.view.width
-        implicitHeight: win.formFactor !== Cask.Env.Desktop ? _cask.avaliableHeight : Math.min(_cask.avaliableHeight, 800)
-        background: Item{}
-        padding: 0
-
-        onOpened:
-        {
-console.log("CARD OPENED")
-                _launcherGrid.forceActiveFocus()
-
-        }
-
-        Launcher
-        {
-            id: _launcherGrid
-            height: parent.height
-            width: Math.min(800, parent.width)
-
-            //           scale: parent.opacity
-        }
-    }
-
-    function toggleLauncherPopup()
-    {
-        if(_section.popup.opened)
-            _section.close()
-        else
-        {
-            _section.open(card.index)
-            forceActiveFocus()
-        }
-    }
 }

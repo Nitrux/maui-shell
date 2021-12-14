@@ -126,10 +126,7 @@ int main()
 
 qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
 
- qputenv("MOZ_ENABLE_WAYLAND", "1");
 
- qputenv("XCURSOR_THEME", "breeze_cursors");
- qputenv("XCURSOR_SIZE", "24");
 
 // qputenv("WAYLAND_DISPLAY", );
 
@@ -161,12 +158,16 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
   qputenv("XDG_SEAT_PATH", "/org/freedesktop/DisplayManager/Seat0");
   qputenv("XDG_SESSION_PATH", "/org/freedesktop/DisplayManager/Session0");
 
-  qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
-//  qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "2"); //if it is mobile., how to calculate this value based on dpi?
+  qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
+//  qputenv("QT_SCALE_FACTOR", "2"); //if it is mobile., how to calculate this value based on dpi?
 //    qunsetenv("QT_SCALE_FACTOR");
 //    qunsetenv("QT_SCREEN_SCALE_FACTORS");
 
+  //style releated
+  qputenv("QT_QPA_PLATFORMTHEME", "breeze");
   qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+  qputenv("XCURSOR_THEME", "breeze_cursors");
+  qputenv("XCURSOR_SIZE", "24");
 
 //  QString command = "/home/camilo/tests/grefsen/grefsen";
   QString command = "cask";

@@ -22,8 +22,6 @@ Item
     property alias contentChildren : _cards.contentChildren
     property alias padding : _cards.padding
 
-    property int position
-
     signal overlayClicked()
 //    signal opened()
     signal closed()
@@ -37,27 +35,10 @@ Item
         id:_overlay
         opacity:  control.opacity
 
-        visible: control.opacity > 0
+        visible: control.visible
         anchors.fill: parent
+        parent: _cask.overlayTopPanel;
 
-        states: [
-            State {
-                when: control.position === ToolBar.Header
-                ParentChange
-                {
-                    target: _overlay;
-                    parent: _cask.overlayTopPanel ;
-                }
-            },
-
-            State {
-                when: control.position === ToolBar.Footer
-                ParentChange
-                {
-                    target: _overlay; parent: _cask.overlayBottomPanel; x: 10; y: 10
-                }
-            }
-        ]
 
         Item
         {
@@ -129,7 +110,7 @@ Item
         contentItem: ListView
         {
             id: _cardsList
-            spacing: Maui.Style.space.medium
+            spacing: currentCard === -1  ? Maui.Style.space.medium : 0
             model: _cards.contentModel
             orientation: ListView.Vertical
             snapMode: ListView.NoSnap

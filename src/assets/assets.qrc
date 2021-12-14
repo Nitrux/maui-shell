@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>calamares_wallpaper.jpg</file>
+        <file>waves-wallpaper-bigsur1.png</file>
     </qresource>
 </RCC>

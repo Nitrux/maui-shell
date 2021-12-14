@@ -27,5 +27,9 @@
         <file>qml/shell/statusbar/items/toggles/sections/network/ConnectionDelegate.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/bluetooth/BluetoothPage.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/bluetooth/ConnectionDelegate.qml</file>
+        <file>qml/shell/zpaces/WorkZpaceSwitcher.qml</file>
+        <file>qml/shell/zpaces/WorkZpace.qml</file>
+        <file>qml/shell/zpaces/Zpace.qml</file>
+        <file>qml/shell/tasksbar/Dock.qml</file>
     </qresource>
 </RCC>

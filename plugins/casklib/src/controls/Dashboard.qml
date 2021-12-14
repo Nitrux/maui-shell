@@ -11,20 +11,23 @@ Item
 {
     id: control
     default property alias content: _content.data
+    property alias overlayContent : _overlayContent.data
 
-    readonly property alias avaliableHeight : _content.height
-    readonly property alias avaliableWidth : _content.width
+    readonly property int avaliableHeight : _content.height-_topPanelContainer.height
+    readonly property int avaliableWidth : _content.width
+
+    readonly property rect availableGeometry : Qt.rect(0, _topPanelContainer.height, avaliableWidth, avaliableHeight)
+
     readonly property alias contentY: _content.y
     readonly property alias surface : _content
 
     property alias background : _rec
     property alias overlayTopPanel : _overlayTopPanel
-    property alias overlayBottomPanel : _overlayBottomPanel
+    property alias overlay : _overlay
     property alias backgroundColor : _rec.color
     property alias backgroundImage: _img.source
 
     property alias topPanel: _topPanel
-    property alias bottomPanel: _bottomPanel
 
     readonly property bool rise : _dropArea.containsDrag
 
@@ -39,7 +42,6 @@ Item
             id: _bg
             anchors.fill: parent
             anchors.margins:  control.rise ? Maui.Style.space.large * 2 : 0
-
             Image
             {
                 id: _img
@@ -115,29 +117,7 @@ Item
     }
 
 
-    Item
-    {
-        id: _topPanelContainer
-        z: _content.z+2
-        //            color: "yellow"
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: _topPanel.visible ? _topPanel.implicitHeight : 0
-        Cask.Panel
-        {
-            id: _topPanel
-            anchors.fill: parent
-        }
-    }
 
-    Item
-    {
-        id: _container
-        anchors.top: _topPanelContainer.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: _bottomPanelContainer.top
 
         Item
         {
@@ -145,147 +125,46 @@ Item
             anchors.fill: parent
         }
 
-        //            TapHandler
-        //            {
-        //                grabPermissions: PointerHandler.CanTakeOverFromAnything
-        //                gesturePolicy: TapHandler.ReleaseWithinBounds | TapHandler.WithinBounds
-        //                onTapped:
-        //                {
-        //                    console.log("Dekstop tapped")
-        //                    control.desktopPressed()
-        //                }
-        //            }
 
-        //            MouseArea
-        //            {
-        //                anchors.fill: parent
-        //                onPressed:
-        //                {
-        //                    control.desktopPressed()
-        //                    mouse.accepted = false
-        //                }
-        //            }
+    Item
+    {
+        id: _overlay
+        anchors.fill: parent
+    }
 
 
+
+    Item
+    {
+        id: _overlayContent
+        anchors.fill: parent
     }
 
     Item
     {
         id: _overlayTopPanel
-        z: _content.z+1
+//        z: _content.z+1
         anchors.fill: parent
     }
 
-    Item
-    {
-        id: _overlayBottomPanel
-        z: _topPanel.z+2
-        anchors.fill: parent
-    }
+
 
     Item
     {
-        id: _bottomPanelContainer
-        z: _overlayBottomPanel.z+2
-
+        id: _topPanelContainer
+        //            color: "yellow"
+        anchors.top: parent.top
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
         anchors.right: parent.right
-        height: _bottomPanel.visible ? _bottomPanel.implicitHeight : 0
+        height: _topPanel.visible ? _topPanel.implicitHeight : 0
+//        color : "purple"
 
         Cask.Panel
         {
-            id: _bottomPanel
-            focus: true
-            readonly property int hidden : y === height
-            property bool autohide: false
-            //            y: _dockHoverHandler.hovered ? 0 : height
-
-            height: parent.height
-            width: parent.width
-
-            Behavior on y
-            {
-                NumberAnimation
-                {
-                    duration: 140
-                    easing.type: Easing.OutBounce
-                }
-            }
-
-            function toggle()
-            {
-                if(_bottomPanel.hidden)
-                {
-                    show()
-                }else
-                {
-                    hide()
-                }
-            }
-
-            function hide()
-            {
-                _bottomPanel.y = height
-            }
-
-            function show()
-            {
-                _bottomPanel.y = 0
-                _bottomPanel.forceActiveFocus()
-            }
-
-            DragHandler
-            {
-                id: handler
-                //            dragThreshold: 100
-                //            enabled: _bottomPanel.hidden
-                target: _bottomPanel
-                margin: 20
-                yAxis.minimum: 0
-                yAxis.maximum: _bottomPanel.height
-                xAxis.enabled : false
-    //            grabPermissions: PointerHandler.CanTakeOverFromAnything | PointerHandler.ApprovesTakeOverByHandlersOfSameType
-                onActiveChanged:
-                {
-                    if(!active && handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y > 60)
-                    {
-                        _bottomPanel.show()
-                    }else
-                    {
-                        _bottomPanel.hide()
-                    }
-                }
-            }
-        }
-
-        Timer
-        {
-            id: _dockRevealTimer
-            interval: 800
-
-            //            triggeredOnStart: true
-            onTriggered:
-            {
-                if(_bottomPanel.hidden)
-                {
-                    _bottomPanel.show()
-                }
-            }
-        }
-
-        HoverHandler
-        {
-            id: _dockHoverHandler
-            enabled: !handler.active && _bottomPanel.hidden
-            acceptedPointerTypes: PointerDevice.GenericPointer
-            onHoveredChanged:
-            {
-                _dockRevealTimer.restart()
-            }
+            id: _topPanel
+            anchors.fill: parent
         }
     }
-
 
     Component.onDestruction:
     {

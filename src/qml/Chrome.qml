@@ -32,8 +32,10 @@ Cask.StackableItem
 {
     id: rootChrome
 
-    readonly property bool intersects : toplevel ? y+height > availableGeometry.height && activated : false
+    readonly property bool intersects : toplevel ? (y+height > _zpaceContainer.height+20 || formFactor !== Cask.Env.Desktop) && activated : false
     property alias shellSurface: surfaceItem.shellSurface
+
+    property bool overviewMode : false
 
     property ZP.XdgWindow window
     property XdgSurface xdgSurface: window.xdgSurface
@@ -54,7 +56,7 @@ Cask.StackableItem
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
     property alias destroyAnimation : destroyAnimationImpl
 
-    property int marginWidth : surfaceItem.isFullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
+    property int marginWidth : window.fullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
     //    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
 
     property int titlebarHeight : decorationVisible ? 36 : 0
@@ -74,9 +76,9 @@ Cask.StackableItem
     onIntersectsChanged:
     {
         if(intersects)
-            _cask.bottomPanel.hide()
+            dock.hide()
         else
-            _cask.bottomPanel.show()
+            dock.show()
     }
 
     property rect oldPos
@@ -125,15 +127,11 @@ Cask.StackableItem
             rootChrome.x = 0
             rootChrome.y = 0
 
-            if(desktop.formFactor === Cask.Env.Desktop)
-            {
-                toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.availableGeometry.height - titleBar.height))
-            }else
-            {
-                toplevel.sendMaximized(Qt.size(desktop.availableGeometry.width, desktop.cask.height-desktop.cask.topPanel.height))
-            }
 
-//            window.activate()
+            toplevel.sendMaximized(Qt.size(_zpaceContainer.width, _zpaceContainer.height - titleBar.height))
+
+
+            //            window.activate()
 
         }
 
@@ -234,17 +232,20 @@ Cask.StackableItem
                 }
             }
 
-            HoverHandler {
+            HoverHandler
+            {
                 cursorShape: Qt.OpenHandCursor
             }
 
-            TapHandler {
+            TapHandler
+            {
                 acceptedButtons: Qt.LeftButton
                 gesturePolicy: TapHandler.DragThreshold
                 onTapped: rootChrome.raise()
             }
 
-            TapHandler {
+            TapHandler
+            {
                 acceptedButtons: Qt.MiddleButton
                 gesturePolicy: TapHandler.DragThreshold
                 onTapped: rootChrome.lower()
@@ -382,7 +383,7 @@ Cask.StackableItem
 
     Connections
     {
-        target: control.surfaceArea
+        target: _zpaceContainer
         ignoreUnknownSignals: true
         enabled: win.formFactor !== Cask.Env.Desktop
         //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
@@ -390,7 +391,7 @@ Cask.StackableItem
         {
             if(desktop.formFactor !== Cask.Env.Desktop)
             {
-            window.maximize()
+                window.maximize()
             }
         }
 
@@ -398,7 +399,7 @@ Cask.StackableItem
         {
             if(desktop.formFactor !== Cask.Env.Desktop)
             {
-               window.maximize()
+                window.maximize()
             }
         }
     }
@@ -482,16 +483,15 @@ Cask.StackableItem
         property bool valid: false
         property bool isPopup: false
         property bool isTransient: false
-        property bool isFullscreen: true
 
         y: titlebarHeight
         sizeFollowsSurface: false
         opacity: moving || pinch4.activeScale <= 0.5 ? 0.5 : 1.0
-        inputEventsEnabled: true
+        inputEventsEnabled: !rootChrome.overviewMode
         touchEventsEnabled: !pinch3.active && !pinch4.active
         //        paintEnabled: visible
 
-        focusOnClick:  !altDragHandler.active
+        focusOnClick:  !altDragHandler.active && !rootChrome.overviewMode
         autoCreatePopupItems: true
 
         onActiveFocusChanged:
@@ -694,6 +694,18 @@ Cask.StackableItem
                              rootChrome.x = pinch4.centroid.scenePosition.x -(size.width/2)
                              rootChrome.y = pinch4.centroid.scenePosition.y-(size.height/2)
                          }
+    }
+
+    DragHandler
+    {
+        enabled: rootChrome.overviewMode
+        xAxis.enabled: true
+        onActiveChanged:
+        {
+            if(!active && (target.y * -1) > 100)
+                window.close()
+            else target.y = 0
+        }
     }
 
     Rectangle {

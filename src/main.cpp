@@ -179,13 +179,9 @@ int main(int argc, char *argv[])
 
     //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
     //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
-    if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
-        qputenv("QT_QPA_PLATFORMTHEME", "generic");
 
     //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
     //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
-
-
 
 
     // ShareOpenGLContexts is needed for using the threaded renderer

@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.15
+
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
@@ -10,6 +10,13 @@ Maui.Page
 {
     id: control
     focus: true
+
+    opacity:  (y/finalYPos)
+
+    readonly property int finalYPos :  0 - (control.height)
+
+    property bool opened : false
+
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     property alias searchBar : _searchBar
@@ -25,7 +32,11 @@ Maui.Page
         placeholderText: qsTr("Search for apps and files...")
         onAccepted: _launcherGrid.model.filter = text
         onCleared: _launcherGrid.model.filter = ""
-
+        onTextChanged:
+        {
+            if(_swipeView.currentIndex === 0)
+                _swipeView.currentIndex = 1
+        }
     }
 
     Cask.ProcessLauncher
@@ -33,10 +44,10 @@ Maui.Page
         id: launcher
     }
 
-    background:  Rectangle
+    background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor
-        opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.8
+        opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.95
         radius: 10
     }
 
@@ -47,6 +58,7 @@ Maui.Page
         anchors.bottomMargin: pageIndicator.height
         background: null
         clip: true
+
         Maui.GridView
         {
             id: _categoriesGridView
@@ -172,7 +184,7 @@ Maui.Page
                     {
                         console.log(model.executable)
                         launcher.launch(model.executable)
-                        closeCard()
+                        control.close()
                     }
                 }
             }
@@ -195,10 +207,56 @@ Maui.Page
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    //    function forceActiveFocus()
-    //    {
-    //        _gridView.forceActiveFocus()
-    //    }
+
+    DragHandler
+    {
+        id: handler3
+        target: control
+        dragThreshold: 60
+        enabled: control.opened
+        yAxis.minimum: control.finalYPos
+
+        xAxis.enabled : false
+        grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
+
+        onActiveChanged:
+        {
+            const condition = (handler3.centroid.scenePosition.y - handler3.centroid.scenePressPosition.y > 200)
+            if(!active && condition)
+            {
+                control.close()
+            }else
+            {
+                control.open()
+            }
+        }
+    }
+
+    function forceActiveFocus()
+    {
+        _searchBar.forceActiveFocus()
+    }
+
+    function close()
+    {
+        _launcher.opened = false
+        dock.forceActiveFocus()
+    }
+
+    function open()
+    {
+        _launcher.opened = true
+        _launcher.y = _launcher.finalYPos
+        _launcher.forceActiveFocus()
+    }
+
+    function toggle()
+    {
+        if(_launcher.opened)
+            _launcher.close()
+        else
+            _launcher.open()
+    }
 }
 
 

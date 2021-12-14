@@ -150,8 +150,8 @@ T.Control
 
             Layout.fillWidth: true
             //            Layout.fillHeight: true
+            availableGeometry : desktop.availableGeometry
 
-            position : ToolBar.Header
             popWidth: 320
             alignment: Qt.AlignLeft
             //            background: Rectangle
@@ -179,8 +179,8 @@ T.Control
             Layout.alignment: Qt.AlignRight
             //            Layout.fillHeight: true
 
-            position : ToolBar.Header
             alignment: Qt.AlignRight
+            availableGeometry : desktop.availableGeometry
 
             popWidth: 340
             //            background: Rectangle
