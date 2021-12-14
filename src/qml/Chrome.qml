@@ -52,7 +52,7 @@ Cask.StackableItem
 
 
     property alias moveItem: surfaceItem.moveItem
-    property bool decorationVisible: win.formFactor === Cask.Env.Desktop && toplevel.decorationMode === XdgToplevel.ServerSideDecoration
+    readonly property bool decorationVisible: win.formFactor === Cask.Env.Desktop && toplevel.decorationMode === XdgToplevel.ServerSideDecoration
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
     property alias destroyAnimation : destroyAnimationImpl
 
@@ -192,7 +192,6 @@ Cask.StackableItem
         radius: window.maximized ? 0 : Maui.Style.radiusV
         border.color: window.maximized ? "transparent" : (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
         color: Kirigami.Theme.backgroundColor
-        visible: decorationVisible
 
         TapHandler
         {
@@ -207,7 +206,7 @@ Cask.StackableItem
             anchors.right: parent.right
             anchors.leftMargin: Maui.Style.space.medium
             anchors.rightMargin: Maui.Style.space.medium
-            height: titlebarHeight - marginWidth
+            height: titlebarHeight
             visible: !surfaceItem.isPopup
 
             DragHandler

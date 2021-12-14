@@ -64,7 +64,7 @@ Item
 
             Rectangle
             {
-                opacity: Math.min(0.7, control.opacity)
+                opacity: Math.min(win.formFactor !== Cask.Env.Desktop ? 0.95 : 0.7, control.opacity)
 
                 anchors.fill: parent
                 Kirigami.Theme.inherit: false

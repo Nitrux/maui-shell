@@ -134,21 +134,11 @@ WaylandCompositor
 
 
         console.log("QML TOPLEVEL TYPE", shellSurface.title)
-
-        desktop.workspaces.currentIndex = desktop.zpaces.addWindow(desktop.zpaces.createXdgWindow(shellSurface, toplevel));
-        resizeSurface(shellSurface)
-
-//        _zpaces.addSurface(shellSurface);
-//        _listSurfaces.append({shellSurface: shellSurface})
-        //        desktop.swipeView.currentIndex = _listSurfaces.count-1
-        //        desktop.showDesktop = false
-    }
-
-    function resizeSurface(surface)
-    {
+let window = desktop.zpaces.createXdgWindow(shellSurface, toplevel)
+        desktop.workspaces.currentIndex = desktop.zpaces.addWindow(window);
         if(desktop.formFactor !== Cask.Env.Desktop)
         {
-            surface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, desktop.cask.height-desktop.cask.topPanel.height), [1,3,4])
+        window.maximize()
         }
     }
 }

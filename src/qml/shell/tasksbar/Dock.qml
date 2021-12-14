@@ -21,7 +21,7 @@ Item
         visible: _launcher.visible
         parent: _cask.overlay
         //        z: control.z+2
-        opacity: Math.min(0.7, _launcher.opacity)
+        opacity: Math.min(formFactor !== Cask.Env.Desktop ? 0.95 : 0.7, _launcher.opacity)
 
         anchors.fill: parent
         color: _launcher.Kirigami.Theme.backgroundColor
