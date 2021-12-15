@@ -52,25 +52,28 @@ Cask.StackableItem
 
 
     property alias moveItem: surfaceItem.moveItem
+
     readonly property bool decorationVisible: win.formFactor === Cask.Env.Desktop && toplevel.decorationMode === XdgToplevel.ServerSideDecoration
+
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
     property alias destroyAnimation : destroyAnimationImpl
 
     property int marginWidth : window.fullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
     //    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
 
-    property int titlebarHeight : decorationVisible ? 36 : 0
+   readonly property int titlebarHeight : decorationVisible ? 36 : 0
     property string screenName: ""
 
     property real resizeAreaWidth: 12
 
-    property rect previousRect: Qt.rect(0,0,0,0)
+    property rect previousRect
 
-    x: surfaceItem.moveItem.x
-    y: surfaceItem.moveItem.y
+   x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
+   y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
+
     visible: surfaceItem.valid && surfaceItem.paintEnabled
 
     onIntersectsChanged:
@@ -81,7 +84,7 @@ Cask.StackableItem
             dock.show()
     }
 
-    property rect oldPos
+    property rect oldPos : Qt.rect(0, 0, rootChrome.width * 0.6, rootChrome.height*0.6)
 
     function performActiveWindowAction(type)
     {
@@ -119,6 +122,8 @@ Cask.StackableItem
 
         function onSetMaximized()
         {
+            console.log("SET MAX", toplevel.maximized, oldPos)
+
             oldPos.x = rootChrome.x
             oldPos.y = rootChrome.y
             oldPos.width = rootChrome.width
@@ -128,7 +133,7 @@ Cask.StackableItem
             rootChrome.y = 0
 
 
-            toplevel.sendMaximized(Qt.size(_zpaceContainer.width, _zpaceContainer.height - titleBar.height))
+            toplevel.sendMaximized(Qt.size(_zpaceContainer.width, _zpaceContainer.height - titlebarHeight))
 
 
             //            window.activate()
@@ -137,6 +142,12 @@ Cask.StackableItem
 
         function onUnsetMaximized()
         {
+            console.log("SET UNMAX", toplevel.maximized, oldPos)
+            if(oldPos.width === -1)
+            {
+               oldPos = Qt.rect(0, 0, rootChrome.width * 0.6, rootChrome.height*0.6)
+            }
+
             rootChrome.x = oldPos.x
             rootChrome.y = oldPos.y
             toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
@@ -185,13 +196,14 @@ Cask.StackableItem
     {
         id: decoration
 
-        Kirigami.Theme.inherit: false
+//        Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: Kirigami.Theme.Window
         anchors.fill: parent
         border.width: 1
         radius: window.maximized ? 0 : Maui.Style.radiusV
         border.color: window.maximized ? "transparent" : (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
         color: Kirigami.Theme.backgroundColor
+        visible: rootChrome.decorationVisible
 
         TapHandler
         {
@@ -271,7 +283,7 @@ Cask.StackableItem
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    text: window.maximized
+                    text: toplevel.maximized
                     horizontalAlignment: Qt.AlignHCenter
                     elide: Text.ElideMiddle
                     wrapMode: Text.NoWrap
@@ -302,11 +314,15 @@ Cask.StackableItem
             enabled: !window.maximized
             focus: false
             id: rightEdgeResizeArea
-            x: parent.width - resizeAreaWidth / 2; width: resizeAreaWidth; height: parent.height - resizeAreaWidth
+            x: parent.width - resizeAreaWidth / 2;
+            width: resizeAreaWidth; height: parent.height - resizeAreaWidth
+
             onXChanged:
-                if (horzDragHandler.active) {
+                if (horzDragHandler.active)
+                {
                     var size = toplevel.sizeForResize(horzDragHandler.initialSize,
-                                                      Qt.point(horzDragHandler.translation.x, horzDragHandler.translation.y),
+                                                      Qt.point(horzDragHandler.translation.x,
+                                                               horzDragHandler.translation.y),
                                                       Qt.RightEdge);
                     toplevel.sendResizing(size)
                 }
@@ -590,8 +606,8 @@ Cask.StackableItem
     {
         maskSource: Item
         {
-            width: rootChrome.width
-            height: rootChrome.height
+            width: Math.floor(rootChrome.width)
+            height: Math.floor(rootChrome.height)
 
             Rectangle
             {

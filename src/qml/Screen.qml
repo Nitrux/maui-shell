@@ -184,11 +184,10 @@ WaylandOutput
                                     moveItem: Item
                                     {
                                         property bool moving: false
-                                        //                                        parent: _zpaceContainer
-                                        x: control.position.x
-                                        y: control.position.y
-                                        height: _chromeDelegate.surface.destinationSize.height
-                                        width: _chromeDelegate.surface.destinationSize.width
+                                        parent: _zpaceContainer
+
+                                        height: _chromeDelegate.surface.size.height
+                                        width: _chromeDelegate.surface.size.width
                                     }
                                 }
 

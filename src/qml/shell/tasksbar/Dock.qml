@@ -26,6 +26,15 @@ Item
         anchors.fill: parent
         color: _launcher.Kirigami.Theme.backgroundColor
 
+        Behavior on opacity
+        {
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.OutInQuad
+            }
+        }
+
         MouseArea
         {
             anchors.fill: parent
@@ -65,7 +74,6 @@ Item
         RowLayout
         {
             id: _bottomPanelContainer
-            z: _overlayBottomPanel.z+2
             width: parent.width
             height: parent.height
 

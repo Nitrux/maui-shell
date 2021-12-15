@@ -173,8 +173,16 @@ int main(int argc, char *argv[])
 
     //    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
     //        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
-    if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
-        qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
+
+
+    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
+         qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
+     if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
+         qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
+ //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
+ //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
+         qputenv("QT_QPA_PLATFORMTHEME", "generic");
 
 
     //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))

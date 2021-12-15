@@ -116,12 +116,12 @@ int main()
 
  qputenv("QT_QPA_PLATFORM", "eglfs");
 
- qputenv("QT_QPA_EGLFS_NO_LIBINPUT", "1");
- qputenv("QT_QPA_EVDEV_KEYBOARD_PARAMETERS", "grab=1");
- qputenv("QT_QPA_EVDEV_MOUSE_PARAMETERS", "grab=1");
+// qputenv("QT_QPA_EGLFS_NO_LIBINPUT", "1");
+// qputenv("QT_QPA_EVDEV_KEYBOARD_PARAMETERS", "grab=1");
+// qputenv("QT_QPA_EVDEV_MOUSE_PARAMETERS", "grab=1");
 
- qputenv("QT_QPA_EGLFS_DISABLE_INPUT", "1");
- qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+// qputenv("QT_QPA_EGLFS_DISABLE_INPUT", "1");
+// qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
  qputenv("QT_WAYLAND_CLIENT_BUFFER_INTEGRATION", "wayland-egl");
 
 qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
@@ -159,7 +159,7 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
 //    qunsetenv("QT_SCREEN_SCALE_FACTORS");
 
   //style releated
-  qputenv("QT_QPA_PLATFORMTHEME", "breeze");
+//  qputenv("QT_QPA_PLATFORMTHEME", "breeze"); //breaks icons
   qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
   qputenv("XCURSOR_THEME", "breeze_cursors");
   qputenv("XCURSOR_SIZE", "24");
@@ -167,8 +167,8 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
 //  QString command = "/home/camilo/tests/grefsen/grefsen";
   QString command = "cask";
   QStringList args;
-  args   << "-plugin";
-args << "libinput";
+//  args   << "-plugin";
+//args << "libinput";
 //       << "--exit-with-session=/usr/bin/cask";
 //  runEnvironmentScripts();
   return runCommandSync(command, args);
