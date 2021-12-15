@@ -39,7 +39,10 @@ target_link_libraries(
 install(TARGETS startcask DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+
 install(FILES cask.desktop DESTINATION share/wayland-sessions/)
+install(FILES cask-x11.desktop DESTINATION share/xsessions/)
+install(FILES startcask-x11 DESTINATION bin/)
 
 #install(FILES org.kde.pix.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 

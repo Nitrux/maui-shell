@@ -132,16 +132,15 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
 
 
  // Set defaults
- if (qEnvironmentVariableIsEmpty("XDG_DATA_HOME"))
-     qputenv("XDG_DATA_HOME", QDir::home().absoluteFilePath(QStringLiteral(".local/share")).toLocal8Bit());
- if (qEnvironmentVariableIsEmpty("XDG_CONFIG_HOME"))
-     qputenv("XDG_CONFIG_HOME", QDir::home().absoluteFilePath(QStringLiteral(".config")).toLocal8Bit());
- if (qEnvironmentVariableIsEmpty("XDG_CACHE_HOME"))
-     qputenv("XDG_CACHE_HOME", QDir::home().absoluteFilePath(QStringLiteral(".cache")).toLocal8Bit());
- if (qEnvironmentVariableIsEmpty("XDG_DATA_DIRS"))
-     qputenv("XDG_DATA_DIRS", "/usr/local/share/:/usr/share/");
- if (qEnvironmentVariableIsEmpty("XDG_CONFIG_DIRS"))
-     qputenv("XDG_CONFIG_DIRS", "/etc/xdg");
+
+
+  qputenv("XDG_CONFIG_DIRS", "/home/camilo/.config/kdedefaults:/etc/xdg");
+
+  qputenv("XDG_SESSION_TYPE", "wayland");
+  qputenv("XDG_CURRENT_DESKTOP", "Cask");
+  qputenv("XDG_SEAT_PATH", "/org/freedesktop/DisplayManager/Seat0");
+  qputenv("XDG_SESSION_PATH", "/org/freedesktop/DisplayManager/Session0");
+
 // if (qEnvironmentVariableIsEmpty("XDG_DESKTOP_PORTAL_DIR"))
 //     qputenv("XDG_DESKTOP_PORTAL_DIR", DATADIR "/xdg-desktop-portal/portals");
 
@@ -153,10 +152,6 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
 
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "xdg-shell");
 
-  qputenv("XDG_SESSION_TYPE", "wayland");
-  qputenv("XDG_CURRENT_DESKTOP", "Cask");
-  qputenv("XDG_SEAT_PATH", "/org/freedesktop/DisplayManager/Seat0");
-  qputenv("XDG_SESSION_PATH", "/org/freedesktop/DisplayManager/Session0");
 
   qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
 //  qputenv("QT_SCALE_FACTOR", "2"); //if it is mobile., how to calculate this value based on dpi?

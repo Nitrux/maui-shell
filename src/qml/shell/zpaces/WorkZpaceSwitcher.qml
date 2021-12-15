@@ -62,15 +62,15 @@ Rectangle
         value: overviewHandler.scaleValue
     }
 
-        Binding
-        {
-            target: control.workzpace
-            property: "contentX"
-            when: overviewHandler.active
-            delayed: true
-            value: target.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
-            restoreMode: Binding.RestoreBinding
-        }
+    Binding
+    {
+        target: control.workzpace
+        property: "contentX"
+        when: overviewHandler.active
+        delayed: true
+        value: target.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
+        restoreMode: Binding.RestoreBinding
+    }
 
 
     DragHandler
@@ -85,9 +85,9 @@ Rectangle
                 if(scaleValue < 0.7)
                 {
                     _swipeView.openOverview()
-//                    return;
-//                    _appsOverview.initScale = control.workzpace.scale
-//                    _appsOverview.contentX = control.workzpace.scale
+                    //                    return;
+                    //                    _appsOverview.initScale = control.workzpace.scale
+                    //                    _appsOverview.contentX = control.workzpace.scale
 
                 }else
                 {
@@ -99,7 +99,7 @@ Rectangle
                 workzpace.returnToBounds()
                 workzpace.currentIndex = workzpace.indexAt(workzpace.contentX, 0)
 
-//                overView = Math.abs(overviewHandler.centroid.position.y) > 100 && _appsOverview.count > 0
+                //                overView = Math.abs(overviewHandler.centroid.position.y) > 100 && _appsOverview.count > 0
             }
         }
     }

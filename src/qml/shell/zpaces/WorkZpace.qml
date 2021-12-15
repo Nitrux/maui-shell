@@ -72,7 +72,7 @@ property bool overviewMode : false
 
     function openOverview()
     {
-         control.scale = 0.7
+         control.scale = 0.8
         overView = true
     }
 

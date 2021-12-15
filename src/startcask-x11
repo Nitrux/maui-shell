@@ -1,0 +1,10 @@
+#! /bin/sh
+
+set -xe
+
+# -- Start Cask
+
+killall plasmashell
+sleep 1 && cask
+
+exit

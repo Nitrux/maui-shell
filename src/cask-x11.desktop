@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=XSession
+Exec=/usr/bin/startcask-x11
+TryExec=/usr/bin/startcask-x11
+DesktopNames=MAUI
+Name=Cask (X11)
+Comment=Cask by Maui
+X-KDE-PluginInfo-Version=5.23.4
