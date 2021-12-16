@@ -224,11 +224,11 @@ T.Control
                 //                                visible: !isMobile
             }
 
-            //AudioPlayerItem
-            //{
-                //visible: _revealer.checked
-                //onClicked: _statusSection.open(card.index)
-            //}
+            AudioPlayerItem
+            {
+                visible: _revealer.checked
+                onClicked: _statusSection.open(card.index)
+            }
 
             SessionItem
             {

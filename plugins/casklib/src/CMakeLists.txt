@@ -21,6 +21,25 @@ set(caskplugin_HDRS
     code/controllers/panelsection.h
     )
 
+set(mpris2_SRCS
+    code/mpris2/mpris2engine.cpp
+    code/mpris2/mpris2engine.h
+    code/mpris2/mpris2player.cpp
+    code/mpris2/mpris2player.h
+    code/mpris2/playersmodel.cpp
+    )
+
+set_source_files_properties(code/mpris2/org.freedesktop.DBus.Properties.xml PROPERTIES NO_NAMESPACE true)
+qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.freedesktop.DBus.Properties.xml properties_interface)
+
+set_source_files_properties(code/mpris2/org.mpris.MediaPlayer2.Player.xml PROPERTIES NO_NAMESPACE true)
+qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.mpris.MediaPlayer2.Player.xml player_interface)
+
+set_source_files_properties(code/mpris2/org.mpris.MediaPlayer2.xml PROPERTIES NO_NAMESPACE true)
+qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.mpris.MediaPlayer2.xml mediaplayer2_interface)
+
+
+
 set(caskplugin_ASSETS
     )
 
@@ -37,6 +56,7 @@ add_library(${PROJECT_NAME}
     ${caskplugin_SRCS}
     ${caskplugin_HDRS}
     ${caskplugin_ASSETS}
+    ${mpris2_SRCS}
     ${caskplugin_QML_QRC}
     )
 

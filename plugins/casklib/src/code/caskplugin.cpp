@@ -4,6 +4,10 @@
 #include "models/appsmodel.h"
 #include "processlauncher.h"
 
+#include "code/mpris2/mpris2engine.h"
+#include "code/mpris2/mpris2player.h"
+#include "code/mpris2/playersmodel.h"
+
 void CaskPlugin::registerTypes(const char *uri)
 {
 
@@ -29,6 +33,12 @@ void CaskPlugin::registerTypes(const char *uri)
         qmlRegisterType<WaylandProcessLauncher>(uri, 1, 0, "ProcessLauncher");
 
     qmlRegisterType<AppsModel>(uri, 1, 0, "AppsModel");
+
+    //mpris stuff
+    qmlRegisterAnonymousType<PlayersModel>(uri, 1);
+    qmlRegisterType<Mpris2Engine>(uri, 1, 0, "Mpris");
+    qmlRegisterUncreatableType<Mpris2Player>(uri, 1, 0, "MprisPlayer",
+                                             QStringLiteral("Cannot create MprisPlayer object"));
 }
 
 void CaskPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

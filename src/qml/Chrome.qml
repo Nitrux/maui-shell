@@ -167,6 +167,7 @@ Cask.StackableItem
 
         function onActivatedChanged ()
         { // xdg_shell only
+            console.log("ACTIVATED CHANGED", toplevel.activated)
             if (target.activated)
             {
                 receivedFocusAnimation.start();
@@ -581,6 +582,7 @@ Cask.StackableItem
             {
                 surfaceItem.valid = false
                 rootChrome.visible = false
+                window.deactivate()
             }
         }
 

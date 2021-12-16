@@ -5,20 +5,21 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
-import org.kde.plasma.core 2.0 as PlasmaCore
+
 import QtGraphicalEffects 1.0
 
 Pane
 {
     id: control
     implicitHeight: _template.implicitHeight + topPadding+bottomPadding
+    property Cask.MprisPlayer player
 
-    property string source
-    property string sourceName
-    property string playerName
-    property string playerIcon
-    property var sourceData
-    property var currentMetadata : sourceData ? sourceData.Metadata : undefined
+    property string state : player ? player.status : ""
+    property string sourceName: player ? player.serviceName : ""
+    property string playerName: player ? player.identity : ""
+    property string playerIcon: player ? player.iconName : ""
+
+    readonly property var currentMetadata : player ? player.metadata : undefined
 
     property string albumArt: currentMetadata ? currentMetadata["mpris:artUrl"] || "" : ""
 
@@ -58,22 +59,30 @@ Pane
         }
     }
 
-    property int position: (control.sourceData && control.sourceData.Position) || 0
-    readonly property real rate: (control.sourceData && control.sourceData.Rate) || 1
+    property int position: (control.player && control.player.position) || 0
+    readonly property real rate: (control.player && control.player.rate) || 1
     readonly property int length: currentMetadata ? currentMetadata["mpris:length"] || 0 : 0
-    readonly property bool canSeek: (control.sourceData && control.sourceData.CanSeek) || false
-    property bool noPlayer: mpris2Source.sources.length <= 1
-    readonly property string identity: !control.noPlayer ? sourceData.Identity || source : ""
 
-    readonly property bool canControl: (!control.noPlayer && sourceData.CanControl) || false
-    readonly property bool canGoPrevious: (canControl && sourceData.CanGoPrevious) || false
-    readonly property bool canGoNext: (canControl && sourceData.CanGoNext) || false
-    readonly property bool canPlay: (canControl && sourceData.CanPlay) || false
-    readonly property bool canPause: (canControl && sourceData.CanPause) || false
+    readonly property bool canSeek: (control.player && control.player.capabilities & Cask.MprisPlayer.CanSeek) || false
+
+    property bool noPlayer: control.players.count === 0
+
+    readonly property string identity: !control.noPlayer ? player.identity || control.sourceName : ""
+
+    readonly property bool canControl: (control.player && control.player.capabilities & Cask.MprisPlayer.CanControl) || false
+
+    readonly property bool canGoPrevious: (control.player && control.player.capabilities & Cask.MprisPlayer.CanGoPrevious) || false
+
+    readonly property bool canGoNext:(control.player && control.player.capabilities & Cask.MprisPlayer.CanGoNext) || false
+
+    readonly property bool canPlay: control.player ? (control.player.capabilities & Cask.MprisPlayer.CanPlay) : false
+
+    readonly property bool canPause: control.player ? (control.player.capabilities & Cask.MprisPlayer.CanPause) : false
 
     // var instead of bool so we can use "undefined" for "shuffle not supported"
-    readonly property var shuffle: !control.noPlayer && typeof sourceData.Shuffle === "boolean" ? sourceData.Shuffle : undefined
-    readonly property var loopStatus: !control.noPlayer && typeof sourceData.LoopStatus === "string" ? sourceData.LoopStatus : undefined
+    readonly property var shuffle:  undefined
+    readonly property var loopStatus:  undefined
+
     property bool disablePositionUpdate: false
 
     //    Component.onCompleted: retrievePosition()
@@ -149,7 +158,7 @@ Pane
             Label
             {
                 Layout.fillWidth: true
-                text: control.playerName
+                text: control.player.capabilities
             }
 
             ToolButton
@@ -234,8 +243,8 @@ Pane
                     ToolButton
                     {
                         //                        text: qsTr("Play and pause")
-                        enabled: control.state == "playing" ? control.canPause : control.canPlay
-                        icon.name: control.state == "playing" ? "media-playback-pause" : "media-playback-start"
+                        enabled: control.canPlay
+                        icon.name: control.state == "Playing" ? "media-playback-pause" : "media-playback-start"
                         onClicked: control.togglePlaying()
 
                     }
@@ -302,60 +311,41 @@ Pane
     }
 
     function togglePlaying() {
-        if (control.state === "playing") {
-            if (control.canPause) {
-                control.action_pause();
-            }
-        } else {
-            if (control.canPlay) {
-                control.action_play();
-            }
-        }
+        control.player.playPause()
     }
 
     function action_open() {
-        serviceOp(control.sourceName, "Raise");
+        control.player.raise()
     }
 
     function action_quit() {
-        serviceOp(control.sourceName, "Quit");
+       control.player.quit()
     }
 
     function action_play() {
-        serviceOp(control.sourceName, "Play");
+        control.player.play()
     }
 
     function action_pause() {
-        serviceOp(control.sourceName, "Pause");
+        control.player.play()
     }
 
     function action_playPause() {
-        serviceOp(control.sourceName, "PlayPause");
+         control.player.playPause()
     }
 
     function action_previous() {
-        serviceOp(control.sourceName, "Previous");
+         control.player.previous()
     }
 
     function action_next() {
-        serviceOp(control.sourceName, "Next");
+         control.player.next()
     }
 
     function action_stop() {
-        serviceOp(control.sourceName, "Stop");
+         control.player.stop()
     }
 
-    function serviceOp(src, op) {
-        var service = mpris2Source.serviceForSource(src);
-        var operation = service.operationDescription(op);
-        return service.startOperationCall(operation);
-    }
-
-    function retrievePosition() {
-        var service = mpris2Source.serviceForSource(control.sourceName);
-        var operation = service.operationDescription("GetPosition");
-        service.startOperationCall(operation);
-    }
 
 
     states: [

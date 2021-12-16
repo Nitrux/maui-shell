@@ -30,13 +30,20 @@ Maui.Page
         Layout.maximumWidth: 500
         Layout.fillWidth: true
         placeholderText: qsTr("Search for apps and files...")
-        onAccepted: _launcherGrid.model.filter = text
-        onCleared: _launcherGrid.model.filter = ""
+        onAccepted: _gridView.model.filter = text
+        onCleared: _gridView.model.filter = ""
         onTextChanged:
         {
             if(_swipeView.currentIndex === 0)
                 _swipeView.currentIndex = 1
         }
+
+        Keys.onReturnPressed:
+        {
+            _gridView.forceActiveFocus()
+        }
+
+//        Keys.forwardTo: _gridView
     }
 
     Cask.ProcessLauncher
@@ -144,7 +151,9 @@ Maui.Page
         Maui.GridView
         {
             id: _gridView
+            focus: true
             itemSize: Math.min(150, Math.floor(flickable.width/3))
+            currentIndex: 0
 
             model: Maui.BaseModel
             {
@@ -157,8 +166,16 @@ Maui.Page
                 {
                     id: _allAppsModel
                 }
-            }
+            }            
 
+onKeyPress:
+{
+    console.log("Key _pressed", event.key, _gridView.model.get(_gridView.currentIndex).executable)
+    if(event.key == Qt.Key_Return)
+    {
+       launchExec(_gridView.model.get(_gridView.currentIndex).executable)
+    }
+}
             delegate: Item
             {
                 width: GridView.view.cellWidth
@@ -169,13 +186,13 @@ Maui.Page
                     height: parent.GridView.view.itemHeight- 10
                     width: parent.GridView.view.itemWidth-10
                     anchors.centerIn: parent
-
+                    highlighted: parent.GridView.isCurrentItem
                     template.labelSizeHint: 22
 
                     draggable: true
                     Drag.keys: ["text/uri-list"]
                     Drag.mimeData: { "text/uri-list": model.path }
-                    background: Item {}
+//                    background: Item {}
                     iconSource:  model.icon
                     iconSizeHint: 64
                     label1.text: model.executable
@@ -183,15 +200,9 @@ Maui.Page
                     onClicked:
                     {
                         console.log(model.executable)
-                        launcher.launch(model.executable)
-                        control.close()
+                        control.launchExec(model.executable)
                     }
                 }
-            }
-
-            function forceActiveFocus()
-            {
-                _searchBar.forceActiveFocus()
             }
         }
     }
@@ -232,9 +243,16 @@ Maui.Page
         }
     }
 
+    function launchExec(exec)
+    {
+        launcher.launch(exec)
+        control.close()
+    }
+
     function forceActiveFocus()
     {
         _searchBar.forceActiveFocus()
+        _searchBar.selectAll()
     }
 
     function close()

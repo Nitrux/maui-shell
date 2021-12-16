@@ -9,7 +9,7 @@
 #include "waylandcursorgrabber.h"
 
 WaylandCursorGrabber::WaylandCursorGrabber(QQuickItem *parent)
-: QWaylandQuickItem(parent)
+    : QWaylandQuickItem(parent)
 {
     setEnabled(false);
     setInputEventsEnabled(false);
@@ -104,18 +104,20 @@ void WaylandCursorGrabber::handleCursorSurfaceRequest(QWaylandSurface *cursorSur
     }
 
     if (surface())
+    {
         disconnect(surface(), &QWaylandSurface::redraw,
                    this, &WaylandCursorGrabber::handleRedraw);
+    }
 
-        if (cursorSurface) {
-            setSurface(cursorSurface);
-            connect(cursorSurface, &QWaylandSurface::redraw,
-                    this, &WaylandCursorGrabber::handleRedraw);
+    if (cursorSurface) {
+        setSurface(cursorSurface);
+        connect(cursorSurface, &QWaylandSurface::redraw,
+                this, &WaylandCursorGrabber::handleRedraw);
 
-            m_grabber = new QWaylandSurfaceGrabber(cursorSurface, this);
-            connect(m_grabber, &QWaylandSurfaceGrabber::success,
-                    this, &WaylandCursorGrabber::handleGrab);
-        }
+        m_grabber = new QWaylandSurfaceGrabber(cursorSurface, this);
+        connect(m_grabber, &QWaylandSurfaceGrabber::success,
+                this, &WaylandCursorGrabber::handleGrab);
+    }
 }
 
 void WaylandCursorGrabber::handleDragIconChanged()
