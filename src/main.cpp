@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
     qmlRegisterAnonymousType<SurfacesModel>(ZPACES_URI, 1);
     qmlRegisterAnonymousType<AbstractWindow>(ZPACES_URI, 1);
     qmlRegisterType<Zpaces>(ZPACES_URI, 1, 0, "Zpaces");
-    qmlRegisterType<XdgWindow>(ZPACES_URI, 1, 0, "XdgWindow");
+    qmlRegisterUncreatableType<XdgWindow>(ZPACES_URI, 1, 0, "XdgWindow", "Create it from Zpaces::createXdgWIndow");
     qmlRegisterType<WaylandCursorGrabber>(ZPACES_URI, 1, 0, "WaylandCursorGrabber");
     engine.load(url);
 

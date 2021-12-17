@@ -4,19 +4,21 @@
 #include "code/models/surfacesmodel.h"
 #include "code/controllers/zpaces.h"
 
-//the zpace needs to be clean up from the model itself
+#include <QDebug>
+
 Zpace::Zpace(ZpacesModel *parent) : QObject(nullptr)
   , m_windowsModel( new SurfacesModel(this))
   , m_zpacesModelRoot(parent)
   , m_zpacesRoot(m_zpacesModelRoot->zpacesRoot())
 {
-
     connect(m_windowsModel, &SurfacesModel::countChanged, [this]()
     {
-       if(m_windowsModel->count() == 0 && m_zpacesModelRoot->count() > 1)
-       {
-           this->deleteLater();
-       }
+        qDebug() << "SHOUDL IT REMOVE THE ZPACE TOO?";
+            if(m_windowsModel->count() == 0 && m_zpacesModelRoot->count() > 1)
+            {
+                emit this->closed();
+            }
+
     });
 
     connect(m_zpacesRoot, &Zpaces::zmodeChanged, [this](Zpaces::ZMode)
@@ -25,6 +27,11 @@ Zpace::Zpace(ZpacesModel *parent) : QObject(nullptr)
     });
 
     this->setConstrains();
+}
+
+Zpace::~Zpace()
+{
+    qDebug() << "DELETIGN ZPACE";
 }
 
 SurfacesModel *Zpace::windows() const

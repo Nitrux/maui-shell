@@ -23,8 +23,7 @@ class XdgWindow : public AbstractWindow
     QWaylandCompositor *m_compositor;
 
 public:
-    explicit XdgWindow(QObject *parent = nullptr);
-    XdgWindow(QWaylandShellSurface *shellSurface, QWaylandXdgToplevel* toplevel);
+   explicit XdgWindow(QWaylandShellSurface *shellSurface, QWaylandXdgToplevel* toplevel);
     ~XdgWindow();
     QWaylandShellSurface * shellSurface() const override final;
     QWaylandXdgToplevel *toplevel() const;

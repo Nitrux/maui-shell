@@ -122,8 +122,6 @@ Item
             }
         }
 
-
-
         DragHandler
         {
             id: handler

@@ -11,7 +11,13 @@ ZpacesModel::ZpacesModel(Zpaces *parent) : QAbstractListModel(parent)
 
 ZpacesModel::~ZpacesModel()
 {
+    qDebug() << "DELETIGN ZPACESMODEL" << m_zpacesList.count();
+
     qDeleteAll(m_zpacesList);
+//    for(auto zpace : m_zpacesList)
+//    {
+//        zpace->deleteLater();
+//    }
 }
 
 int ZpacesModel::rowCount(const QModelIndex &parent) const
@@ -55,12 +61,7 @@ Zpace *ZpacesModel::addZpace()
 {
     qDebug() << "trying to add a new zpace";
 
-    auto newZpace = new Zpace(this);// this is not the parent but a reference to the model
-
-    connect(newZpace, &Zpace::destroyed, [this, newZpace]
-    {
-       this->removeZpace(indexOf(newZpace));
-    });
+    auto newZpace = createZpace();// this is not the parent but a reference to the model
 
     const auto index = m_zpacesList.size();
 
@@ -69,7 +70,7 @@ Zpace *ZpacesModel::addZpace()
     this->endInsertRows();
 
     emit this->countChanged();
-    emit this->zpaceAdded();
+    emit this->zpaceAdded(index);
 
     qDebug() << "trying to add a new zpace" << rowCount(QModelIndex());
 
@@ -81,13 +82,17 @@ Zpace *ZpacesModel::insertZpace(const int &index)
     if(!indexIsValid(index))
         return nullptr;
 
-    auto newZpace = new Zpace(this);
+//    if(index > m_zpacesList.count() || index < 0) //we want to be able to insert at count+1
+//    {
+//        return nullptr;
+//    }
 
+    auto newZpace = createZpace();
     this->beginInsertRows(QModelIndex(), index, index);
     m_zpacesList.insert(index, newZpace);
     this->endInsertRows();
     emit this->countChanged();
-    emit this->zpaceAdded();
+    emit this->zpaceAdded(index);
 
     return newZpace;
 }
@@ -96,6 +101,7 @@ void ZpacesModel::removeZpace(const int &index)
 {
     if(!indexIsValid(index))
         return;
+    qDebug() << "REMOVING THE ZPACE";
 
     this->beginRemoveRows(QModelIndex(), index, index);
     m_zpacesList.remove(index);
@@ -116,7 +122,7 @@ void ZpacesModel::moveZpace(const int &from, const int &to)
     this->endMoveRows();
 }
 
-ZpacesModel::ZpacesList ZpacesModel::zpaces() const
+QVector<Zpace *> ZpacesModel::zpaces() const
 {
     return m_zpacesList;
 }
@@ -150,4 +156,15 @@ bool ZpacesModel::indexIsValid(const int &index) const
         return false;
 
     return true;
+}
+
+Zpace *ZpacesModel::createZpace()
+{
+    auto newZpace = new Zpace(this);
+    connect(newZpace, &Zpace::closed, this, [this, newZpace]
+    {
+       this->removeZpace(indexOf(newZpace));
+    }, Qt::UniqueConnection);
+
+    return newZpace;
 }

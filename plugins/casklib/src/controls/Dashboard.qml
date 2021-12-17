@@ -24,6 +24,7 @@ Item
     property alias background : _rec
     property alias overlayTopPanel : _overlayTopPanel
     property alias overlay : _overlay
+    property alias underneathContent : _underneathContent.data
     property alias backgroundColor : _rec.color
     property alias backgroundImage: _img.source
 
@@ -116,23 +117,23 @@ Item
         }
     }
 
+    Item
+    {
+        id: _underneathContent
+        anchors.fill: parent
+    }
 
-
-
-        Item
-        {
-            id: _content
-            anchors.fill: parent
-        }
-
+    Item
+    {
+        id: _content
+        anchors.fill: parent
+    }
 
     Item
     {
         id: _overlay
         anchors.fill: parent
     }
-
-
 
     Item
     {
@@ -143,11 +144,9 @@ Item
     Item
     {
         id: _overlayTopPanel
-//        z: _content.z+1
+        //        z: _content.z+1
         anchors.fill: parent
     }
-
-
 
     Item
     {
@@ -157,7 +156,7 @@ Item
         anchors.left: parent.left
         anchors.right: parent.right
         height: _topPanel.visible ? _topPanel.implicitHeight : 0
-//        color : "purple"
+        //        color : "purple"
 
         Cask.Panel
         {

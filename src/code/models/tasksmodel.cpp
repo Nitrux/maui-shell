@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <KService>
 #include <KDesktopFile>
+#include <QSettings>
 
 #include "code/controllers/abstractwindow.h"
 #include "code/controllers/task.h"
@@ -11,7 +12,7 @@
 TasksModel::TasksModel(Zpaces *parent) : QAbstractListModel(parent)
   ,m_zpaces(parent)
 {
-
+    this->setPinnedTasks();
 }
 
 TasksModel::~TasksModel()
@@ -74,33 +75,20 @@ void TasksModel::addTask(AbstractWindow *window)
     }else
     {
         task = new Task(window->appId(), window, this);
-        const auto index = m_tasks.size();
-
-        this->beginInsertRows(QModelIndex(), index, index);
-        m_tasks.append(task);
-        this->endInsertRows();
-
-        emit this->countChanged();
+       this->addTask(task);
     }
-
-    connect(task, &Task::destroyed, this, [this, task]()
-    {
-        this->removeTask(indexOf(task));
-    }, Qt::UniqueConnection);
 }
 
 void TasksModel::addTask(const QString &id, const bool &pin)
 {
+    if(containsTask(id))
+    {
+        return;
+    }
+
     auto task = new Task(id, nullptr, this);
     task->setIsPinned(pin);
-
-    const auto index = m_tasks.size();
-
-    this->beginInsertRows(QModelIndex(), index, index);
-    m_tasks.append(task);
-    this->endInsertRows();
-
-    emit this->countChanged();
+    this->addTask(task);
 }
 
 void TasksModel::removeTask(const int &index)
@@ -112,6 +100,16 @@ void TasksModel::removeTask(const int &index)
     m_tasks.remove(index);
     this->endRemoveRows();
     emit this->countChanged();
+}
+
+QStringList TasksModel::pinnedTasks()
+{
+    QStringList res;
+    QSettings settings;
+    settings.beginGroup("TaskBar");
+    res = settings.value("Pinned").toStringList();
+    settings.endGroup();
+    return res;
 }
 
 int TasksModel::count() const
@@ -135,6 +133,34 @@ bool TasksModel::indexIsValid(const int &index) const
     return true;
 }
 
+void TasksModel::setPinnedTasks()
+{
+    for(const auto &taskId : pinnedTasks())
+    {
+        this->addTask(taskId, true);
+    }
+}
+
+void TasksModel::addTask(Task *task)
+{
+    if(!task)
+    {
+        qWarning() << "Task is nullptr and can not be added to the TaskModel";
+    }
+
+    const auto index = m_tasks.size();
+
+    this->beginInsertRows(QModelIndex(), index, index);
+    m_tasks.append(task);
+    this->endInsertRows();
+
+    emit this->countChanged();
+
+    connect(task, &Task::closed, this, [this, task]()
+    {
+        this->removeTask(indexOf(task));
+    }, Qt::UniqueConnection);
+}
 
 Task *TasksModel::findTask(const QString &id)
 {
@@ -168,5 +194,18 @@ Task *TasksModel::findTask(const QString &id)
     }
 
     return nullptr;
+}
+
+bool TasksModel::containsTask(const QString &id)
+{
+    for(auto task : m_tasks)
+    {
+        if(task->id() == id)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 

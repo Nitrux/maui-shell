@@ -26,6 +26,7 @@ public:
     QString name() const;
     QString iconName() const;
     QString fileName() const;
+    QString id() const;
 
     void setName(const QString &name);
     void setIconName(const QString &name);
@@ -45,10 +46,6 @@ private:
     QString m_id;
     AbstractWindow *m_window;
     TasksModel *m_modelRoot;
-    void setWindowConnections();
-    void setData();
-    void setFileName(const QString &name);
-    void setExecutable(const QString &exec);
     QString m_name;
     QString m_iconName;
     QString m_fileName;
@@ -56,6 +53,14 @@ private:
     QString m_executable;
 
     bool m_isPinned;
+
+    void setWindowConnections();
+    void setData();
+    void setFileName(const QString &name);
+    void setExecutable(const QString &exec);
+
+    void pinTask();
+    void unPinTask();
 
 signals:
     void windowChanged();
@@ -65,6 +70,7 @@ signals:
     void fileNameChanged();
     void executableChanged(QString executable);
     void isPinnedChanged(bool isPinned);
+    void closed();
 };
 
 #endif // TASK_H

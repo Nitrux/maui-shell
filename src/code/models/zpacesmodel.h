@@ -11,7 +11,6 @@ class ZpacesModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged FINAL)
 
-    typedef QVector<Zpace*> ZpacesList;
 
 public:
 
@@ -76,7 +75,7 @@ public:
      * @return
      * List of all the Zpaces AKA QVector<Zpace*>
      */
-    ZpacesList zpaces() const;
+    QVector<Zpace*> zpaces() const;
 
     /**
      * @brief indexOf
@@ -110,12 +109,13 @@ public:
 
 signals:
     void countChanged();
-    void zpaceAdded();
+    void zpaceAdded(int index);
 
 private:
-    ZpacesModel::ZpacesList m_zpacesList;
+   QVector<Zpace*> m_zpacesList;
     Zpaces *m_zpacesRoot;
     bool indexIsValid(const int &index) const;
+    Zpace * createZpace();
 };
 
 #endif // ZPACESMODEL_H

@@ -20,7 +20,7 @@ public:
     };
 
     explicit SurfacesModel(QObject *parent = nullptr);
-~SurfacesModel();
+    ~SurfacesModel();
 
     int rowCount(const QModelIndex &parent) const override final;
     QVariant data(const QModelIndex &index, int role) const override final;

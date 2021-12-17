@@ -107,6 +107,21 @@ WaylandOutput
                 anchors.bottomMargin: _zpaceSwitcher.height
                 topPanel.data: StatusBar {id: _statusBar}
 
+                Button
+                {
+                    text: "New ZPace"
+                    icon.name: "list-add"
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.topMargin: _cask.topPanel.height + Maui.Style.space.huge
+                    anchors.margins: Maui.Style.space.huge
+                    onClicked:
+                    {
+                     _zpaces.insertZpace(workspaces.currentIndex)
+
+                    }
+                }
+
                 overlayContent: Dock
                 {
                     id: _dock
@@ -214,7 +229,6 @@ WaylandOutput
                 height: visible ? 16 : 0
                 width: parent.width
                 anchors.bottom: parent.bottom
-
             }
 
             AppsOverview
@@ -222,7 +236,6 @@ WaylandOutput
                 id: _appsOverview
                 anchors.fill: parent
                 visible: opened
-
             }
 
             //             WaylandCursorItem

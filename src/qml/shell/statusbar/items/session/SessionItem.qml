@@ -13,6 +13,45 @@ Cask.PanelItem
     text: "80%"
     display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
 
+    Maui.Dialog
+    {
+        id: _sessioDialog
+        title: i18n("Quit Session")
+        message: i18n("Are you sure you want to quit the session and terminate runnig  tasks?")
+        page.margins: Maui.Style.space.big
+        spacing: Maui.Style.space.medium
+        ListView
+        {
+            Layout.fillWidth: true
+            implicitHeight: 200
+            model: _zpaces.allSurfaces
+            delegate: Maui.ListBrowserDelegate
+            {
+                isCurrentItem: false
+                background: null
+                width: ListView.view.width
+                label1.text: model.window.title
+                label2.text: model.window.appName
+                iconSource: model.window.iconName
+            }
+        }
+
+        onAccepted:
+        {
+            _zpaces.clearAllSurfaces()
+            if(_zpaces.allSurfaces.count === 0)
+            {
+                Qt.quit()
+            }
+
+        }
+
+        onRejected:
+        {
+             Qt.quit()
+        }
+    }
+
     card: Cask.PanelCard
     {
         width: ListView.view.width
@@ -22,7 +61,10 @@ Cask.PanelItem
             ToolButton
             {
                 icon.name: "system-log-out"
-                onClicked: Qt.quit()
+                onClicked:
+                {
+                   _sessioDialog.open()
+                }
             }
 
             Repeater

@@ -20,7 +20,7 @@ private:
     bool m_minimized = false;
 
 public:
-    explicit AbstractWindow(QObject *parent = nullptr);
+    explicit AbstractWindow();
 
     virtual QString title() const = 0;
     virtual QString appId() const = 0;
@@ -58,6 +58,7 @@ signals:
     void minimizedChanged();
     void maximizedChanged();
     void fullscreenChanged();
+    void closed();
 };
 
 #endif // ABSTRACTWINDOW_H

@@ -15,9 +15,20 @@
 Zpaces::Zpaces(QObject *parent) : QObject(parent)
   ,m_zpacesModel(new ZpacesModel(this))
   ,m_tasksModel(new TasksModel(this))
+  ,m_allSurfaces(new SurfacesModel(this))
   ,m_output(nullptr)
 {
     connect(this, &Zpaces::outputChanged, this, &Zpaces::setGeometryConnections);
+}
+
+Zpaces::~Zpaces()
+{
+    qDebug() << "DELETING ZPACES";
+
+//        m_allSurfaces->deleteLater();
+//        m_tasksModel->deleteLater();
+//        m_zpacesModel->deleteLater();
+
 }
 
 ZpacesModel *Zpaces::zpacesModel() const
@@ -35,17 +46,23 @@ QWaylandOutput *Zpaces::output() const
     return m_output;
 }
 
+SurfacesModel *Zpaces::allSurfaces() const
+{
+    return m_allSurfaces;
+}
+
 int Zpaces::addWindow(AbstractWindow *window, const int &fromIndex)
 {
     qDebug() << "trying to add window" << window;
     window->setParent(nullptr); //parent the window to nullptr. windows are destroyed when closed or by the SurfacesModel itself. SurfacesModel takes care of cleaning up remanining windows on destruction, same TasksModel.
 
+    //add window to allSurfacesModel
+    m_allSurfaces->addWindow(window);
+
     QMetaObject::Connection * const winConnection = new QMetaObject::Connection;
     *winConnection = connect(window, &AbstractWindow::appIdChanged, [this, winConnection, window]()
     {
-
         m_tasksModel->addTask(window);
-
         QObject::disconnect(*winConnection);
         delete winConnection;
     });
@@ -203,4 +220,12 @@ Zpaces::ZMode Zpaces::zmode() const
 XdgWindow *Zpaces::createXdgWindow(QWaylandShellSurface *shellSurface, QWaylandXdgToplevel * toplevel)
 {
     return new XdgWindow(shellSurface, toplevel);
+}
+
+void Zpaces::clearAllSurfaces()
+{
+   for(auto window : m_allSurfaces->windows())
+   {
+       window->close();
+   }
 }

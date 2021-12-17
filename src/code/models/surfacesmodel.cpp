@@ -11,6 +11,8 @@ SurfacesModel::SurfacesModel(QObject *parent) :  QAbstractListModel(parent)
 SurfacesModel::~SurfacesModel()
 {
     // make sure to delete all the surfaces
+    qDebug() << "DELETING SURFACES MODEL" << m_windows.size();
+
     qDeleteAll(m_windows);
 }
 
@@ -47,9 +49,9 @@ void SurfacesModel::removeWindow(const int &index)
 {
     if(!indexIsValid(index))
         return;
-
+qDebug() << "REMOVING WINDOW FORM MODEL";
     this->beginRemoveRows(QModelIndex(), index, index);
-    this->m_windows.remove(index);
+    auto window = this->m_windows.takeAt(index);
     this->endRemoveRows();
     emit this->countChanged();
 }

@@ -82,15 +82,15 @@ Maui.Page
     {
         id: _flickable
         anchors.fill: parent
-        contentWidth: _overviewList.implicitWidth
-        contentHeight: availableHeight
+        contentWidth: availableWidth
+        contentHeight: _overviewList.implicitHeight
         contentX: _swipeView.contentX
-        scale: control.initScale
+//        scale: control.initScale
 
         boundsBehavior: Flickable.StopAtBounds
         boundsMovement :Flickable.StopAtBounds
 
-        Row
+        Flow
         {
             id: _overviewList
             //        opacity: overView ? 1 : (1* Math.min(200, overviewHandler.centroid.position.y * -1)) / 200
@@ -103,6 +103,7 @@ Maui.Page
             //        }
 
             height: parent.height
+            width: parent.width
             //        anchors.verticalCenter: parent.verticalCenter
 
             spacing: Maui.Style.space.big
@@ -114,15 +115,15 @@ Maui.Page
             //        }
             Repeater
             {
-                model: _zpaces.tasksModel
+                model: _zpaces.allSurfaces
                 delegate: ItemDelegate
                 {
                     id: _itemDelegate
-                    anchors.verticalCenter: parent.verticalCenter
+
 
                     property ZP.XdgWindow xdgWindow :  model.window
-                    height: _surface.surface.sourceGeometry.height
-                    width: _surface.surface.sourceGeometry.width
+                    height: _layout.implicitHeight
+                    width: _layout.implicitWidth
 
                     opacity: (y * -1) > 50 ? 20 / (y * -1): 1
                     background: null
@@ -136,71 +137,103 @@ Maui.Page
 
                     clip: false
 
-                    Maui.ListItemTemplate
-                    {
-                        anchors.bottom: _thumbnail.top
-                        anchors.left: _thumbnail.left
-                        anchors.right: _thumbnail.right
-                        height: Maui.Style.rowHeight
-                        iconSource: xdgWindow.iconName
-                        iconSizeHint: Maui.Style.iconSizes.medium
-                        label1.text: xdgWindow.appName
-                    }
 
-                    Item
+                    contentItem: Column
                     {
-                        anchors.centerIn: parent
-                        height: _surface.surface.sourceGeometry.height
-                        width: _surface.surface.sourceGeometry.width
-                        //                    scale: 0.7
-                        id: _thumbnail
+                        id: _layout
 
-                        WaylandQuickItem
+                        Maui.ListItemTemplate
                         {
-                            id: _surface
-                            surface: xdgWindow.shellSurface.surface
-                            touchEventsEnabled: false
-                            focusOnClick: false
-                            enabled: false
-                            sizeFollowsSurface: false
-                            smooth: true
-                            anchors.fill: parent
+                            width: parent.width
+                            height: Maui.Style.rowHeight
+                            iconSource: xdgWindow.iconName
+                            iconSizeHint: Maui.Style.iconSizes.medium
+                            label1.text: xdgWindow.appName
+                        }
 
-                            layer.enabled: true
-                            layer.effect: OpacityMask
+                        Item
+                        {
+                            height: _surface.surface.sourceGeometry.height * 0.5
+                            width: _surface.surface.sourceGeometry.width * 0.5
+                            //                    scale: 0.7
+                            id: _thumbnail
+
+                            WaylandQuickItem
                             {
-                                maskSource: Item
-                                {
-                                    width: _thumbnail.width
-                                    height: _thumbnail.height
+                                id: _surface
+                                surface: xdgWindow.shellSurface.surface
+                                touchEventsEnabled: false
+                                focusOnClick: false
+                                enabled: false
+                                sizeFollowsSurface: false
+                                smooth: true
+                                anchors.fill: parent
 
-                                    Rectangle
+                                layer.enabled: true
+                                layer.effect: OpacityMask
+                                {
+                                    maskSource: Item
                                     {
-                                        anchors.fill: parent
-                                        radius: Maui.Style.radiusV
+                                        width: _thumbnail.width
+                                        height: _thumbnail.height
+
+                                        Rectangle
+                                        {
+                                            anchors.fill: parent
+                                            radius: Maui.Style.radiusV
+                                        }
                                     }
                                 }
                             }
-                        }
-
-                        Rectangle
-                        {
-                            anchors.fill: parent
-                            //         anchors.margins: Maui.Style.space.small
-                            radius: Maui.Style.radiusV
-                            color: "transparent"
-                            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-                            opacity: 0.5
 
                             Rectangle
                             {
                                 anchors.fill: parent
-                                anchors.margins: 1
+                                //         anchors.margins: Maui.Style.space.small
+                                radius: Maui.Style.radiusV
                                 color: "transparent"
-                                radius: parent.radius - 0.5
-                                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                                opacity: 0.7
+                                border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+                                opacity: 0.5
+
+                                Rectangle
+                                {
+                                    anchors.fill: parent
+                                    anchors.margins: 1
+                                    color: "transparent"
+                                    radius: parent.radius - 0.5
+                                    border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                                    opacity: 0.7
+                                }
                             }
+
+                            Maui.Badge
+                            {
+                                parent: _thumbnail
+                                id: _closeButton
+                                color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+
+                                property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
+
+                                Maui.X
+                                {
+                                    height: Maui.Style.iconSizes.tiny
+                                    width: height
+                                    anchors.centerIn: parent
+                                    color: Kirigami.Theme.textColor
+                                }
+
+                                border.color: Kirigami.Theme.textColor
+
+                                anchors
+                                {
+                                    verticalCenter: parent.top
+                                    horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
+                                }
+
+                                z: _itemDelegate.z+999
+                                onClicked:  xdgWindow.close()
+                            }
+
                         }
                     }
 
@@ -216,33 +249,6 @@ Maui.Page
                         source: _thumbnail
                     }
 
-                    Maui.Badge
-                    {
-                        parent: _thumbnail
-                        id: _closeButton
-                        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
-
-                        property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
-
-                        Maui.X
-                        {
-                            height: Maui.Style.iconSizes.tiny
-                            width: height
-                            anchors.centerIn: parent
-                            color: Kirigami.Theme.textColor
-                        }
-
-                        border.color: Kirigami.Theme.textColor
-
-                        anchors
-                        {
-                            verticalCenter: parent.top
-                            horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
-                        }
-
-                        z: _itemDelegate.z+999
-                        onClicked:  xdgWindow.close()
-                    }
 
                     DragHandler
                     {

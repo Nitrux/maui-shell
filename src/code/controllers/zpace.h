@@ -15,6 +15,7 @@ class Zpace : public QObject
 
 public:
     explicit Zpace(ZpacesModel *parent = nullptr);
+    ~Zpace();
 
     /**
      * @brief surfaces
@@ -55,6 +56,7 @@ private:
 
 signals:
     void limitChanged(int limit);
+    void closed();
 };
 
 #endif // ZPACE_H

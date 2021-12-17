@@ -135,7 +135,7 @@ WaylandCompositor
 
         console.log("QML TOPLEVEL TYPE", shellSurface.title)
 let window = desktop.zpaces.createXdgWindow(shellSurface, toplevel)
-        desktop.workspaces.currentIndex = desktop.zpaces.addWindow(window);
+        desktop.workspaces.currentIndex = desktop.zpaces.addWindow(window, desktop.workspaces.currentIndex);
         if(desktop.formFactor !== Cask.Env.Desktop)
         {
         window.maximize()

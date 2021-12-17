@@ -11,6 +11,7 @@ class QWaylandOutput;
 class QWaylandXdgToplevel;
 class XdgWindow;
 class QWaylandShellSurface;
+class SurfacesModel;
 class Zpaces : public QObject
 {
     Q_OBJECT
@@ -18,6 +19,7 @@ class Zpaces : public QObject
     Q_PROPERTY(TasksModel *tasksModel READ tasksModel FINAL CONSTANT)
     Q_PROPERTY(ZMode zmode READ zmode NOTIFY zmodeChanged)
     Q_PROPERTY(QWaylandOutput *output READ output WRITE setOutput NOTIFY outputChanged)
+    Q_PROPERTY(SurfacesModel *allSurfaces READ allSurfaces FINAL CONSTANT)
 
 public:
     enum ZMode
@@ -28,7 +30,7 @@ public:
         PhoneMode
     }; Q_ENUM(ZMode)
     explicit Zpaces(QObject *parent = nullptr);
-
+~Zpaces();
     /**
      * @brief zpacesModel
      * Model of all the Zpaces AKA workspaces
@@ -39,6 +41,8 @@ public:
     TasksModel * tasksModel() const;
 
     QWaylandOutput * output() const;
+
+    SurfacesModel * allSurfaces() const;
 
 public slots:
     /**
@@ -106,9 +110,12 @@ public slots:
 
     XdgWindow *createXdgWindow(QWaylandShellSurface *, QWaylandXdgToplevel*);
 
+    void clearAllSurfaces();
+
 private:
     ZpacesModel *m_zpacesModel;    
     TasksModel * m_tasksModel;
+    SurfacesModel * m_allSurfaces;
 
     QWaylandOutput * m_output;
 
@@ -116,6 +123,7 @@ private:
 
     void setGeometryConnections();
     void setZpacesMode();
+
 
 signals:
 

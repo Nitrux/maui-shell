@@ -9,33 +9,29 @@
 #include <QtWaylandCompositor/QWaylandClient>
 #include <QtWaylandCompositor/QWaylandCompositor>
 
-XdgWindow::XdgWindow(QObject *parent) : AbstractWindow(parent)
-  ,m_shellSurface(nullptr)
-  ,m_toplevel(nullptr)
-  , m_xdgSurface(nullptr)
-  ,m_waylandSurface(nullptr)
-  ,m_client(nullptr)
-  ,m_compositor(nullptr)
-{
-    connect(this, &XdgWindow::toplevelChanged, this, &XdgWindow::setUpToplevelConnections);
-}
 
-XdgWindow::XdgWindow(QWaylandShellSurface * shellSurface, QWaylandXdgToplevel * toplevel) : AbstractWindow(nullptr)
-,m_shellSurface(shellSurface)
-,m_toplevel(toplevel)
-,m_xdgSurface(qobject_cast<QWaylandXdgSurface*>(m_shellSurface))
-,m_waylandSurface( m_xdgSurface->surface())
-,m_client(m_waylandSurface->client())
-,m_compositor(m_waylandSurface->compositor())
+XdgWindow::XdgWindow(QWaylandShellSurface * shellSurface, QWaylandXdgToplevel * toplevel) : AbstractWindow()
+  ,m_shellSurface(shellSurface)
+  ,m_toplevel(toplevel)
+  ,m_xdgSurface(qobject_cast<QWaylandXdgSurface*>(m_shellSurface))
+  ,m_waylandSurface( m_xdgSurface->surface())
+  ,m_client(m_waylandSurface->client())
+  ,m_compositor(m_waylandSurface->compositor())
 {
     this->setUpToplevelConnections();
+
+    connect(m_shellSurface, &QWaylandXdgToplevel::destroyed, [this]()
+    {
+        emit this->closed();
+        this->deleteLater();
+    });
 }
 
 XdgWindow::~XdgWindow()
 {
     qDebug() << "DELETING XDG WINDOW";
-//    m_client->close();
-//    qDebug() << "WINDOW CLOSED?" << m_toplevel << m_xdgSurface;
+    //    m_client->close();
+    //    qDebug() << "WINDOW CLOSED?" << m_toplevel << m_xdgSurface;
 }
 
 QWaylandShellSurface *XdgWindow::shellSurface() const
@@ -76,8 +72,8 @@ void XdgWindow::setToplevel(QWaylandXdgToplevel *toplevel)
     if (m_toplevel == toplevel)
         return;
 
-    if(m_toplevel)
-        m_toplevel->deleteLater();
+//    if(m_toplevel)
+//        m_toplevel->deleteLater();
 
     m_toplevel = toplevel;
     qDebug() << "SETTIGN WINDOW TOPLEVEL" << toplevel << m_toplevel;
@@ -114,9 +110,7 @@ void XdgWindow::activate()
 
 void XdgWindow::close()
 {
-        m_toplevel->sendClose();
-//    m_client->close();
-        //    this->deleteLater();
+    m_toplevel->sendClose();
 }
 
 bool XdgWindow::maximized() const
@@ -140,9 +134,6 @@ void XdgWindow::setUpClientConnections()
 {
     if(!m_client)
         return;
-
-//    connect(m_client, &QWaylandClient::titleChanged, this, &AbstractWindow::titleChanged);
-
 }
 
 void XdgWindow::setUpToplevelConnections()
@@ -151,7 +142,6 @@ void XdgWindow::setUpToplevelConnections()
         return;
 
     qDebug() << "Setting up tolevel connection from XDGWINDOW";
-    connect(m_toplevel, &QWaylandXdgToplevel::destroyed, this, &XdgWindow::deleteLater);
 
     connect(m_toplevel, &QWaylandXdgToplevel::titleChanged, this, &AbstractWindow::titleChanged);
 

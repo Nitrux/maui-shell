@@ -18,20 +18,15 @@ import Zpaces 1.0 as ZP
 Rectangle
 {
     id: control
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
     property WorkZpace workzpace
 
-    opacity: 0.3
+    opacity: 0.9
 
-    color: "#333"
+    color: Kirigami.Theme.backgroundColor
 
-
-    Kirigami.Separator
-    {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-    }
 
     HoverHandler
     {
@@ -45,7 +40,7 @@ Rectangle
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height - 12
         width: Math.min(100, parent.width * 0.5)
-        color: _hadleHandler.hovered ? Kirigami.Theme.highlightColor : "white"
+        color: _hadleHandler.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
         radius: 4
     }
 

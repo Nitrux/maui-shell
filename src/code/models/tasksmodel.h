@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QObject>
 #include <QtWaylandCompositor/QWaylandShellSurface>
+#include <QQmlParserStatus>
 
 class Task;
 class Zpaces;
@@ -58,12 +59,15 @@ public slots:
      */
     void addTask(const QString &id, const bool &pin = false);
 
+
     /**
      * @brief removeTask
      * Removes a task from the model
      * @param index
      */
     void removeTask(const int &index);
+
+    QStringList pinnedTasks();
 
 signals:
     void countChanged();
@@ -73,9 +77,10 @@ private:
     QVector<Task*> m_tasks;
 
     Task * findTask(const QString &id);
+    bool containsTask(const QString &id);
     bool indexIsValid(const int &index) const;
-
-
+    void setPinnedTasks();
+    void addTask(Task *task);
 };
 
 #endif // TASKSMODEL_H

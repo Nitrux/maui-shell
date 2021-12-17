@@ -19,15 +19,15 @@ ListView
 {
     id: control
 
-property bool overviewMode : false
+    property bool overviewMode : false
     clip: false
 
-//    Binding on currentIndex
-//    {
-//        delayed: true
-//        value:  _appsOverview.currentIndex
-//        restoreMode: Binding.RestoreBinding
-//    }
+    //    Binding on currentIndex
+    //    {
+    //        delayed: true
+    //        value:  _appsOverview.currentIndex
+    //        restoreMode: Binding.RestoreBinding
+    //    }
 
     onCurrentIndexChanged:
     {
@@ -42,7 +42,7 @@ property bool overviewMode : false
     highlightFollowsCurrentItem: true
     highlightMoveDuration: 0
     highlightResizeDuration: 0
-    cacheBuffer: width * 4
+    cacheBuffer: width * count
     //                    preferredHighlightEnd: width
     // 		highlight: Item {}
     highlightMoveVelocity: -1
@@ -63,16 +63,16 @@ property bool overviewMode : false
     {
         target: _zpaces.zpacesModel
         ignoreUnknownSignals: true
-        function onZpaceAdded()
+        function onZpaceAdded(index)
         {
-            control.incrementCurrentIndex()
+            control.currentIndex = index
         }
     }
 
 
     function openOverview()
     {
-         control.scale = 0.8
+        control.scale = 0.8
         overView = true
     }
 

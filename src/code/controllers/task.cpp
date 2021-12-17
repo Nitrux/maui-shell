@@ -1,16 +1,29 @@
 #include "task.h"
 #include "code/controllers/abstractwindow.h"
 #include "code/models/tasksmodel.h"
+
 #include <KDesktopFile>
 #include <KService>
+#include <QSettings>
 
-Task::Task(const QString &id, AbstractWindow *window, TasksModel *modelRoot) : QObject(nullptr) //tasksmodel destroys it
+Task::Task(const QString &id, AbstractWindow *window, TasksModel *modelRoot) : QObject(nullptr)
   ,m_id(id)
   ,m_window(window)
   ,m_modelRoot(modelRoot)
 {
     connect(this, &Task::windowChanged, this, &Task::setWindowConnections);
     connect(this, &Task::idChanged, this, &Task::setData);
+
+    connect(this, &Task::isPinnedChanged, [this](bool pinned)
+    {
+       if(pinned)
+       {
+           this->pinTask();
+       }else
+       {
+           this->unPinTask();
+       }
+    });
 
     this->setWindowConnections();
     this->setData();
@@ -56,6 +69,11 @@ QString Task::iconName() const
 QString Task::fileName() const
 {
     return m_fileName;
+}
+
+QString Task::id() const
+{
+    return m_id;
 }
 
 void Task::setName(const QString &name)
@@ -104,9 +122,7 @@ void Task::setWindowConnections()
     if(!m_window)
         return;
 
-//    m_window->disconnect();
-
-    connect(m_window, &AbstractWindow::destroyed, this, [this]()
+    connect(m_window, &AbstractWindow::closed, this, [this]()
     {
         if(m_isPinned)
         {
@@ -114,10 +130,10 @@ void Task::setWindowConnections()
             emit windowChanged();
         }else
         {
-            this->deleteLater();
+            emit this->closed();
         }
 
-    }, Qt::UniqueConnection);
+    }, Qt::QueuedConnection);
 
 
     connect(m_window, &AbstractWindow::appIdChanged, [this]()
@@ -165,4 +181,42 @@ void Task::setExecutable(const QString &exec)
 
     m_executable = exec;
     emit this->executableChanged(m_executable);
+}
+
+void Task::pinTask()
+{
+    auto tasks = m_modelRoot->pinnedTasks();
+    if(tasks.contains(m_id))
+    {
+        return;
+    }
+
+    tasks << m_id;
+
+    QSettings settings;
+    settings.beginGroup("TaskBar");
+    settings.setValue("Pinned", tasks);
+    settings.endGroup();
+}
+
+void Task::unPinTask()
+{
+    auto tasks = m_modelRoot->pinnedTasks();
+    if(!tasks.contains(m_id))
+    {
+        return;
+    }
+
+    tasks.removeOne(m_id);
+
+    QSettings settings;
+    settings.beginGroup("TaskBar");
+    settings.setValue("Pinned", tasks);
+    settings.endGroup();
+
+    //now chekc if it has a window, if it has then leave it there, otherwise remove it
+    if(m_window == nullptr)
+    {
+        emit this->closed();
+    }
 }
