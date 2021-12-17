@@ -81,9 +81,24 @@ Cask.PanelItem
         Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
+
+
         ListView
         {
             id: _playersList
+
+            Maui.Holder
+            {
+                anchors.fill: parent
+                visible: _playersList.count === 0
+                title: i18n("No Players")
+                body: i18n("Launch a new player to control")
+                Action
+                {
+                    text: "Vvave"
+                    onTriggered: dock.launchExec("vvave")
+                }
+            }
 
 //            currentIndex: pageIndicator.currentIndex
             width: parent.width

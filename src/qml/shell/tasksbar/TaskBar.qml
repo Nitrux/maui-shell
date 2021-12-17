@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
 import QtQuick.Templates 2.15 as T
@@ -24,14 +24,14 @@ T.Control
     implicitHeight: 64
     padding: Maui.Style.space.small
 
-//    property alias launcher : _launcherItem
+    //    property alias launcher : _launcherItem
 
-    ListModel {id: _tasksModel}
+
 
     background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor
-        opacity: 0.8
+        opacity: _dropArea.containsDrag ? 1 : 0.8
         radius: 10
     }
 
@@ -84,27 +84,7 @@ T.Control
             onClicked: _appsOverview.toggle()
         }
 
-        //    ListModel {id: _runninTasksModel}
 
-        Repeater
-        {
-            model: _tasksModel
-
-            Maui.ItemDelegate
-            {
-                implicitWidth: height
-                implicitHeight: 48
-                draggable: true
-
-                Kirigami.Icon
-                {
-                    source: model.icon
-                    height: isMobile ? 32 : 22
-                    width: height
-                    anchors.centerIn: parent
-                }
-            }
-        }
 
         Repeater
         {
@@ -113,54 +93,71 @@ T.Control
             AbstractButton
             {
                 focusPolicy: Qt.NoFocus
-                property ZP.XdgWindow xdgWindow : model.window
+                readonly property ZP.Task task : model.task
+                readonly property ZP.XdgWindow xdgWindow : task.window
+
                 implicitHeight: 48
                 implicitWidth: height
                 //                draggable: true
-                ToolTip.text: xdgWindow.title
+                ToolTip.text: task.fileName
                 ToolTip.delay: 1000
                 ToolTip.timeout: 5000
                 ToolTip.visible: hovered
 
+                Menu
+                {
+                    id: _menu
+
+                    MenuItem
+                    {
+                        text: task.isPinned ? i18n("UnPin") : i18n("Pin")
+                        onTriggered: task.isPinned = !task.isPinned
+                    }
+                }
+
+                MouseArea
+                {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.RightButton
+                    onClicked:
+                    {
+                        _menu.popup()
+                    }
+                }
 
                 onClicked:
                 {
-//                    var toggleMinimize = false
-//                    if(_swipeView.currentIndex === index)
-//                    {
-//                        toggleMinimize = true
-//                    }
 
-                    _swipeView.currentIndex = model.zpaceIndex
-//                    xdgWindow.minimize()
-
-                    console.log("MINIMIZED?" , xdgWindow.minimized)
-
-                    if(xdgWindow.toplevel.activated)
+                    if(xdgWindow)
                     {
-                        if(!xdgWindow.minimized)
+                        _swipeView.currentIndex = model.zpaceIndex
+
+                        console.log("MINIMIZED?" , xdgWindow.minimized)
+
+                        if(xdgWindow.toplevel.activated)
                         {
-                            xdgWindow.minimize()
+                            if(!xdgWindow.minimized)
+                            {
+                                xdgWindow.minimize()
+                            }else
+                            {
+                                xdgWindow.unminimize()
+                            }
                         }else
                         {
-                            xdgWindow.unminimize()
+                            xdgWindow.unminimize()//also activates it
                         }
                     }else
                     {
-                        xdgWindow.unminimize()//also activates it
+                        launchExec(task.executable)
                     }
-
-//                    if(toggleMinimize)
-//                    {
-//                        _swipeView.itemAtIndex(index).chrome.visible = !_swipeView.itemAtIndex(index).chrome.visible
-//                    }
                 }
 
                 contentItem: Item
                 {
                     Kirigami.Icon
                     {
-                        source: model.window.iconName
+                        source: task.iconName
                         height: 48
                         width: height
                         anchors.centerIn: parent
@@ -168,10 +165,12 @@ T.Control
 
                     Rectangle
                     {
-                        width: parent.width
-                        height: 2
+                        width: task.window ? (task.window.toplevel.activated ? parent.width  : height) : 0
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        height: task.window ? (task.window.toplevel.activated ? 2  : 8) : 0
+                        radius: height/2
                         anchors.bottom: parent.bottom
-                        visible: xdgWindow.toplevel.activated
+                        visible: task.window
                         color: Kirigami.Theme.highlightColor
                     }
                 }
@@ -187,4 +186,24 @@ T.Control
         }
 
     }
+
+    DropArea
+    {
+        id: _dropArea
+        anchors.fill: parent
+        onDropped:
+        {
+            for(var url of drop.urls)
+            {
+                if(url.endsWith(".desktop"))
+                {
+                    console.log("Dropped things" , url)
+                    zpaces.tasksModel.addTask(url, true)
+                    launcher.close()
+                }
+            }
+        }
+    }
+
+
 }

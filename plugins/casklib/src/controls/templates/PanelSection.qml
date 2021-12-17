@@ -73,15 +73,15 @@ T.Control
         visible: handler.active || opened
         opacity: Math.abs((y+height)/(0-(height)))
 
+        y: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
 
+        //        Binding on y
+        //        {
+        //            //            when: !handler.active
+        //            value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
 
-        Binding on y
-        {
-            //            when: !handler.active
-            value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
-
-            restoreMode: Binding.RestoreBindingOrValue
-        }
+        //            restoreMode: Binding.RestoreBindingOrValue
+        //        }
 
         //        Behavior on y
         //        {
@@ -129,7 +129,7 @@ T.Control
         function open()
         {
             popup.opened = true
-//            popup.y= popup.opened ? popup.finalYPos : 0-popup.height
+            //            popup.y= popup.opened ? popup.finalYPos : 0-popup.height
             popup.forceActiveFocus()
             //            popup.opened()
         }
@@ -162,7 +162,7 @@ T.Control
     {
         id: handler
         dragThreshold: 20
-        enabled: !popup.opened
+        enabled: !popup.opened && Maui.Handy.isTouch
         target: null
         yAxis.minimum: 0
         yAxis.maximum: popup.finalYPos + 10
@@ -183,6 +183,7 @@ T.Control
     }
 
 
+
     //    Label
     //    {
     //        text: control.implicitHeight
@@ -194,6 +195,31 @@ T.Control
         spacing: control.spacing
     }
 
+
+    WheelHandler {
+        //        orientation: Qt.Vertical
+        target: null
+        enabled: true
+        grabPermissions: PointerHandler.CanTakeOverFromAnything
+
+        //        property: "y"
+        //        rotationScale: 15
+        //        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+        onActiveChanged:
+        {
+            console.log("WHEEL HANMDLER ACTIVE", rotation)
+            if(!active)
+            {
+                if(rotation > 15)
+                    control.close()
+                else if(rotation < -60)
+                    popup.open()
+                rotation = 0
+            }
+
+        }
+
+    }
     function isPanelItem(obj)
     {
         return obj instanceof PanelCard

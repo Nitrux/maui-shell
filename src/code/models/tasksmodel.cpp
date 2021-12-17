@@ -2,13 +2,21 @@
 #include "code/controllers/zpaces.h"
 #include <QtWaylandCompositor/QWaylandSurface>
 #include <QDebug>
+#include <KService>
+#include <KDesktopFile>
 
 #include "code/controllers/abstractwindow.h"
+#include "code/controllers/task.h"
 
 TasksModel::TasksModel(Zpaces *parent) : QAbstractListModel(parent)
   ,m_zpaces(parent)
 {
 
+}
+
+TasksModel::~TasksModel()
+{
+    qDeleteAll(m_tasks);
 }
 
 int TasksModel::rowCount(const QModelIndex &parent) const
@@ -18,7 +26,7 @@ int TasksModel::rowCount(const QModelIndex &parent) const
         return 0;
     }
 
-    return m_windows.count();
+    return m_tasks.count();
 }
 
 QVariant TasksModel::data(const QModelIndex &index, int role) const
@@ -26,14 +34,15 @@ QVariant TasksModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    auto window = m_windows[index.row()];
+    auto task = m_tasks[index.row()];
+    auto window = task->window();
 
     qDebug() << "Askign for taksbar mdoel data" << role;
     switch(role)
     {
-    case Roles::SurfaceIndex: return QVariant(m_zpaces->indexOfWindow(window));
-    case Roles::ZpaceIndex: return QVariant(m_zpaces->indexOfZpace(window));
-    case Roles::Window: return QVariant::fromValue(window);
+    case Roles::SurfaceIndex: return QVariant( window ? m_zpaces->indexOfWindow(window) : -1);
+    case Roles::ZpaceIndex: return QVariant(window ? m_zpaces->indexOfZpace(window) : -1);
+    case Roles::TaskItem: return QVariant::fromValue(task);
     default: return QVariant();
     }
 
@@ -44,22 +53,51 @@ QHash<int, QByteArray> TasksModel::roleNames() const
 {
     return QHash<int, QByteArray> {{Roles::SurfaceIndex, "surfaceIndex" },
         {Roles::ZpaceIndex, "zpaceIndex" },
-        {Roles::Window, "window" },
+        {Roles::TaskItem, "task"}
     };
 }
 
 void TasksModel::addTask(AbstractWindow *window)
 {
-    qDebug() << "trying to insert a task" << window;
-    connect(window, &AbstractWindow::destroyed, this, [this, window]()
-    {
-        this->removeTask(indexOf(window));
-    }, Qt::UniqueConnection);
+    qDebug() << "trying to insert a task" << window << window->appId();
 
-    const auto index = m_windows.size();
+    //here needs to find if the window appid belongs to an existing task.
+    Task * task = nullptr;
+    task = findTask(window->appId());
+
+    qDebug() << "Trying to deal with new window <<" << window->appId() << (task == nullptr);
+
+    if(task && task->window() == nullptr)
+    {
+        qDebug() << "Setting window to existing task" << task << (task->window() == nullptr);
+        task->setWindow(window);
+    }else
+    {
+        task = new Task(window->appId(), window, this);
+        const auto index = m_tasks.size();
+
+        this->beginInsertRows(QModelIndex(), index, index);
+        m_tasks.append(task);
+        this->endInsertRows();
+
+        emit this->countChanged();
+    }
+
+    connect(task, &Task::destroyed, this, [this, task]()
+    {
+        this->removeTask(indexOf(task));
+    }, Qt::UniqueConnection);
+}
+
+void TasksModel::addTask(const QString &id, const bool &pin)
+{
+    auto task = new Task(id, nullptr, this);
+    task->setIsPinned(pin);
+
+    const auto index = m_tasks.size();
 
     this->beginInsertRows(QModelIndex(), index, index);
-    m_windows.append(window);
+    m_tasks.append(task);
     this->endInsertRows();
 
     emit this->countChanged();
@@ -71,28 +109,64 @@ void TasksModel::removeTask(const int &index)
         return;
 
     this->beginRemoveRows(QModelIndex(), index, index);
-    m_windows.remove(index);
+    m_tasks.remove(index);
     this->endRemoveRows();
     emit this->countChanged();
 }
 
 int TasksModel::count() const
 {
-    return m_windows.count();
+    return m_tasks.count();
 }
 
-int TasksModel::indexOf(AbstractWindow *window)
+int TasksModel::indexOf(Task *task)
 {
-    if(!window)
+    if(!task)
         return -1;
 
-    return this->m_windows.indexOf(window);
+    return this->m_tasks.indexOf(task);
 }
 
 bool TasksModel::indexIsValid(const int &index) const
 {
-    if(index >= m_windows.size() || index < 0)
+    if(index >= m_tasks.size() || index < 0)
         return false;
 
     return true;
 }
+
+
+Task *TasksModel::findTask(const QString &id)
+{
+    qDebug() << "task Service exec" << id;
+
+    if(!id.isEmpty())
+    {
+        QString suffix;
+        if(!id.endsWith(".desktop"))
+        {
+            suffix = ".desktop";
+        }
+        KDesktopFile file(id+suffix);
+        KService service(&file);
+        auto idExec = service.exec();
+
+        qDebug() << "task Service exec" << idExec;
+
+        if(idExec.isEmpty())
+        {
+            return nullptr;
+        }
+
+        for(auto task : m_tasks)
+        {
+            if(task->executable() == idExec)
+            {
+                return task;
+            }
+        }
+    }
+
+    return nullptr;
+}
+

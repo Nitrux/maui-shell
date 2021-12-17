@@ -39,7 +39,17 @@ int Zpaces::addWindow(AbstractWindow *window, const int &fromIndex)
 {
     qDebug() << "trying to add window" << window;
     window->setParent(nullptr); //parent the window to nullptr. windows are destroyed when closed or by the SurfacesModel itself. SurfacesModel takes care of cleaning up remanining windows on destruction, same TasksModel.
-    m_tasksModel->addTask(window);
+
+    QMetaObject::Connection * const winConnection = new QMetaObject::Connection;
+    *winConnection = connect(window, &AbstractWindow::appIdChanged, [this, winConnection, window]()
+    {
+
+        m_tasksModel->addTask(window);
+
+        QObject::disconnect(*winConnection);
+        delete winConnection;
+    });
+
 
     for(int i = fromIndex ; i < m_zpacesModel->count(); i++)
     {
@@ -160,16 +170,16 @@ void Zpaces::setZpacesMode()
     qDebug() << "OUTPUT GEOMETRY CHANGED";
     auto geometry = m_output->geometry();
 
-//    auto position = m_output->position();
-//    auto physicalSize = m_output->physicalSize();
+    //    auto position = m_output->position();
+    //    auto physicalSize = m_output->physicalSize();
 
-//    auto screen = m_output->window()->screen();
-//    bool devicePixelRatio = screen->devicePixelRatio();
+    //    auto screen = m_output->window()->screen();
+    //    bool devicePixelRatio = screen->devicePixelRatio();
     qDebug() << "CHECKING FOR TOUCH DEVICES";
-//for(const auto &device : QTouchDevice::devices())
-//{
-//    qDebug() << "DEVICE" << device->capabilities() <<device->maximumTouchPoints() << device->name() << device->type();
-//}
+    //for(const auto &device : QTouchDevice::devices())
+    //{
+    //    qDebug() << "DEVICE" << device->capabilities() <<device->maximumTouchPoints() << device->name() << device->type();
+    //}
 
     if(geometry.width() > 1500)
     {
@@ -192,5 +202,5 @@ Zpaces::ZMode Zpaces::zmode() const
 
 XdgWindow *Zpaces::createXdgWindow(QWaylandShellSurface *shellSurface, QWaylandXdgToplevel * toplevel)
 {
-return new XdgWindow(shellSurface, toplevel);
+    return new XdgWindow(shellSurface, toplevel);
 }

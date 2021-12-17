@@ -43,13 +43,9 @@ Maui.Page
             _gridView.forceActiveFocus()
         }
 
-//        Keys.forwardTo: _gridView
+        //        Keys.forwardTo: _gridView
     }
 
-    Cask.ProcessLauncher
-    {
-        id: launcher
-    }
 
     background: Rectangle
     {
@@ -166,16 +162,17 @@ Maui.Page
                 {
                     id: _allAppsModel
                 }
-            }            
+            }
 
-onKeyPress:
-{
-    console.log("Key _pressed", event.key, _gridView.model.get(_gridView.currentIndex).executable)
-    if(event.key == Qt.Key_Return)
-    {
-       launchExec(_gridView.model.get(_gridView.currentIndex).executable)
-    }
-}
+            onKeyPress:
+            {
+                console.log("Key _pressed", event.key, _gridView.model.get(_gridView.currentIndex).executable)
+                if(event.key == Qt.Key_Return)
+                {
+                    launchExec(_gridView.model.get(_gridView.currentIndex).executable)
+                    control.close()
+                }
+            }
             delegate: Item
             {
                 width: GridView.view.cellWidth
@@ -192,7 +189,7 @@ onKeyPress:
                     draggable: true
                     Drag.keys: ["text/uri-list"]
                     Drag.mimeData: { "text/uri-list": model.path }
-//                    background: Item {}
+                    //                    background: Item {}
                     iconSource:  model.icon
                     iconSizeHint: 64
                     label1.text: model.executable
@@ -200,7 +197,9 @@ onKeyPress:
                     onClicked:
                     {
                         console.log(model.executable)
-                        control.launchExec(model.executable)
+                        launchExec(model.executable)
+                        control.close()
+
                     }
                 }
             }
@@ -243,11 +242,7 @@ onKeyPress:
         }
     }
 
-    function launchExec(exec)
-    {
-        launcher.launch(exec)
-        control.close()
-    }
+
 
     function forceActiveFocus()
     {

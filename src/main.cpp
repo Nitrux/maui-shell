@@ -44,6 +44,8 @@
 #include "code/controllers/zpace.h"
 #include "code/models/zpacesmodel.h"
 #include "code/models/surfacesmodel.h"
+#include "code/models/tasksmodel.h"
+#include "code/controllers/task.h"
 #include "code/controllers/xdgwindow.h"
 #include "code/controllers/waylandcursorgrabber.h"
 
@@ -304,8 +306,10 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
 
-    qmlRegisterUncreatableType<Zpace>(ZPACES_URI, 1, 0, "Zpace", "Use it from a reference form Zpaces object");
+    qmlRegisterUncreatableType<Zpace>(ZPACES_URI, 1, 0, "Zpace", "Use it from a reference from Zpaces object");
+    qmlRegisterUncreatableType<Task>(ZPACES_URI, 1, 0, "Task", "Use it from Zpaces::TasksModel.task object");
     qmlRegisterAnonymousType<ZpacesModel>(ZPACES_URI, 1);
+    qmlRegisterAnonymousType<TasksModel>(ZPACES_URI, 1);
     qmlRegisterAnonymousType<SurfacesModel>(ZPACES_URI, 1);
     qmlRegisterAnonymousType<AbstractWindow>(ZPACES_URI, 1);
     qmlRegisterType<Zpaces>(ZPACES_URI, 1, 0, "Zpaces");

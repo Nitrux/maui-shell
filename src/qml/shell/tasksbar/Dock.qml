@@ -14,6 +14,12 @@ Item
     implicitHeight: _bottomPanelContainer.implicitHeight
     property bool hidden : _container.y === height
     property bool autohide: false
+    property alias launcher : _launcher
+
+    Cask.ProcessLauncher
+    {
+        id: processlauncher
+    }
 
     Rectangle
     {
@@ -190,4 +196,8 @@ Item
         _taskbar.forceActiveFocus()
     }
 
+    function launchExec(exec)
+    {
+        processlauncher.launch(exec)
+    }
 }

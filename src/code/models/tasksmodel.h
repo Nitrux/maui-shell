@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QtWaylandCompositor/QWaylandShellSurface>
 
+class Task;
 class Zpaces;
 class AbstractWindow;
 class TasksModel : public QAbstractListModel
@@ -16,11 +17,11 @@ public:
     enum Roles
     {
         ZpaceIndex,
-        SurfaceIndex,       
-        Window
+        SurfaceIndex,
+        TaskItem
     };
     explicit TasksModel(Zpaces *parent = nullptr);
-
+~TasksModel();
     // QAbstractItemModel interface
 public:
     int rowCount(const QModelIndex &parent) const override final;
@@ -35,20 +36,27 @@ public:
 
     /**
      * @brief indexOf
-     * Index of the given Window in the model
+     * Index of the given Task in the model
      * @param window
      * @return
      */
-    int indexOf(AbstractWindow * window);
+    int indexOf(Task *task);
 
 public slots:
 
     /**
      * @brief addTask
-     * Add a task to the model
+     * Add a task to the model based off an AbstractWindow
      * @param surface
      */
     void addTask(AbstractWindow* window);
+
+    /**
+     * @brief addTask
+     * Add a task to the model based off an id such as the dekstop file path
+     * @param surface
+     */
+    void addTask(const QString &id, const bool &pin = false);
 
     /**
      * @brief removeTask
@@ -62,8 +70,9 @@ signals:
 
 private:
     Zpaces* m_zpaces;
-    QVector<AbstractWindow*> m_windows;
+    QVector<Task*> m_tasks;
 
+    Task * findTask(const QString &id);
     bool indexIsValid(const int &index) const;
 
 

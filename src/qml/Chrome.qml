@@ -111,13 +111,15 @@ Cask.StackableItem
 
         function onSetMinimized()
         {
-            rootChrome.visible = false;
+            rootChrome.visible = false
+            window.deactivate()
         }
 
         function onUnsetMinimized()
         {
             rootChrome.visible = true;
             surfaceItem.forceActiveFocus();
+            window.activate()
         }
 
         function onSetMaximized()
@@ -580,9 +582,7 @@ Cask.StackableItem
 
             onSetMinimized:
             {
-                surfaceItem.valid = false
-                rootChrome.visible = false
-                window.deactivate()
+
             }
         }
 
