@@ -19,9 +19,30 @@ Maui.Page
 
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
     property alias searchBar : _searchBar
+
+    Behavior on opacity
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
     headBar.visible: true
     headBar.background: null
+    headBar.leftContent: ToolButton
+    {
+        Kirigami.Theme.inherit: false
+        Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+
+        icon.name: "go-previous"
+        onClicked: _swipeView.decrementCurrentIndex()
+        visible: _swipeView.currentIndex=== 1
+    }
+
     headBar.middleContent: Maui.TextField
     {
         id: _searchBar
@@ -192,7 +213,7 @@ Maui.Page
                     //                    background: Item {}
                     iconSource:  model.icon
                     iconSizeHint: 64
-                    label1.text: model.executable
+                    label1.text: model.label
 
                     onClicked:
                     {

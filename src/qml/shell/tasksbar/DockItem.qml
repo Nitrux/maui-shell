@@ -9,26 +9,26 @@ import org.maui.cask 1.0 as Cask
 Cask.PanelItem
 {
     id: control
-    iconSize: 48
+    implicitHeight: 48
+    implicitWidth: 48
+
     leftPadding: 0
     rightPadding: 0
 
     background: Rectangle
     {
         color: Qt.darker(Kirigami.Theme.backgroundColor)
-        opacity: control.card.visible ? 1 : 0.7
+        opacity: control.checked? 1 : 0.7
         radius: 10
     }
 
-    Item
+    contentItem: Item
     {
-        Layout.preferredHeight: control.iconSize
-        Layout.preferredWidth: height
 
         Kirigami.Icon
         {
-            source: "view-list-icons"
-            color: Kirigami.Theme.textColor
+            source: control.icon.name
+            color: control.checked || control.down ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
             height: 22
             width: height
             anchors.centerIn: parent

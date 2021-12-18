@@ -17,13 +17,27 @@ Cask.PanelItem
     {
         id: _sessioDialog
         title: i18n("Quit Session")
-        message: i18n("Are you sure you want to quit the session and terminate runnig  tasks?")
+        message: i18n("Are you sure you want to quit the session and terminate runnig tasks?")
         page.margins: Maui.Style.space.big
         spacing: Maui.Style.space.medium
+        acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : i18n("Quit")
+
         ListView
         {
+            id: _runningTasks
+//            visible : count > 0
+
+            Maui.Holder
+            {
+                anchors.fill: parent
+                visible: _runningTasks.count === 0
+                title: i18n("All Clear")
+                body: i18n("Session can quitt")
+            }
+
             Layout.fillWidth: true
-            implicitHeight: 200
+            implicitHeight: Math.max(contentHeight + Maui.Style.space.big, 200)
+
             model: _zpaces.allSurfaces
             delegate: Maui.ListBrowserDelegate
             {
@@ -48,7 +62,7 @@ Cask.PanelItem
 
         onRejected:
         {
-             Qt.quit()
+             _sessioDialog.close()
         }
     }
 
@@ -58,22 +72,39 @@ Cask.PanelItem
 
         Row
         {
+            property int display: ToolButton.TextUnderIcon
+            anchors.horizontalCenter: parent.horizontalCenter
             ToolButton
             {
                 icon.name: "system-log-out"
+                text: i18n("Quit")
+                display: parent.display
+
                 onClicked:
                 {
                    _sessioDialog.open()
                 }
             }
 
-            Repeater
+            ToolButton
             {
-                model: ["system-reboot", "system-shutdown", "system-lock-screen","webcam", "system-suspend"]
-                delegate:  ToolButton
-                {
+                icon.name: "system-reboot"
+                text: i18n("Restart")
+                display: parent.display
 
-                    icon.name: modelData
+                onClicked:
+                {
+                }
+            }
+
+            ToolButton
+            {
+                icon.name: "system-shutdown"
+                text: i18n("Shutdown")
+                display: parent.display
+
+                onClicked:
+                {
                 }
             }
         }

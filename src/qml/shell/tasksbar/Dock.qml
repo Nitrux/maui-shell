@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQml 2.14
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -70,6 +71,20 @@ Item
         x: handler2.active && win.formFactor === Cask.Env.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((control.width/2 ) - (_launcher.width/2));
 
     }
+
+    DropShadow
+    {
+        visible: win.formFactor === Cask.Env.Desktop
+        transparentBorder: true
+        anchors.fill: _launcher
+        horizontalOffset: 0
+        verticalOffset: 0
+        radius: 8.0
+        samples: 17
+        color: Qt.rgba(0,0,0,0.2)
+        source: _launcher
+    }
+
 
     Item
     {

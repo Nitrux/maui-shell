@@ -153,7 +153,8 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "xdg-shell");
 
 
-  qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
+      qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
+    //  qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
 //  qputenv("QT_SCALE_FACTOR", "2"); //if it is mobile., how to calculate this value based on dpi?
 //    qunsetenv("QT_SCALE_FACTOR");
 //    qunsetenv("QT_SCREEN_SCALE_FACTORS");

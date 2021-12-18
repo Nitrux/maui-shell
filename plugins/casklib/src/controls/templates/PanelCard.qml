@@ -21,6 +21,7 @@ Item
     signal opened()
     signal closed()
 
+    opacity: visible ? 1 : 0
 
     onVisibleChanged:
     {
@@ -33,12 +34,12 @@ Item
         }
     }
 
-    Behavior on implicitHeight
+    Behavior on opacity
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.shortDuration
-            easing.type: Easing.OutInQuad
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
         }
     }
 

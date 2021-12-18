@@ -18,6 +18,7 @@ import Zpaces 1.0 as ZP
 ListView
 {
     id: control
+    property real overviewScale : 1
 
     property bool overviewMode : false
     clip: false
@@ -33,11 +34,11 @@ ListView
     {
         control.lastPos = control.contentX
     }
-
+    scale: control.overviewScale
     orientation: ListView.Horizontal
     interactive: overviewMode
     snapMode: overviewMode ? ListView.NoSnap : ListView.SnapOneItem
-    boundsBehavior: Flickable.StopAtBounds
+    boundsBehavior: overViewMode ? Flickable.OvershootBounds : Flickable.StopAtBounds
 
     highlightFollowsCurrentItem: true
     highlightMoveDuration: 0
@@ -45,8 +46,8 @@ ListView
     cacheBuffer: width * count
     //                    preferredHighlightEnd: width
     // 		highlight: Item {}
-    highlightMoveVelocity: -1
-    highlightResizeVelocity: -1
+//    highlightMoveVelocity: -1
+//    highlightResizeVelocity: -1
 
 
     property int lastPos: 0
@@ -59,6 +60,7 @@ ListView
         font.pointSize: 22
     }
 
+
     Connections
     {
         target: _zpaces.zpacesModel
@@ -69,17 +71,17 @@ ListView
         }
     }
 
-
     function openOverview()
     {
-        control.scale = 0.8
-        overView = true
+        control.overviewScale = 0.8
+        overviewMode = true
     }
 
     function closeOverview()
     {
-        control.scale = 1
-        overView = false
+        control.overviewScale = 1
+        control.returnToBounds()
+        overviewMode = false
     }
 
 }

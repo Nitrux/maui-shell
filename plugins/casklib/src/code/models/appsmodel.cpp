@@ -24,28 +24,30 @@ const FMH::MODEL_LIST &AppsModel::items() const
     return m_data;
 }
 
+static FMH::MODEL_LIST groupData( KServiceGroup::Ptr group)
+{
+    FMH::MODEL_LIST res;
+
+    if(!group->groupEntries().isEmpty())
+    {
+        for(const auto &s : group->groupEntries())
+        {
+            if (!s->noDisplay() && s->serviceEntries().length() > 0)
+                res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
+
+        }
+    }
+
+    return res;
+}
+
 static FMH::MODEL_LIST getApps()
 {
     FMH::MODEL_LIST res;
     KServiceGroup::Ptr group = KServiceGroup::root();
 
-    bool sortByGenericName = false;
+    res = groupData(group);
 
-    KServiceGroup::List list = group->entries(true /* sorted */, true /* excludeNoDisplay */, true /* allowSeparators */, sortByGenericName /* sortByGenericName */);
-
-    for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++) {
-        const KSycocaEntry::Ptr p = (*it);
-
-        if (p->isType(KST_KServiceGroup))
-        {
-            KServiceGroup::Ptr s(static_cast<KServiceGroup *>(p.data()));
-
-            if (!s->noDisplay() && s->childCount() > 0) {
-                res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
-
-            }
-        }
-    }
     return res;
 }
 
@@ -59,45 +61,19 @@ static FMH::MODEL_LIST getApps(const QString &groupStr, const int &limit)
         return getApps();
 
     FMH::MODEL_LIST res;
-    //    const KServiceGroup::Ptr group(static_cast<KServiceGroup*>(groupStr));
     auto group = new KServiceGroup(grp);
-    KServiceGroup::List list = group->entries(true /* sorted */, true /* excludeNoDisplay */, false /* allowSeparators */, true /* sortByGenericName */);
+    auto list = group->serviceEntries();
 
-    for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++)
+    for (const auto &s : list)
     {
-        const KSycocaEntry::Ptr p = (*it);
+        if (s->noDisplay())
+            continue;
 
-        if (p->isType(KST_KService))
-        {
-            const KService::Ptr s(static_cast<KService *>(p.data()));
+        if(i>=limit)
+            break;
 
-            if (s->noDisplay())
-                continue;
-
-            if(i>=limit)
-                break;
-
-             res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}, {FMH::MODEL_KEY::EXECUTABLE, s->exec()}};
-             i++;
-
-        } else if (p->isType(KST_KServiceSeparator))
-        {
-            qDebug() << "separator wtf";
-
-        } else if (p->isType(KST_KServiceGroup))
-        {
-            const KServiceGroup::Ptr s(static_cast<KServiceGroup *>(p.data()));
-
-            if(i>=limit)
-                break;
-
-            if (s->childCount() == 0)
-                continue;
-            res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::CATEGORY, s->baseGroupName()}, {FMH::MODEL_KEY::MESSAGE, s->caption()}, {FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
-
-            i++;
-
-        }
+        res << FMH::MODEL {{FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}, {FMH::MODEL_KEY::EXECUTABLE, s->exec()}};
+        i++;
     }
 
     return res;
@@ -108,23 +84,20 @@ void AppsModel::setList()
     emit preListChanged();
     m_data.clear();
 
-    if(m_group.isEmpty())
+    if(m_group.isEmpty() || m_group == "All")
     {
         const auto apps = getApps();
         for(const auto &item : std::as_const(apps))
         {
-           const auto apps = getApps(item[FMH::MODEL_KEY::LABEL], m_limit);
+            const auto apps = getApps(item[FMH::MODEL_KEY::LABEL], m_limit);
 
-           m_data << apps;
+            m_data << apps;
         }
     }else
     {
         const auto apps = getApps(m_group, m_limit);
         m_data << apps;
     }
-
-
-
 
     emit postListChanged();
     emit this->countChanged();
@@ -135,7 +108,7 @@ void AppsModel::componentComplete()
 {
     connect(this, &AppsModel::groupChanged, this, &AppsModel::setList);
     connect(this, &AppsModel::limitChanged, this, &AppsModel::setList);
-     this->setList();
+    this->setList();
 }
 
 QString AppsModel::group() const
@@ -145,7 +118,11 @@ QString AppsModel::group() const
 
 QVariantList AppsModel::groups() const
 {
-    return FMH::toMapList(getApps());
+    FMH::MODEL_LIST res;
+    res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, "All Apps"}, {FMH::MODEL_KEY::ICON, "Love"}, {FMH::MODEL_KEY::LABEL, "All"}, {FMH::MODEL_KEY::PATH, ""}};
+
+    res << getApps();
+    return FMH::toMapList(res);
 }
 
 int AppsModel::limit() const

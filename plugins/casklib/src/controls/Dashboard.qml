@@ -30,7 +30,6 @@ Item
 
     property alias topPanel: _topPanel
 
-    readonly property bool rise : _dropArea.containsDrag
 
     Rectangle
     {
@@ -42,79 +41,19 @@ Item
         {
             id: _bg
             anchors.fill: parent
-            anchors.margins:  control.rise ? Maui.Style.space.large * 2 : 0
             Image
             {
                 id: _img
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
-                layer.enabled: control.rise
-                layer.effect: OpacityMask
-                {
-                    maskSource: Item
-                    {
-                        width: _img.width
-                        height: _img.height
-
-                        Rectangle
-                        {
-                            anchors.fill: parent
-                            radius: Maui.Style.radiusV
-                        }
-                    }
-                }
-
-                Rectangle
-                {
-                    visible:  control.rise
-                    anchors.fill: parent
-                    //         anchors.margins: Maui.Style.space.small
-                    radius: Maui.Style.radiusV
-                    color: "transparent"
-                    border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-                    opacity: 0.5
 
 
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        anchors.margins: 1
-                        color: "transparent"
-                        radius: parent.radius - 0.5
-                        border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                        opacity: 0.7
-                    }
-                }
             }
 
         }
 
-        DropShadow
-        {
-            visible: control.rise
-            transparentBorder: true
-            anchors.fill: _bg
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 17
-            color: Qt.rgba(0,0,0,0.9)
-            source: _bg
-        }
 
-        DropArea
-        {
-            id: _dropArea
 
-            anchors.fill: parent
-            onDropped:
-            {
-                if(drop.urls)
-                {
-                    _img.source = drop.urls[0]
-                }
-            }
-        }
     }
 
     Item

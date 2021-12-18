@@ -4,17 +4,20 @@ import QtQuick.Controls 2.15
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import Zpaces 1.0 as ZP
 
 import QtGraphicalEffects 1.0
 
 Control
 {
     id: control
+    property ZP.Zpace zpace
 
     default property alias content: _content.data
-property int radius: 20
+    property int radius: 20
     property bool overviewMode : false
-property alias backgroundImage : _img.source
+    property alias backgroundImage : _img.source
+    readonly property bool rise : _dropArea.containsDrag
 
     Behavior on radius
     {
@@ -37,54 +40,34 @@ property alias backgroundImage : _img.source
             id : _bgContainer
             anchors.fill: parent
 
-        Image
-        {
-            id: _img
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectCrop
-            layer.enabled: control.radius > 0
-            layer.effect: OpacityMask
+            Image
             {
-                maskSource: Item
-                {
-                    width: _img.width
-                    height: _img.height
+                id: _img
+                anchors.fill: parent
+                anchors.margins:  control.rise ? Maui.Style.space.large * 2 : 0
 
-                    Rectangle
+                fillMode: Image.PreserveAspectCrop
+                layer.enabled: control.radius > 0 || control.rise
+                layer.effect: OpacityMask
+                {
+                    maskSource: Item
                     {
-                        anchors.fill: parent
-                        radius: control.radius
+                        width: _img.width
+                        height: _img.height
+
+                        Rectangle
+                        {
+                            anchors.fill: parent
+                            radius: control.radius
+                        }
                     }
                 }
             }
-
-//            Rectangle
-//            {
-//                visible:  control.overviewMode
-//                anchors.fill: parent
-//                //         anchors.margins: Maui.Style.space.small
-//                radius: control.radius
-//                color: "transparent"
-//                border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-//                opacity: 0.5
-
-
-//                Rectangle
-//                {
-//                    anchors.fill: parent
-//                    anchors.margins: 1
-//                    color: "transparent"
-//                    radius: parent.radius - 0.5
-//                    border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-//                    opacity: 0.7
-//                }
-//            }
         }
-    }
 
         DropShadow
         {
-//            visible: control.rise
+            //            visible: control.rise
             transparentBorder: true
             anchors.fill: _bgContainer
             horizontalOffset: 0
@@ -108,16 +91,35 @@ property alias backgroundImage : _img.source
             anchors.fill: parent
         }
 
-        TapHandler
+        MouseArea
         {
-            target: _content
-            onTapped:
+            enabled: overviewMode
+            anchors.fill: parent
+            propagateComposedEvents: true
+            preventStealing: false
+            onClicked:
             {
-                _swipeView.currentIndex = index
                 _swipeView.closeOverview()
+
+                _swipeView.currentIndex = index
+                mouse.accepted= false
             }
         }
     }
 
+
+    DropArea
+    {
+        id: _dropArea
+
+        anchors.fill: parent
+        onDropped:
+        {
+            if(drop.urls)
+            {
+                control.zpace.wallpaper= drop.urls[0]
+            }
+        }
+    }
 
 }

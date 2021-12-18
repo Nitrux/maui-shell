@@ -97,3 +97,29 @@ void Zpace::setConstrains()
 }
 
 
+
+const QString &Zpace::wallpaper() const
+{
+    return m_wallpaper;
+}
+
+void Zpace::setWallpaper(const QString &newWallpaper)
+{
+    if (m_wallpaper == newWallpaper)
+        return;
+    m_wallpaper = newWallpaper;
+    emit wallpaperChanged();
+}
+
+const QString &Zpace::title() const
+{
+    return m_title;
+}
+
+void Zpace::setTitle(const QString &newTitle)
+{
+    if (m_title == newTitle)
+        return;
+    m_title = newTitle;
+    emit titleChanged();
+}

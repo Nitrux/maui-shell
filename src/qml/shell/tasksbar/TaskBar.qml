@@ -42,49 +42,28 @@ T.Control
         spacing: Maui.Style.space.medium
 
 
-        LauncherPanelItem
+        DockItem
         {
             id: _launcherItem
-            height: parent.height
+            checked: _launcher.visible
+            icon.name: "view-list-icons"
             onClicked: _launcher.toggle()
         }
 
-        Cask.PanelItem
+        DockItem
         {
-            iconSize: 48
-            height: parent.height
-            leftPadding: 0
-            rightPadding: 0
-            visible: !isMobile
-            background: Rectangle
-            {
-                color: Qt.darker(Kirigami.Theme.backgroundColor)
-                radius: 10
-                opacity: 0.7
-            }
-
-            Item
-            {
-                Layout.preferredHeight: 48
-                Layout.preferredWidth: height
-
-
-                Kirigami.Icon
-                {
-                    source: "view-file-columns"
-                    color: Kirigami.Theme.textColor
-                    height: 22
-                    width: height
-                    anchors.centerIn: parent
-                }
-            }
-
-            //            visible: !isMobile
+            icon.name: "view-file-columns"
             checked: _appsOverview.opened
             onClicked: _appsOverview.toggle()
         }
 
+        DockItem
+        {
+            icon.name: "list-add"
 
+            visible: overView
+            onClicked: _zpaces.insertZpace(0)
+        }
 
         Repeater
         {
@@ -112,6 +91,18 @@ T.Control
                     {
                         text: task.isPinned ? i18n("UnPin") : i18n("Pin")
                         onTriggered: task.isPinned = !task.isPinned
+                    }
+
+                    MenuItem
+                    {
+                        text: i18n("Maximize")
+                    }
+
+                    MenuSeparator{}
+                    MenuItem
+                    {
+                        text: i18n("Close")
+                        onTriggered: task.window.close()
                     }
                 }
 

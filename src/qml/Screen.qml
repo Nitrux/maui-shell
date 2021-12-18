@@ -133,7 +133,7 @@ WaylandOutput
                 Shortcut
                 {
                     sequence: "Meta+A" // maybe not the best one... or maybe we don't need it at all
-                    onActivated: _taskBar.launcher.toggleLauncherPopup()
+                    onActivated: dock.launcher.toggle()
                 }
 
 
@@ -168,15 +168,17 @@ WaylandOutput
                     width: parent.width
                     model: _zpaces.zpacesModel
                     spacing: 20
+
                     delegate: Zpace
                     {
+//                        scale: ListView.view.overviewScale
                         height: ListView.view.height
                         width: ListView.view.width
-                        radius: ListView.view.scale === 1 ? 0 : 20
+                        radius: ListView.view.overviewScale === 1 ? 0 : 20
                         clip: false
-                        backgroundImage: "qrc:/waves-wallpaper-bigsur1.png"
+                        backgroundImage: zpace.wallpaper
                         overviewMode: overView
-                        property ZP.Zpace zpace : model.Zpace
+                        zpace : model.Zpace
                         topPadding: _cask.topPanel.height
                         bottomPadding: formFactor === Cask.Env.Desktop ? _dock.height : 0
 
@@ -217,6 +219,7 @@ WaylandOutput
             Loader
             {
                 anchors.fill: parent
+                active: Maui.Handy.isTouch
                 source: "Keyboard.qml"
             }
 

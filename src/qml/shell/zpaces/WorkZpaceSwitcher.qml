@@ -53,7 +53,7 @@ Rectangle
     {
         when: overviewHandler.active && overviewHandler.centroid.position.y < -60
         target: control.workzpace
-        property: "scale"
+        property: "overviewScale"
         value: overviewHandler.scaleValue
     }
 

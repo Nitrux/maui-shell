@@ -9,7 +9,6 @@
         <file>qml/shell/AppsOverview.qml</file>
         <file>qml/shell/statusbar/items/calendar/CalendarItem.qml</file>
         <file>qml/shell/tasksbar/Launcher.qml</file>
-        <file>qml/shell/tasksbar/LauncherPanelItem.qml</file>
         <file>qml/shell/statusbar/items/sliders/SlidersItem.qml</file>
         <file>qml/shell/statusbar/items/sliders/SliderTemplate.qml</file>
         <file>qml/shell/statusbar/items/player/AudioPlayerItem.qml</file>
@@ -31,5 +30,6 @@
         <file>qml/shell/zpaces/WorkZpace.qml</file>
         <file>qml/shell/zpaces/Zpace.qml</file>
         <file>qml/shell/tasksbar/Dock.qml</file>
+        <file>qml/shell/tasksbar/DockItem.qml</file>
     </qresource>
 </RCC>
