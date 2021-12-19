@@ -725,21 +725,21 @@ Cask.StackableItem
         }
     }
 
-    Rectangle {
-        z: surfaceItem.z + 9999999999
-        visible: true
-        border.color: "white"
-        color: "black"
-        radius: 5
-        anchors.centerIn: parent
-        width: height * 10
-        height: moveGeometryText.implicitHeight * 1.5
-        Text {
-            id: moveGeometryText
-            color: "white"
-            anchors.centerIn: parent
-            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
-        }
+//    Rectangle {
+//        z: surfaceItem.z + 9999999999
+//        visible: true
+//        border.color: "white"
+//        color: "black"
+//        radius: 5
+//        anchors.centerIn: parent
+//        width: height * 10
+//        height: moveGeometryText.implicitHeight * 1.5
+//        Text {
+//            id: moveGeometryText
+//            color: "white"
+//            anchors.centerIn: parent
+//            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
+//        }
 
-    }
+//    }
 }

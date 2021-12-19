@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
 
-    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+//    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     //    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
     QGuiApplication app(argc, argv);

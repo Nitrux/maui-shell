@@ -46,14 +46,8 @@ Item
                 id: _img
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
-
-
             }
-
         }
-
-
-
     }
 
     Item

@@ -73,7 +73,8 @@ WaylandOutput
     window: Window
     {
         id: win
-
+        width: 1024
+        height: 760
         readonly property int formFactor :
         {
             if(width > 1500)
@@ -91,13 +92,13 @@ WaylandOutput
             anchors.fill: parent
             // Set this to false to disable the outer mouse cursor when running nested
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
-            windowSystemCursorEnabled: mouseTracker.containsMouse
+            windowSystemCursorEnabled: output.isNestedCompositor
 
-            ZP.WaylandCursorGrabber
-            {
-                seat: control.compositor.defaultSeat
-                grab: mouseTracker.containsMouse
-            }
+//            ZP.WaylandCursorGrabber
+//            {
+//                seat: control.compositor.defaultSeat
+//                grab: mouseTracker.containsMouse
+//            }
 
             Cask.Dashboard
             {
@@ -181,6 +182,8 @@ WaylandOutput
                         zpace : model.Zpace
                         topPadding: _cask.topPanel.height
                         bottomPadding: formFactor === Cask.Env.Desktop ? _dock.height : 0
+                        leftPadding: 0
+                        rightPadding: 0
 
                         Item
                         {
@@ -241,14 +244,13 @@ WaylandOutput
                 visible: opened
             }
 
-            //             WaylandCursorItem
-            //             {
-            //                 id: cursor
-            //                 inputEventsEnabled: false
-            //                 x: mouseTracker.mouseX
-            //                 y: mouseTracker.mouseY
-            //                 seat: control.compositor.defaultSeat
-            //             }
+            // Draws the mouse cursor for a given Wayland seat
+            WaylandCursorItem {
+                inputEventsEnabled: false
+                x: mouseTracker.mouseX
+                y: mouseTracker.mouseY
+                seat: output.compositor.defaultSeat
+            }
         }
     }
 

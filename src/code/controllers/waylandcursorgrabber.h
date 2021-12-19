@@ -9,6 +9,7 @@
 #include <QWaylandSeat>
 #include <QWaylandSurfaceGrabber>
 
+class QWaylandDrag;
 class WaylandCursorGrabber : public QWaylandQuickItem
 {
     Q_OBJECT
@@ -37,6 +38,7 @@ Q_SIGNALS:
 private:
     QWaylandSurfaceGrabber *m_grabber = nullptr;
     QWaylandSurfaceGrabber *m_dragIconGrabber = nullptr;
+    QWaylandDrag *m_drag = nullptr;
     bool m_grabbing = false;
     QWaylandSeat *m_seat = nullptr;
     int m_hotspotX = -1;

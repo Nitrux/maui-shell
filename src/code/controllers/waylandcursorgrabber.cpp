@@ -5,7 +5,7 @@
 #include <QWaylandDrag>
 #include <QWaylandOutput>
 #include <QDebug>
-
+#include <QWaylandClient>
 #include "waylandcursorgrabber.h"
 
 WaylandCursorGrabber::WaylandCursorGrabber(QQuickItem *parent)
@@ -30,6 +30,8 @@ void WaylandCursorGrabber::setSeat(QWaylandSeat *seat)
         return;
     }
 
+    m_drag = seat->drag();
+
     if (m_dragIconGrabber) {
         disconnect(m_dragIconGrabber, &QWaylandSurfaceGrabber::success,
                    this, &WaylandCursorGrabber::handleGrab);
@@ -47,6 +49,22 @@ void WaylandCursorGrabber::setSeat(QWaylandSeat *seat)
 
     m_seat = seat;
     Q_EMIT seatChanged(seat);
+
+    connect(m_drag, &QWaylandDrag::dragStarted,[this]()
+    {
+        qDebug() << "DRAG STARTED??????" << m_drag->origin()->client()->processId() << m_drag->visible();
+    });
+
+//    connect(m_seat, &QWaylandSeat::mouseFocusChanged,[this](QWaylandView *newFocus, QWaylandView *oldFocus)
+//    {
+//        qDebug() << "FOCUS CHANGED" << newFocus << oldFocus << m_drag->visible();
+//        if(m_drag->visible())
+//        {
+//            m_drag->dragMove(newFocus->surface(), QPointF{0,0});
+//            m_drag->drop();
+//        }
+//    });
+
 
     connect(m_seat, &QWaylandSeat::cursorSurfaceRequest,
             this, &WaylandCursorGrabber::handleCursorSurfaceRequest);
@@ -83,6 +101,8 @@ void WaylandCursorGrabber::setGrab(bool value)
 
 void WaylandCursorGrabber::handleCursorSurfaceRequest(QWaylandSurface *cursorSurface, int hotspotX, int hotspotY)
 {
+
+    qDebug() << "CURSOR SURFACE REQUESTED";
     if (m_hotspotX != hotspotX) {
         m_hotspotX = hotspotX;
         Q_EMIT hotspotXChanged(hotspotX);
@@ -122,8 +142,20 @@ void WaylandCursorGrabber::handleCursorSurfaceRequest(QWaylandSurface *cursorSur
 
 void WaylandCursorGrabber::handleDragIconChanged()
 {
+    qDebug() << "HANDLE DRAG ICON CHANGED" << m_seat->drag()->visible();
     if (!m_seat->drag()->visible())
+    {
+//        m_seat->drag()->drop();
+//            output()->window()->setCursor(QCursor{Qt::WaitCursor});
+
         return;
+    }
+
+//    QCursor cursor(QPixmap::fromImage(QImage("/home/camilo/Coding/qml/nota/src/assets/48.png")), m_hotspotX, m_hotspotY);
+
+//    output()->window()->setCursor(cursor);
+
+//    output()->window()->setCursor(QCursor{Qt::WaitCursor});
 
     if (m_grab && !m_grabbing && m_dragIconGrabber) {
         m_grabbing = true;
@@ -148,7 +180,11 @@ void WaylandCursorGrabber::handleRedraw()
 
 void WaylandCursorGrabber::handleGrab(const QImage &image)
 {
+    qDebug() << "HANDLE DRAG IMAGE";
+
     if (m_grab) {
+        qDebug() << "HANDLE DRAG IMAGE" << m_grab;
+
         QCursor cursor(QPixmap::fromImage(image), m_hotspotX, m_hotspotY);
         output()->window()->setCursor(cursor);
     }

@@ -31,5 +31,6 @@
         <file>qml/shell/zpaces/Zpace.qml</file>
         <file>qml/shell/tasksbar/Dock.qml</file>
         <file>qml/shell/tasksbar/DockItem.qml</file>
+        <file>qml/CursorItem.qml</file>
     </qresource>
 </RCC>

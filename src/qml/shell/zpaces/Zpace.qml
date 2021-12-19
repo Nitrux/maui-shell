@@ -8,7 +8,7 @@ import Zpaces 1.0 as ZP
 
 import QtGraphicalEffects 1.0
 
-Control
+Pane
 {
     id: control
     property ZP.Zpace zpace
@@ -91,13 +91,13 @@ Control
             anchors.fill: parent
         }
 
-        MouseArea
+        TapHandler
         {
             enabled: overviewMode
-            anchors.fill: parent
-            propagateComposedEvents: true
-            preventStealing: false
-            onClicked:
+//            anchors.fill: parent
+//            propagateComposedEvents: true
+//            preventStealing: false
+            onTapped:
             {
                 _swipeView.closeOverview()
 
