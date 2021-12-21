@@ -38,8 +38,6 @@ qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.mpris.MediaPlayer2.Player.xml 
 set_source_files_properties(code/mpris2/org.mpris.MediaPlayer2.xml PROPERTIES NO_NAMESPACE true)
 qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.mpris.MediaPlayer2.xml mediaplayer2_interface)
 
-
-
 set(caskplugin_ASSETS
     )
 

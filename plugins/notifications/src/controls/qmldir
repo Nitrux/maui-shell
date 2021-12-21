@@ -1,0 +1,4 @@
+module org.cask.notifications
+plugin CaskNotifications
+classname CaskNotificationsPlugin
+typeinfo plugins.qmltypes
