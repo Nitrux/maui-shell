@@ -36,6 +36,8 @@ import "shell/statusbar"
 import "shell/tasksbar"
 import "shell/zpaces"
 
+import "shell/statusbar/items/notifications"
+
 import Zpaces 1.0 as ZP
 
 WaylandOutput
@@ -108,28 +110,23 @@ WaylandOutput
                 anchors.bottomMargin: _zpaceSwitcher.height
                 topPanel.data: StatusBar {id: _statusBar}
 
-                Button
-                {
-                    text: "New ZPace"
-                    icon.name: "list-add"
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.topMargin: _cask.topPanel.height + Maui.Style.space.huge
-                    anchors.margins: Maui.Style.space.huge
-                    onClicked:
-                    {
-                     _zpaces.insertZpace(workspaces.currentIndex)
-
-                    }
-                }
-
-                overlayContent: Dock
+                overlayContent: [
+                    Dock
                 {
                     id: _dock
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
+                },
+
+                NotificationsContainer
+                {
+                    id: _overlayNotificationContainer
+                    width: Math.min(availableGeometry.width, 300)
+                    y: _cask.topPanel.height
+
                 }
+            ]
 
                 Shortcut
                 {
@@ -216,6 +213,8 @@ WaylandOutput
 
                     }
                 }
+
+
             }
 
             // Virtual Keyboard

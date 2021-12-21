@@ -3,7 +3,9 @@ import QtQuick.Controls 2.15
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
+
 import org.maui.cask 1.0 as Cask
+
 import Zpaces 1.0 as ZP
 
 import QtGraphicalEffects 1.0
@@ -94,6 +96,7 @@ Pane
         TapHandler
         {
             enabled: overviewMode
+
 //            anchors.fill: parent
 //            propagateComposedEvents: true
 //            preventStealing: false
@@ -102,7 +105,6 @@ Pane
                 _swipeView.closeOverview()
 
                 _swipeView.currentIndex = index
-                mouse.accepted= false
             }
         }
     }

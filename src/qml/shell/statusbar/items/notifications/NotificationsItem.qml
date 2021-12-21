@@ -13,12 +13,12 @@ Cask.PanelItem
     text: _nof.count
 
 
-//    Maui.Badge
-//    {
-//        height: parent.height
-//        text: _nof.count
-//        radius: 4
-//    }
+    //    Maui.Badge
+    //    {
+    //        height: parent.height
+    //        text: _nof.count
+    //        radius: 4
+    //    }
 
     card: Cask.PanelCard
     {
@@ -40,28 +40,26 @@ Cask.PanelItem
         {
             id: _nof
             width: parent.width
-            implicitHeight: Math.min(500, contentHeight)
+            implicitHeight: Math.max(300, Math.min(500, contentHeight))
             boundsBehavior: ListView.StopAtBounds
             model: 10
             spacing: Maui.Style.space.medium
-            delegate: Maui.ItemDelegate
+
+            Maui.Holder
             {
-                width: parent.width
-                height: 80
+                anchors.fill: parent
+                visible: _nof.count === 0
+                emoji: "notifications"
+                title: i18n("Clear")
+                body: i18n("No notifications.")
+            }
 
-                Maui.ListItemTemplate
-                {
-                    anchors.fill: parent
-                    iconSource: "documentinfo"
-                    label1.text: "Notification Title"
-                    label2.text: "Blach some infor about the notification"
-                    iconSizeHint: Maui.Style.iconSizes.medium
-                    spacing: Maui.Style.space.medium
-                    headerSizeHint: iconSizeHint + Maui.Style.space.big
-                }
-
+            delegate: NotificationItem
+            {
+                width: ListView.view.width
+                autoDismiss: false
+                onDismissed:_nof.model--
                 onClicked: _nof.model--
-
             }
         }
     }

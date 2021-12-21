@@ -37,6 +37,14 @@ WaylandCompositor
         position: Qt.point(virtualX, virtualY)
     }
 
+    ListModel
+    {
+        id: _notificationsModel
+        ListElement {}
+        ListElement {}
+        ListElement {}
+        ListElement {}
+    }
 
     QtWindowManager
     {

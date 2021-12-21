@@ -90,7 +90,7 @@ Cask.StackableItem
     {
         if (type === Maui.CSDButton.Close)
         {
-            window.close()
+            destroyAnimationImpl.start()
 
         } else if (type === Maui.CSDButton.Maximize)
         {

@@ -83,6 +83,7 @@ Cask.PanelItem
                 ToggleTemplate
                 {
                     icon.name:  "mic-ready"
+                    onClicked: _notificationsModel.insert(0, {})
                 }
 
                 AirplaneModeToggle
