@@ -79,24 +79,23 @@ bool NotificationsDaemon::registerService()
 
     QDBusConnectionInterface *iface = QDBusConnection::sessionBus().interface();
 
-
     QDBusConnection bus = QDBusConnection::sessionBus();
 
-    if (!bus.registerObject(servicePath, this)) {
+
+
+
+    auto objectRegistered = QDBusConnection::sessionBus().registerObject(servicePath, this);
+    auto registration = iface->registerService(serviceName,
+                                                QDBusConnectionInterface::ReplaceExistingService,
+                                                QDBusConnectionInterface::DontAllowReplacement);
+
+    if (!objectRegistered) {
         qCWarning(NOTIFICATIONS,
                   "1 Failed to register D-Bus object \"%s\" on session bus: \"%s\"",
                   qPrintable(servicePath),
                   qPrintable(bus.lastError().message()));
         return false;
     }
-
-
-    QDBusConnection::sessionBus().registerObject(servicePath, this);
-    auto registration = iface->registerService("org.freedesktop.Notifications",
-                                                QDBusConnectionInterface::ReplaceExistingService,
-                                                QDBusConnectionInterface::DontAllowReplacement);
-
-
 
     if (!registration.isValid()) {
         qCWarning(NOTIFICATIONS,

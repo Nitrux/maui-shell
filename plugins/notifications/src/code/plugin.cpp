@@ -23,9 +23,9 @@
 
 #include <QtQml/QtQml>
 
-#include "notification.h"
-
 #include "notifications.h"
+#include "notificationsmodel.h"
+#include "historymodel.h"
 #include "notificationsimageprovider.h"
 
 class CaskNotificationsPlugin : public QQmlExtensionPlugin
@@ -41,8 +41,11 @@ public:
 
     void registerTypes(const char *uri) override
     {        
-        qmlRegisterType<Notifications>(uri, 1, 0, "NotificationsServer");
-        qmlRegisterType<Liri::Notification>(uri, 1, 0, "Notification");
+
+        qmlRegisterAnonymousType<NotificationsModel>(uri, 1);
+        qmlRegisterAnonymousType<HistoryModel>(uri, 1);
+        qmlRegisterType<Notifications>(uri, 1, 0, "Notifications");
+
     }
 };
 

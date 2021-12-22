@@ -22,11 +22,12 @@
  ***************************************************************************/
 
 #include "notifications.h"
-#include "notificationsdaemon.h"
+#include "notificationserver.h"
 
 Notifications::Notifications(QObject *parent)
     : QObject(parent)
-    , m_daemon(new NotificationsDaemon(this))
+    , m_server(new NotificationServer(this))
+    , m_model(new NotificationsModel(m_server))
 {
 }
 
@@ -35,22 +36,17 @@ bool Notifications::isActive() const
     return m_active;
 }
 
-void Notifications::invokeAction(uint id, const QString &actionId)
-{
-    Q_EMIT m_daemon->ActionInvoked(id, actionId);
-}
-
-void Notifications::closeNotification(uint id, const CloseReason &reason)
-{
-    if (m_daemon->m_notifications.remove(id) > 0)
-        Q_EMIT m_daemon->NotificationClosed(id, (uint)reason);
-}
 
 void Notifications::componentComplete()
 {
     // Register service
-    if (m_daemon->registerService()) {
+    if (m_server->registerService()) {
         m_active = true;
         Q_EMIT activeChanged();
     }
+}
+
+NotificationsModel *Notifications::notificationsModel()
+{
+    return m_model;
 }

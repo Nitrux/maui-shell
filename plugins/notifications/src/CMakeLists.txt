@@ -14,12 +14,16 @@ include_directories(
 set(
     SRCS
     code/notificationimagesstorage.cpp
+    code/notificationserver.cpp
     code/notifications.cpp
-    code/notificationsdaemon.cpp
     code/notificationsimageutils.cpp
     code/notificationsimageprovider.cpp
     code/plugin.cpp
     code/notification.cpp
+    code/notificationsmodel.cpp
+    code/historymodel.cpp
+    code/datehelper.cpp
+
 
     ${casknotifications_QM_LOADER}
     )
@@ -27,11 +31,16 @@ set(
 set(
     headers
     code/notificationimagesstorage.h
-    code/notificationsdaemon.h
+    code/notificationserver.h
+#    code/notifications_plugin.h
+
+    code/notifications.h
     code/notificationsimageutils.h
     code/notificationsimageprovider.h
     code/notification.h
-    code/notification_p.h
+    code/notificationsmodel.h
+    code/historymodel.h
+    code/datehelper.h
     )
 
 set(
@@ -39,13 +48,9 @@ set(
     controls/qmldir
     )
 
-#set_source_files_properties(code/org.freedesktop.Notifications.xml  PROPERTIES NO_NAMESPACE true)
-
-#set_source_files_properties(code/org.freedesktop.Notifications.xml  PROPERTIES CLASSNAME NotificationsInterface)
-
 qt_add_dbus_interface(SRCS code/org.freedesktop.Notifications.xml notifications_interface )
 
-qt_add_dbus_adaptor(SRCS code/org.freedesktop.Notifications.xml notificationsdaemon.h NotificationsDaemon notifications_adaptor)
+qt_add_dbus_adaptor(SRCS code/org.freedesktop.Notifications.xml notificationserver.h NotificationServer notifications_adaptor)
 
 
 if(QUICK_COMPILER)

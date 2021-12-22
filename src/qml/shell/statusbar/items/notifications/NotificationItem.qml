@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.0
 
 import org.maui.cask 1.0 as Cask
 
-Maui.ItemDelegate
+ItemDelegate
 {
     id: control
     implicitHeight: 80
@@ -15,6 +15,12 @@ Maui.ItemDelegate
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     property bool autoDismiss : false
+
+    property alias title : control.text
+    property string message
+    property alias iconSource : _template.iconSource
+    property alias imageSource : _template.imageSource
+
 
     signal dismissed()
 
@@ -25,12 +31,12 @@ Maui.ItemDelegate
         onClicked: control.dismissed()
     }
 
-    Maui.ListItemTemplate
+    contentItem: Maui.ListItemTemplate
     {
-        anchors.fill: parent
+        id: _template
         iconSource: "documentinfo"
-        label1.text: control.x + "/" + _handler.centroid.position.x
-        label2.text: "Blach some infor about the notification"
+        label1.text: control.title
+        label2.text: control.message
         label2.wrapMode: Text.Wrap
         iconSizeHint: Maui.Style.iconSizes.medium
         spacing: Maui.Style.space.medium

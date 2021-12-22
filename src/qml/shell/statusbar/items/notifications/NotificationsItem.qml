@@ -10,7 +10,7 @@ Cask.PanelItem
 {
     id: control
     icon.name: "notifications"
-    text: _nof.count
+    text: _nofList.count
 
 
     //    Maui.Badge
@@ -38,17 +38,17 @@ Cask.PanelItem
 
         ListView
         {
-            id: _nof
+            id: _nofList
             width: parent.width
             implicitHeight: Math.max(300, Math.min(500, contentHeight))
             boundsBehavior: ListView.StopAtBounds
-            model: 10
+            model: _notifications.notificationsModel.historyModel
             spacing: Maui.Style.space.medium
 
             Maui.Holder
             {
                 anchors.fill: parent
-                visible: _nof.count === 0
+                visible: _nofList.count === 0
                 emoji: "notifications"
                 title: i18n("Clear")
                 body: i18n("No notifications.")
@@ -58,8 +58,11 @@ Cask.PanelItem
             {
                 width: ListView.view.width
                 autoDismiss: false
-                onDismissed:_nof.model--
-                onClicked: _nof.model--
+                title: model.title
+                message: model.body
+                iconSource: model.iconName
+//                onDismissed:_nof.model--
+//                onClicked: _nof.model--
             }
         }
     }
