@@ -36,6 +36,7 @@ Cask.PanelItem
         //                        icon.name: "edit-clear-all"
         //                    }
 
+
         ListView
         {
             id: _nofList
@@ -44,6 +45,16 @@ Cask.PanelItem
             boundsBehavior: ListView.StopAtBounds
             model: _notifications.notificationsModel.historyModel
             spacing: Maui.Style.space.medium
+            header: Maui.ToolBar
+            {
+                width: parent.width
+                background: null
+                leftContent: ToolButton
+                {
+                    icon.name: "edit-clear"
+                    onClicked: _notifications.notificationsModel.historyModel.clearAll()
+                }
+            }
 
             Maui.Holder
             {
@@ -58,10 +69,11 @@ Cask.PanelItem
             {
                 width: ListView.view.width
                 autoDismiss: false
-                title: model.title
+                title: model.summary
                 message: model.body
                 iconSource: model.iconName
-//                onDismissed:_nof.model--
+                imageSource : model.image
+                onDismissed:_notifications.notificationsModel.historyModel.remove(index)
 //                onClicked: _nof.model--
             }
         }

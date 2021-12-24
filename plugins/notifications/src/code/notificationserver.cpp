@@ -6,7 +6,8 @@
 
 #include "notificationserver.h"
 #include "notifications_adaptor.h"
-//#include "utils.h"
+#include "notificationimagesstorage.h"
+#include "notificationsimageutils.h"
 
 #include <QDebug>
 
@@ -106,10 +107,59 @@ uint NotificationServer::Notify(const QString &app_name,
     notification.appName = app_name;
     notification.appIcon = app_icon;
     notification.actions = actions;
-    notification.timeout = timeout;
+    notification.persistent = timeout == 0;
+    notification.image = QString("image://notifications/%1").arg(id);
+    const int averageWordLength = 6;
+    const int wordPerMinute = 250;
+    int totalLength = summary.length() + body.length();
+    timeout = 2000 + qMax(60000 * totalLength / averageWordLength / wordPerMinute, 3000);
 
     if (notification.appIcon.startsWith("file://"))
         notification.appIcon = notification.appIcon.replace("file://", "");
+    notification.timeout = timeout;
+
+    if (hints.contains(QStringLiteral("category")))
+        notification.category = hints[QStringLiteral("category")].toString();
+
+    int urgency = -1;
+    if (hints.contains(QStringLiteral("urgency")))
+    {
+        qDebug() << "URGENCY" << hints[QStringLiteral("urgency")] << hints[QStringLiteral("urgency")].toChar();
+        bool ok;
+        urgency = hints[QStringLiteral("urgency")].toInt(&ok);
+        if (!ok)
+            urgency = -1;
+    }
+
+    notification.urgency = urgency;
+
+    // Notification image
+    NotificationImage *notificationImage = new NotificationImage();
+    notificationImage->iconName = app_icon;
+
+    // Fetch the image hint (we also support the obsolete icon_data hint which
+    // is still used by applications compatible with the specification version
+    if (hints.contains(QStringLiteral("image_data")))
+        notificationImage->image.convertFromImage(decodeImageHint(hints[QStringLiteral("image_data")].value<QDBusArgument>()));
+    else if (hints.contains(QStringLiteral("image-data")))
+        notificationImage->image.convertFromImage(decodeImageHint(hints[QStringLiteral("image-data")].value<QDBusArgument>()));
+    else if (hints.contains(QStringLiteral("image_path")))
+        notificationImage->image = QPixmap(hints[QStringLiteral("image_path")].toString());
+    else if (hints.contains(QStringLiteral("image-path")))
+        notificationImage->image = QPixmap(hints[QStringLiteral("image-path")].toString());
+    else if (hints.contains(QStringLiteral("icon_data")))
+        notificationImage->image.convertFromImage(decodeImageHint(hints[QStringLiteral("icon_data")].value<QDBusArgument>()));
+
+    // Retrieve icon from desktop entry, if any
+    if (hints.contains(QStringLiteral("desktop-entry"))) {
+        QString fileName = QStandardPaths::locate(QStandardPaths::ApplicationsLocation,
+                                                  hints[QStringLiteral("desktop-entry")].toString());
+        QSettings desktopEntry(fileName, QSettings::IniFormat);
+        notificationImage->entryIconName = desktopEntry.value(QStringLiteral("Icon"), app_icon).toString();
+    }
+
+    // Store image
+    NotificationImagesStorage::instance()->add(id, notificationImage);
 
     uint pid = 0;
     QDBusReply<uint> pidReply = connection().interface()->servicePid(message().service());

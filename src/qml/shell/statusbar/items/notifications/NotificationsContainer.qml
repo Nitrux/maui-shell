@@ -26,12 +26,13 @@ Pane
             delegate: NotificationItem
             {
                 width: parent.width
-                autoDismiss: true
+                autoDismiss: !model.persistent
                 title: model.summary
                 message: model.body
-                iconSource: model.iconName
-
-
+                //                iconSource: model.iconName
+                imageSource : model.image
+                timeout: model.timeout
+                urgency: model.urgency
                 onDismissed: _notifications.notificationsModel.close(model.notificationId)
             }
         }

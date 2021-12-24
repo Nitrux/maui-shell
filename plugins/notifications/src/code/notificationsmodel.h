@@ -19,6 +19,7 @@ class NotificationsModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(HistoryModel* historyModel READ historyModel CONSTANT FINAL)
+    Q_PROPERTY(bool doNotDisturb READ doNotDisturb WRITE setDoNotDisturb NOTIFY doNotDisturbChanged)
 
 public:
     enum Roles {
@@ -29,6 +30,11 @@ public:
         UpdatedRole,
         BodyRole,
         IconNameRole,
+        TimeoutRole,
+        AppNameRole,
+        PersistentRole,
+        UrgencyRole,
+        CategoryRole,
         HasDefaultActionRole
     };
     Q_ENUM(Roles)
@@ -50,6 +56,14 @@ public:
 
     HistoryModel* historyModel() const;
 
+    bool doNotDisturb() const;
+
+public slots:
+    void setDoNotDisturb(bool doNotDisturb);
+
+signals:
+    void doNotDisturbChanged(bool doNotDisturb);
+
 private slots:
     void onNotificationAdded(const Notification &notification);
     void onNotificationReplaced(uint replacedId, const Notification &notification);
@@ -61,6 +75,9 @@ private:
     QVector<Notification> m_notifications;
     QVector<uint /*notificationId*/> m_pendingRemovals;
     QTimer m_pendingRemovalTimer;
+    bool m_doNotDisturb = false;
 };
+
+
 
 #endif // NOTIFICATIONSMODEL_H

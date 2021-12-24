@@ -33,9 +33,12 @@ public:
     QString body;
     QString appName;
     QString appIcon;
+    QString image;
     QStringList actions;
     int timeout = -1;
-
+    bool persistent = false;
+    int urgency = -1;
+    QString category;
     QDateTime created;
     QDateTime updated;
 

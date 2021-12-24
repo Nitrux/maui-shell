@@ -1,0 +1,4 @@
+module Cutefish.Audio
+plugin cutefishaudio_qmlplugins
+
+PulseObjectFilterModel 1.0 PulseObjectFilterModel.qml

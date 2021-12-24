@@ -14,14 +14,15 @@ ItemDelegate
     opacity: (width-Math.abs(x))/width
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
     property bool autoDismiss : false
 
     property alias title : control.text
     property string message
     property alias iconSource : _template.iconSource
     property alias imageSource : _template.imageSource
-
-
+    property alias timeout : _timer.interval
+    property int urgency : -1
     signal dismissed()
 
     Maui.CloseButton
@@ -38,7 +39,7 @@ ItemDelegate
         label1.text: control.title
         label2.text: control.message
         label2.wrapMode: Text.Wrap
-        iconSizeHint: Maui.Style.iconSizes.medium
+        iconSizeHint: Maui.Style.iconSizes.big
         spacing: Maui.Style.space.medium
         headerSizeHint: iconSizeHint + Maui.Style.space.big
     }
@@ -52,6 +53,20 @@ ItemDelegate
             anchors.fill: parent
             color:  Kirigami.Theme.backgroundColor
             radius: 12
+
+            Rectangle
+            {
+                width: parent.width
+                anchors.bottom: parent.bottom
+                height: 4
+                color: switch(control.urgency)
+                       {
+                       case 0: return Kirigami.Theme.positiveBackgroundColor;
+                       case 1: return Kirigami.Theme.neutralBackgroundColor;
+                       case 2: return Kirigami.Theme.negativeBackgroundColor
+
+                       }
+            }
         }
 
         DropShadow

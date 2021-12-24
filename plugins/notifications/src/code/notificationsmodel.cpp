@@ -50,13 +50,23 @@ QVariant NotificationsModel::data(const QModelIndex &index, int role) const
     case NotificationsModel::SummaryRole:
         return notification.summary;
     case NotificationsModel::ImageRole:
-        return "";
+        return notification.image;
     case NotificationsModel::CreatedRole:
         return notification.created;
     case NotificationsModel::BodyRole:
         return notification.body;
     case NotificationsModel::IconNameRole:
         return notification.appIcon;
+    case NotificationsModel::TimeoutRole:
+        return notification.timeout;
+    case NotificationsModel::AppNameRole:
+        return notification.appName;
+    case NotificationsModel::PersistentRole:
+        return notification.persistent;
+    case NotificationsModel::UrgencyRole:
+        return notification.urgency;
+    case NotificationsModel::CategoryRole:
+        return notification.category;
     case NotificationsModel::HasDefaultActionRole:
         return notification.actions.contains("default");
     default:
@@ -203,14 +213,20 @@ HistoryModel *NotificationsModel::historyModel() const
     return m_historyModel;
 }
 
+bool NotificationsModel::doNotDisturb() const
+{
+    return m_doNotDisturb;
+}
+
 void NotificationsModel::onNotificationAdded(const Notification &notification)
 {
     // Do Not Disturb Mode:
     // Add directly to the historical model.
-//    if (Settings::self()->doNotDisturb()) {
+    if (m_doNotDisturb)
+    {
         m_historyModel->add(notification);
-//        return;
-//    }
+        return;
+    }
 
     if (m_notifications.size() >= s_notificationsLimit) {
         const int cleanupCount = s_notificationsLimit / 2;
@@ -262,4 +278,13 @@ void NotificationsModel::onNotificationRemoved(uint removedId, NotificationServe
     if (!m_pendingRemovalTimer.isActive()) {
         m_pendingRemovalTimer.start();
     }
+}
+
+void NotificationsModel::setDoNotDisturb(bool doNotDisturb)
+{
+    if (m_doNotDisturb == doNotDisturb)
+        return;
+
+    m_doNotDisturb = doNotDisturb;
+    emit doNotDisturbChanged(m_doNotDisturb);
 }

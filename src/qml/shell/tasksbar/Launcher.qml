@@ -274,6 +274,7 @@ Maui.Page
     function close()
     {
         _launcher.opened = false
+           _launcher.y = control.parent.height
         dock.forceActiveFocus()
     }
 
