@@ -1,0 +1,23 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+import QtQuick.Layouts 1.3
+
+import org.kde.kirigami 2.14 as Kirigami
+import org.mauikit.controls 1.3 as Maui
+
+import org.maui.cask 1.0 as Cask
+import QtQuick.Templates 2.15 as T
+
+Maui.Dialog
+{
+    id: control
+    page.margins: Maui.Style.space.big
+    spacing: Maui.Style.space.medium
+    page.headerColorSet: control.Kirigami.Theme.colorSet
+    closeButtonVisible: false
+    maxWidth: 400
+    hint: 1
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+}

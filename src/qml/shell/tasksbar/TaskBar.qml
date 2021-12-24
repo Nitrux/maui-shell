@@ -15,18 +15,11 @@ T.Control
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
-    Layout.fillWidth: false
-    Layout.alignment: Qt.AlignCenter
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-                            implicitContentWidth + leftPadding + rightPadding)
-
-    Layout.margins: Maui.Style.space.medium
+    implicitWidth: _section.implicitWidth + rightPadding + leftPadding
     implicitHeight: 64
+
     padding: Maui.Style.space.small
-
-    //    property alias launcher : _launcherItem
-
-
+    spacing: Maui.Style.space.medium
 
     background: Rectangle
     {
@@ -35,147 +28,151 @@ T.Control
         radius: 10
     }
 
-    contentItem: Row
+    contentItem: Flickable
     {
-        id: _section
+        contentWidth: _section.implicitWidth
+        contentHeight: availableHeight
+        clip: true
 
-        spacing: Maui.Style.space.medium
-
-
-        DockItem
+        Row
         {
-            id: _launcherItem
-            checked: _launcher.visible
-            icon.name: "view-list-icons"
-            onClicked: _launcher.toggle()
-        }
+            id: _section
 
-        DockItem
-        {
-            icon.name: "view-file-columns"
-            checked: _appsOverview.opened
-            onClicked: _appsOverview.toggle()
-        }
+            spacing: control.spacing
 
-        DockItem
-        {
-            icon.name: "list-add"
-
-            visible: overView
-            onClicked: _zpaces.insertZpace(0)
-        }
-
-        Repeater
-        {
-            model: _zpaces.tasksModel
-
-            AbstractButton
+            DockItem
             {
-                focusPolicy: Qt.NoFocus
-                readonly property ZP.Task task : model.task
-                readonly property ZP.XdgWindow xdgWindow : task.window
+                id: _launcherItem
+                checked: _launcher.visible
+                icon.name: "view-list-icons"
+                onClicked: _launcher.toggle()
+            }
 
-                implicitHeight: 48
-                implicitWidth: height
-                //                draggable: true
-                ToolTip.text: task.fileName
-                ToolTip.delay: 1000
-                ToolTip.timeout: 5000
-                ToolTip.visible: hovered
+            DockItem
+            {
+                icon.name: "view-file-columns"
+                checked: _appsOverview.opened
+                onClicked: _appsOverview.toggle()
+            }
 
-                Menu
+            DockItem
+            {
+                icon.name: "list-add"
+
+                visible: overView
+                onClicked: _zpaces.insertZpace(0)
+            }
+
+            Repeater
+            {
+                model: _zpaces.tasksModel
+
+                AbstractButton
                 {
-                    id: _menu
+                    focusPolicy: Qt.NoFocus
+                    readonly property ZP.Task task : model.task
+                    readonly property ZP.XdgWindow xdgWindow : task.window
 
-                    MenuItem
+                    implicitHeight: 48
+                    implicitWidth: height
+                    //                draggable: true
+                    ToolTip.text: task.fileName
+                    ToolTip.delay: 1000
+                    ToolTip.timeout: 5000
+                    ToolTip.visible: hovered
+
+                    Menu
                     {
-                        text: task.isPinned ? i18n("UnPin") : i18n("Pin")
-                        onTriggered: task.isPinned = !task.isPinned
+                        id: _menu
+
+                        MenuItem
+                        {
+                            text: task.isPinned ? i18n("UnPin") : i18n("Pin")
+                            onTriggered: task.isPinned = !task.isPinned
+                        }
+
+                        MenuItem
+                        {
+                            text: i18n("Maximize")
+                        }
+
+                        MenuSeparator{}
+                        MenuItem
+                        {
+                            text: i18n("Close")
+                            onTriggered: task.window.close()
+                        }
                     }
 
-                    MenuItem
+                    MouseArea
                     {
-                        text: i18n("Maximize")
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        onClicked:
+                        {
+                            _menu.popup()
+                        }
                     }
 
-                    MenuSeparator{}
-                    MenuItem
-                    {
-                        text: i18n("Close")
-                        onTriggered: task.window.close()
-                    }
-                }
-
-                MouseArea
-                {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.RightButton
                     onClicked:
                     {
-                        _menu.popup()
-                    }
-                }
-
-                onClicked:
-                {
-
-                    if(xdgWindow)
-                    {
-                        _swipeView.currentIndex = model.zpaceIndex
-
-                        console.log("MINIMIZED?" , xdgWindow.minimized)
-
-                        if(xdgWindow.toplevel.activated)
+                        if(xdgWindow)
                         {
-                            if(!xdgWindow.minimized)
+                            _swipeView.currentIndex = model.zpaceIndex
+
+                            console.log("MINIMIZED?" , xdgWindow.minimized)
+
+                            if(xdgWindow.toplevel.activated)
                             {
-                                xdgWindow.minimize()
+                                if(!xdgWindow.minimized)
+                                {
+                                    xdgWindow.minimize()
+                                }else
+                                {
+                                    xdgWindow.unminimize()
+                                }
                             }else
                             {
-                                xdgWindow.unminimize()
+                                xdgWindow.unminimize()//also activates it
                             }
                         }else
                         {
-                            xdgWindow.unminimize()//also activates it
+                            launchExec(task.executable)
                         }
-                    }else
+                    }
+
+                    contentItem: Item
                     {
-                        launchExec(task.executable)
+                        Kirigami.Icon
+                        {
+                            source: task.iconName
+                            height: 48
+                            width: height
+                            anchors.centerIn: parent
+                        }
+
+                        Rectangle
+                        {
+                            width: task.window ? (task.window.toplevel.activated ? parent.width  : height) : 0
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            height: task.window ? (task.window.toplevel.activated ? 2  : 8) : 0
+                            radius: height/2
+                            anchors.bottom: parent.bottom
+                            visible: task.window
+                            color: Kirigami.Theme.highlightColor
+                        }
                     }
                 }
 
-                contentItem: Item
-                {
-                    Kirigami.Icon
-                    {
-                        source: task.iconName
-                        height: 48
-                        width: height
-                        anchors.centerIn: parent
-                    }
 
-                    Rectangle
-                    {
-                        width: task.window ? (task.window.toplevel.activated ? parent.width  : height) : 0
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        height: task.window ? (task.window.toplevel.activated ? 2  : 8) : 0
-                        radius: height/2
-                        anchors.bottom: parent.bottom
-                        visible: task.window
-                        color: Kirigami.Theme.highlightColor
-                    }
-                }
+
+                //    onContentDropped:
+                //    {
+                //        console.log("Dropped things" , drop.urls)
+                //        _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
+                //    }
             }
-
-
-
-            //    onContentDropped:
-            //    {
-            //        console.log("Dropped things" , drop.urls)
-            //        _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
-            //    }
         }
-
     }
 
     DropArea

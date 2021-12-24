@@ -5,6 +5,9 @@ import QtQuick.Controls 2.15
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import QtGraphicalEffects 1.0
+
+import QtQuick.Templates 2.15 as T
 
 Maui.Page
 {
@@ -73,171 +76,203 @@ Maui.Page
         color: Kirigami.Theme.backgroundColor
         opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.95
         radius: 10
+
+        layer.enabled: win.formFactor === Cask.Env.Desktop
+        layer.effect :  DropShadow
+        {
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 17
+            color: Qt.rgba(0,0,0,0.2)
+        }
     }
 
-    SwipeView
+    ColumnLayout
     {
-        id: _swipeView
         anchors.fill: parent
-        anchors.bottomMargin: pageIndicator.height
-        background: null
-        clip: true
-
-        Maui.GridView
+        SwipeView
         {
-            id: _categoriesGridView
-            itemSize: Math.min(150, Math.floor(flickable.width/2))
-            itemHeight: 172
-            model: _allAppsModel.groups
+            id: _swipeView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            background: null
+            clip: true
 
-            verticalScrollBarPolicy: ScrollBar.AlwaysOff
-
-            onAreaClicked: closeCard()
-
-            delegate: Item
+            Maui.GridView
             {
-                id: _delegate
-                property string group: modelData.label
-                width: GridView.view.cellWidth
-                height: GridView.view.cellHeight
+                id: _categoriesGridView
+                itemSize: Math.min(150, Math.floor(flickable.width/2))
+                itemHeight: 172
+                model: _allAppsModel.groups
 
-                Maui.GridBrowserDelegate
+                verticalScrollBarPolicy: ScrollBar.AlwaysOff
+
+                onAreaClicked: closeCard()
+
+                delegate: Item
                 {
-                    height: parent.GridView.view.itemHeight- 10
-                    width: parent.GridView.view.itemWidth-10
-                    anchors.centerIn: parent
-                    template.labelSizeHint: 22
-                    iconSource:  modelData.icon
-                    iconSizeHint: width
-                    label1.font.bold: true
-                    label1.font.weight: Font.ExtraBold
-                    label1.text: modelData.label.replace("/", "")
-                    background: null
+                    id: _delegate
+                    property string group: modelData.label
+                    width: GridView.view.cellWidth
+                    height: GridView.view.cellHeight
 
-                    onClicked:
+                    Maui.GridBrowserDelegate
                     {
-                        _swipeView.incrementCurrentIndex()
-                        _allAppsModel.group = modelData.label
-                    }
+                        height: parent.GridView.view.itemHeight- 10
+                        width: parent.GridView.view.itemWidth-10
+                        anchors.centerIn: parent
+                        template.labelSizeHint: 22
+                        iconSizeHint: width
+                        label1.font.bold: true
+                        label1.font.weight: Font.ExtraBold
+                        label1.text: modelData.label.replace("/", "")
+                        background: null
 
-                    template.iconComponent: Pane
-                    {
-                        background: Rectangle
+                        onClicked:
                         {
-                            color:  Qt.lighter(Kirigami.Theme.backgroundColor)
-                            opacity: 0.5
-                            radius: 12
+                            _swipeView.incrementCurrentIndex()
+                            _allAppsModel.group = modelData.label
                         }
 
-                        GridView
+                        template.iconComponent: T.Pane
                         {
-                            anchors.fill: parent
-                            interactive: false
-                            cellWidth: width/2
-                            cellHeight: height/2
-
-                            model: Maui.BaseModel
+                            background: Rectangle
                             {
-                                list: Cask.AppsModel
+                                color:  Qt.lighter(Kirigami.Theme.backgroundColor)
+                                opacity: 0.5
+                                radius: 12
+                            }
+
+                            contentItem: GridView
+                            {
+                                interactive: false
+                                cellWidth: width/2
+                                cellHeight: height/2
+                                clip: true
+                                model: Maui.BaseModel
                                 {
-                                    group: modelData.label
-                                    limit: 4
+                                    list: Cask.AppsModel
+                                    {
+                                        group: modelData.label
+                                        limit: 4
+                                    }
+                                }
+
+                                delegate: Item
+                                {
+                                    height: GridView.view.cellHeight
+                                    width: GridView.view.cellWidth
+
+                                    Kirigami.Icon
+                                    {
+                                        anchors.centerIn: parent
+                                        height: 32
+                                        width: height
+                                        source: model.icon
+                                    }
                                 }
                             }
 
-                            delegate: Item
+                            MouseArea
                             {
-                                height: GridView.view.cellHeight
-                                width: GridView.view.cellWidth
-
-                                Kirigami.Icon
+                                anchors.fill: parent
+                                onClicked:
                                 {
-                                    anchors.centerIn: parent
-                                    height: 32
-                                    width: height
-                                    source: model.icon
+                                    _swipeView.incrementCurrentIndex()
+                                    _allAppsModel.group = modelData.label
                                 }
                             }
                         }
                     }
                 }
+
             }
 
-        }
-
-        Maui.GridView
-        {
-            id: _gridView
-            focus: true
-            itemSize: Math.min(150, Math.floor(flickable.width/3))
-            currentIndex: 0
-
-            model: Maui.BaseModel
+            Maui.GridView
             {
-                filter: _searchBar.text
-                sortOrder: Qt.DescendingOrder
-                recursiveFilteringEnabled: true
-                sortCaseSensitivity: Qt.CaseInsensitive
-                filterCaseSensitivity: Qt.CaseInsensitive
-                list: Cask.AppsModel
+                id: _gridView
+                focus: true
+                itemSize: Math.min(150, Math.floor(flickable.width/3))
+                currentIndex: 0
+
+                holder.visible: _gridView.count === 0
+                holder.title: i18n("Nothing here")
+                holder.body: i18n("Try with a different query")
+                holder.emoji: "anchor"
+
+                model: Maui.BaseModel
                 {
-                    id: _allAppsModel
-                }
-            }
-
-            onKeyPress:
-            {
-                console.log("Key _pressed", event.key, _gridView.model.get(_gridView.currentIndex).executable)
-                if(event.key == Qt.Key_Return)
-                {
-                    launchExec(_gridView.model.get(_gridView.currentIndex).executable)
-                    control.close()
-                }
-            }
-            delegate: Item
-            {
-                width: GridView.view.cellWidth
-                height: GridView.view.cellHeight
-
-                Maui.GridBrowserDelegate
-                {
-                    height: parent.GridView.view.itemHeight- 10
-                    width: parent.GridView.view.itemWidth-10
-                    anchors.centerIn: parent
-                    highlighted: parent.GridView.isCurrentItem
-                    template.labelSizeHint: 22
-
-                    draggable: true
-                    Drag.keys: ["text/uri-list"]
-                    Drag.mimeData: { "text/uri-list": model.path }
-                    //                    background: Item {}
-                    iconSource:  model.icon
-                    iconSizeHint: 64
-                    label1.text: model.label
-
-                    onClicked:
+                    filter: _searchBar.text
+                    sortOrder: Qt.DescendingOrder
+                    recursiveFilteringEnabled: true
+                    sortCaseSensitivity: Qt.CaseInsensitive
+                    filterCaseSensitivity: Qt.CaseInsensitive
+                    list: Cask.AppsModel
                     {
-                        console.log(model.executable)
-                        launchExec(model.executable)
+                        id: _allAppsModel
+                    }
+                }
+
+                onKeyPress:
+                {
+                    console.log("Key _pressed", event.key, _gridView.model.get(_gridView.currentIndex).executable)
+                    if(event.key == Qt.Key_Return)
+                    {
+                        launchExec(_gridView.model.get(_gridView.currentIndex).executable)
                         control.close()
+                    }
+                }
+                delegate: Item
+                {
+                    width: GridView.view.cellWidth
+                    height: GridView.view.cellHeight
 
+                    Maui.GridBrowserDelegate
+                    {
+                        height: parent.GridView.view.itemHeight- 10
+                        width: parent.GridView.view.itemWidth-10
+                        anchors.centerIn: parent
+                        highlighted: parent.GridView.isCurrentItem
+                        template.labelSizeHint: 22
+
+                        draggable: true
+                        Drag.keys: ["text/uri-list"]
+                        Drag.mimeData: { "text/uri-list": model.path }
+                        //                    background: Item {}
+                        iconSource:  model.icon
+                        iconSizeHint: 64
+                        label1.text: model.label
+
+                        onClicked:
+                        {
+                            console.log(model.executable)
+                            launchExec(model.executable)
+                            control.close()
+
+                        }
                     }
                 }
             }
         }
+
+        Item
+        {
+            Layout.fillWidth: true
+            implicitHeight: 22
+            PageIndicator
+            {
+                id: pageIndicator
+                height: parent.height
+                interactive: true
+                count: _swipeView.count
+                currentIndex: _swipeView.currentIndex
+
+                anchors.centerIn: parent
+            }
+        }
     }
-
-    PageIndicator
-    {
-        id: pageIndicator
-        interactive: true
-        count: _swipeView.count
-        currentIndex: _swipeView.currentIndex
-
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
-
 
     DragHandler
     {
@@ -274,7 +309,7 @@ Maui.Page
     function close()
     {
         _launcher.opened = false
-           _launcher.y = control.parent.height
+        _launcher.y = control.parent.height
         dock.forceActiveFocus()
     }
 

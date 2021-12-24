@@ -7,11 +7,15 @@ import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 
 import QtGraphicalEffects 1.0
+import QtQuick.Templates 2.15 as T
 
-Pane
+T.Pane
 {
     id: control
     implicitHeight: _template.implicitHeight + topPadding+bottomPadding
+
+    padding: 0
+
     property Cask.MprisPlayer player
 
     property string state : player ? player.status : ""
@@ -147,6 +151,7 @@ Pane
         RowLayout
         {
             Layout.fillWidth: true
+            implicitHeight: 22
             Layout.alignment: Qt.AlignRight
             Kirigami.Icon
             {
@@ -158,7 +163,7 @@ Pane
             Label
             {
                 Layout.fillWidth: true
-                text: control.player.capabilities
+                text: control.playerName
             }
 
             ToolButton
@@ -184,8 +189,9 @@ Pane
 
             Item
             {
-                implicitHeight: 100
-                implicitWidth: implicitHeight
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignCenter
+                implicitWidth: 100
 
                 Maui.IconItem
                 {
@@ -198,77 +204,88 @@ Pane
                 }
             }
 
-            ColumnLayout
+            Item
             {
-                implicitHeight: 120
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                Label
+                ColumnLayout
                 {
-                    visible: text.length
-                    Layout.fillWidth: true
-                    //                    Layout.fillHeight: true
-                    text: control.track
-                    wrapMode: Text.Wrap
-                    font.pointSize: Maui.Style.fontSizes.big
-                    font.bold: true
-                }
+                    anchors.fill: parent
 
-                Label
-                {
-                    visible: text.length
-                    Layout.fillWidth: true
-                    //                    Layout.fillHeight: true
-
-                    wrapMode: Text.NoWrap
-                    text: control.artist
-                }
-
-                Row
-                {
-                    spacing: Maui.Style.space.medium
-                    ToolButton
+                    Label
                     {
-                        icon.name: "media-skip-backward"
-                        enabled: control.canGoPrevious
-                        onClicked:
-                        {
-                            seekSlider.value = 0    // Let the media start from beginning. Bug 362473
-                            control.action_previous()
-                        }
-
+                        visible: text.length
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignCenter
+                        verticalAlignment: Qt.AlignVCenter
+                        text: control.track
+                        wrapMode: Text.Wrap
+                        font.pointSize: Maui.Style.fontSizes.big
+                        font.bold: true
                     }
 
-                    ToolButton
+                    Label
                     {
-                        //                        text: qsTr("Play and pause")
-                        enabled: control.canPlay
-                        icon.name: control.state == "Playing" ? "media-playback-pause" : "media-playback-start"
-                        onClicked: control.togglePlaying()
+                        visible: text.length
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
 
+                        Layout.alignment: Qt.AlignCenter
+                        verticalAlignment: Qt.AlignVCenter
+
+                        wrapMode: Text.NoWrap
+                        text: control.artist
                     }
 
-                    ToolButton
+                    Row
                     {
-                        icon.name: "media-skip-forward"
-                        enabled: control.canGoNext
-                        onClicked:
+                        spacing: Maui.Style.space.medium
+                        Layout.fillHeight: true
+
+                        ToolButton
                         {
-                            seekSlider.value = 0    // Let the media start from beginning. Bug 362473
-                            control.action_next()
+                            icon.name: "media-skip-backward"
+                            enabled: control.canGoPrevious
+                            onClicked:
+                            {
+                                seekSlider.value = 0    // Let the media start from beginning. Bug 362473
+                                control.action_previous()
+                            }
+
                         }
 
+                        ToolButton
+                        {
+                            //                        text: qsTr("Play and pause")
+                            enabled: control.canPlay
+                            icon.name: control.state == "Playing" ? "media-playback-pause" : "media-playback-start"
+                            onClicked: control.togglePlaying()
+
+                        }
+
+                        ToolButton
+                        {
+                            icon.name: "media-skip-forward"
+                            enabled: control.canGoNext
+                            onClicked:
+                            {
+                                seekSlider.value = 0    // Let the media start from beginning. Bug 362473
+                                control.action_next()
+                            }
+
+                        }
                     }
                 }
             }
-
         }
 
         Slider
         {
             id: seekSlider
             Layout.fillWidth: true
+            implicitHeight: 22
             //            value: 50000000
             from: 0
             value: control.position/control.length
@@ -319,7 +336,7 @@ Pane
     }
 
     function action_quit() {
-       control.player.quit()
+        control.player.quit()
     }
 
     function action_play() {
@@ -331,19 +348,19 @@ Pane
     }
 
     function action_playPause() {
-         control.player.playPause()
+        control.player.playPause()
     }
 
     function action_previous() {
-         control.player.previous()
+        control.player.previous()
     }
 
     function action_next() {
-         control.player.next()
+        control.player.next()
     }
 
     function action_stop() {
-         control.player.stop()
+        control.player.stop()
     }
 
 

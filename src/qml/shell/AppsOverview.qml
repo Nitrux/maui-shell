@@ -78,6 +78,12 @@ Maui.Page
             text: qsTr("Settings")
         }]
 
+    MouseArea
+    {
+        anchors.fill : parent
+        onClicked: control.close()
+    }
+
     Flickable
     {
         id: _flickable
@@ -86,6 +92,7 @@ Maui.Page
         contentHeight: _overviewList.implicitHeight
         contentX: _swipeView.contentX
 //        scale: control.initScale
+        interactive: false
 
         boundsBehavior: Flickable.StopAtBounds
         boundsMovement :Flickable.StopAtBounds
@@ -129,15 +136,15 @@ Maui.Page
                     background: null
                     onClicked:
                     {
-                        overView = false
-                        showDesktop = false
-                        //                    _overviewList.currentIndex = index
-
+                        control.close()
+                        _swipeView.currentIndex = _zpaces.indexOfZpace(xdgWindow)
+                        if(!xdgWindow.toplevel.activated)
+                        {
+                            xdgWindow.unminimize()//also activates it
+                        }
                     }
 
                     clip: false
-
-
                     contentItem: Column
                     {
                         id: _layout

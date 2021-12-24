@@ -67,6 +67,8 @@ QVariant NotificationsModel::data(const QModelIndex &index, int role) const
         return notification.urgency;
     case NotificationsModel::CategoryRole:
         return notification.category;
+    case NotificationsModel::ActionsRole:
+        return notification.actions;
     case NotificationsModel::HasDefaultActionRole:
         return notification.actions.contains("default");
     default:

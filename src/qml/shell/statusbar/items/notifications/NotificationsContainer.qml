@@ -33,7 +33,9 @@ Pane
                 imageSource : model.image
                 timeout: model.timeout
                 urgency: model.urgency
+                actions: model.actions
                 onDismissed: _notifications.notificationsModel.close(model.notificationId)
+                onExpired: _notifications.notificationsModel.expired(model.notificationId)
             }
         }
     }

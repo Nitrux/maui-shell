@@ -35,6 +35,7 @@ public:
         PersistentRole,
         UrgencyRole,
         CategoryRole,
+        ActionsRole,
         HasDefaultActionRole
     };
     Q_ENUM(Roles)

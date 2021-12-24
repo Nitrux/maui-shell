@@ -1,19 +1,20 @@
-import QtQuick 2.13
-import QtQml 2.14
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.13
-import QtGraphicalEffects 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-import org.kde.kirigami 2.7 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import QtQuick.Layouts 1.3
+
+import org.kde.kirigami 2.14 as Kirigami
+import org.mauikit.controls 1.3 as Maui
+
 import org.maui.cask 1.0 as Cask
 import QtQuick.Templates 2.15 as T
 
 T.AbstractButton
 {
     id: control
-    property PanelCard card : null
+    property Cask.PanelCard card : null
+    property Cask.PanelSection section : control.parent.parent
+
     focus: true
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
@@ -35,7 +36,8 @@ T.AbstractButton
     icon.color: control.checked || control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 
     checked: card ? card.visible : false
-//    checkable: true
+    spacing: Maui.Style.space.medium
+    //    checkable: true
 
     Behavior on iconSize
     {
@@ -48,15 +50,28 @@ T.AbstractButton
 
     background: Rectangle
     {
+        id: _bg
         visible: !isMobile
-        color: control.checked ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+
+        property color finalColor: control.checked ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+        color: finalColor
         radius: 6
+
+        ColorAnimation on color
+        {
+            id: _animation
+            easing.type: Easing.InExpo
+            running: false
+            from: Kirigami.Theme.highlightColor
+            to: _bg.finalColor
+            duration: 1000
+        }
     }
 
     contentItem: RowLayout
     {
         id: _layout
-        spacing: Maui.Style.space.small
+        spacing: control.spacing
         clip: true
 
         Item
@@ -89,5 +104,25 @@ T.AbstractButton
             font: control.font
         }
     }
+
+    function animate()
+    {
+        _animation.restart()
+    }
+
+    onClicked:
+    {
+        if(control.card && control.section)
+        {
+            if(card.visible)
+            {
+                control.section.close()
+            }else
+            {
+                control.section.open(card.index)
+            }
+        }
+    }
+
 
 }

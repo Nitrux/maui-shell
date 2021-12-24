@@ -1,10 +1,13 @@
 import QtQuick 2.15
-import QtQuick.Window 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
+
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+
+import "volume"
+import "brightness"
 
 Cask.PanelItem
 {
@@ -12,7 +15,7 @@ Cask.PanelItem
 
     Row
     {
-        spacing: Maui.Style.space.medium
+        spacing: control.spacing
         Kirigami.Icon
         {
             source: "audio-volume-medium"
@@ -40,35 +43,43 @@ Cask.PanelItem
 
     card: Cask.PanelCard
     {
+
         width: ListView.view.width
 
-        Column
+
+        onClosed: _togglesStack.pop()
+
+        StackView
         {
+            id : _togglesStack
             width: parent.width
-            spacing: Maui.Style.space.big
+            height: currentItem.implicitHeight
+            clip: true
 
-            SliderTemplate
+            initialItem: Column
             {
-                width: parent.width
-                iconSource: "high-brightness"
+                spacing: control.card.spacing
+
+                BrightnessSlider
+                {
+                    width: parent.width
+                    onClicked: _togglesStack.push(page)
+
+                }
+
+                VolumeSlider
+                {
+                    width: parent.width
+                    onClicked: _togglesStack.push(page)
+
+                }
+
+                SliderToggle
+                {
+                    width: parent.width
+//                    iconSource: "microphone"
+                }
             }
-
-
-            SliderTemplate
-            {
-                width: parent.width
-                iconSource: "player-volume"
-            }
-
-            SliderTemplate
-            {
-                width: parent.width
-                iconSource: "microphone"
-            }
-
-
         }
-
-
     }
 }

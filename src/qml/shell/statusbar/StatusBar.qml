@@ -162,13 +162,13 @@ T.Control
 
             NotificationsItem
             {
-                onClicked: _notificationsSection.open(card.index)
+//                onClicked: _notificationsSection.open(card.index)
                 //                anchors.verticalCenter: parent.verticalCenter
             }
 
             CalendarItem
             {
-                onClicked: _notificationsSection.open(card.index)
+//                onClicked: _notificationsSection.open(card.index)
                 //                anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -209,7 +209,7 @@ T.Control
 
             TogglesItem
             {
-                onClicked: _statusSection.open(card.index)
+//                onClicked: _statusSection.open(card.index)
                 //                anchors.verticalCenter: parent.verticalCenter
 
                 //                visible: !isMobile
@@ -218,7 +218,7 @@ T.Control
             SlidersItem
             {
                 visible: _revealer.checked
-                onClicked: _statusSection.open(card.index)
+//                onClicked: _statusSection.open(card.index)
                 //                anchors.verticalCenter: parent.verticalCenter
 
                 //                                visible: !isMobile
@@ -227,12 +227,12 @@ T.Control
             AudioPlayerItem
             {
                 visible: _revealer.checked
-                onClicked: _statusSection.open(card.index)
+//                onClicked: _statusSection.open(card.index)
             }
 
             SessionItem
             {
-                onClicked: card.visible ? _statusSection.close() : _statusSection.open(card.index)
+//                onClicked: card.visible ? _statusSection.close() : _statusSection.open(card.index)
                 anchors.verticalCenter: parent.verticalCenter
             }
         }

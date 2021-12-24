@@ -30,6 +30,9 @@ WaylandCompositor
     {
         id: qtWindowManager
         onShowIsFullScreenChanged: console.debug("Show is fullscreen hint for Qt applications:", showIsFullScreen)
+        showIsFullScreen: false
+            onOpenUrl: Session.Launcher.launchCommand("xdg-open %1".arg(url))
+
     }
 
 //    WlShell {

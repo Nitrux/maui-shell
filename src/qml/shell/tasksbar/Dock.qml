@@ -2,17 +2,17 @@ import QtQuick 2.15
 import QtQml 2.14
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import QtQuick.Templates 2.15 as T
 
 Item
 {
-//    color: "purple"
+    //    color: "purple"
     id: control
-    implicitHeight: _bottomPanelContainer.implicitHeight
+    implicitHeight: _container.implicitHeight
     property bool hidden : _container.y === height
     property bool autohide: false
     property alias launcher : _launcher
@@ -72,57 +72,39 @@ Item
 
     }
 
-    DropShadow
-    {
-        visible: win.formFactor === Cask.Env.Desktop
-        transparentBorder: true
-        anchors.fill: _launcher
-        horizontalOffset: 0
-        verticalOffset: 0
-        radius: 8.0
-        samples: 17
-        color: Qt.rgba(0,0,0,0.2)
-        source: _launcher
-    }
-
-
-    Item
+    RowLayout
     {
         id: _container
         width: parent.width
         height: parent.height
 
-        RowLayout
+        TaskBar
         {
-            id: _bottomPanelContainer
-            width: parent.width
-            height: parent.height
+            id: _taskbar
+            Layout.preferredWidth: Math.min(implicitWidth, parent.width -   (Layout.margins*2))
+            Layout.alignment: Qt.AlignCenter
+            Layout.margins: Maui.Style.space.medium
 
-            TaskBar
+            DragHandler
             {
-                id: _taskbar
+                id: handler2
+                target: _launcher
+                xAxis.enabled : false
+                dragThreshold: 64
+                enabled: !_launcher.opened
+                yAxis.minimum: _launcher.finalYPos - 10
+                yAxis.maximum:  0
+                grabPermissions: PointerHandler.CanTakeOverFromAnything
 
-                DragHandler
+                onActiveChanged:
                 {
-                    id: handler2
-                    target: _launcher
-                    xAxis.enabled : false
-                    dragThreshold: 64
-                    enabled: !_launcher.opened
-                    yAxis.minimum: _launcher.finalYPos - 10
-                    yAxis.maximum:  0
-                    grabPermissions: PointerHandler.CanTakeOverFromAnything
-
-                    onActiveChanged:
+                    const condition = Math.abs(handler2.centroid.scenePressPosition.y -handler2.centroid.scenePosition.y) > 60
+                    if(!active && condition)
                     {
-                        const condition = Math.abs(handler2.centroid.scenePressPosition.y -handler2.centroid.scenePosition.y) > 60
-                        if(!active && condition)
-                        {
-                            _launcher.open()
-                        }else
-                        {
-                            _launcher.close()
-                        }
+                        _launcher.open()
+                    }else
+                    {
+                        _launcher.close()
                     }
                 }
             }

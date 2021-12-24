@@ -34,5 +34,12 @@
         <file>qml/CursorItem.qml</file>
         <file>qml/shell/statusbar/items/notifications/NotificationsContainer.qml</file>
         <file>qml/shell/statusbar/items/notifications/NotificationItem.qml</file>
+        <file>qml/shell/statusbar/items/session/SessionButton.qml</file>
+        <file>qml/shell/templates/CaskDialog.qml</file>
+        <file>qml/shell/statusbar/items/sliders/SliderToggle.qml</file>
+        <file>qml/shell/statusbar/items/sliders/volume/VolumeSlider.qml</file>
+        <file>qml/shell/statusbar/items/sliders/brightness/BrightnessSlider.qml</file>
+        <file>qml/shell/statusbar/items/sliders/SliderPage.qml</file>
+        <file>qml/shell/statusbar/items/sliders/volume/VolumePage.qml</file>
     </qresource>
 </RCC>

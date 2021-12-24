@@ -7,16 +7,16 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import QtQuick.Templates 2.15 as T
 
-Item
+T.Pane
 {
     id: control
-
+    padding: Maui.Style.space.medium
+    clip: false
+    spacing: Maui.Style.space.medium
     default property alias content: _layout.data
-    implicitHeight: visible ? _layout.implicitHeight + _rec.topPadding + _rec.bottomPadding : 0
+    implicitHeight: visible ? implicitContentHeight + topPadding + bottomPadding : 0
 
     property int index : -1
-    property alias padding : _rec.padding
-    property alias background : _rec.background
 
     signal opened()
     signal closed()
@@ -43,58 +43,32 @@ Item
         }
     }
 
-    T.Pane
+    background: Rectangle
     {
-        id: _rec
-        anchors.fill: parent
-        padding: Maui.Style.space.medium
-        clip: true
-        //        anchors.margins: Maui.Style.space.tiny
-        background: Rectangle
-        {
-            color: Kirigami.Theme.backgroundColor
-            radius: width <= _cask.availableWidth ? 0 : 10
-        }
+        color: Kirigami.Theme.backgroundColor
+        radius: width <= _cask.availableWidth ? 0 : 10
 
-        contentItem: Column
+        layer.enabled: true
+        layer.effect: DropShadow
         {
-            id: _layout
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 17
+            color: Qt.rgba(0,0,0,0.2)
         }
     }
 
-    //    layer.enabled: true
-    //    layer.effect: OpacityMask
-    //    {
-    //        maskSource: Item
-    //        {
-    //            width: control.width
-    //            height: control.height
-
-    //            Rectangle
-    //            {
-    //                anchors.fill: parent
-    //                radius: Maui.Style.radiusV
-    //            }
-    //        }
-    //    }
-
-    DropShadow
+    contentItem: Column
     {
-        visible: !(width <= _cask.availableWidth)
-        transparentBorder: true
-        anchors.fill: _rec
-        horizontalOffset: 0
-        verticalOffset: 0
-        radius: 8.0
-        samples: 17
-        color: Qt.rgba(0,0,0,0.2)
-        source: _rec
+        id: _layout
+        spacing: control.spacing
     }
-
 
     Component.onDestruction:
     {
         console.log("DESTROY PANEL CARD")
     }
-
 }
+

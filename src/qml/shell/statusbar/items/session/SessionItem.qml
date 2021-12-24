@@ -6,26 +6,44 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 import org.kde.plasma.core 2.0 as PlasmaCore
+import "../../../templates"
 
 Cask.PanelItem
-{
-    icon.name: "battery-080"
-    text: "80%"
+{   
+    id: control
     display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
 
-    Maui.Dialog
+    Row
+    {
+        spacing: control.spacing
+        Kirigami.Icon
+        {
+            source: "battery-080"
+            height: control.iconSize
+            width: height
+            color: control.icon.color
+        }
+
+        Kirigami.Icon
+        {
+            source: "system-shutdown"
+            height: control.iconSize
+            width: height
+            color: control.icon.color
+        }
+    }
+
+    CaskDialog
     {
         id: _sessioDialog
         title: i18n("Quit Session")
         message: i18n("Are you sure you want to quit the session and terminate runnig tasks?")
-        page.margins: Maui.Style.space.big
-        spacing: Maui.Style.space.medium
         acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : i18n("Quit")
 
         ListView
         {
             id: _runningTasks
-//            visible : count > 0
+            //            visible : count > 0
 
             Maui.Holder
             {
@@ -36,7 +54,8 @@ Cask.PanelItem
             }
 
             Layout.fillWidth: true
-            implicitHeight: Math.max(contentHeight + Maui.Style.space.big, 200)
+            Layout.fillHeight: true
+            Layout.minimumHeight: Math.max(contentHeight + Maui.Style.space.big, 200)
 
             model: _zpaces.allSurfaces
             delegate: Maui.ListBrowserDelegate
@@ -62,7 +81,7 @@ Cask.PanelItem
 
         onRejected:
         {
-             _sessioDialog.close()
+            _sessioDialog.close()
         }
     }
 
@@ -70,24 +89,38 @@ Cask.PanelItem
     {
         width: ListView.view.width
 
-        Row
+        ProgressBar
         {
+            id: _batteryProgressBar
+            width: parent.width
+            from: 1
+            to : 100
+            value : 10
+        }
+
+        RowLayout
+        {
+            width: parent.width
             property int display: ToolButton.TextUnderIcon
-            anchors.horizontalCenter: parent.horizontalCenter
-            ToolButton
+            spacing: Maui.Style.space.medium
+
+            SessionButton
             {
+                Layout.fillWidth: true
                 icon.name: "system-log-out"
                 text: i18n("Quit")
                 display: parent.display
 
                 onClicked:
                 {
-                   _sessioDialog.open()
+                    _sessioDialog.open()
                 }
             }
 
-            ToolButton
+            SessionButton
             {
+                Layout.fillWidth: true
+
                 icon.name: "system-reboot"
                 text: i18n("Restart")
                 display: parent.display
@@ -97,8 +130,10 @@ Cask.PanelItem
                 }
             }
 
-            ToolButton
+            SessionButton
             {
+                Layout.fillWidth: true
+
                 icon.name: "system-shutdown"
                 text: i18n("Shutdown")
                 display: parent.display

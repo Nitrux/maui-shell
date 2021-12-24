@@ -11,7 +11,9 @@ Cask.PanelItem
     id: control
     icon.name: "notifications"
     text: _nofList.count
+    font.bold: true
 
+    onTextChanged: animate()
 
     //    Maui.Badge
     //    {
@@ -23,38 +25,26 @@ Cask.PanelItem
     card: Cask.PanelCard
     {
         width: ListView.view.width
-        padding: 0
-        //                    title: _nof.count + " " + qsTr("Notifications")
-        //                    headBar.visible: true
-        //                    headBar.leftContent: ToolButton
-        //                    {
-        //                        icon.name: "configure"
-        //                    }
-
-        //                    headBar.rightContent: ToolButton
-        //                    {
-        //                        icon.name: "edit-clear-all"
-        //                    }
-
 
         ListView
         {
             id: _nofList
             width: parent.width
+            clip: true
             implicitHeight: Math.max(300, Math.min(500, contentHeight))
             boundsBehavior: ListView.StopAtBounds
             model: _notifications.notificationsModel.historyModel
             spacing: Maui.Style.space.medium
-            header: Maui.ToolBar
+
+            section.delegate: Maui.LabelDelegate
             {
                 width: parent.width
-                background: null
-                leftContent: ToolButton
-                {
-                    icon.name: "edit-clear"
-                    onClicked: _notifications.notificationsModel.historyModel.clearAll()
-                }
+                label: section
+                isSection: true
             }
+
+            section.property: "category"
+            section.criteria: ViewSection.FullString
 
             Maui.Holder
             {
@@ -74,7 +64,37 @@ Cask.PanelItem
                 iconSource: model.iconName
                 imageSource : model.image
                 onDismissed:_notifications.notificationsModel.historyModel.remove(index)
-//                onClicked: _nof.model--
+                background: Rectangle
+                {
+                    color: hovered? Qt.lighter(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+                    radius: 10
+                }
+            }
+        }
+
+        Maui.ToolBar
+        {
+            width: parent.width
+            background: null
+            rightContent: [ToolButton
+                {
+                    icon.name: "edit-clear-all"
+                    onClicked: _notifications.notificationsModel.historyModel.clearAll()
+                },
+
+                ToolButton
+                {
+                    icon.name: "settings-configure"
+                }
+
+            ]
+            leftContent: Switch
+            {
+                text: "Silent"
+                checkable: true
+                checked: _notifications.notificationsModel.doNotDisturb
+                onToggled: _notifications.notificationsModel.doNotDisturb = checked
+
             }
         }
     }

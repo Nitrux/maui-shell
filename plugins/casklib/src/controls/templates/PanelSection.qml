@@ -196,7 +196,8 @@ T.Control
     }
 
 
-    WheelHandler {
+    WheelHandler
+    {
         //        orientation: Qt.Vertical
         target: null
         enabled: true

@@ -24,7 +24,7 @@ import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
 
 import org.mauikit.controls 1.3 as Maui
-import org.kde.kirigami 2.8 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
 
@@ -286,7 +286,7 @@ Cask.StackableItem
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    text: toplevel.maximized
+                    text: rootChrome.title
                     horizontalAlignment: Qt.AlignHCenter
                     elide: Text.ElideMiddle
                     wrapMode: Text.NoWrap
@@ -606,7 +606,8 @@ Cask.StackableItem
     layer.enabled: _borders.visible
     layer.effect: OpacityMask
     {
-        maskSource: Item
+        maskSource:  Item
+
         {
             width: Math.floor(rootChrome.width)
             height: Math.floor(rootChrome.height)
@@ -616,6 +617,15 @@ Cask.StackableItem
                 anchors.fill: parent
                 radius: _borders.radius
             }
+        }
+
+        layer.enabled: _borders.visible
+        layer.effect :  DropShadow
+        {
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            color: Qt.rgba(0,0,0,0.2)
         }
     }
 
@@ -724,6 +734,8 @@ Cask.StackableItem
             else target.y = 0
         }
     }
+
+
 
 //    Rectangle {
 //        z: surfaceItem.z + 9999999999

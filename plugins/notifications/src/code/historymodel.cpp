@@ -40,7 +40,7 @@ QVariant HistoryModel::data(const QModelIndex &index, int role) const
     case HistoryModel::SummaryRole:
         return notification.summary;
     case HistoryModel::ImageRole:
-        return "";
+        return notification.image;
     case HistoryModel::CreatedRole:
         return DateHelper::friendlyTime(notification.created);
     case HistoryModel::UpdatedRole:
@@ -49,6 +49,16 @@ QVariant HistoryModel::data(const QModelIndex &index, int role) const
         return notification.body;
     case HistoryModel::IconNameRole:
         return notification.appIcon;
+    case HistoryModel::TimeoutRole:
+        return notification.timeout;
+    case HistoryModel::AppNameRole:
+        return notification.appName;
+    case HistoryModel::PersistentRole:
+        return notification.persistent;
+    case HistoryModel::UrgencyRole:
+        return notification.urgency;
+    case HistoryModel::CategoryRole:
+        return notification.category;
     case HistoryModel::HasDefaultActionRole:
         return notification.actions.contains("default");
     default:

@@ -13,9 +13,9 @@ Cask.PanelItem
 {
     id: control
 
-    Row
+   Row
     {
-        spacing: Maui.Style.space.medium
+        spacing: control.spacing
         Kirigami.Icon
         {
             source: "settings-configure"
@@ -45,6 +45,8 @@ Cask.PanelItem
     {
         width: parent.width
 
+        onClosed: _togglesStack.pop()
+
         StackView
         {
             id : _togglesStack
@@ -73,17 +75,9 @@ Cask.PanelItem
 
                 }
 
-//                ToggleTemplate
-//                {
-//                    icon.name: "continuous"
-//                }
-
-
-
                 ToggleTemplate
                 {
                     icon.name:  "mic-ready"
-                    onClicked: _notificationsModel.insert(0, {})
                 }
 
                 AirplaneModeToggle

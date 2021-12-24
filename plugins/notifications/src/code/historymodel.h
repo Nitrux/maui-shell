@@ -36,6 +36,11 @@ public:
         UpdatedRole,
         BodyRole,
         IconNameRole,
+        TimeoutRole,
+        AppNameRole,
+        PersistentRole,
+        UrgencyRole,
+        CategoryRole,
         HasDefaultActionRole
     };
     Q_ENUM(Roles)
