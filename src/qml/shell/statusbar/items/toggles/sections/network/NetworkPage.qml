@@ -8,14 +8,13 @@ import org.maui.cask 1.0 as Cask
 
 import org.kde.plasma.networkmanagement 0.2 as PlasmaNM
 
-import "../.."
+import "../../../../../templates"
 
-TogglePage
+StackPage
 {
     id: control
     implicitHeight: Math.max(400, Math.min(400, _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
-    title: "Networks"
-    showTitle: true
+    title: i18n("Networks")
 
     readonly property var displayWifiMessage: !wifiSwitchButton.checked && wifiSwitchButton.visible
     readonly property var displayWwanMessage: !wwanSwitchButton.checked && wwanSwitchButton.visible

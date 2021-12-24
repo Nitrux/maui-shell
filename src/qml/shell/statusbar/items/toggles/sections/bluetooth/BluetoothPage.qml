@@ -8,22 +8,19 @@ import org.maui.cask 1.0 as Cask
 import org.kde.bluezqt 1.0 as BluezQt
 import org.kde.plasma.private.bluetooth 1.0 as PlasmaBt
 
-import "../.."
+import "../../../../../templates"
 
-TogglePage
+StackPage
 {
     id: control
 
     implicitHeight: Math.max(400, Math.min(400, _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
-    title: "Networks"
-    showTitle: true
+    title: i18n("Bluetooth")
 
     headBar.rightContent: [
         Switch
         {
-
             checkable: true
-
         }
     ]
 
@@ -31,6 +28,10 @@ TogglePage
     {
         id: _listView
         anchors.fill: parent
-    }
 
+        holder.visible: _listView.count === 0
+        holder.title: i18n("Nothing here")
+        holder.body: i18n("Under development. Check later.")
+        holder.emoji: "code-context"
+    }
 }

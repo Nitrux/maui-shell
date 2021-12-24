@@ -13,7 +13,8 @@ ToggleTemplate
     id: control
     checked: PlasmaNM.Configuration.airplaneModeEnabled
     checkable: true
-    icon.name: PlasmaNM.Configuration.airplaneModeEnabled ? "network-flightmode-on" : "network-flightmode-off"
+    icon.name: "network-flightmode-on"
+    text: i18n("Airplane Mode")
 
     visible: availableDevices.modemDeviceAvailable || availableDevices.wirelessDeviceAvailable
 

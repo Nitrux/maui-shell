@@ -8,12 +8,13 @@ import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 import "sections/network"
 import "sections/bluetooth"
+import "sections/screenshot"
 
 Cask.PanelItem
 {
     id: control
 
-   Row
+    Row
     {
         spacing: control.spacing
         Kirigami.Icon
@@ -78,6 +79,7 @@ Cask.PanelItem
                 ToggleTemplate
                 {
                     icon.name:  "mic-ready"
+                    text: "Michrophone"
                 }
 
                 AirplaneModeToggle
@@ -85,54 +87,26 @@ Cask.PanelItem
 
                 }
 
-                ToggleTemplate
+                ScreenshotToggle
                 {
                     id: _screenshotToggle
-                    icon.name:  "edit-image-face-detect"
+
                     onClicked:
                     {
-                        animation.start()
-                    }
-
-                    Rectangle
-                    {
-                        id: _rec
-                        visible: _screenshotToggle.visible
-                        parent: _cask.overlayTopPanel
-                        color: "orange"
-                        anchors.fill: parent
-                        opacity: 0
-                        PropertyAnimation
-                        {
-                            id: animation;
-                                                target: _rec;
-                                                property: "opacity";
-                                                to: 90;
-                                                duration: 500
-
-                                                onFinished:
-                                                {
-                                                    _rec.opacity = 0
-                                                    _statusSection.close()
-
-                                                    _cask.grabToImage(function(result) {
-                                                                           result.saveToFile("something-%1.png".arg(new Date().toLocaleTimeString()));
-                                                                       });
-                                                }
-                        }
-
-
+                        _togglesStack.push(page)
                     }
                 }
 
                 ToggleTemplate
                 {
                     icon.name:  "contrast"
+                    text: i18n("Nigh mode")
                 }
 
                 ToggleTemplate
                 {
                     icon.name:  "settings-configure"
+                    text: i18n("Settings")
                 }
             }
 

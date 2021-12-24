@@ -1,15 +1,14 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.15
 
 import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
-
-import org.maui.cask 1.0 as Cask
+import org.mauikit.controls 1.3 as Maui
 
 Maui.Page
 {
     id: control
     headerColorSet: control.Kirigami.Theme.colorSet
+    showTitle: true
 
     headBar.background: null
     headBar.farLeftContent: ToolButton
@@ -17,5 +16,4 @@ Maui.Page
         icon.name: "go-previous"
         onClicked: control.StackView.view.pop()
     }
-
 }

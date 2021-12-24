@@ -1,8 +1,8 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.15
 
 import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 import org.kde.plasma.networkmanagement 0.2 as PlasmaNM
 
 import org.maui.cask 1.0 as Cask
@@ -14,6 +14,7 @@ ToggleTemplate
     template.label1.text: "WiFi"
     template.label2.text:  networkStatus.activeConnections.split(" ").pop()
     tooltipText: networkStatus.activeConnections
+    display: ToolButton.TextBesideIcon
 
     property alias handler : handler
 

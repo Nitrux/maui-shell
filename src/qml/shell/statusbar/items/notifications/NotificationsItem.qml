@@ -86,11 +86,12 @@ Cask.PanelItem
                 {
                     icon.name: "settings-configure"
                 }
-
             ]
+
             leftContent: Switch
             {
-                text: "Silent"
+//                text: "Silent"
+                icon.name: checked? "notifications-disabled" : "notifications-enabled"
                 checkable: true
                 checked: _notifications.notificationsModel.doNotDisturb
                 onToggled: _notifications.notificationsModel.doNotDisturb = checked

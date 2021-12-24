@@ -38,6 +38,7 @@ Cask.PanelItem
         id: _sessioDialog
         title: i18n("Quit Session")
         message: i18n("Are you sure you want to quit the session and terminate runnig tasks?")
+        template.iconSource: "emblem-warning"
         acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : i18n("Quit")
 
         ListView

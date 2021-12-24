@@ -43,10 +43,28 @@ T.Pane
         }
     }
 
+    Behavior on implicitHeight
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
     background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor
-        radius: width <= _cask.availableWidth ? 0 : 10
+        radius: isMobile ? 0 : 10
+
+        Behavior on radius
+        {
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         layer.enabled: true
         layer.effect: DropShadow

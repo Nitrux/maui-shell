@@ -90,6 +90,7 @@ Cask.PanelItem
             {
                 anchors.fill: parent
                 visible: _playersList.count === 0
+                emoji: "music-note-16th"
                 title: i18n("No Players")
                 body: i18n("Launch a new player to control")
                 Action

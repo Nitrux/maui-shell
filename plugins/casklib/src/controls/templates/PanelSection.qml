@@ -54,7 +54,7 @@ T.Control
     {
         id: popup
         property int alignment: Qt.AlignCenter
-        z: _content.z -1
+        z: _content.z -2
 
         Label
         {
@@ -107,9 +107,9 @@ T.Control
         {
             switch(alignment)
             {
-            case Qt.AlignLeft: return 0;
+            case Qt.AlignLeft: return isMobile ? 0-Maui.Style.space.tiny : 0;
             case Qt.AlignCenter: return Math.round((control.width/2 ) - (popup.width/2));
-            case Qt.AlignRight: return 0-(width - control.width);
+            case Qt.AlignRight: return  0-(width - control.width)+(isMobile ? Maui.Style.space.tiny : 0);
             default: return 0;
             }
 

@@ -60,24 +60,22 @@ Cask.PanelItem
             {
                 spacing: control.card.spacing
 
-                BrightnessSlider
-                {
-                    width: parent.width
-                    onClicked: _togglesStack.push(page)
-
-                }
-
                 VolumeSlider
                 {
                     width: parent.width
                     onClicked: _togglesStack.push(page)
+                }
 
+                BrightnessSlider
+                {
+                    width: parent.width
+                    onClicked: _togglesStack.push(page)
                 }
 
                 SliderToggle
                 {
                     width: parent.width
-//                    iconSource: "microphone"
+                    slider.iconSource: "microphone"
                 }
             }
         }

@@ -100,7 +100,7 @@ Item
     {
         id: _cards
         anchors.fill: parent
-        clip: false
+        clip: isMobile
         padding: isMobile ? 0 : Maui.Style.space.medium
         leftPadding: padding
         rightPadding: padding

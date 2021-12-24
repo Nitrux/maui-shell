@@ -15,7 +15,6 @@
         <file>qml/shell/statusbar/items/toggles/ToggleTemplate.qml</file>
         <file>qml/shell/statusbar/items/toggles/TogglesItem.qml</file>
         <file>qml/shell/statusbar/items/player/PlayerCard.qml</file>
-        <file>qml/shell/statusbar/items/toggles/TogglePage.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/network/NetworkToggle.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/bluetooth/BluetoothToggle.qml</file>
         <file>qml/shell/statusbar/items/notifications/NotificationsItem.qml</file>
@@ -39,7 +38,10 @@
         <file>qml/shell/statusbar/items/sliders/SliderToggle.qml</file>
         <file>qml/shell/statusbar/items/sliders/volume/VolumeSlider.qml</file>
         <file>qml/shell/statusbar/items/sliders/brightness/BrightnessSlider.qml</file>
-        <file>qml/shell/statusbar/items/sliders/SliderPage.qml</file>
         <file>qml/shell/statusbar/items/sliders/volume/VolumePage.qml</file>
+        <file>qml/shell/templates/StackPage.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/screenshot/ScreenshotToggle.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/screenshot/ScreenshotPage.qml</file>
+        <file>qml/shell/templates/CardButton.qml</file>
     </qresource>
 </RCC>
