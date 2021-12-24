@@ -65,7 +65,7 @@ Maui.Page
 
         Button
         {
-            text: qsTr("Desktop")
+            text: qsTr("Show Desktop")
             onClicked:
             {
                 control.close()
