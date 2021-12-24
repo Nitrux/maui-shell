@@ -2,7 +2,7 @@
 Type=XSession
 Exec=startcask-x11
 TryExec=startcask-x11
-DesktopNames=MAUI
+DesktopNames=Maui Shell (Cask)
 Name=Cask (X11)
-Comment=Cask by Maui
+Comment=Maui Shell is a convergent shell for desktops, tablets, and phones.
 X-KDE-PluginInfo-Version=5.23.4
