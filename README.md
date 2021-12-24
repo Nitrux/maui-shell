@@ -1,40 +1,50 @@
-Maui Shell is a convergent shell for desktop, tablets and phones.
+# Maui Shell 
+![](https://mauikit.org/wp-content/uploads/2018/12/maui_project_logo.png)
 
-Cask is the shell container and elements templates, such as panels, popups, cards etc.
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![Generic badge](https://img.shields.io/badge/OS-Linux-blue.svg)](https://shields.io/)
 
-Zpace is the composer, which is the layout and places the windows /surfaces into the Cask container.
+_Maui Shell is a convergent shell for desktops, tablets, and phones._
 
+Maui Shell is composed of two parts:
+
+- Cask is the shell container and elements templates, such as panels, popups, cards etc.
+- Zpace is the composer, which is the layout and places the windows or surfaces into the Cask container.
+
+# Screenshots
 
 ![a screenshot](screenshots/desktop/screenshot.png "screenshot")
 
-# Requirements
+# Build
 
-* Qt 5.15 (if you need 5.x, use the 5.x branch)
-  - qtbase, qtdeclarative, qtwayland, dbus, concurrent
-  - QtQuick.Controls 2
-  - QtQuick.Controls 1, only for the calendar popover
-* KConfig
-* KService
-* KI18n
-* KCoreAddons
-* BlueDevil
-* Plasma Core
-* Plasma-nm
-* KIO
-* MauiKit
+### Requirements
 
-# Building
+#### Debian/Ubuntu
+##### Maui Shell needs ECM > 5.70
+##### Maui Shell needs MauiKit > 2.1.0
 
 ```
-cmake .. _DCMAKE_INSTALL_PREFIX=/usr
-make
+libkf5config-dev
+libkf5coreaddons-dev
+libkf5i18n-dev
+libkf5kio-dev
+libkf5notifications-dev
+libkf5service-dev
+libqt5svg5-dev
+libqt5waylandcompositor5-dev
+mauikit
+qtbase5-dev
+qtdeclarative5-dev
+qtquickcontrols2-5-dev
 ```
 
-# Installation
+### Compile source
+ 1. `git clone --depth 1 --branch master https://github.com/Nitrux/maui-shell.git` 
+ 2. `mkdir -p maui-shell/build && cd maui-shell/build`
+ 4. `cmake-DCMAKE_INSTALL_PREFIX=/usr -DENABLE_BSYMBOLICFUNCTIONS=OFF -DQUICK_COMPILER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_LOCALSTATEDIR=/var -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ..`
+ 5. `make`
 
-```
-sudo make install
-```
+ ### Install
+ 1. `make install`
 
 # Running
 
@@ -46,22 +56,38 @@ If you want to run it on the Linux console without an X11 session
 ```
 #!/bin/sh
 export QT_QPA_PLATFORM=eglfs
-export QT_AUTO_SCREEN_SCALE_FACTOR=0 # don't embiggen stuff on "high-res" displays
-#export QT_QPA_EGLFS_PHYSICAL_WIDTH=480 # in case it's not detected
-#export QT_QPA_EGLFS_PHYSICAL_HEIGHT=270 # or you wish to override
+
+# don't enlarge stuff on "high-res" displays
+export QT_AUTO_SCREEN_SCALE_FACTOR=0 
+
+# in case it's not detected
+# or you wish to override
+#
+# export QT_QPA_EGLFS_PHYSICAL_WIDTH=480 
+# export QT_QPA_EGLFS_PHYSICAL_HEIGHT=270 
+
 # try to restart if it crashes; write a log file
 cask -r -l /tmp/cask.log
 ```
 
-If you are on the console and have the problem that the keyboard, mouse etc.
+If you are on the console and have a problem with the keyboard, mouse, etc.
 don't work (which should be fixed in Qt 5.6 and above, theoretically) you can
 try various input plugins (after rebooting via ssh, or the power button ;-) by adding
-```-plugin EvdevTouch -plugin EvdevMouse -plugin EvdevTablet -plugin EvdevKeyboard```
-or
-```-plugin libinput```
 
-The set of applications you can run inside is mostly limited to those
-that are built with Qt 5, so far.  That includes a lot of KDE applications.
-It is intended to eventually be able to run weston and GTK3 apps too;
-that's mainly a matter of qtwayland having the XDG shell support finished.
+```
+-plugin EvdevTouch -plugin EvdevMouse -plugin EvdevTablet -plugin EvdevKeyboard
+```
+or
+```
+-plugin libinput
+```
+
+Cask can run Weston and GTK3 apps too eventually;
+that's mainly a matter of QtWayland having the XDG shell support finished.
+
 Cask does not include an embedded X server yet, but it might be possible.
+
+# Issues
+If you find problems with the contents of this repository please create an issue.
+
+©2021 Nitrux Latinoamericana S.C.
