@@ -1,10 +1,17 @@
-#! /bin/sh
+#!/bin/bash
 
-set -xe
+set -x
 
-# -- Start Cask
+cask
 
-killall plasmashell
-sleep 1 && cask
+# To logout we will check if cask is running and if not kill the user session.
 
-exit
+USERNAME=`echo $USER`
+
+if pgrep -f cask >/dev/null
+
+then
+  echo "Cask is running"
+else
+  pkill -KILL -u $USERNAME
+fi
