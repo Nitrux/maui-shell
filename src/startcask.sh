@@ -1,4 +1,7 @@
 #!/bin/sh
+
+#FIXME Add environment variables without requiring systemd components.
+
 for ENV_VAR in DESKTOP_SESSION \
                DISPLAY \
                XAUTHORITY \
