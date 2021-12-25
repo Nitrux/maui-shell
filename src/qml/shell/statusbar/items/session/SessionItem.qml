@@ -26,7 +26,7 @@ Cask.PanelItem
 
         Kirigami.Icon
         {
-            source: "system-shutdown"
+            source: "view-media-artist"
             height: control.iconSize
             width: height
             color: control.icon.color

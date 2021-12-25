@@ -44,10 +44,10 @@ Rectangle
         radius: 4
     }
 
-    Label
-    {
-        text: workzpace.lastPos + " / " + workzpace.contentX + " / " + workzpace.currentIndex
-    }
+//    Label
+//    {
+//        text: workzpace.lastPos + " / " + workzpace.contentX + " / " + workzpace.currentIndex
+//    }
 
     Binding
     {

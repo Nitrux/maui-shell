@@ -56,12 +56,12 @@ T.Control
         property int alignment: Qt.AlignCenter
         z: _content.z -2
 
-        Label
-        {
-            color: "orange"
-            text:  handler.centroid.position.y + " / " + handler2.centroid.scenePosition.y
-            anchors.bottom: parent.bottom
-        }
+//        Label
+//        {
+//            color: "orange"
+//            text:  handler.centroid.position.y + " / " + handler2.centroid.scenePosition.y
+//            anchors.bottom: parent.bottom
+//        }
 
         onOverlayClicked: control.close()
         //        onActiveFocusChanged:

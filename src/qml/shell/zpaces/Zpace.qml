@@ -9,8 +9,9 @@ import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
 
 import QtGraphicalEffects 1.0
+import QtQuick.Templates 2.15 as T
 
-Pane
+T.Pane
 {
     id: control
     property ZP.Zpace zpace
@@ -29,8 +30,6 @@ Pane
             easing.type: Easing.OutInQuad
         }
     }
-
-
 
 
     background: Item

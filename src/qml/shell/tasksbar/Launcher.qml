@@ -16,7 +16,7 @@ Maui.Page
 
     opacity:  (y/finalYPos)
 
-    readonly property int finalYPos :  0 - (control.height)
+    readonly property int finalYPos :  0 - (control.height - _container.y)
 
     property bool opened : false
 

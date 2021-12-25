@@ -77,6 +77,7 @@ WaylandOutput
         id: win
         width: 1024
         height: 760
+
         readonly property int formFactor :
         {
             if(width > 1500)

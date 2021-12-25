@@ -8,6 +8,9 @@ import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
 import QtQuick.Templates 2.15 as T
 
+
+import "../templates"
+
 T.Control
 {
     id: control
@@ -67,19 +70,17 @@ T.Control
             {
                 model: _zpaces.tasksModel
 
-                AbstractButton
+                DockItem
                 {
                     focusPolicy: Qt.NoFocus
                     readonly property ZP.Task task : model.task
                     readonly property ZP.XdgWindow xdgWindow : task.window
 
-                    implicitHeight: 48
-                    implicitWidth: height
-                    //                draggable: true
-                    ToolTip.text: task.fileName
-                    ToolTip.delay: 1000
-                    ToolTip.timeout: 5000
-                    ToolTip.visible: hovered
+                    icon.height: 32
+                    icon.width: 32
+
+                    text: task.fileName
+                    icon.name: task.iconName
 
                     Menu
                     {
@@ -141,27 +142,27 @@ T.Control
                         }
                     }
 
-                    contentItem: Item
-                    {
-                        Kirigami.Icon
-                        {
-                            source: task.iconName
-                            height: 48
-                            width: height
-                            anchors.centerIn: parent
-                        }
+                    //                    contentItem: Item
+                    //                    {
+                    //                        Kirigami.Icon
+                    //                        {
+                    //                            source: task.iconName
+                    //                            height: 48
+                    //                            width: height
+                    //                            anchors.centerIn: parent
+                    //                        }
 
-                        Rectangle
-                        {
-                            width: task.window ? (task.window.toplevel.activated ? parent.width  : height) : 0
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            height: task.window ? (task.window.toplevel.activated ? 2  : 8) : 0
-                            radius: height/2
-                            anchors.bottom: parent.bottom
-                            visible: task.window
-                            color: Kirigami.Theme.highlightColor
-                        }
+                    Rectangle
+                    {
+                        width: task.window ? (task.window.toplevel.activated ? parent.width  : height) : 0
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        height: task.window ? (task.window.toplevel.activated ? 2  : 8) : 0
+                        radius: height/2
+                        anchors.bottom: parent.bottom
+                        visible: task.window
+                        color: Kirigami.Theme.highlightColor
                     }
+                    //                    }
                 }
 
 

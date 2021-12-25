@@ -60,11 +60,11 @@ Item
         id: _launcher
         visible: handler2.active || opened
         width: Math.min(800, parent.width)
-        height: win.formFactor !== Cask.Env.Desktop ? _cask.avaliableHeight - control.height : Math.min(_cask.avaliableHeight - control.height, 800)
+        height: win.formFactor !== Cask.Env.Desktop ? _cask.avaliableHeight - (control.height - _container.y): Math.min(_cask.avaliableHeight - (control.height - _container.y) , 800)
 
         Binding on y
         {
-            value: (_launcher.opened ? _launcher.finalYPos : control.height)
+            value: handler2.active ? handler2.centroid.position.y : (_launcher.opened ? _launcher.finalYPos : control.height)
             restoreMode: Binding.RestoreBindingOrValue
         }
 
@@ -88,17 +88,17 @@ Item
             DragHandler
             {
                 id: handler2
-                target: _launcher
+                target: null
                 xAxis.enabled : false
                 dragThreshold: 64
                 enabled: !_launcher.opened
-                yAxis.minimum: _launcher.finalYPos - 10
+                yAxis.minimum: availableGeometry.height
                 yAxis.maximum:  0
                 grabPermissions: PointerHandler.CanTakeOverFromAnything
 
                 onActiveChanged:
                 {
-                    const condition = Math.abs(handler2.centroid.scenePressPosition.y -handler2.centroid.scenePosition.y) > 60
+                    const condition = handler2.centroid.scenePressPosition.y -handler2.centroid.scenePosition.y > 200
                     if(!active && condition)
                     {
                         _launcher.open()

@@ -5,8 +5,10 @@ import QtQuick.Controls 2.5
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
+import "../templates"
+import QtQuick.Templates 2.15 as T
 
-Cask.PanelItem
+T.AbstractButton
 {
     id: control
     implicitHeight: 48
@@ -14,6 +16,9 @@ Cask.PanelItem
 
     leftPadding: 0
     rightPadding: 0
+
+    icon.height: 22
+    icon.width: 22
 
     background: Rectangle
     {
@@ -24,13 +29,12 @@ Cask.PanelItem
 
     contentItem: Item
     {
-
         Kirigami.Icon
         {
             source: control.icon.name
             color: control.checked || control.down ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-            height: 22
-            width: height
+            height: control.icon.height
+            width: control.icon.width
             anchors.centerIn: parent
         }
     }
