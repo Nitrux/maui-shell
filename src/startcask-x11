@@ -2,13 +2,13 @@
 
 set -x
 
-# --  Start Cask
-
-cask
-
 # --  Set environment variables
 
 export XDG_SESSION_DESKTOP=KDE
+
+# --  Start Cask
+
+cask
 
 # --  To logout we will check if cask is running and if not kill the user session.
 
