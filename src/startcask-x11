@@ -5,6 +5,8 @@ set -x
 # --  Set environment variables
 
 export XDG_SESSION_DESKTOP=KDE
+export XDG_CURRENT_DESKTOP=KDE
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
 # --  Start Cask
 
