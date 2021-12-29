@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=PolicyKit Handler
+TryExec=cutefish-polkit-agent
+Exec=cutefish-polkit-agent
+NoDisplay=true

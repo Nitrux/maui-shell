@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>svg/emblem-warning.svg</file>
+    </qresource>
+</RCC>
