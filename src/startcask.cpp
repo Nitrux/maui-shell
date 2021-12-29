@@ -124,7 +124,7 @@ int main()
 // qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
  qputenv("QT_WAYLAND_CLIENT_BUFFER_INTEGRATION", "wayland-egl");
 
-qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "0");
+qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "1");
 
 
 

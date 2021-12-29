@@ -29,36 +29,36 @@ ListView
     //        value:  _appsOverview.currentIndex
     //        restoreMode: Binding.RestoreBinding
     //    }
-
     onCurrentIndexChanged:
     {
         control.lastPos = control.contentX
     }
+
     scale: control.overviewScale
     orientation: ListView.Horizontal
     interactive: overviewMode
-    snapMode: overviewMode ? ListView.NoSnap : ListView.SnapOneItem
-    boundsBehavior: overViewMode ? Flickable.OvershootBounds : Flickable.StopAtBounds
+    snapMode: ListView.SnapOneItem
+    boundsBehavior: overviewMode ? Flickable.OvershootBounds : Flickable.StopAtBounds
 
     highlightFollowsCurrentItem: true
-    highlightMoveDuration: 0
-    highlightResizeDuration: 0
+    highlightMoveDuration: Kirigami.Units.longDuration
+    //    highlightResizeDuration: 0
     cacheBuffer: width * count
     //                    preferredHighlightEnd: width
     // 		highlight: Item {}
-//    highlightMoveVelocity: -1
-//    highlightResizeVelocity: -1
+    //    highlightMoveVelocity: -1
+    //    highlightResizeVelocity: -1
 
 
     property int lastPos: 0
 
-//    Label
-//    {
-//        text: control.count + "/" + _zpaces.zpacesModel.count
-//        color: "orange"
-//        font.bold: true
-//        font.pointSize: 22
-//    }
+    Label
+    {
+        text: control.currentIndex + "/" + control.lastPos
+        color: "orange"
+        font.bold: true
+        font.pointSize: 22
+    }
 
 
     Connections
@@ -82,6 +82,8 @@ ListView
         control.overviewScale = 1
         control.returnToBounds()
         overviewMode = false
+        control.lastPos = control.currentIndex * control.width
+
     }
 
 }

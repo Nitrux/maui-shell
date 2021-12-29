@@ -114,8 +114,8 @@ Item
         {
             NumberAnimation
             {
-                duration: 140
-                easing.type: Easing.OutBounce
+                duration: 540
+                easing.type: Easing.OutBack
             }
         }
 

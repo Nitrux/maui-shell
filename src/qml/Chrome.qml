@@ -731,7 +731,7 @@ Cask.StackableItem
         {
             if(!active && (target.y * -1) > 100)
                 window.close()
-            else target.y = 0
+//            else target.y = 0
         }
     }
 

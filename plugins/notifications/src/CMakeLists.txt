@@ -52,7 +52,6 @@ qt_add_dbus_interface(SRCS code/org.freedesktop.Notifications.xml notifications_
 
 qt_add_dbus_adaptor(SRCS code/org.freedesktop.Notifications.xml notificationserver.h NotificationServer notifications_adaptor)
 
-
 if(QUICK_COMPILER)
     qtquick_compiler_add_resources(casknotifications_QML_QRC resources.qrc)
 else()

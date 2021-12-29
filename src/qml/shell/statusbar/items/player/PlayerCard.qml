@@ -365,18 +365,6 @@ T.Pane
 
 
 
-    states: [
-        State {
-            name: "playing"
-            when: !control.noPlayer && sourceData.PlaybackStatus === "Playing"
-
-        },
-        State {
-            name: "paused"
-            when: !control.noPlayer && sourceData.PlaybackStatus === "Paused"
-        }
-    ]
-
     Component.onDestruction:
     {
         console.log("DESTROY PLAYER CARD")

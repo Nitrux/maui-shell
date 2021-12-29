@@ -82,7 +82,7 @@ T.Control
                     text: task.fileName
                     icon.name: task.iconName
 
-                    Menu
+                    Maui.ContextualMenu
                     {
                         id: _menu
 
@@ -111,7 +111,7 @@ T.Control
                         acceptedButtons: Qt.RightButton
                         onClicked:
                         {
-                            _menu.popup()
+                            _menu.show()
                         }
                     }
 

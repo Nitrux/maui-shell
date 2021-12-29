@@ -101,9 +101,10 @@ T.Pane
 //            preventStealing: false
             onTapped:
             {
-                _swipeView.closeOverview()
 
                 _swipeView.currentIndex = index
+                _swipeView.closeOverview()
+
             }
         }
     }

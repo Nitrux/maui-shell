@@ -95,7 +95,7 @@ WaylandOutput
             anchors.fill: parent
             // Set this to false to disable the outer mouse cursor when running nested
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
-            windowSystemCursorEnabled: output.isNestedCompositor
+            windowSystemCursorEnabled: control.isNestedCompositor
 
 //            ZP.WaylandCursorGrabber
 //            {
@@ -249,7 +249,7 @@ WaylandOutput
                 inputEventsEnabled: false
                 x: mouseTracker.mouseX
                 y: mouseTracker.mouseY
-                seat: output.compositor.defaultSeat
+                seat: control.compositor.defaultSeat
             }
         }
     }
