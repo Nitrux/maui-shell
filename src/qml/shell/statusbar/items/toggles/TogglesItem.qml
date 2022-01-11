@@ -78,8 +78,10 @@ Cask.PanelItem
 
                 ToggleTemplate
                 {
-                    icon.name:  "mic-ready"
+                    icon.name: _slidersItem.micItem.slider.iconSource
                     text: "Michrophone"
+                    checked: _slidersItem.micItem.muted
+                    onClicked: _slidersItem.micItem.toggleMute()
                 }
 
                 AirplaneModeToggle

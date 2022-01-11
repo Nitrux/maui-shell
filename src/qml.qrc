@@ -43,5 +43,12 @@
         <file>qml/shell/statusbar/items/toggles/sections/screenshot/ScreenshotToggle.qml</file>
         <file>qml/shell/statusbar/items/toggles/sections/screenshot/ScreenshotPage.qml</file>
         <file>qml/shell/templates/CardButton.qml</file>
+        <file>qml/shell/statusbar/items/session/BatteryToggle.qml</file>
+        <file>qml/shell/statusbar/items/sliders/volume/DeviceItem.qml</file>
+        <file>qml/shell/templates/SliderToggle.qml</file>
+        <file>qml/shell/templates/ProgressToggle.qml</file>
+        <file>qml/shell/templates/ProgressBarTemplate.qml</file>
+        <file>qml/shell/statusbar/items/sliders/volume/MicSlider.qml</file>
+        <file>qml/shell/statusbar/items/sliders/volume/MicPage.qml</file>
     </qresource>
 </RCC>

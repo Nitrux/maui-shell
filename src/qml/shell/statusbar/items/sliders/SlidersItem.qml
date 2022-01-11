@@ -12,13 +12,14 @@ import "brightness"
 Cask.PanelItem
 {
     id: control
+    property alias micItem : _micSlider
 
     Row
     {
         spacing: control.spacing
         Kirigami.Icon
         {
-            source: "audio-volume-medium"
+            source: _audioSlider.slider.iconSource
             height: control.iconSize
             width: height
             color: control.icon.color
@@ -26,7 +27,7 @@ Cask.PanelItem
 
         Kirigami.Icon
         {
-            source: "mic-ready"
+            source: _micSlider.slider.iconSource
             height: control.iconSize
             width: height
             color: control.icon.color
@@ -45,8 +46,6 @@ Cask.PanelItem
     {
 
         width: ListView.view.width
-
-
         onClosed: _togglesStack.pop()
 
         StackView
@@ -62,6 +61,14 @@ Cask.PanelItem
 
                 VolumeSlider
                 {
+                    id: _audioSlider
+                    width: parent.width
+                    onClicked: _togglesStack.push(page)
+                }
+
+                MicSlider
+                {
+                    id: _micSlider
                     width: parent.width
                     onClicked: _togglesStack.push(page)
                 }
@@ -72,11 +79,7 @@ Cask.PanelItem
                     onClicked: _togglesStack.push(page)
                 }
 
-                SliderToggle
-                {
-                    width: parent.width
-                    slider.iconSource: "microphone"
-                }
+
             }
         }
     }

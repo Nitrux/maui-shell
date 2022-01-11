@@ -10,8 +10,7 @@ import "../.."
 ToggleTemplate
 {
     icon.name: "network-bluetooth"
-    template.label2.text: "PinePhone-Pro-2x"
-    template.label1.text: i18n("Bluetooth")
+    template.label1.text: "PinePhone-Pro-2x"
     display: ToolButton.TextBesideIcon
 
     page: BluetoothPage

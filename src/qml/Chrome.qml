@@ -606,8 +606,7 @@ Cask.StackableItem
     layer.enabled: _borders.visible
     layer.effect: OpacityMask
     {
-        maskSource:  Item
-
+        maskSource: Item
         {
             width: Math.floor(rootChrome.width)
             height: Math.floor(rootChrome.height)

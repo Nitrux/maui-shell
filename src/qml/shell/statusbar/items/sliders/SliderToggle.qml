@@ -14,9 +14,11 @@ T.Pane
     id: control
     property Component page : null
 
-    implicitHeight: 32 + topPadding + bottomPadding
+    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+    spacing: Maui.Style.space.medium
 
     property alias slider : _slider
+    property alias label : _label
 
     padding: Maui.Style.space.medium
 
@@ -31,21 +33,40 @@ T.Pane
         radius: 10
     }
 
-    contentItem: RowLayout
+    contentItem: ColumnLayout
     {
-        SliderTemplate
+        spacing: control.spacing
+
+        Label
         {
-            id: _slider
+            id: _label
             Layout.fillWidth: true
+            wrapMode: Text.NoWrap
+            elide: Text.ElideMiddle
+            font.bold: true
+            visible: text && text.length
+            color: Kirigami.Theme.textColor
         }
 
-        ToolButton
+        RowLayout
         {
-            visible: control.page
-            icon.name: "go-next"
-            onClicked: control.clicked()
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: control.spacing
+
+            SliderTemplate
+            {
+                id: _slider
+                Layout.fillWidth: true
+            }
+
+            ToolButton
+            {
+                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+                visible: control.page
+                icon.name: "go-next"
+                onClicked: control.clicked()
+            }
         }
     }
-
-
 }

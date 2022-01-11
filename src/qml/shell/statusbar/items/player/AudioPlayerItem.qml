@@ -88,6 +88,7 @@ Cask.PanelItem
 
             Maui.Holder
             {
+                id:  holder
                 anchors.fill: parent
                 visible: _playersList.count === 0
                 emoji: "music-note-16th"
@@ -102,7 +103,7 @@ Cask.PanelItem
 
             //            currentIndex: pageIndicator.currentIndex
             width: parent.width
-            implicitHeight: 200
+            implicitHeight: Math.max(200, holder.implicitHeight)
             spacing: Maui.Style.space.medium
 
             orientation: ListView.Horizontal

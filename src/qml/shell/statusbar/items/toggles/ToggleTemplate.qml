@@ -10,8 +10,8 @@ import "../../../templates"
 CardButton
 {
     id: control
-    implicitHeight: 48
-    implicitWidth: Math.max(_template.implicitWidth, implicitHeight)
+    implicitHeight: 48 + topPadding + bottomPadding
+    implicitWidth: Math.max(_template.layout.implicitWidth, implicitHeight) + leftPadding + rightPadding
     property alias template : _template
 
     display: ToolButton.IconOnly
@@ -21,8 +21,10 @@ CardButton
     contentItem: Maui.ListItemTemplate
     {
         id: _template
+        spacing: control.spacing
         labelsVisible: (label1.text.length || label2.text.length) && control.display === ToolButton.TextBesideIcon
         label1.text: control.text
+        label1.wrapMode: Text.Wrap
         iconSource: control.icon.name
         isMask: false
         iconVisible: true

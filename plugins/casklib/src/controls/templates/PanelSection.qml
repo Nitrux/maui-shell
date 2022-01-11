@@ -29,6 +29,8 @@ T.Control
 
     property int currentCard : -1
 
+    hoverEnabled: true
+
     padding: 0
     topPadding: padding
     bottomPadding: padding

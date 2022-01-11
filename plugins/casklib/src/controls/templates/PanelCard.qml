@@ -81,6 +81,7 @@ T.Pane
     contentItem: Column
     {
         id: _layout
+        clip: true
         spacing: control.spacing
     }
 

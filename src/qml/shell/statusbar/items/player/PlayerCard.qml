@@ -12,7 +12,7 @@ import QtQuick.Templates 2.15 as T
 T.Pane
 {
     id: control
-    implicitHeight: _template.implicitHeight + topPadding+bottomPadding
+    implicitHeight: _template.implicitHeight + topPadding + bottomPadding
 
     padding: 0
 

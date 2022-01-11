@@ -121,13 +121,13 @@ T.Control
     Timer
     {
         id: _timer
-        running: control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened)
+        running: control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened) && !_statusSection.hovered
         interval: 4000
 //        triggeredOnStart: true
         onTriggered:
         {
             console.log("_timer triggered")
-            if(control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened))
+            if(control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened) && !_statusSection.hovered)
             {
                 control.hide()
             }
@@ -142,7 +142,6 @@ T.Control
     contentItem: RowLayout
     {
         id: _layout
-
 
         Cask.PanelSection
         {
@@ -200,7 +199,7 @@ T.Control
 
                 Timer
                 {
-                    running: _revealer.checked && !_statusSection.popup.opened
+                    running: _revealer.checked && !_statusSection.popup.opened && !_statusSection.hovered
                     interval: 4000
                     onTriggered: _revealer.toggle()
                 }
@@ -217,6 +216,7 @@ T.Control
 
             SlidersItem
             {
+                id: _slidersItem
                 visible: _revealer.checked
 //                onClicked: _statusSection.open(card.index)
                 //                anchors.verticalCenter: parent.verticalCenter

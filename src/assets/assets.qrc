@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>calamares_wallpaper.jpg</file>
         <file>waves-wallpaper-bigsur1.png</file>
+        <file>Waves Monterey Light 6016x6016.jpg</file>
     </qresource>
 </RCC>

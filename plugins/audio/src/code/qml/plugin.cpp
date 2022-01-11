@@ -38,7 +38,7 @@ static QJSValue pulseaudio_singleton(QQmlEngine *engine, QJSEngine *scriptEngine
 
 void CaskAudioPlugin::registerTypes(const char *uri)
 {
-    QPulseAudio::Context::setApplicationId(QStringLiteral("Cask.Audio"));
+    QPulseAudio::Context::setApplicationId(QStringLiteral("maui.cask.audio"));
 
     qmlRegisterType<SortFilterModel>(uri, 1, 0, "SortFilterModel");
 

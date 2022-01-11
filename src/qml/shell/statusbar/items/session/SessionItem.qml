@@ -90,13 +90,10 @@ Cask.PanelItem
     {
         width: ListView.view.width
 
-        ProgressBar
+        BatteryToggle
         {
             id: _batteryProgressBar
-            width: parent.width
-            from: 1
-            to : 100
-            value : 10
+            width: parent.width            
         }
 
         RowLayout
