@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import QtQuick.Window 2.15
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
@@ -31,7 +31,6 @@ T.Pane
         }
     }
 
-
     background: Item
     {
         id: _bg
@@ -46,7 +45,9 @@ T.Pane
                 id: _img
                 anchors.fill: parent
                 anchors.margins:  control.rise ? Maui.Style.space.large * 2 : 0
-
+                asynchronous: true
+                sourceSize.width: Screen.width
+                sourceSize.height: Screen.height
                 fillMode: Image.PreserveAspectCrop
                 layer.enabled: control.radius > 0 || control.rise
                 layer.effect: OpacityMask
