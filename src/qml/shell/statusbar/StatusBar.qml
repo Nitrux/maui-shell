@@ -217,7 +217,7 @@ T.Control
             SlidersItem
             {
                 id: _slidersItem
-                visible: _revealer.checked
+//                visible: _revealer.checked
 //                onClicked: _statusSection.open(card.index)
                 //                anchors.verticalCenter: parent.verticalCenter
 

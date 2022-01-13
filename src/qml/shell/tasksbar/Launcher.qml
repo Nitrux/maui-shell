@@ -53,6 +53,7 @@ Maui.Page
         Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
         Layout.maximumWidth: 500
         Layout.fillWidth: true
+        Layout.alignment: Qt.AlignCenter
         placeholderText: qsTr("Search for apps and files...")
         onAccepted: _gridView.model.filter = text
         onCleared: _gridView.model.filter = ""
@@ -224,6 +225,7 @@ Maui.Page
                         control.close()
                     }
                 }
+
                 delegate: Item
                 {
                     width: GridView.view.cellWidth
@@ -235,7 +237,7 @@ Maui.Page
                         width: parent.GridView.view.itemWidth-10
                         anchors.centerIn: parent
                         highlighted: parent.GridView.isCurrentItem
-                        template.labelSizeHint: 22
+                        template.labelSizeHint: 44
 
                         draggable: true
                         Drag.keys: ["text/uri-list"]

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM
+    "http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+<kcfg>
+    <group name="lockScreen"> </group>
+    <group name="suspend"> </group>
+    <group name="suspendToRam"> </group>
+    <group name="suspendToDisk"> </group>
+    <group name="suspendHybrid"> </group>
+    <group name="requestShutDown"> </group>
+    <group name="switchUser"> </group>
+
+    <group name="beginSuppressingSleep">
+        <entry name="reason" type="String">
+            <label>States why sleep is being inhibited</label>
+        </entry>
+    </group>
+    <group name="stopSuppressingSleep">
+        <entry name="cookie" type="Int">
+            <label>The cookie obtained from beginSuppressingSleep, representing the inhibition to release</label>
+        </entry>
+    </group>
+
+    <group name="beginSuppressingScreenPowerManagement">
+        <entry name="reason" type="String">
+            <label>States why screen power management is being inhibited</label>
+        </entry>
+    </group>
+    <group name="stopSuppressingScreenPowerManagement">
+        <entry name="cookie" type="Int">
+            <label>The cookie obtained from beginSuppressingScreenPowerManagement, representing the inhibition to release</label>
+        </entry>
+    </group>
+
+    <group name="setBrightness">
+        <entry name="brightness" type="Int">
+          <label>The value of the screen brightness</label>
+        </entry>
+        <entry name="silent" type="Bool">
+          <label>Whether the OSD should be suppressed</label>
+        </entry>
+    </group>
+    <group name="setKeyboardBrightness">
+        <entry name="brightness" type="Int">
+            <label>The value of the keyboard brightness</label>
+        </entry>
+        <entry name="silent" type="Bool">
+            <label>Whether the OSD should be suppressed</label>
+        </entry>
+    </group>
+
+    <group name="setPowerProfile">
+        <entry name="profile" type="String">
+            <label>The name of the profile to change the active power profile to</label>
+        </entry>
+    </group>
+</kcfg>

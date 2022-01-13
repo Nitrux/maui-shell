@@ -36,7 +36,6 @@ readonly property bool muted : defaultSource ?  defaultSource.muted : true
 
     }
 
-    label.text: slider.iconSource
     slider.from: PA.PulseAudio.MinimalVolume
     slider.to: PA.PulseAudio.MaximalVolume
     slider.stepSize: slider.to / (slider.to / PA.PulseAudio.MaximalVolume * 100.0)
