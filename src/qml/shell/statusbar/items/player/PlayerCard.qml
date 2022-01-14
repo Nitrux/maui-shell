@@ -18,6 +18,7 @@ T.Pane
 
     property Cask.MprisPlayer player
 
+    readonly property bool isPlaying : state === "Playing"
     property string state : player ? player.status : ""
     property string sourceName: player ? player.serviceName : ""
     property string playerName: player ? player.identity : ""

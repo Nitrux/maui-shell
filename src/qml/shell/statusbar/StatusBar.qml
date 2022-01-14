@@ -226,7 +226,7 @@ T.Control
 
             AudioPlayerItem
             {
-                visible: _revealer.checked
+                visible: _revealer.checked || isPlaying
 //                onClicked: _statusSection.open(card.index)
             }
 

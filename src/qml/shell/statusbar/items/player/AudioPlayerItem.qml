@@ -10,7 +10,7 @@ Cask.PanelItem
 {
     id: control
     property var mprisSourcesModel: []
-
+readonly property bool isPlaying : _playersList.currentItem.item.isPlaying
     Row
     {
         spacing: control.spacing
@@ -23,7 +23,7 @@ Cask.PanelItem
         }
         Kirigami.Icon
         {
-            source: _playersList.currentItem.item.state == "playing" ? "media-playback-pause" : "media-playback-start"
+            source: isPlaying ? "media-playback-pause" : "media-playback-start"
 
             height: control.iconSize
             width: height
@@ -85,7 +85,6 @@ Cask.PanelItem
         {
             id: _playersList
 
-
             Maui.Holder
             {
                 id:  holder
@@ -135,13 +134,14 @@ Cask.PanelItem
                 asynchronous: true
                 active: ListView.isCurrentItem
 
+                ListView.onAdd: ListView.view.incrementCurrentIndex()
+                ListView.onRemove: ListView.view.decrementCurrentIndex()
+
                 sourceComponent: PlayerCard
                 {
                     player:  model.player
                 }
             }
-
-
         }
 
         Item
