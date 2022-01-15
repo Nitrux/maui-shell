@@ -20,7 +20,7 @@ Maui Shell is composed of two parts:
 
 #### Debian/Ubuntu
 ##### Maui Shell needs ECM > 5.70
-##### Maui Shell needs MauiKit > 2.1.0
+##### Maui Shell needs MauiKit > 2.1.1 (master)
 
 ```
 libcanberra-dev
