@@ -23,15 +23,19 @@ Maui Shell is composed of two parts:
 ##### Maui Shell needs MauiKit > 2.1.0
 
 ```
+libcanberra-dev
 libkf5config-dev
 libkf5coreaddons-dev
 libkf5i18n-dev
 libkf5kio-dev
 libkf5notifications-dev
 libkf5service-dev
+libpulse-dev
 libqt5svg5-dev
 libqt5waylandcompositor5-dev
 mauikit
+qml-module-qtquick-shapes
+qml-module-qtwayland-compositor
 qtbase5-dev
 qtdeclarative5-dev
 qtquickcontrols2-5-dev
