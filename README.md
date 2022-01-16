@@ -1,4 +1,4 @@
-# Maui Shell 
+# Maui Shell
 ![](https://mauikit.org/wp-content/uploads/2018/12/maui_project_logo.png)
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![Generic badge](https://img.shields.io/badge/OS-Linux-blue.svg)](https://shields.io/)
@@ -14,41 +14,158 @@ Maui Shell is composed of two parts:
 
 ![a screenshot](screenshots/desktop/screenshot.png "screenshot")
 
-# Build
+Install guide for Maui Shell
 
-### Requirements
+1) Distro of choice and the prerequisites
 
-#### Debian/Ubuntu
-##### Maui Shell needs ECM > 5.70
-##### Maui Shell needs MauiKit > 2.1.1 (master)
 
-```
-libcanberra-dev
+We attempted using other Debian based rolling release distributions as well but they did not work as well with the dependencies and the prerequisites, so we recommend Debian Testing KDE-Plasma. (Specifically Plasma since there are way too many dependency downloads required on other DEs). If not Debian Testing, you can still add the Debian sources in /etc/apt/sources.list.
+The following are the prerequisites
+“You are not in sudoers file” fix for Debian testing:
+su
+sudo adduser <your_username> sudo
+The following list contains all the dependencies that are necessary for Maui Shell to run.
+
 libkf5config-dev
 libkf5coreaddons-dev
 libkf5i18n-dev
 libkf5kio-dev
 libkf5notifications-dev
 libkf5service-dev
-libpulse-dev
 libqt5svg5-dev
 libqt5waylandcompositor5-dev
-mauikit
-qml-module-qtquick-shapes
-qml-module-qtwayland-compositor
 qtbase5-dev
 qtdeclarative5-dev
 qtquickcontrols2-5-dev
+cmake
+extra-cmake-modules
+libqt5x11extras5-dev
+Libqt5svg5-dev
+libxcb-shape0-dev
+libxcb-icccm4-dev
+libpulse-dev
+pkg-config
+qml-module-qtwayland-compositor
+
+All of these can be installed via apt
+
+Install any missing QML modules from the Synaptic Package Manager. You can also check
+
+Aptitude/Synaptics libs/apps that need to be installed manually
+
+If you are using Deb testing
+
+qml-module-Qt.labs.calendar
+qml-module-qtquick.shapes
+
+If you are using any other distro
+
+qml-module-org.kde.kirigami2
+qml-module-qtgraphicseffects
+qml-module-qtquick.window
+qml-module-qtquick.layouts
+qml-module-qtquick.controls
+qml-module-qtquick.controls2
+qml-module-Qt.labs.calendar
+qml-module-qtquick.shapes
+bluedevil
+plasma-nm
+
+This is the point when we encountered a ton of errors and there were just too many dependancies that were still to be installed (that is why we recommend debian testing)
+
+QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QGuiApplication(0x7ffe8885b590), parent's thread is QThread(0x55e1b3f57400), current thread is QThread(0x55e1b40fc3e0)
+QObject::installEventFilter(): Cannot filter events for objects in a different thread.
+Icon theme "breeze" not found.
+QQmlApplicationEngine failed to load component
+qrc:/qml/main.qml:16:5: Type Screen unavailable
+qrc:/qml/Screen.qml:112:32: Type StatusBar unavailable
+qrc:/qml/shell/statusbar/StatusBar.qml:217:13: Type SlidersItem unavailable
+qrc:/qml/shell/statusbar/items/sliders/SlidersItem.qml:62:17: Type VolumeSlider unavailable
+qrc:/qml/shell/statusbar/items/sliders/volume/VolumeSlider.qml:13:1: module "org.kde.plasma.private.volume" is not installed
+
+The following link can be used to cross reference missing packages:
+
+https://packages.debian.org/testing/
+
+You can also utilise apt-file search
+
+After obtaining prerequisites the process is fairly easy, assuming you don't encounter random errors.
+
+
+
+
+To build Maui Shell:
+
+git clone --depth 1 --branch master https://github.com/Nitrux/maui-shell.git
+mkdir -p maui-shell/build && cd maui-shell/build
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_BSYMBOLICFUNCTIONS=OFF -DQUICK_COMPILER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_LOCALSTATEDIR=/var -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ..
+make
+sudo make install
+
+
+Once you're done installing Maui Shell, we recommend you run it via cask in the build directory, and check the logs once. Then you can log in via caskx11 the DE picker.
+
+
+We also recommend checking out these link that might be helpful to your unique error
+https://t.me/mauiproject
+
 ```
+libkf5config-dev
+libkf5coreaddons-dev
+libkf5i18n-dev
+libkf5kio-dev
+libkf5notifications-dev
+libkf5service-dev
+libqt5svg5-dev
+libqt5waylandcompositor5-dev
+qtbase5-dev
+qtdeclarative5-dev
+qtquickcontrols2-5-dev
+cmake
+extra-cmake-modules
+libqt5x11extras5-dev
+Libqt5svg5-dev
+libxcb-shape0-dev
+libxcb-icccm4-dev
+libpulse-dev
+pkg-config
+qml-module-qtwayland-compositor
+```
+Aptitude/Synaptics libs/apps that need to be installed manually
 
-### Compile source
- 1. `git clone --depth 1 --branch master https://github.com/Nitrux/maui-shell.git` 
- 2. `mkdir -p maui-shell/build && cd maui-shell/build`
- 4. `cmake -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_BSYMBOLICFUNCTIONS=OFF -DQUICK_COMPILER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_LOCALSTATEDIR=/var -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ..`
+If you are using Deb testing
+
+qml-module-Qt.labs.calendar
+qml-module-qtquick.shapes
+
+If you are using any other distro
+
+qml-module-org.kde.kirigami2
+qml-module-qtgraphicseffects
+qml-module-qtquick.window
+qml-module-qtquick.layouts
+qml-module-qtquick.controls
+qml-module-qtquick.controls2
+qml-module-Qt.labs.calendar
+qml-module-qtquick.shapes
+bluedevil
+plasma-nm
+
+### To build MauiKit (A prerequisite for Maui Shell):
+ 1. `git clone https://anongit.kde.org/mauikit`
+ 2. `cd mauikit`
+ 3. `mkdir build && cd build`
+ 4. `cmake .. -DCMAKE_INSTALL_PREFIX=/usr`
  5. `make`
+ 6. `sudo make install`
 
- ### Install
- 1. `make install`
+### To build Maui Shell
+ 1. `git clone --depth 1 --branch master https://github.com/Nitrux/maui-shell.git`
+ 2. `mkdir -p maui-shell/build && cd maui-shell/build`
+ 3. `cmake -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_BSYMBOLICFUNCTIONS=OFF -DQUICK_COMPILER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_LOCALSTATEDIR=/var -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ..`
+ 4. `make`
+ 5. `sudo make install`
 
 # Running
 
@@ -62,13 +179,13 @@ If you want to run it on the Linux console without an X11 session
 export QT_QPA_PLATFORM=eglfs
 
 # don't enlarge stuff on "high-res" displays
-export QT_AUTO_SCREEN_SCALE_FACTOR=0 
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
 # in case it's not detected
 # or you wish to override
 #
-# export QT_QPA_EGLFS_PHYSICAL_WIDTH=480 
-# export QT_QPA_EGLFS_PHYSICAL_HEIGHT=270 
+# export QT_QPA_EGLFS_PHYSICAL_WIDTH=480
+# export QT_QPA_EGLFS_PHYSICAL_HEIGHT=270
 
 # try to restart if it crashes; write a log file
 cask -r -l /tmp/cask.log
