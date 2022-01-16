@@ -35,6 +35,7 @@ We attempted using other Debian based rolling release distributions as well but 
 #### Prerequisites
 The following list contains all the apt installable dependencies that are necessary for Maui Shell to run.
 ```
+libcanberra-dev
 libkf5config-dev
 libkf5coreaddons-dev
 libkf5i18n-dev
