@@ -58,6 +58,9 @@ qtquickcontrols2-5-dev
 
 ```
 libcanberra-dev
+libkf5config-dev
+libkf5coreaddons-dev
+libkf5i18n-dev
 libkf5kio-dev
 libkf5notifications-dev
 libkf5service-dev
@@ -68,6 +71,14 @@ libqt5x11extras5-dev
 libxcb-icccm4-dev
 libxcb-shape0-dev
 pkg-config
+qml-module-org.kde.kirigami2
+qml-module-qt-labs-calendar
+qml-module-qtgraphicaleffects
+qml-module-qtquick.controls
+qml-module-qtquick.controls2
+qml-module-qtquick.layouts
+qml-module-qtquick.shapes
+qml-module-qtquick.window
 qml-module-qtwayland-compositor
 qtbase5-dev
 qtdeclarative5-dev
