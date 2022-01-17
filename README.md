@@ -12,7 +12,9 @@ Maui Shell is composed of two parts:
 
 # Screenshots
 
-![a screenshot](screenshots/desktop/screenshot.png "screenshot")
+![screenshot_1](https://nxos.org/wp-content/uploads/2021/12/promo-0-scaled.jpg "Desktop Mode")
+![screenshot_2](https://nxos.org/wp-content/uploads/2021/12/promo-8-scaled.jpg "Tablet Mode")
+![screenshot_3](https://nxos.org/wp-content/uploads/2021/12/promo-6.jpg "Phone Mode")
 
 # Build
 
@@ -22,19 +24,52 @@ Maui Shell is composed of two parts:
 ##### Maui Shell needs ECM > 5.70
 ##### Maui Shell needs MauiKit > 2.1.1 (master)
 
+### Compile MauiKit
+
 ```
-libcanberra-dev
-libkf5config-dev
-libkf5coreaddons-dev
 libkf5i18n-dev
+libkf5kio-dev
+libkf5notifications-dev
+libkf5solid-dev
+libkf5syntaxhighlighting-dev
+libqt5svg5-dev
+libqt5x11extras5-dev
+libxcb-icccm4-dev
+libxcb-shape0-dev
+qml-module-qtgraphicaleffects
+qml-module-qtquick-controls2
+qml-module-qtquick-shapes
+qtbase5-dev
+qtdeclarative5-dev
+qtquickcontrols2-5-dev
+```
+
+### Compile source
+ 1. `git clone --depth 1 --branch v2.1 https://invent.kde.org/maui/mauikit.git` 
+ 2. `mkdir -p mauikit/build && cd mauikit/build`
+ 3. `cmake -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_BSYMBOLICFUNCTIONS=OFF -DQUICK_COMPILER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_LOCALSTATEDIR=/var -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ..`
+ 4. `make`
+
+ ### Install
+ 1. `make install`
+
+
+ ### Compile Maui Shell
+
+```
+cmake
+extra-cmake-modules
+libcanberra-dev
 libkf5kio-dev
 libkf5notifications-dev
 libkf5service-dev
 libpulse-dev
 libqt5svg5-dev
 libqt5waylandcompositor5-dev
-mauikit
-qml-module-qtquick-shapes
+libqt5x11extras5-dev
+libxcb-icccm4-dev
+libxcb-shape0-dev
+pkg-config
 qml-module-qtwayland-compositor
 qtbase5-dev
 qtdeclarative5-dev
@@ -52,10 +87,9 @@ qtquickcontrols2-5-dev
 
 # Running
 
-It can run as a window inside an X11 session.
+Maui Shell can run as a window inside an X11 session, open a terminal and run `cask`.
 
-If you want to run it on the Linux console without an X11 session
-(which is much more efficient), you can use a startup script like this:
+If you want to run it on the Linux console without an X11 session, you can use a startup script like this:
 
 ```
 #!/bin/sh
