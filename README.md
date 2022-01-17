@@ -57,8 +57,6 @@ qtquickcontrols2-5-dev
  ### Compile Maui Shell
 
 ```
-cmake
-extra-cmake-modules
 libcanberra-dev
 libkf5kio-dev
 libkf5notifications-dev
@@ -124,6 +122,9 @@ Cask can run Weston and GTK3 apps too eventually;
 that's mainly a matter of QtWayland having the XDG shell support finished.
 
 Cask does not include an embedded X server yet, but it might be possible.
+
+# Contributing
+If you'd like to contribute to this project, please make a PR. You can also ask for help at the [KDE Maui project Telegram](https://t.me/mauiproject) channel.
 
 # Issues
 If you find problems with the contents of this repository please create an issue.
