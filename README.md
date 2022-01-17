@@ -22,6 +22,12 @@ Maui Shell is composed of two parts:
 
 #### Debian/Ubuntu
 ##### Maui Shell needs ECM > 5.70
+
+```
+cmake
+extra-cmake-modules
+```
+
 ##### Maui Shell needs MauiKit > 2.1.1 (master)
 
 ### Compile MauiKit
