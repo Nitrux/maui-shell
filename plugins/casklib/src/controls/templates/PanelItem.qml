@@ -14,7 +14,7 @@ T.AbstractButton
     id: control
     property Cask.PanelCard card : null
     property Cask.PanelSection section : control.parent.parent
-
+    property bool flat: isMobile
     focus: true
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
@@ -31,15 +31,14 @@ T.AbstractButton
     icon.height: iconSize
     icon.width: iconSize
 
-    leftPadding: Maui.Style.space.medium
+    leftPadding: spacing
     rightPadding: leftPadding
 
     padding: Maui.Style.space.small
 
-    icon.color: control.checked || control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+    icon.color: (control.checked || control.hovered || control.down || control.pressed) && !control.flat ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 
-    spacing: Maui.Style.space.medium
-    //    checkable: true
+    spacing: isMobile ? Maui.Style.space.small : Maui.Style.space.medium
 
     Behavior on iconSize
     {
@@ -53,7 +52,7 @@ T.AbstractButton
     background: Rectangle
     {
         id: _bg
-        visible: !isMobile
+        visible: !control.flat
 
         property color finalColor: control.checked ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
         color: finalColor

@@ -19,18 +19,40 @@ SliderToggle
     id: control
     property var defaultSinkValue: defaultSink ? defaultSink.volume / PA.PulseAudio.MaximalVolume * 100.0 : -1
     property var defaultSink: paSinkModel.defaultSink
+    property bool globalMute: false
+    readonly property string dummyOutputName: "auto_null"
+    property int wheelDelta: 0
+    property int volumePercentStep: 5
+    property int currentMaxVolumePercent: 100
+       property int currentMaxVolumeValue: currentMaxVolumePercent * PA.PulseAudio.NormalVolume / 100.00
 
-    slider.iconSource: volumeIconName
     page: VolumePage
     {
 
     }
 
+    slider.iconSource: volumeIconName
     slider.from: PA.PulseAudio.MinimalVolume
     slider.to: PA.PulseAudio.MaximalVolume
     slider.stepSize: slider.to / (slider.to / PA.PulseAudio.MaximalVolume * 100.0)
-
     slider.value: defaultSink ? defaultSink.volume : 0
+
+    onWheel:
+    {
+        var delta = wheel.angleDelta.y || wheel.angleDelta.x;
+        wheelDelta += delta;
+        // Magic number 120 for common "one click"
+        // See: https://qt-project.org/doc/qt-5/qml-qtquick-wheelevent.html#angleDelta-prop
+        while (wheelDelta >= 120) {
+            wheelDelta -= 120;
+            increaseVolume();
+        }
+        while (wheelDelta <= -120) {
+            wheelDelta += 120;
+            decreaseVolume();
+        }
+    }
+
     Connections
     {
         target: control.slider
@@ -121,11 +143,79 @@ SliderToggle
 
     function playFeedback(sinkIndex)
     {
-
-        if (sinkIndex == undefined) {
+        if (sinkIndex == undefined)
+        {
             sinkIndex = paSinkModel.preferredSink.index;
         }
         feedback.play(sinkIndex);
     }
 
+    function increaseVolume()
+    {
+        if (globalMute)
+        {
+            disableGlobalMute();
+        }
+        changeSpeakerVolume(volumePercentStep);
+    }
+
+    function decreaseVolume()
+    {
+        if (globalMute)
+        {
+            disableGlobalMute();
+        }
+        changeSpeakerVolume(-volumePercentStep);
+    }
+
+    function changeSpeakerVolume(deltaPercent)
+    {
+        if (!paSinkModel.preferredSink || isDummyOutput(paSinkModel.preferredSink))
+        {
+            return;
+        }
+        const newPercent = changeVolumeByPercent(paSinkModel.preferredSink, deltaPercent);
+        //        osd.showVolume(newPercent);
+        playFeedback();
+    }
+
+    function changeVolumeByPercent(volumeObject, deltaPercent)
+    {
+        const oldVolume = volumeObject.volume;
+        const oldPercent = volumePercent(oldVolume);
+        const targetPercent = oldPercent + deltaPercent;
+        const newVolume = boundVolume(Math.round(PA.PulseAudio.NormalVolume * (targetPercent/100)));
+        const newPercent = volumePercent(newVolume);
+        volumeObject.muted = newPercent == 0;
+        volumeObject.volume = newVolume;
+        return newPercent;
+    }
+
+    function volumePercent(volume)
+    {
+        return Math.round(volume / PA.PulseAudio.NormalVolume * 100.0);
+    }
+
+    function disableGlobalMute()
+    {
+        var role = paSinkModel.role("Muted");
+        for (var i = 0; i < paSinkModel.rowCount(); i++)
+        {
+            var idx = paSinkModel.index(i, 0);
+            var name = paSinkModel.data(idx, paSinkModel.role("Name")) + "." + paSinkModel.data(idx, paSinkModel.role("ActivePortIndex"));
+            paSinkModel.setData(idx, false, role);
+        }
+        globalMute = false;
+    }
+
+    function boundVolume(volume)
+    {
+            return Math.max(PA.PulseAudio.MinimalVolume, Math.min(volume, currentMaxVolumeValue));
+        }
+
+
+    function isDummyOutput(output)
+    {
+        return output && output.name === dummyOutputName;
+    }
 }

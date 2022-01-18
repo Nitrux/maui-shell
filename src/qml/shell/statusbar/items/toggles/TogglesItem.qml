@@ -16,14 +16,15 @@ Cask.PanelItem
 
     Row
     {
-        spacing: control.spacing
+        spacing: control.spacing       
+
         Kirigami.Icon
         {
-            source: "settings-configure"
+            source: "network-wireless"
             height: control.iconSize
             width: height
             color: control.icon.color
-        }
+        }        
 
         Kirigami.Icon
         {
@@ -35,7 +36,7 @@ Cask.PanelItem
 
         Kirigami.Icon
         {
-            source: "network-wireless"
+            source: "settings-configure"
             height: control.iconSize
             width: height
             color: control.icon.color

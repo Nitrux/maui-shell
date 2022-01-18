@@ -23,6 +23,7 @@ T.Pane
     padding: Maui.Style.space.medium
 
     signal clicked()
+    signal wheel(var wheel)
 
     background: Rectangle
     {
@@ -33,39 +34,48 @@ T.Pane
         radius: 10
     }
 
-    contentItem: ColumnLayout
+    contentItem: MouseArea
     {
-        spacing: control.spacing
+        implicitHeight: _layout.implicitHeight
+        onWheel: control.wheel(wheel)
 
-        Label
+        ColumnLayout
         {
-            id: _label
-            Layout.fillWidth: true
-            wrapMode: Text.NoWrap
-            elide: Text.ElideMiddle
-            font.bold: true
-            visible: text && text.length
-            color: Kirigami.Theme.textColor
-        }
+            id: _layout
+            anchors.fill: parent
 
-        RowLayout
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
             spacing: control.spacing
 
-            SliderTemplate
+            Label
             {
-                id: _slider
+                id: _label
                 Layout.fillWidth: true
+                wrapMode: Text.NoWrap
+                elide: Text.ElideMiddle
+                font.bold: true
+                visible: text && text.length
+                color: Kirigami.Theme.textColor
             }
 
-            ToolButton
+            RowLayout
             {
-                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                visible: control.page
-                icon.name: "go-next"
-                onClicked: control.clicked()
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                spacing: control.spacing
+
+                SliderTemplate
+                {
+                    id: _slider
+                    Layout.fillWidth: true
+                }
+
+                ToolButton
+                {
+                    Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+                    visible: control.page
+                    icon.name: "go-next"
+                    onClicked: control.clicked()
+                }
             }
         }
     }

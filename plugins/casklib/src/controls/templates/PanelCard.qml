@@ -61,11 +61,7 @@ T.Pane
     {
         color: Kirigami.Theme.backgroundColor
         radius: isMobile ? 0 : 10
-Label
-{
-    color: "orange"
-    text: control.visible
-}
+
         Behavior on radius
         {
             NumberAnimation

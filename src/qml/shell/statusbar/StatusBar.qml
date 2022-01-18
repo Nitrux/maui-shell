@@ -22,19 +22,33 @@ T.Control
     id: control
 
     readonly property bool floating : win.formFactor === Cask.Env.Desktop
-    Layout.fillWidth: true
-    Layout.margins: floating ? Maui.Style.space.tiny : 0
+    readonly property bool cardsOverlapping : (_notificationsSection.popup.width + _statusSection.popup.width) > availableGeometry.width
 
-    implicitHeight:  implicitContentHeight + topPadding + bottomPadding
+    property bool hidden : contentItem.y === 0- control.height
+    property bool autohide: false
 
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
+    Layout.fillWidth: true
+    Layout.margins: floating ? Maui.Style.space.tiny : 0
+
+    implicitHeight: implicitContentHeight + topPadding + bottomPadding
 
     padding: isMobile ? 0 : Maui.Style.space.tiny
     topPadding: padding
     bottomPadding: padding
     leftPadding: padding
     rightPadding: padding
+
+    onCardsOverlappingChanged:
+    {
+        if(cardsOverlapping)
+        {
+            _notificationsSection.popup.close()
+            _statusSection.popup.close()
+        }
+    }
 
     Behavior on Layout.margins
     {
@@ -45,54 +59,30 @@ T.Control
         }
     }
 
-    //    Label
-    //    {
-    //        text: control.height + " / " +  _notificationsSection.height
-    //        anchors.centerIn: parent
-    //    }
+    Behavior on padding
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
 
-    background: Item
+    background: Rectangle
     {
         visible: !control.floating
         opacity:  _notificationsSection.popup.opened || _statusSection.popup.opened ? 1 : 0.8
+        color: Kirigami.Theme.backgroundColor
 
-        Rectangle
+        Behavior on opacity
         {
-            id: _rec
-            anchors.fill: parent
-            //            radius: control.floating ? 6 : 0
-            color: Kirigami.Theme.backgroundColor
-        }
-
-        //        DropShadow
-        //        {
-        //            visible: control.floating
-        //            transparentBorder: true
-        //            anchors.fill: parent
-        //            horizontalOffset: 0
-        //            verticalOffset: 0
-        //            radius: 8.0
-        //            samples: 17
-        //            color: Qt.rgba(0,0,0,0.5)
-        //            source: _rec
-        //        }
-    }
-
-    function show()
-    {
-        control.contentItem.y = control.topPadding
-        if(autohide)
-        {
-            _timer.restart()
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
         }
     }
-
-    function hide()
-    {
-        control.contentItem.y = 0- control.height
-    }
-    property bool hidden : contentItem.y === 0- control.height
-    property bool autohide: false
 
     Rectangle
     {
@@ -119,8 +109,7 @@ T.Control
         }
     }
 
-
-    Timer
+    data: Timer
     {
         id: _timer
         running: control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened) && !_statusSection.hovered
@@ -136,11 +125,6 @@ T.Control
         }
     }
 
-    //    Label
-    //    {
-    //        text: control.contentItem.y + " - " + control.hidden
-    //    }
-
     contentItem: RowLayout
     {
         id: _layout
@@ -151,7 +135,6 @@ T.Control
             id: _notificationsSection
 
             Layout.fillWidth: true
-            //            Layout.fillHeight: true
             availableGeometry : desktop.availableGeometry
 
             popWidth: 320
@@ -160,9 +143,9 @@ T.Control
             Connections
             {
                 target: _notificationsSection.popup
-                onOpenedChanged:
+                onOpenedChanged: //if the cards are open and the avaliable width is not enough close the right section
                 {
-                    if(target.opened && _statusSection.popup.opened)
+                    if(target.opened && _statusSection.popup.opened && control.cardsOverlapping)
                     {
                         _statusSection.popup.close()
                     }
@@ -182,9 +165,7 @@ T.Control
         {
             id: _statusSection
             alignment: Qt.AlignRight
-            Layout.alignment: alignment
             availableGeometry : desktop.availableGeometry
-
             popWidth: 340
 
             Connections
@@ -192,7 +173,7 @@ T.Control
                 target: _statusSection.popup
                 onOpenedChanged:
                 {
-                    if(target.opened && _notificationsSection.popup.opened && ((_notificationsSection.popup.width + _statusSection.popup.width) > availableGeometry.width))
+                    if(target.opened && _notificationsSection.popup.opened && control.cardsOverlapping)
                     {
                         _notificationsSection.popup.close()
                     }
@@ -222,7 +203,6 @@ T.Control
 
             SlidersItem
             {
-                id: _slidersItem
             }
 
             AudioPlayerItem
@@ -235,6 +215,20 @@ T.Control
                 visible: !isMobile
             }
         }
+    }
+
+    function show()
+    {
+        control.contentItem.y = control.topPadding
+        if(autohide)
+        {
+            _timer.restart()
+        }
+    }
+
+    function hide()
+    {
+        control.contentItem.y = 0- control.height
     }
 }
 

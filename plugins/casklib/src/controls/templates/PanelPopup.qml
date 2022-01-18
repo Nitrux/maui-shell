@@ -36,7 +36,6 @@ T.Container
     Keys.onEscapePressed: control.overlayClicked()
 
     background: null
-
     data: Item
     {
         id:_overlay
@@ -147,13 +146,7 @@ T.Container
         console.log("DESTROY PANEL POPUP")
     }
 
-    onClosed:
-    {
-
-    }
-
-
-    NumberAnimation
+        NumberAnimation
     {
         id: _slideDownAnimation
         target: control
