@@ -15,4 +15,7 @@ SliderToggle
     id: control
 
     slider.iconSource: "high-brightness"
+    page: Page{
+
+    }
 }
