@@ -46,7 +46,7 @@ Maui.Page
         visible: _swipeView.currentIndex=== 1
     }
 
-    headBar.middleContent: Maui.TextField
+    headBar.middleContent: Maui.SearchField
     {
         id: _searchBar
         Kirigami.Theme.inherit: false

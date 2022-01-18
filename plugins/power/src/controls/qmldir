@@ -1,0 +1,5 @@
+module org.cask.power
+plugin CaskPower
+classname CaskPowerPlugin
+
+typeinfo plugins.qmltypes

@@ -63,7 +63,6 @@ add_library(CaskAudio SHARED ${audio_SRCS} ${caskaudio_QML_QRC})
 
 generate_export_header(CaskAudio BASE_NAME CaskAudio)
 
-
 target_include_directories(CaskAudio
     INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/Cask/Audio>")
 

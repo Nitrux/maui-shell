@@ -1,6 +1,6 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.0
-
+ import QtQml.Models 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
@@ -10,29 +10,34 @@ import QtQuick.Templates 2.15 as T
 T.Pane
 {
     id: control
+    default property alias content: _layout.data
+
     padding: Maui.Style.space.medium
     clip: false
     spacing: Maui.Style.space.medium
-    default property alias content: _layout.data
-    implicitHeight: visible ? implicitContentHeight + topPadding + bottomPadding : 0
-
-    property int index : -1
+    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+//    visible:
+    readonly property bool isOpen: parent !== null && visible
+    readonly property int index : ObjectModel.index
 
     signal opened()
     signal closed()
 
-    opacity: visible ? 1 : 0
+    opacity: isOpen ? 1 : 0
 
-    onVisibleChanged:
-    {
-        if(visible)
-        {
-            control.opened()
-        }else
-        {
-            control.closed()
-        }
-    }
+//    onVisibleChanged:
+//    {
+//        if(visible)
+//        {
+//            control.opened()
+//        }else
+//        {
+//            control.closed()
+//        }
+//    }
+
+    ListView.onRemove: control.closed()
+    ListView.onAdd: control.opened()
 
     Behavior on opacity
     {
@@ -56,7 +61,11 @@ T.Pane
     {
         color: Kirigami.Theme.backgroundColor
         radius: isMobile ? 0 : 10
-
+Label
+{
+    color: "orange"
+    text: control.visible
+}
         Behavior on radius
         {
             NumberAnimation
@@ -89,5 +98,7 @@ T.Pane
     {
         console.log("DESTROY PANEL CARD")
     }
+
+
 }
 

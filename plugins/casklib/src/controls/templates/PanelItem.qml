@@ -18,10 +18,11 @@ T.AbstractButton
     focus: true
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
+    checkable: false
+    checked: card ?  card.isOpen : false
 
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-                            implicitContentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(iconSize+ Maui.Style.space.medium, 16) + topPadding + bottomPadding //keep it fixed size
+    implicitWidth: implicitContentWidth + leftPadding + rightPadding
+    implicitHeight: Math.max(iconSize, implicitContentHeight) + topPadding + bottomPadding //keep it fixed size
 
     default property alias content : _layout.data
 
@@ -30,12 +31,13 @@ T.AbstractButton
     icon.height: iconSize
     icon.width: iconSize
 
-    leftPadding: isMobile ? 0 : Maui.Style.space.medium
+    leftPadding: Maui.Style.space.medium
     rightPadding: leftPadding
+
+    padding: Maui.Style.space.small
 
     icon.color: control.checked || control.hovered || control.down || control.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 
-    checked: card ? card.visible : false
     spacing: Maui.Style.space.medium
     //    checkable: true
 
@@ -74,21 +76,17 @@ T.AbstractButton
         spacing: control.spacing
         clip: true
 
-        Item
+        Kirigami.Icon
         {
+            id: _icon
             visible: control.icon.name.length
             Layout.preferredWidth: height
-            implicitHeight: Math.min(control.iconSize+ Maui.Style.space.medium, control.height)
+            Layout.alignment: Qt.AlignCenter
+            implicitHeight: control.iconSize
 
-            Kirigami.Icon
-            {
-                id: _icon
-                source: control.icon.name
-                height: control.icon.height
-                width: control.icon.width
-                anchors.centerIn: parent
-                color: control.icon.color
-            }
+            source: control.icon.name
+
+            color: control.icon.color
         }
 
         Label
@@ -114,12 +112,12 @@ T.AbstractButton
     {
         if(control.card && control.section)
         {
-            if(card.visible)
+            if(card.isOpen)
             {
-                control.section.close()
+                control.section.close(card)
             }else
             {
-                control.section.open(card.index)
+                control.section.open(card)
             }
         }
     }

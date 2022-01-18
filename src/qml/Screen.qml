@@ -97,11 +97,11 @@ WaylandOutput
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
             windowSystemCursorEnabled: control.isNestedCompositor
 
-//            ZP.WaylandCursorGrabber
-//            {
-//                seat: control.compositor.defaultSeat
-//                grab: mouseTracker.containsMouse
-//            }
+            //            ZP.WaylandCursorGrabber
+            //            {
+            //                seat: control.compositor.defaultSeat
+            //                grab: mouseTracker.containsMouse
+            //            }
 
             Cask.Dashboard
             {
@@ -113,21 +113,21 @@ WaylandOutput
 
                 overlayContent: [
                     Dock
-                {
-                    id: _dock
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                },
+                    {
+                        id: _dock
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                    },
 
-                NotificationsContainer
-                {
-                    id: _overlayNotificationContainer
-                    width: Math.min(availableGeometry.width, 300)
-                    y: _cask.topPanel.height
+                    NotificationsContainer
+                    {
+                        id: _overlayNotificationContainer
+                        width: Math.min(availableGeometry.width, 300)
+                        y: _cask.topPanel.height
 
-                }
-            ]
+                    }
+                ]
 
                 Shortcut
                 {
@@ -170,7 +170,7 @@ WaylandOutput
 
                     delegate: Zpace
                     {
-//                        scale: ListView.view.overviewScale
+                        //                        scale: ListView.view.overviewScale
                         height: ListView.view.height
                         width: ListView.view.width
                         radius: ListView.view.overviewScale === 1 ? 0 : 20

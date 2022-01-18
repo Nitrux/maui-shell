@@ -8,15 +8,11 @@
 
 #pragma once
 
-#include <Plasma/DataEngine>
-
 #include <solid/battery.h>
 
 #include <QDBusConnection>
 #include <QHash>
 #include <QPair>
-
-class SessionManagement;
 
 using InhibitionInfo = QPair<QString, QString>;
 
@@ -24,19 +20,17 @@ using InhibitionInfo = QPair<QString, QString>;
  * This class provides runtime information about the battery and AC status
  * for use in power management Plasma applets.
  */
-class PowermanagementEngine : public Plasma::DataEngine
+class PowermanagementEngine : public QObject
 {
     Q_OBJECT
 
 public:
-    PowermanagementEngine(QObject *parent, const QVariantList &args);
-    ~PowermanagementEngine() override;
-    QStringList sources() const override;
-    Plasma::Service *serviceForSource(const QString &source) override;
+    PowermanagementEngine(QObject *parent = nullptr);
+    QStringList sources() const;
 
 protected:
-    bool sourceRequestEvent(const QString &name) override;
-    bool updateSourceEvent(const QString &source) override;
+    bool sourceRequestEvent(const QString &name);
+    bool updateSourceEvent(const QString &source);
     void init();
 
 private Q_SLOTS:
@@ -77,5 +71,5 @@ private:
     QHash<QString, QString> m_batterySources; // <udi, Battery0>
     QHash<QString, QPair<QString, QString>> m_applicationInfo; // <appname, <pretty name, icon>>
 
-    SessionManagement *m_session;
+    void setData(const QString &name, const QString &name2, const QVariant &value);
 };

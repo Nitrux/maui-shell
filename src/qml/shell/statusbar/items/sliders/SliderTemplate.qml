@@ -18,9 +18,9 @@ T.Slider
 
     background: Rectangle
     {
-
         radius: height/2
-        color: Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
+        color: control.enabled ? Qt.darker(Kirigami.Theme.backgroundColor, 1.2) : "transparent"
+        border.color: control.enabled ? "transparent" : Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
 
         Rectangle
         {
@@ -29,13 +29,15 @@ T.Slider
             width: Math.max(height, control.visualPosition * parent.width)
             height: control.height
             anchors.verticalCenter: parent.verticalCenter
-            color: Kirigami.Theme.highlightColor
+            color: control.enabled ? Kirigami.Theme.highlightColor : "transparent"
+            border.color: control.enabled ? "transparent" : Kirigami.Theme.highlightColor
             radius: height/2
             clip: true
 
             Rectangle
             {
                 id: _animatedRec
+                visible: control.enabled
                 height: parent.height
                 color: Qt.lighter(parent.color)
                 opacity: 0.5
@@ -50,8 +52,7 @@ T.Slider
                 }
             }
 
-
-            layer.enabled: true
+            layer.enabled: _animatedRec.visible
             layer.effect: OpacityMask
             {
                 maskSource: Rectangle
@@ -71,8 +72,9 @@ T.Slider
         y: control.topPadding + control.availableHeight / 2 - height / 2
         implicitWidth: control.height
         implicitHeight: control.height
-        color: Kirigami.Theme.highlightColor
+        color: control.enabled ? Kirigami.Theme.highlightColor : "transparent"
         radius: height/2
+
         Kirigami.Icon
         {
             id: _icon

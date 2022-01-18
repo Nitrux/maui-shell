@@ -19,7 +19,10 @@ SliderToggle
     id: control
     property var defaultSourceValue: defaultSource ? defaultSource.volume / PA.PulseAudio.MaximalVolume * 100.0 : -1
     property var defaultSource: paSourceModel.defaultSource
-readonly property bool muted : defaultSource ?  defaultSource.muted : true
+    readonly property bool muted : defaultSource ?  defaultSource.muted : true
+
+    enabled: !muted
+
     slider.iconSource: {
         if (defaultSourceValue <= 0)
             return "microphone-sensitivity-muted"
@@ -71,19 +74,16 @@ readonly property bool muted : defaultSource ?  defaultSource.muted : true
         sourceModel: paSourceModel
     }
 
-
-
-    PA.CardModel {
+    PA.CardModel
+    {
         id: paCardModel
     }
-
-
 
     function muteMic()
     {
         for (var i = 0; i < paSourceModel.rowCount(); i++) {
 
-                paSourceModel.setData(paSourceModel.index(i, 0), true, paSourceModel.role("Muted"));
+            paSourceModel.setData(paSourceModel.index(i, 0), true, paSourceModel.role("Muted"));
 
         }
     }
@@ -92,7 +92,7 @@ readonly property bool muted : defaultSource ?  defaultSource.muted : true
     {
         for (var i = 0; i < paSourceModel.rowCount(); i++) {
 
-                paSourceModel.setData(paSourceModel.index(i, 0), false, paSourceModel.role("Muted"));
+            paSourceModel.setData(paSourceModel.index(i, 0), false, paSourceModel.role("Muted"));
 
         }
     }

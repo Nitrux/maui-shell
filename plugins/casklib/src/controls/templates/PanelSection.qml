@@ -3,7 +3,6 @@ import QtQml 2.14
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
-
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
@@ -25,7 +24,7 @@ T.Control
 
     property rect availableGeometry
 
-    spacing:  Maui.Style.space.medium
+    spacing: isMobile ? 0 : Maui.Style.space.medium
 
     property int currentCard : -1
 
@@ -37,11 +36,8 @@ T.Control
     leftPadding: padding
     rightPadding: padding
 
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-                            implicitContentWidth + leftPadding + rightPadding)
-
-    implicitHeight: _content.implicitHeight + topPadding + bottomPadding
-
+    implicitWidth: implicitContentWidth + leftPadding + rightPadding
+    implicitHeight: implicitContentHeight + topPadding + bottomPadding
 
     Behavior on implicitWidth
     {
@@ -52,140 +48,6 @@ T.Control
         }
     }
 
-    PanelPopup
-    {
-        id: popup
-        property int alignment: Qt.AlignCenter
-        z: _content.z -2
-
-//        Label
-//        {
-//            color: "orange"
-//            text:  handler.centroid.position.y + " / " + handler2.centroid.scenePosition.y
-//            anchors.bottom: parent.bottom
-//        }
-
-        onOverlayClicked: control.close()
-        //        onActiveFocusChanged:
-        //        {
-        //            if(!activeFocus)
-        //                control.close()
-        //        }
-
-        visible: handler.active || opened
-        opacity: Math.abs((y+height)/(0-(height)))
-
-        y: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
-
-        //        Binding on y
-        //        {
-        //            //            when: !handler.active
-        //            value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
-
-        //            restoreMode: Binding.RestoreBindingOrValue
-        //        }
-
-        //        Behavior on y
-        //        {
-        //            NumberAnimation
-        //            {
-        //                duration: Kirigami.Units.longDuration*3
-        //                easing.type: Easing.OutInQuad
-        //            }
-        //        }
-
-        //        Behavior on x
-        //        {
-        //            NumberAnimation
-        //            {
-        //                duration: Kirigami.Units.longDuration*10
-        //                easing.type: Easing.InOutQuad
-        //            }
-        //        }
-
-        x: handler.active && win.formFactor === Cask.Env.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
-
-        function setXAlignment(alignment)
-        {
-            switch(alignment)
-            {
-            case Qt.AlignLeft: return isMobile ? 0-Maui.Style.space.tiny : 0;
-            case Qt.AlignCenter: return Math.round((control.width/2 ) - (popup.width/2));
-            case Qt.AlignRight: return  0-(width - control.width)+(isMobile ? Maui.Style.space.tiny : 0);
-            default: return 0;
-            }
-
-        }
-
-        readonly property int finalYPos : availableGeometry.y + Maui.Style.space.medium
-
-        height: Math.min (availableGeometry.height, popup.implicitHeight)
-        width: isMobile ? availableGeometry.width : Math.min(control.popWidth, availableGeometry.width)
-
-        function close()
-        {
-            popup.opened = false
-            popup.closed()
-        }
-
-        function open()
-        {
-            popup.opened = true
-            //            popup.y= popup.opened ? popup.finalYPos : 0-popup.height
-            popup.forceActiveFocus()
-            //            popup.opened()
-        }
-
-        DragHandler
-        {
-            id: handler2
-            dragThreshold: 100
-            enabled: popup.opened && Maui.Handy.isTouch
-            target: popup
-            yAxis.maximum: popup.finalYPos
-
-            xAxis.enabled : false
-            grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
-            onActiveChanged:
-            {
-                const condition = (handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y < -200)
-                if(!active && condition)
-                {
-                    control.close()
-                }else
-                {
-                    popup.open()
-                }
-            }
-        }
-    }
-
-    DragHandler
-    {
-        id: handler
-        dragThreshold: 20
-        enabled: !popup.opened && Maui.Handy.isTouch
-        target: null
-        yAxis.minimum: 0
-        yAxis.maximum: popup.finalYPos + 10
-        xAxis.enabled : false
-        grabPermissions: PointerHandler.CanTakeOverFromAnything
-        onActiveChanged:
-        {
-            console.log(Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y))
-
-            if(!active && Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y) > 60)
-            {
-                popup.open()
-            }else
-            {
-                control.close()
-            }
-        }
-    }
-
-
-
     //    Label
     //    {
     //        text: control.implicitHeight
@@ -195,10 +57,87 @@ T.Control
     {
         id: _content
         spacing: control.spacing
+        clip: true
     }
 
+    DragHandler
+    {
+        id: handler
+        dragThreshold: 20
+        enabled: !popup.opened /*&& Maui.Handy.isTouch*/
+        target: null
+        yAxis.minimum: 0
+        yAxis.maximum: popup.finalYPos + 10
+        xAxis.enabled : false
+        grabPermissions: PointerHandler.CanTakeOverFromAnything
+        onActiveChanged:
+        {
+            console.log(Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y))
+            if(active)
+            {
+                control.fillPopup()
+            }
 
-    WheelHandler
+            if(!active && Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y) > 60)
+            {
+                popup.open()
+            }else
+            {
+                popup.close()
+            }
+        }
+    }
+
+    PanelPopup
+    {
+        id: popup
+        z: _content.z -2
+        finalYPos : availableGeometry.y
+
+        height: Math.min (availableGeometry.height, popup.implicitHeight)
+        width: isMobile ? availableGeometry.width : Math.min(control.popWidth, availableGeometry.width)
+
+        //        Label
+        //        {
+        //            color: "orange"
+        //            text:  handler.centroid.position.y + " / " + handler2.centroid.scenePosition.y
+        //            anchors.bottom: parent.bottom
+        //        }
+
+        onOverlayClicked:
+        {
+            clear()
+            close()
+        }
+
+        visible: handler.active || opened
+        opacity: Math.abs((y+height)/(0-(height)))
+
+        Binding on y
+        {
+            delayed: true
+            restoreMode: Binding.RestoreBindingOrValue
+            value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
+
+        }
+
+        x: handler.active && win.formFactor === Cask.Env.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
+
+        function setXAlignment(alignment)
+        {
+            switch(alignment)
+            {
+            case Qt.AlignLeft: return isMobile ? 0 : 0;
+            case Qt.AlignCenter: return Math.round((control.width/2 ) - (popup.width/2));
+            case Qt.AlignRight: return  0-(width - control.width)+(isMobile ? 0 : 0);
+            default: return 0;
+            }
+        }
+
+
+    }
+
+    data: WheelHandler
     {
         //        orientation: Qt.Vertical
         target: null
@@ -211,60 +150,77 @@ T.Control
         onActiveChanged:
         {
             console.log("WHEEL HANMDLER ACTIVE", rotation)
+
+            if(active && !popup.opened)
+            {
+                fillPopup()
+            }
+
             if(!active)
             {
                 if(rotation > 15)
-                    control.close()
+                {
+                    popup.slideUp()
+                }
                 else if(rotation < -60)
-                    popup.open()
+                {
+                    if(popup.opened)
+                    {
+                        return
+                    }
+
+                    popup.slideDown()
+                }
                 rotation = 0
             }
-
         }
-
     }
-    function isPanelItem(obj)
+
+
+    function isPanelCard(obj)
     {
         return obj instanceof PanelCard
     }
 
-    Component.onCompleted:
+    function close(card)
     {
-        for(var k in _content.children)
+        if(card && isPanelCard(card))
         {
-            const obj = _content.children[k]
-            if(obj.card && isPanelItem(obj.card))
+            console.log("Close it", card.index)
+
+            var card_ = popup.takeItem(card.index)
+            console.log("REMOVING CARD", card.parent)
+            if(popup.count === 0)
             {
-                obj.card.index = popup.count
-                obj.card.visible = Qt.binding(function(){return (control.currentCard >= 0 ? control.currentCard === obj.card.index : true) })
-                obj.card.parent = popup
-                popup.container.insertItem(popup.count, obj.card)
+                popup.close()
             }
         }
     }
 
-
-    function close()
+    function open(card)
     {
-        console.log("Close it")
-        control.currentCard = -1
-        popup.close()
-    }
+        if(card)
+        {
+            console.log("Pop it up", card)
 
-    function open(index)
-    {
-        console.log("Pop it up", index)
-        if(index >= 0 && index  <= popup.count)
-        {
-            control.currentCard = index
-        }else
-        {
-            control.currentCard = -1
+            popup.addCard(card)
+            console.log("INSERTING CARD", card.parent)
+            popup.open()
         }
-
-        popup.open()
     }
 
+    function fillPopup()
+    {
+        for(var k in _content.children)
+        {
+            const obj = _content.children[k]
+            if(obj.card)
+            {
+                console.log("INSERTING CARD", obj.card)
+                popup.addCard(obj.card)
+            }
+        }
+    }
 
     Component.onDestruction:
     {

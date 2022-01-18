@@ -9,8 +9,9 @@ import org.maui.cask 1.0 as Cask
 Cask.PanelItem
 {
     id: control
+
     icon.name: "notifications"
-    text: _nofList.count
+    text: _nofList.count > 0 ? _nofList.count : ""
     font.bold: true
 
     onTextChanged: animate()

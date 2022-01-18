@@ -1,36 +1,43 @@
-import QtQuick 2.13
+import QtQuick 2.15
 import QtQml 2.14
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.13
+import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
 import org.maui.cask 1.0 as Cask
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
+import QtQuick.Templates 2.15 as T
 
-Item
+T.Container
 {
     id: control
-    //    visible: y > 0
+    implicitHeight: _cardsList.contentHeight + topPadding + bottomPadding
+
+    clip: isMobile
+    padding: 0
+    leftPadding: padding
+    rightPadding: padding
+    bottomPadding: padding
+    topPadding: padding
+
     focus: true
 
+    property int finalYPos : 0
     property bool opened : false
-    property alias container : _cards
-    property alias count: _cards.count
-    implicitHeight: _cardsList.contentHeight + (_cards.padding*2)
-    property alias contentChildren : _cards.contentChildren
-    property alias padding : _cards.padding
+    property int alignment: Qt.AlignCenter
 
     signal overlayClicked()
-//    signal opened()
+//        signal opened()
     signal closed()
 
     Keys.enabled: true
     Keys.onEscapePressed: control.overlayClicked()
-    Keys.onSpacePressed: control.overlayClicked()
 
-    Item
+    background: null
+
+    data: Item
     {
         id:_overlay
         opacity:  control.opacity
@@ -39,32 +46,31 @@ Item
         anchors.fill: parent
         parent: _cask.overlayTopPanel;
 
-
         Item
         {
             visible: win.formFactor !== Cask.Env.Desktop
             anchors.fill: parent
-            Image
-            {
-                id: _img
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectCrop
-                source: _cask.backgroundImage
-            }
+//            Image
+//            {
+//                id: _img
+//                anchors.fill: parent
+//                fillMode: Image.PreserveAspectCrop
+//                source: _swipeView.currentItem.backgroundImage
+//            }
 
-            FastBlur
-            {
-                anchors.fill: parent
-                id: fastBlur
-                source: _img
-                radius: 64
-                transparentBorder: false
-                cached: true
-            }
+//            FastBlur
+//            {
+//                anchors.fill: parent
+//                id: fastBlur
+//                source: _img
+//                radius: 64
+//                transparentBorder: false
+//                cached: true
+//            }
 
             Rectangle
             {
-                opacity: Math.min(win.formFactor !== Cask.Env.Desktop ? 0.95 : 0.7, control.opacity)
+                opacity: (control.height/availableGeometry.height)
 
                 anchors.fill: parent
                 Kirigami.Theme.inherit: false
@@ -96,40 +102,130 @@ Item
         }
     }
 
-    Container
+    contentItem: ListView
     {
-        id: _cards
-        anchors.fill: parent
-        clip: isMobile
-        padding: isMobile ? 0 : Maui.Style.space.medium
-        leftPadding: padding
-        rightPadding: padding
-        bottomPadding: padding
-        topPadding: padding
+        id: _cardsList
+        spacing: currentCard === -1  ? Maui.Style.space.medium : 0
+        model: control.contentModel
+        orientation: ListView.Vertical
+        snapMode: ListView.NoSnap
 
-        contentItem: ListView
+        boundsBehavior: Flickable.StopAtBounds
+        boundsMovement :Flickable.StopAtBounds
+
+//        interactive: Maui.Handy.isTouch
+        highlightFollowsCurrentItem: true
+        highlightMoveDuration: 0
+        highlightResizeDuration : 0
+
+        DragHandler
         {
-            id: _cardsList
-            spacing: currentCard === -1  ? Maui.Style.space.medium : 0
-            model: _cards.contentModel
-            orientation: ListView.Vertical
-            snapMode: ListView.NoSnap
+            id: handler2
+            dragThreshold: 100
+    //                enabled: popup.opened /*&& Maui.Handy.isTouch*/
+            target: control
+    //                yAxis.maximum: popup.finalYPos
 
-            boundsBehavior: Flickable.StopAtBounds
-            boundsMovement :Flickable.StopAtBounds
-
-            //            interactive: Kirigami.Settings.hasTransientTouchInput /*&& (control.selectionMode ? _listView.position.x > 84 : true)*/
-            highlightFollowsCurrentItem: true
-            highlightMoveDuration: 0
-            highlightResizeDuration : 0
-            //            pressDelay: 1000
+            xAxis.enabled : false
+            grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
+            onActiveChanged:
+            {
+                const condition = (handler2.centroid.scenePosition.y - handler2.centroid.scenePressPosition.y < -200)
+                if(!active && condition)
+                {
+                    control.close()
+                }else
+                {
+                    control.y = control.finalYPos
+                }
+            }
         }
     }
-
 
     Component.onDestruction:
     {
         console.log("DESTROY PANEL POPUP")
     }
 
+    onClosed:
+    {
+
+    }
+
+
+    NumberAnimation
+    {
+        id: _slideDownAnimation
+        target: control
+        property: "y"
+        duration: Kirigami.Units.shortDuration
+        from: 0 - control.height
+        to: control.finalYPos
+        easing.type: Easing.OutInQuad
+    }
+
+    NumberAnimation
+    {
+        id: _slideUpAnimation
+        target: control
+        property: "y"
+        duration: Kirigami.Units.shortDuration
+        from: control.y
+        to: 0 - control.height
+        easing.type: Easing.InOutQuad
+        onFinished: {
+            control.clear()
+            control.close()
+        }
+    }
+
+    function close()
+    {
+        control.opened = false
+        control.closed()
+    }
+
+    function open()
+    {
+        control.opened = true
+        control.forceActiveFocus()
+//        control.opened()
+    }
+
+    function clear()
+    {
+        control.contentModel.clear()
+    }
+
+    function contains(card)
+    {
+        return control.contentModel.get(card.index) === card;
+    }
+
+    function addCard(card)
+    {
+        if(!isPanelCard(card))
+        {
+            return;
+        }
+
+        if(control.contains(card))
+        {
+            return;
+        }
+
+        control.addItem(card)
+    }
+
+    function slideDown()
+    {
+        popup.open()
+        _slideDownAnimation.start()
+    }
+
+    function slideUp()
+    {
+        _slideUpAnimation.start()
+    }
 }
+

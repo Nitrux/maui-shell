@@ -30,13 +30,13 @@ T.Control
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
-    padding: Maui.Style.space.tiny
+    padding: isMobile ? 0 : Maui.Style.space.tiny
     topPadding: padding
     bottomPadding: padding
     leftPadding: padding
     rightPadding: padding
 
-    Behavior on  Layout.margins
+    Behavior on Layout.margins
     {
         NumberAnimation
         {
@@ -54,7 +54,8 @@ T.Control
     background: Item
     {
         visible: !control.floating
-        opacity: 0.8
+        opacity:  _notificationsSection.popup.opened || _statusSection.popup.opened ? 1 : 0.8
+
         Rectangle
         {
             id: _rec
@@ -76,6 +77,7 @@ T.Control
         //            source: _rec
         //        }
     }
+
     function show()
     {
         control.contentItem.y = control.topPadding
@@ -106,7 +108,7 @@ T.Control
             target: control.contentItem
             xAxis.enabled: false
             yAxis.maximum: control.topPadding
-//            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            //            grabPermissions: PointerHandler.CanTakeOverFromAnything
             onActiveChanged:
             {
                 if(!active)
@@ -123,7 +125,7 @@ T.Control
         id: _timer
         running: control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened) && !_statusSection.hovered
         interval: 4000
-//        triggeredOnStart: true
+        //        triggeredOnStart: true
         onTriggered:
         {
             console.log("_timer triggered")
@@ -134,14 +136,15 @@ T.Control
         }
     }
 
-//    Label
-//    {
-//        text: control.contentItem.y + " - " + control.hidden
-//    }
+    //    Label
+    //    {
+    //        text: control.contentItem.y + " - " + control.hidden
+    //    }
 
     contentItem: RowLayout
     {
         id: _layout
+        spacing: control.spacing
 
         Cask.PanelSection
         {
@@ -153,40 +156,48 @@ T.Control
 
             popWidth: 320
             alignment: Qt.AlignLeft
-            //            background: Rectangle
-            //            {
-            //                color: "red"
-            //            }
 
+            Connections
+            {
+                target: _notificationsSection.popup
+                onOpenedChanged:
+                {
+                    if(target.opened && _statusSection.popup.opened)
+                    {
+                        _statusSection.popup.close()
+                    }
+                }
+            }
 
             NotificationsItem
             {
-//                onClicked: _notificationsSection.open(card.index)
-                //                anchors.verticalCenter: parent.verticalCenter
             }
 
             CalendarItem
             {
-//                onClicked: _notificationsSection.open(card.index)
-                //                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
         Cask.PanelSection
         {
             id: _statusSection
-            Layout.alignment: Qt.AlignRight
-            //            Layout.fillHeight: true
-
             alignment: Qt.AlignRight
+            Layout.alignment: alignment
             availableGeometry : desktop.availableGeometry
 
             popWidth: 340
-            //            background: Rectangle
-            //            {
-            //                color: "red"
-            //            }
 
+            Connections
+            {
+                target: _statusSection.popup
+                onOpenedChanged:
+                {
+                    if(target.opened && _notificationsSection.popup.opened && ((_notificationsSection.popup.width + _statusSection.popup.width) > availableGeometry.width))
+                    {
+                        _notificationsSection.popup.close()
+                    }
+                }
+            }
 
             Cask.PanelItem
             {
@@ -197,43 +208,31 @@ T.Control
                 leftPadding: 0
                 rightPadding: 0
 
-                Timer
+                data: Timer
                 {
                     running: _revealer.checked && !_statusSection.popup.opened && !_statusSection.hovered
                     interval: 4000
                     onTriggered: _revealer.toggle()
                 }
-
             }
 
             TogglesItem
             {
-//                onClicked: _statusSection.open(card.index)
-                //                anchors.verticalCenter: parent.verticalCenter
-
-                //                visible: !isMobile
             }
 
             SlidersItem
             {
                 id: _slidersItem
-//                visible: _revealer.checked
-//                onClicked: _statusSection.open(card.index)
-                //                anchors.verticalCenter: parent.verticalCenter
-
-                //                                visible: !isMobile
             }
 
             AudioPlayerItem
             {
                 visible: _revealer.checked || isPlaying
-//                onClicked: _statusSection.open(card.index)
             }
 
             SessionItem
             {
-//                onClicked: card.visible ? _statusSection.close() : _statusSection.open(card.index)
-                anchors.verticalCenter: parent.verticalCenter
+                visible: !isMobile
             }
         }
     }
