@@ -17,9 +17,8 @@ cask
 USERNAME=`echo $USER`
 
 if pgrep -f cask >/dev/null
-
-then
-  echo "Cask is running"
-else
-  pkill -KILL -u $USERNAME
+  then
+    echo "Cask is running"
+  else
+    pkill -KILL -u $USERNAME
 fi
