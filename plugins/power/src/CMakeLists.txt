@@ -7,6 +7,8 @@ include_directories(
 set(caskpower_SRCS
     code/powermanagementengine.cpp
     code/powermanagementjob.cpp
+    code/brightnesscontrol.cpp
+    code/caskpowerplugin.cpp
 #    code/powermanagementservice.cpp
 )
 
@@ -40,6 +42,7 @@ endif()
 
 target_link_libraries(CaskPower
     Qt5::Core
+    Qt5::Qml
     KF5::Solid
     KF5::IdleTime
     KF5::CoreAddons

@@ -3,11 +3,15 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 import org.kde.kirigami 2.7 as Kirigami
+
 import org.mauikit.controls 1.3 as Maui
+import org.mauikit.filebrowsing 1.0 as FB
+
 import org.maui.cask 1.0 as Cask
 import QtGraphicalEffects 1.0
 
 import QtQuick.Templates 2.15 as T
+import Qt.labs.platform 1.1
 
 Maui.Page
 {
@@ -24,6 +28,8 @@ Maui.Page
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
     property alias searchBar : _searchBar
+
+    signal placeClicked(string path)
 
     Behavior on opacity
     {
@@ -71,7 +77,6 @@ Maui.Page
         //        Keys.forwardTo: _gridView
     }
 
-
     background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor
@@ -79,7 +84,7 @@ Maui.Page
         radius: 10
 
         layer.enabled: win.formFactor === Cask.Env.Desktop
-        layer.effect :  DropShadow
+        layer.effect: DropShadow
         {
             transparentBorder: true
             horizontalOffset: 0
@@ -93,6 +98,7 @@ Maui.Page
     ColumnLayout
     {
         anchors.fill: parent
+
         SwipeView
         {
             id: _swipeView
@@ -104,6 +110,7 @@ Maui.Page
             ColumnLayout
             {
                 spacing: Maui.Style.space.medium
+
                 Maui.GridView
                 {
                     id: _categoriesGridView
@@ -194,26 +201,142 @@ Maui.Page
                         }
                     }
 
-                }
-
-
-                Maui.ListBrowser
-                {
-                    Layout.fillWidth: true
-                    implicitHeight: 80
-                    orientation: ListView.Horizontal
-                    model: 6
-
-                    delegate: Maui.GridBrowserDelegate
+                    flickable.footer: T.Page
                     {
-                        width: 64
-                        height: 64
+                        width: parent.width
+                        implicitHeight: contentHeight+ topPadding + topPadding + header.height
+//                        padding: Maui.Style.space.big
+                        header: Item
+                        {
+                            width: parent.width
+                            height: 60
 
-                        iconSource: "folder"
-                        label1.text: "Folder"
+                            Kirigami.Separator
+                            {
+                                anchors.centerIn: parent
+                                width: 100
+                                opacity: 0.5
+                            }
+                        }
+
+                        contentItem: Flow
+                        {
+
+                            GridView
+                            {
+                                id: _quickSection
+                                implicitHeight: contentHeight + topMargin +  bottomMargin
+                                implicitWidth: 200
+                                currentIndex :-1
+
+                                cellWidth: Math.floor(width/3)
+                                cellHeight: cellWidth
+                                interactive: false
+
+                                model: Maui.BaseModel
+                                {
+                                    list: FB.PlacesList
+                                    {
+                                        groups: [FB.FMList.QUICK_PATH, FB.FMList.PLACES_PATH]
+                                    }
+                                }
+
+                                header: Maui.LabelDelegate
+                                {
+                                    width: parent.width
+                                    isSection: true
+                                    label: i18n("Places")
+                                }
+
+                                delegate: Item
+                                {
+                                    height: GridView.view.cellHeight
+                                    width: GridView.view.cellWidth
+
+                                    Maui.GridBrowserDelegate
+                                    {
+                                        isCurrentItem: parent.GridView.isCurrentItem
+                                        anchors.fill: parent
+                                        anchors.margins: Maui.Style.space.tiny
+                                        iconSource: model.icon
+                                        iconSizeHint: Maui.Style.iconSizes.medium
+                                        template.isMask: true
+                                        label1.text: model.label
+                                        labelsVisible: false
+                                        tooltipText: model.label
+                                        onClicked:
+                                        {
+                                            placeClicked(model.path)
+                                            FB.FM.openUrl(model.path)
+                                        }
+
+                                        //                            onRightClicked:
+                                        //                            {
+                                        //                                _menu.path = model.path
+                                        //                                _menu.show()
+                                        //                            }
+
+                                        //                            onPressAndHold:
+                                        //                            {
+                                        //                                _menu.path = model.path
+                                        //                                _menu.show()
+                                        //                            }
+                                    }
+                                }
+                            }
+
+                            GridView
+                            {
+                                id: _recentSection
+                                implicitHeight: contentHeight +  topMargin+  bottomMargin
+                                implicitWidth: 300
+                                currentIndex :-1
+
+                                cellWidth: Math.floor(width/3)
+                                cellHeight: cellWidth
+                                interactive: false
+
+                                model: Maui.BaseModel
+                                {
+                                    list: Cask.RecentFiles
+                                    {
+                                        url: StandardPaths.writableLocation(StandardPaths.DownloadLocation)
+                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
+
+                                    }
+                                }
+
+                                header: Maui.LabelDelegate
+                                {
+                                    width: parent.width
+                                    isSection: true
+                                    label: i18n("Downloads")
+                                }
+
+                                delegate: Item
+                                {
+                                    height: GridView.view.cellHeight
+                                    width: GridView.view.cellWidth
+
+                                    Maui.GridBrowserDelegate
+                                    {
+                                        isCurrentItem: parent.GridView.isCurrentItem
+                                        anchors.fill: parent
+                                        anchors.margins: Maui.Style.space.tiny
+                                        iconSource: model.icon
+                                        imageSource: model.thumbnail
+                                        iconSizeHint: Maui.Style.iconSizes.medium
+                                        label1.text: model.label
+                                        labelsVisible: !FB.FM.checkFileType(FB.FMList.IMAGE, model.mime)
+                                        tooltipText: model.label
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
+
             Maui.GridView
             {
                 id: _gridView
@@ -315,8 +438,6 @@ Maui.Page
                 }
             }
         }
-
-
 
         Item
         {

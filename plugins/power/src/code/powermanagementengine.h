@@ -27,9 +27,9 @@ class PowermanagementEngine : public QObject
 public:
     PowermanagementEngine(QObject *parent = nullptr);
     QStringList sources() const;
+    bool sourceRequestEvent(const QString &name);
 
 protected:
-    bool sourceRequestEvent(const QString &name);
     bool updateSourceEvent(const QString &source);
     void init();
 
@@ -46,7 +46,6 @@ private Q_SLOTS:
     void deviceRemoved(const QString &udi);
     void deviceAdded(const QString &udi);
     void batteryRemainingTimeChanged(qulonglong time);
-    void screenBrightnessChanged(int brightness);
     void maximumScreenBrightnessChanged(int maximumBrightness);
     void keyboardBrightnessChanged(int brightness);
     void maximumKeyboardBrightnessChanged(int maximumBrightness);
@@ -72,4 +71,8 @@ private:
     QHash<QString, QPair<QString, QString>> m_applicationInfo; // <appname, <pretty name, icon>>
 
     void setData(const QString &name, const QString &name2, const QVariant &value);
+
+signals:
+    void screenBrightnessChanged(int brightness);
+
 };

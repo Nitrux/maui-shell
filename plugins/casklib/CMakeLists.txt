@@ -71,6 +71,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/casklib_version.h"
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core Quick Concurrent DBus)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Service KIO )
 find_package(MauiKit REQUIRED)
+find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
 
 if(QUICK_COMPILER)
     find_package(Qt5QuickCompiler)

@@ -2,6 +2,8 @@
 #include "stackableitem.h"
 #include "enviroment.h"
 #include "models/appsmodel.h"
+#include "models/recentfilesmodel.h"
+
 #include "processlauncher.h"
 
 #include "code/mpris2/mpris2engine.h"
@@ -23,16 +25,17 @@ void CaskPlugin::registerTypes(const char *uri)
 
     qmlRegisterType(resolveFileUrl(QStringLiteral("Dashboard.qml")), uri, 1, 0, "Dashboard");
 
-        //controllers
+    //controllers
     qmlRegisterType<StackableItem>(uri, 1, 0, "StackableItem");
     qmlRegisterSingletonType<Enviroment>(uri, 1, 0, "Env", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
         return new Enviroment;
     });
-        qmlRegisterType<WaylandProcessLauncher>(uri, 1, 0, "ProcessLauncher");
+    qmlRegisterType<WaylandProcessLauncher>(uri, 1, 0, "ProcessLauncher");
 
     qmlRegisterType<AppsModel>(uri, 1, 0, "AppsModel");
+    qmlRegisterType<RecentFilesModel>(uri, 1, 0, "RecentFiles");
 
     //mpris stuff
     qmlRegisterAnonymousType<PlayersModel>(uri, 1);

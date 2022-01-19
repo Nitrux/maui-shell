@@ -203,6 +203,7 @@ T.Control
 
             SlidersItem
             {
+                id: _slidersItem
             }
 
             AudioPlayerItem

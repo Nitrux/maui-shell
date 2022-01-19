@@ -49,6 +49,7 @@ void PowermanagementEngine::init()
     connect(Solid::DeviceNotifier::instance(), &Solid::DeviceNotifier::deviceRemoved, this, &PowermanagementEngine::deviceRemoved);
 
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered(SOLID_POWERMANAGEMENT_SERVICE)) {
+        qDebug() << "POWER IS REGISTERED" << SOLID_POWERMANAGEMENT_SERVICE;
         if (!QDBusConnection::sessionBus().connect(SOLID_POWERMANAGEMENT_SERVICE,
                                                    QStringLiteral("/org/kde/Solid/PowerManagement/Actions/BrightnessControl"),
                                                    QStringLiteral("org.kde.Solid.PowerManagement.Actions.BrightnessControl"),
@@ -304,6 +305,9 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
             QDBusPendingReply<int> reply = *watcher;
             if (!reply.isError()) {
                 maximumScreenBrightnessChanged(reply.value());
+            }else
+            {
+                qDebug() << "POWER" << reply.error().message();
             }
             watcher->deleteLater();
         });
@@ -535,7 +539,7 @@ QString PowermanagementEngine::batteryStateToString(int newState) const
 
 void PowermanagementEngine::setData(const QString &name, const QString &name2, const QVariant &value)
 {
-
+qDebug() << "POWER DATA CHANGED" << name << name2 << value;
 }
 
 void PowermanagementEngine::updateBatteryChargeState(int newState, const QString &udi)
@@ -773,10 +777,10 @@ void PowermanagementEngine::batteryRemainingTimeChanged(qulonglong time)
     setData(QStringLiteral("Battery"), QStringLiteral("Remaining msec"), time);
 }
 
-void PowermanagementEngine::screenBrightnessChanged(int brightness)
-{
-    setData(QStringLiteral("PowerDevil"), QStringLiteral("Screen Brightness"), brightness);
-}
+//void PowermanagementEngine::screenBrightnessChanged(int brightness)
+//{
+//    setData(QStringLiteral("PowerDevil"), QStringLiteral("Screen Brightness"), brightness);
+//}
 
 void PowermanagementEngine::maximumScreenBrightnessChanged(int maximumBrightness)
 {

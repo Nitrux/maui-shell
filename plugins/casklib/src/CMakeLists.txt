@@ -6,6 +6,7 @@ include_directories(
 set(caskplugin_SRCS
     code/caskplugin.cpp
     code/models/appsmodel.cpp
+    code/models/recentfilesmodel.cpp
     code/stackableitem.cpp
     code/enviroment.cpp
     code/processlauncher.cpp
@@ -15,6 +16,7 @@ set(caskplugin_SRCS
 set(caskplugin_HDRS
     code/caskplugin.h
     code/models/appsmodel.h
+    code/models/recentfilesmodel.h
     code/stackableitem.h
     code/enviroment.h
     code/processlauncher.h
@@ -73,6 +75,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     MauiKit
+    MauiKit::FileBrowsing
     KF5::Service
     KF5::ConfigCore
     KF5::KIOCore

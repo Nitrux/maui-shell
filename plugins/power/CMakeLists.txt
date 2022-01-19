@@ -68,7 +68,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/caskpower_version.h"
 
 option(QUICK_COMPILER "Use QtQuick compiler to improve performance" TRUE)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} COMPONENTS Core Quick DBus Gui REQUIRED)
+find_package(Qt5 ${REQUIRED_QT_VERSION} COMPONENTS Core Qml Quick DBus Gui REQUIRED)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Solid IdleTime CoreAddons Service)
 
 if(QUICK_COMPILER)
