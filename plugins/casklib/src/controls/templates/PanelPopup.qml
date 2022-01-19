@@ -69,7 +69,7 @@ T.Container
 
             Rectangle
             {
-                opacity: (control.height/(availableGeometry.height* 0.7))
+                opacity: Math.min(0.7, (control.height/(availableGeometry.height* 0.7)))
 
                 anchors.fill: parent
                 Kirigami.Theme.inherit: false
