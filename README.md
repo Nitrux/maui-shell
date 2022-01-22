@@ -29,6 +29,7 @@ extra-cmake-modules
 ```
 
 ##### Maui Shell needs MauiKit > 2.1.1 (master)
+##### Maui Shell needs MauiKit FileBrowsing > 2.1.1 (master)
 
 ### Compile MauiKit
 
@@ -59,6 +60,27 @@ qtquickcontrols2-5-dev
  ### Install
  1. `make install`
 
+##### Compile MauiKit FileBrowsing
+
+```
+libkf5coreaddons-dev
+libkf5i18n-dev
+libkf5kio-dev
+mauikit
+qtbase5-dev
+qtdeclarative5-dev
+qtquickcontrols2-5-dev
+```
+
+### Compile source
+ 1. `git clone --depth 1 --branch v2.1 https://invent.kde.org/maui/mauikit-filebrowsing.git` 
+ 2. `mkdir -p mauikit-filebrowsing/build && cd mauikit-filebrowsing/build`
+ 4. `cmake-DCMAKE_INSTALL_PREFIX=/usr -DENABLE_BSYMBOLICFUNCTIONS=OFF -DQUICK_COMPILER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_LOCALSTATEDIR=/var -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ..`
+ 5. `make`
+
+ ### Install
+ 1. `make install`
+
 
  ### Compile Maui Shell
 
@@ -67,6 +89,7 @@ libcanberra-dev
 libkf5config-dev
 libkf5coreaddons-dev
 libkf5i18n-dev
+libkf5idletime-dev
 libkf5kio-dev
 libkf5notifications-dev
 libkf5service-dev
