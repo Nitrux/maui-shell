@@ -46,12 +46,14 @@ private Q_SLOTS:
     void deviceRemoved(const QString &udi);
     void deviceAdded(const QString &udi);
     void batteryRemainingTimeChanged(qulonglong time);
-    void maximumScreenBrightnessChanged(int maximumBrightness);
     void keyboardBrightnessChanged(int brightness);
     void maximumKeyboardBrightnessChanged(int maximumBrightness);
     void triggersLidActionChanged(bool triggers);
     void inhibitionsChanged(const QList<InhibitionInfo> &added, const QStringList &removed);
     void chargeStopThresholdChanged(int threshold);
+
+    void setMaximumScreenBrightness(int maximumBrightness);
+    void setScreenBrightness(int brightness);
 
     void updatePowerProfileCurrentProfile(const QString &profile);
     void updatePowerProfileChoices(const QStringList &choices);
@@ -74,5 +76,7 @@ private:
 
 signals:
     void screenBrightnessChanged(int brightness);
+    void screenBrightnessAvailableChanged(bool value);
+    void maximumScreenBrightnessChanged(int maximumBrightness);
 
 };

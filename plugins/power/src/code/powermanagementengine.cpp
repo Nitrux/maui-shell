@@ -55,7 +55,7 @@ void PowermanagementEngine::init()
                                                    QStringLiteral("org.kde.Solid.PowerManagement.Actions.BrightnessControl"),
                                                    QStringLiteral("brightnessChanged"),
                                                    this,
-                                                   SLOT(screenBrightnessChanged(int)))) {
+                                                   SLOT(setScreenBrightness(int)))) {
             qDebug() << "error connecting to Brightness changes via dbus";
         }
 
@@ -64,7 +64,7 @@ void PowermanagementEngine::init()
                                                    QStringLiteral("org.kde.Solid.PowerManagement.Actions.BrightnessControl"),
                                                    QStringLiteral("brightnessMaxChanged"),
                                                    this,
-                                                   SLOT(maximumScreenBrightnessChanged(int)))) {
+                                                   SLOT(setMaximumScreenBrightness(int)))) {
             qDebug() << "error connecting to max brightness changes via dbus";
         }
 
@@ -274,12 +274,12 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         QDBusReply<bool> reply = QDBusConnection::sessionBus().call(msg);
         updateAcPlugState(reply.isValid() ? reply.value() : false);
     } else if (name == QLatin1String("Sleep States")) {
-//        setData(QStringLiteral("Sleep States"), QStringLiteral("Standby"), m_session->canSuspend());
-//        setData(QStringLiteral("Sleep States"), QStringLiteral("Suspend"), m_session->canSuspend());
-//        setData(QStringLiteral("Sleep States"), QStringLiteral("Hibernate"), m_session->canHibernate());
-//        setData(QStringLiteral("Sleep States"), QStringLiteral("HybridSuspend"), m_session->canHybridSuspend());
-//        setData(QStringLiteral("Sleep States"), QStringLiteral("LockScreen"), m_session->canLock());
-//        setData(QStringLiteral("Sleep States"), QStringLiteral("Logout"), m_session->canLogout());
+        //        setData(QStringLiteral("Sleep States"), QStringLiteral("Standby"), m_session->canSuspend());
+        //        setData(QStringLiteral("Sleep States"), QStringLiteral("Suspend"), m_session->canSuspend());
+        //        setData(QStringLiteral("Sleep States"), QStringLiteral("Hibernate"), m_session->canHibernate());
+        //        setData(QStringLiteral("Sleep States"), QStringLiteral("HybridSuspend"), m_session->canHybridSuspend());
+        //        setData(QStringLiteral("Sleep States"), QStringLiteral("LockScreen"), m_session->canLock());
+        //        setData(QStringLiteral("Sleep States"), QStringLiteral("Logout"), m_session->canLogout());
     } else if (name == QLatin1String("PowerDevil")) {
         QDBusMessage screenMsg = QDBusMessage::createMethodCall(SOLID_POWERMANAGEMENT_SERVICE,
                                                                 QStringLiteral("/org/kde/Solid/PowerManagement/Actions/BrightnessControl"),
@@ -290,7 +290,7 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         QObject::connect(screenWatcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *watcher) {
             QDBusPendingReply<int> reply = *watcher;
             if (!reply.isError()) {
-                screenBrightnessChanged(reply.value());
+                setScreenBrightness(reply.value());
             }
             watcher->deleteLater();
         });
@@ -304,7 +304,7 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         QObject::connect(maxScreenWatcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *watcher) {
             QDBusPendingReply<int> reply = *watcher;
             if (!reply.isError()) {
-                maximumScreenBrightnessChanged(reply.value());
+                setMaximumScreenBrightness(reply.value());
             }else
             {
                 qDebug() << "POWER" << reply.error().message();
@@ -380,7 +380,7 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
             watcher->deleteLater();
 
             if (!reply.isError()) {
-//                removeAllData(QStringLiteral("Inhibitions"));
+                //                removeAllData(QStringLiteral("Inhibitions"));
 
                 inhibitionsChanged(reply.value(), QStringList());
             }
@@ -539,7 +539,7 @@ QString PowermanagementEngine::batteryStateToString(int newState) const
 
 void PowermanagementEngine::setData(const QString &name, const QString &name2, const QVariant &value)
 {
-qDebug() << "POWER DATA CHANGED" << name << name2 << value;
+    qDebug() << "POWER DATA CHANGED" << name << name2 << value;
 }
 
 void PowermanagementEngine::updateBatteryChargeState(int newState, const QString &udi)
@@ -577,32 +577,32 @@ void PowermanagementEngine::updateBatteryPowerSupplyState(bool newState, const Q
 void PowermanagementEngine::updateBatteryNames()
 {
     uint unnamedBatteries = 0;
-//    foreach (QString source, m_batterySources) {
-//        DataContainer *batteryDataContainer = containerForSource(source);
-//        if (batteryDataContainer) {
-//            const QString batteryVendor = batteryDataContainer->data()[QStringLiteral("Vendor")].toString();
-//            const QString batteryProduct = batteryDataContainer->data()[QStringLiteral("Product")].toString();
+    //    foreach (QString source, m_batterySources) {
+    //        DataContainer *batteryDataContainer = containerForSource(source);
+    //        if (batteryDataContainer) {
+    //            const QString batteryVendor = batteryDataContainer->data()[QStringLiteral("Vendor")].toString();
+    //            const QString batteryProduct = batteryDataContainer->data()[QStringLiteral("Product")].toString();
 
-//            // Don't show battery name for primary power supply batteries. They usually have cryptic serial number names.
-//            const bool showBatteryName = batteryDataContainer->data()[QStringLiteral("Type")].toString() != QLatin1String("Battery")
-//                || !batteryDataContainer->data()[QStringLiteral("Is Power Supply")].toBool();
+    //            // Don't show battery name for primary power supply batteries. They usually have cryptic serial number names.
+    //            const bool showBatteryName = batteryDataContainer->data()[QStringLiteral("Type")].toString() != QLatin1String("Battery")
+    //                || !batteryDataContainer->data()[QStringLiteral("Is Power Supply")].toBool();
 
-//            if (!batteryProduct.isEmpty() && batteryProduct != QLatin1String("Unknown Battery") && showBatteryName) {
-//                if (!batteryVendor.isEmpty()) {
-//                    setData(source, QStringLiteral("Pretty Name"), QString(batteryVendor + ' ' + batteryProduct));
-//                } else {
-//                    setData(source, QStringLiteral("Pretty Name"), batteryProduct);
-//                }
-//            } else {
-//                ++unnamedBatteries;
-//                if (unnamedBatteries > 1) {
-//                    setData(source, QStringLiteral("Pretty Name"), i18nc("Placeholder is the battery number", "Battery %1", unnamedBatteries));
-//                } else {
-//                    setData(source, QStringLiteral("Pretty Name"), i18n("Battery"));
-//                }
-//            }
-//        }
-//    }
+    //            if (!batteryProduct.isEmpty() && batteryProduct != QLatin1String("Unknown Battery") && showBatteryName) {
+    //                if (!batteryVendor.isEmpty()) {
+    //                    setData(source, QStringLiteral("Pretty Name"), QString(batteryVendor + ' ' + batteryProduct));
+    //                } else {
+    //                    setData(source, QStringLiteral("Pretty Name"), batteryProduct);
+    //                }
+    //            } else {
+    //                ++unnamedBatteries;
+    //                if (unnamedBatteries > 1) {
+    //                    setData(source, QStringLiteral("Pretty Name"), i18nc("Placeholder is the battery number", "Battery %1", unnamedBatteries));
+    //                } else {
+    //                    setData(source, QStringLiteral("Pretty Name"), i18n("Battery"));
+    //                }
+    //            }
+    //        }
+    //    }
 }
 
 void PowermanagementEngine::updateOverallBattery()
@@ -716,7 +716,7 @@ void PowermanagementEngine::deviceRemoved(const QString &udi)
 
         const QString source = m_batterySources[udi];
         m_batterySources.remove(udi);
-//        removeSource(source);
+        //        removeSource(source);
 
         QStringList sourceNames(m_batterySources.values());
         sourceNames.removeAll(source);
@@ -782,11 +782,12 @@ void PowermanagementEngine::batteryRemainingTimeChanged(qulonglong time)
 //    setData(QStringLiteral("PowerDevil"), QStringLiteral("Screen Brightness"), brightness);
 //}
 
-void PowermanagementEngine::maximumScreenBrightnessChanged(int maximumBrightness)
-{
-    setData(QStringLiteral("PowerDevil"), QStringLiteral("Maximum Screen Brightness"), maximumBrightness);
-    setData(QStringLiteral("PowerDevil"), QStringLiteral("Screen Brightness Available"), maximumBrightness > 0);
-}
+//void PowermanagementEngine::maximumScreenBrightnessChanged(int maximumBrightness)
+//{
+//    setData(QStringLiteral("PowerDevil"), QStringLiteral("Maximum Screen Brightness"), maximumBrightness);
+//    setData(QStringLiteral("PowerDevil"), QStringLiteral("Screen Brightness Available"), maximumBrightness > 0);
+
+//}
 
 void PowermanagementEngine::keyboardBrightnessChanged(int brightness)
 {
@@ -807,7 +808,7 @@ void PowermanagementEngine::triggersLidActionChanged(bool triggers)
 void PowermanagementEngine::inhibitionsChanged(const QList<InhibitionInfo> &added, const QStringList &removed)
 {
     for (auto it = removed.constBegin(); it != removed.constEnd(); ++it) {
-//        removeData(QStringLiteral("Inhibitions"), (*it));
+        //        removeData(QStringLiteral("Inhibitions"), (*it));
     }
 
     for (auto it = added.constBegin(); it != added.constEnd(); ++it) {
@@ -847,6 +848,20 @@ void PowermanagementEngine::populateApplicationData(const QString &name, QString
 void PowermanagementEngine::chargeStopThresholdChanged(int threshold)
 {
     setData(QStringLiteral("Battery"), QStringLiteral("Charge Stop Threshold"), threshold);
+}
+
+void PowermanagementEngine::setMaximumScreenBrightness(int maximumBrightness)
+{
+    qDebug() << "POWER" << "SCreen maximum brightness" << maximumBrightness;
+
+    emit maximumScreenBrightnessChanged(maximumBrightness);
+    emit screenBrightnessAvailableChanged(maximumBrightness > 0);
+}
+
+void PowermanagementEngine::setScreenBrightness(int brightness)
+{
+    qDebug() << "POWER" << "SCreen brightness" << brightness;
+    emit screenBrightnessChanged(brightness);
 }
 
 

@@ -14,10 +14,13 @@ import ".."
 SliderToggle
 {
     id: control
+//    visible: _brightnessControl.screenBrightnessAvailable
     CaskPower.BrightnessControl
     {
         id: _brightnessControl
     }
+
+    label.text: _brightnessControl.screenBrightness
     slider.from: 0
     slider.to: _brightnessControl.maximumScreenBrightness
     slider.value: _brightnessControl.screenBrightness
