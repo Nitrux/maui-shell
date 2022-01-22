@@ -66,7 +66,6 @@ qtquickcontrols2-5-dev
 libkf5coreaddons-dev
 libkf5i18n-dev
 libkf5kio-dev
-mauikit
 qtbase5-dev
 qtdeclarative5-dev
 qtquickcontrols2-5-dev
@@ -169,4 +168,4 @@ If you'd like to contribute to this project, please make a PR. You can also ask 
 # Issues
 If you find problems with the contents of this repository please create an issue.
 
-©2021 Nitrux Latinoamericana S.C.
+©2022 Nitrux Latinoamericana S.C.
