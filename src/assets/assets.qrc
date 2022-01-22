@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>calamares_wallpaper.jpg</file>
-        <file>waves-wallpaper-bigsur1.png</file>
-        <file>Waves Monterey Light 6016x6016.jpg</file>
+        <file>wallpapers/maui_shell_dev_bg.png</file>
     </qresource>
 </RCC>
