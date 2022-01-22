@@ -60,7 +60,7 @@ qtquickcontrols2-5-dev
  ### Install
  1. `make install`
 
-##### Compile MauiKit FileBrowsing
+### Compile MauiKit FileBrowsing
 
 ```
 libkf5coreaddons-dev
