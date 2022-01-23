@@ -62,7 +62,7 @@ private:
 
     void setConstrains();
 
-    QString m_wallpaper = "qrc:/Waves Monterey Light 6016x6016.jpg";
+    QString m_wallpaper = "qrc:/wallpapers/maui_shell_dev_bg.png";
 
     QString m_title;
 
