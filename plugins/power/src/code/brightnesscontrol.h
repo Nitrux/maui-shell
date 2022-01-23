@@ -4,8 +4,8 @@ class PowermanagementEngine;
 class BrightnessControl : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int screenBrightness READ screenBrightness WRITE setScreenBrightness NOTIFY screenBrightnessChanged)
-    Q_PROPERTY(int keyboardBrightness READ keyboardBrightness WRITE setKeyboardBrightness NOTIFY keyboardBrightnessChanged)
+    Q_PROPERTY(int screenBrightness READ screenBrightness NOTIFY screenBrightnessChanged CONSTANT)
+    Q_PROPERTY(int keyboardBrightness READ keyboardBrightness NOTIFY keyboardBrightnessChanged CONSTANT)
 
     Q_PROPERTY(bool screenBrightnessAvailable READ screenBrightnessAvailable NOTIFY screenBrightnessAvailableChanged CONSTANT)
     Q_PROPERTY(bool keyboardBrightnessAvailable READ keyboardBrightnessAvailable NOTIFY keyboardBrightnessAvailableChanged CONSTANT)
@@ -29,11 +29,11 @@ public:
 
     bool keyboardBrightnessAvailable() const;
     void setKeyboardBrightnessAvailable(bool newKeyboardBrightnessAvailable);
+    void setScreenBrightness(int screenBrightness);
+    void setKeyboardBrightness(int keyboardBrightness);
 
 public slots:
-    void setScreenBrightness(int screenBrightness);
-
-    void setKeyboardBrightness(int keyboardBrightness);
+    void changeScreenBrightness( int value, bool silent);
 
 signals:
     void screenBrightnessChanged(int screenBrightness);

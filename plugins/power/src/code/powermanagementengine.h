@@ -16,6 +16,7 @@
 
 using InhibitionInfo = QPair<QString, QString>;
 
+class PowerManagementJob;
 /**
  * This class provides runtime information about the battery and AC status
  * for use in power management Plasma applets.
@@ -29,6 +30,7 @@ public:
     QStringList sources() const;
     bool sourceRequestEvent(const QString &name);
 
+    void setScreenBrightness(int value, bool silent);
 protected:
     bool updateSourceEvent(const QString &source);
     void init();
@@ -52,8 +54,8 @@ private Q_SLOTS:
     void inhibitionsChanged(const QList<InhibitionInfo> &added, const QStringList &removed);
     void chargeStopThresholdChanged(int threshold);
 
-    void setMaximumScreenBrightness(int maximumBrightness);
-    void setScreenBrightness(int brightness);
+    void onMaximumScreenBrightness(int maximumBrightness);
+    void onScreenBrightness(int brightness);
 
     void updatePowerProfileCurrentProfile(const QString &profile);
     void updatePowerProfileChoices(const QStringList &choices);
@@ -62,6 +64,7 @@ private Q_SLOTS:
     void updatePowerProfileHolds(const QList<QVariantMap> &holds);
 
 private:
+    PowerManagementJob *m_job;
     void populateApplicationData(const QString &name, QString *prettyName, QString *icon);
     QString batteryType(const Solid::Battery *battery) const;
     QStringList basicSourceNames() const;

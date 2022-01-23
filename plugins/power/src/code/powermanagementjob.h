@@ -17,10 +17,10 @@ class PowerManagementJob : public QObject
 
 public:
     PowerManagementJob(QObject *parent = nullptr);
-    void start();
+    void start(const QString &operation, const QVariantMap &parameters);
+    void setScreenBrightness(int value, bool silent);
 
 private:
-    QDBusPendingCall setScreenBrightness(int value, bool silent);
     QDBusPendingCall setKeyboardBrightness(int value, bool silent);
     QDBusPendingCall setPowerProfile(const QString &value);
 };

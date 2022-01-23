@@ -14,18 +14,47 @@ import ".."
 SliderToggle
 {
     id: control
-//    visible: _brightnessControl.screenBrightnessAvailable
+    visible: _brightnessControl.screenBrightnessAvailable
+
     CaskPower.BrightnessControl
     {
         id: _brightnessControl
     }
 
-    label.text: _brightnessControl.screenBrightness
     slider.from: 0
     slider.to: _brightnessControl.maximumScreenBrightness
-    slider.value: _brightnessControl.screenBrightness
+    slider.stepSize: 1
+
+    Binding
+    {
+        delayed: true
+        target: control.slider
+        property : "value"
+        value: _brightnessControl.screenBrightness
+    }
+
     slider.iconSource: "high-brightness"
-    page: Page{
+
+
+    Connections
+    {
+        target: control.slider
+
+//        function onMoved()
+//        {
+//            console.log(control.slider.value)
+//        }
+
+        function onPressedChanged()
+        {
+            if (!control.slider.pressed)
+            {
+                _brightnessControl.changeScreenBrightness(control.slider.value, true)
+            }
+        }
+    }
+
+    page: BrightnessPage{
 
     }
 }

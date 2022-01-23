@@ -11,25 +11,22 @@ BrightnessControl::BrightnessControl(QObject *parent) : QObject(parent)
 {
     connect(m_engine, &PowermanagementEngine::maximumScreenBrightnessChanged, this, [this](int value)
     {
-        qDebug() << "MAximum SCreen brigthness is" << value;
+        if(m_maximumScreenBrightness == value)
+        {
+            return;
+        }
+
+        qDebug() <<"CONTROL" << "Maximum Screen brigthness is" << value;
         m_maximumScreenBrightness = value;
         emit this->maximumScreenBrightnessChanged(m_maximumKeyboardBrightness);
-        emit this->screenBrightnessChanged(m_screenBrightness);
+//        emit this->screenBrightnessChanged(m_screenBrightness);
     });
 
-    connect(m_engine, &PowermanagementEngine::screenBrightnessChanged, this, [this](int value)
-    {
-        qDebug() << "SCreen brigthness is" << value;
-        this->setScreenBrightness(value);
-    });
+    connect(m_engine, &PowermanagementEngine::screenBrightnessChanged, this, &BrightnessControl::setScreenBrightness);
 
-//    connect(m_engine, &PowermanagementEngine::screenBrightnessAvailableChanged, this, [this](bool value)
-//    {
-//        qDebug() << "SCreen brigthness avaliable" << value;
-//        this->setScreenBrightnessAvailable(value);
-//    });
+    connect(m_engine, &PowermanagementEngine::screenBrightnessAvailableChanged, this, &BrightnessControl::setScreenBrightnessAvailable);
+
     m_engine->sourceRequestEvent("PowerDevil");
-
 }
 
 int BrightnessControl::screenBrightness() const
@@ -65,6 +62,11 @@ void BrightnessControl::setKeyboardBrightness(int keyboardBrightness)
 
     m_keyboardBrightness = keyboardBrightness;
     emit keyboardBrightnessChanged(m_keyboardBrightness);
+}
+
+void BrightnessControl::changeScreenBrightness(int value, bool silent)
+{
+    m_engine->setScreenBrightness(value, silent);
 }
 
 bool BrightnessControl::screenBrightnessAvailable() const

@@ -27,6 +27,8 @@
 #include <QDBusPendingCallWatcher>
 #include <QDBusReply>
 
+#include "powermanagementjob.h"
+
 static const char SOLID_POWERMANAGEMENT_SERVICE[] = "org.kde.Solid.PowerManagement";
 
 Q_DECLARE_METATYPE(QList<InhibitionInfo>)
@@ -34,6 +36,7 @@ Q_DECLARE_METATYPE(InhibitionInfo)
 
 PowermanagementEngine::PowermanagementEngine(QObject *parent)
     : QObject(parent)
+    , m_job(new PowerManagementJob(this))
     , m_sources(basicSourceNames())
 {
     qDBusRegisterMetaType<QList<InhibitionInfo>>();
@@ -55,7 +58,7 @@ void PowermanagementEngine::init()
                                                    QStringLiteral("org.kde.Solid.PowerManagement.Actions.BrightnessControl"),
                                                    QStringLiteral("brightnessChanged"),
                                                    this,
-                                                   SLOT(setScreenBrightness(int)))) {
+                                                   SLOT(onScreenBrightness(int)))) {
             qDebug() << "error connecting to Brightness changes via dbus";
         }
 
@@ -64,7 +67,7 @@ void PowermanagementEngine::init()
                                                    QStringLiteral("org.kde.Solid.PowerManagement.Actions.BrightnessControl"),
                                                    QStringLiteral("brightnessMaxChanged"),
                                                    this,
-                                                   SLOT(setMaximumScreenBrightness(int)))) {
+                                                   SLOT(onMaximumScreenBrightness(int)))) {
             qDebug() << "error connecting to max brightness changes via dbus";
         }
 
@@ -290,7 +293,7 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         QObject::connect(screenWatcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *watcher) {
             QDBusPendingReply<int> reply = *watcher;
             if (!reply.isError()) {
-                setScreenBrightness(reply.value());
+                onScreenBrightness(reply.value());
             }
             watcher->deleteLater();
         });
@@ -304,7 +307,7 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         QObject::connect(maxScreenWatcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *watcher) {
             QDBusPendingReply<int> reply = *watcher;
             if (!reply.isError()) {
-                setMaximumScreenBrightness(reply.value());
+                onMaximumScreenBrightness(reply.value());
             }else
             {
                 qDebug() << "POWER" << reply.error().message();
@@ -464,6 +467,11 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         return false;
     }
     return true;
+}
+
+void PowermanagementEngine::setScreenBrightness(int value, bool silent)
+{
+    m_job->setScreenBrightness(value, silent);
 }
 
 QString PowermanagementEngine::batteryType(const Solid::Battery *battery) const
@@ -850,7 +858,7 @@ void PowermanagementEngine::chargeStopThresholdChanged(int threshold)
     setData(QStringLiteral("Battery"), QStringLiteral("Charge Stop Threshold"), threshold);
 }
 
-void PowermanagementEngine::setMaximumScreenBrightness(int maximumBrightness)
+void PowermanagementEngine::onMaximumScreenBrightness(int maximumBrightness)
 {
     qDebug() << "POWER" << "SCreen maximum brightness" << maximumBrightness;
 
@@ -858,7 +866,7 @@ void PowermanagementEngine::setMaximumScreenBrightness(int maximumBrightness)
     emit screenBrightnessAvailableChanged(maximumBrightness > 0);
 }
 
-void PowermanagementEngine::setScreenBrightness(int brightness)
+void PowermanagementEngine::onScreenBrightness(int brightness)
 {
     qDebug() << "POWER" << "SCreen brightness" << brightness;
     emit screenBrightnessChanged(brightness);
