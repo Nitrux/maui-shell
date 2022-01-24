@@ -7,21 +7,30 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
+import org.cask.power 1.0 as CaskPower
+
 import QtQuick.Templates 2.15 as T
 
 import "../sliders"
-import "../../../templates"
 
-ProgressToggle
+BatteryBar
 {
     id: control
-    bar.iconSource: "preferences-system-power-management"
-    bar.from: 1
-    bar.to : 100
-    bar.value : 10
+    visible: _batteryInfo.hasBatteries
+    battery: primaryBattery
+    label.text: battery.product + " " + battery.vendor + " / " + battery.type
 
-    page: StackPage
+    iconSource: "preferences-system-power-management"
+
+    page: PowerPage
     {
+        model: _batteryInfo.batteries
+    }
 
+    property alias primaryBattery : _batteryInfo.primaryBattery
+
+    CaskPower.BatteryInfo
+    {
+        id: _batteryInfo
     }
 }

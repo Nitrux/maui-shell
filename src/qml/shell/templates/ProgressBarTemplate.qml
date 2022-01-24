@@ -22,17 +22,22 @@ T.ProgressBar
         height: implicitHeight
         radius: height/2
         color: Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
-
     }
 
-
-    contentItem: Rectangle
+    contentItem: Item
     {
-
         implicitWidth: control.height
         implicitHeight: control.height
-        color: Kirigami.Theme.highlightColor
-        radius: height/2
+
+        Rectangle
+        {
+            height: parent.height
+
+              width: control.visualPosition * parent.width
+              color: Kirigami.Theme.highlightColor
+              radius: height/2
+        }
+
         Kirigami.Icon
         {
             id: _icon

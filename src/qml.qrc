@@ -10,7 +10,6 @@
         <file>qml/shell/statusbar/items/calendar/CalendarItem.qml</file>
         <file>qml/shell/tasksbar/Launcher.qml</file>
         <file>qml/shell/statusbar/items/sliders/SlidersItem.qml</file>
-        <file>qml/shell/statusbar/items/sliders/SliderTemplate.qml</file>
         <file>qml/shell/statusbar/items/player/AudioPlayerItem.qml</file>
         <file>qml/shell/statusbar/items/toggles/ToggleTemplate.qml</file>
         <file>qml/shell/statusbar/items/toggles/TogglesItem.qml</file>
@@ -35,7 +34,6 @@
         <file>qml/shell/statusbar/items/notifications/NotificationItem.qml</file>
         <file>qml/shell/statusbar/items/session/SessionButton.qml</file>
         <file>qml/shell/templates/CaskDialog.qml</file>
-        <file>qml/shell/statusbar/items/sliders/SliderToggle.qml</file>
         <file>qml/shell/statusbar/items/sliders/volume/VolumeSlider.qml</file>
         <file>qml/shell/statusbar/items/sliders/brightness/BrightnessSlider.qml</file>
         <file>qml/shell/statusbar/items/sliders/volume/VolumePage.qml</file>
@@ -51,5 +49,9 @@
         <file>qml/shell/statusbar/items/sliders/volume/MicSlider.qml</file>
         <file>qml/shell/statusbar/items/sliders/volume/MicPage.qml</file>
         <file>qml/shell/statusbar/items/sliders/brightness/BrightnessPage.qml</file>
+        <file>qml/shell/templates/AbstractBarToggle.qml</file>
+        <file>qml/shell/templates/SliderTemplate.qml</file>
+        <file>qml/shell/statusbar/items/session/PowerPage.qml</file>
+        <file>qml/shell/statusbar/items/session/BatteryBar.qml</file>
     </qresource>
 </RCC>

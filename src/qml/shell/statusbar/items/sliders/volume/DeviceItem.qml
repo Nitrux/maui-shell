@@ -14,7 +14,9 @@ import org.kde.plasma.private.volume 0.1 as PA
 
 import ".."
 
-SliderToggle
+import "../../../../templates" as Template
+
+Template.SliderToggle
 {
     id: control
     property string /* "sink" | "sink-input" | "source" | "source-output" */ type
@@ -37,11 +39,11 @@ SliderToggle
     //slider.value: 0.5
     slider.animatedRec.width: (slider.handle.x * meter.volume) + Maui.Style.space.medium
 
-    PA.VolumeMonitor
+    data: [PA.VolumeMonitor
     {
         id: meter
         target: slider.visible && model.PulseObject ? model.PulseObject : null
-    }
+    },
 
     Timer
     {
@@ -49,7 +51,7 @@ SliderToggle
         interval: 200
         triggeredOnStart: true
         onTriggered: updateSliderValue(control.volume)
-    }
+    }]
 
     onVolumeChanged:
     {

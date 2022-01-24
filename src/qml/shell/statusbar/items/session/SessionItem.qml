@@ -1,6 +1,7 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQuick.Templates 2.15 as T
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -89,55 +90,71 @@ Cask.PanelItem
     card: Cask.PanelCard
     {
         width: ListView.view.width
+        onClosed: _stack.pop()
 
-        BatteryToggle
+        T.StackView
         {
-            id: _batteryProgressBar
-            width: parent.width            
-        }
+            id: _stack
 
-        RowLayout
-        {
             width: parent.width
-            property int display: ToolButton.TextUnderIcon
-            spacing: Maui.Style.space.medium
+            height: currentItem.implicitHeight
+            clip: true
 
-            SessionButton
+            initialItem: Column
             {
-                Layout.fillWidth: true
-                icon.name: "system-log-out"
-                text: i18n("Quit")
-                display: parent.display
+                spacing: control.card.spacing
 
-                onClicked:
+                BatteryToggle
                 {
-                    _sessioDialog.open()
+                    id: _batteryProgressBar
+                    width: parent.width
+                    onClicked: _stack.push(page)
                 }
-            }
 
-            SessionButton
-            {
-                Layout.fillWidth: true
-
-                icon.name: "system-reboot"
-                text: i18n("Restart")
-                display: parent.display
-
-                onClicked:
+                RowLayout
                 {
-                }
-            }
+                    width: parent.width
+                    property int display: ToolButton.TextUnderIcon
+                    spacing: Maui.Style.space.medium
 
-            SessionButton
-            {
-                Layout.fillWidth: true
+                    SessionButton
+                    {
+                        Layout.fillWidth: true
+                        icon.name: "system-log-out"
+                        text: i18n("Quit")
+                        display: parent.display
 
-                icon.name: "system-shutdown"
-                text: i18n("Shutdown")
-                display: parent.display
+                        onClicked:
+                        {
+                            _sessioDialog.open()
+                        }
+                    }
 
-                onClicked:
-                {
+                    SessionButton
+                    {
+                        Layout.fillWidth: true
+
+                        icon.name: "system-reboot"
+                        text: i18n("Restart")
+                        display: parent.display
+
+                        onClicked:
+                        {
+                        }
+                    }
+
+                    SessionButton
+                    {
+                        Layout.fillWidth: true
+
+                        icon.name: "system-shutdown"
+                        text: i18n("Shutdown")
+                        display: parent.display
+
+                        onClicked:
+                        {
+                        }
+                    }
                 }
             }
         }

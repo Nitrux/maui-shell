@@ -13,11 +13,11 @@ T.Pane
 {
     id: control
     property Component page : null
+    property Item bar
 
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
     spacing: Maui.Style.space.medium
 
-    property alias slider : _slider
     property alias label : _label
 
     padding: Maui.Style.space.medium
@@ -32,6 +32,13 @@ T.Pane
         color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
 
         radius: 10
+    }
+    property Item button : ToolButton
+    {
+        Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+        visible: control.page
+        icon.name: "go-next"
+        onClicked: control.clicked()
     }
 
     contentItem: MouseArea
@@ -63,19 +70,7 @@ T.Pane
                 Layout.fillHeight: true
                 spacing: control.spacing
 
-                SliderTemplate
-                {
-                    id: _slider
-                    Layout.fillWidth: true
-                }
-
-                ToolButton
-                {
-                    Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                    visible: control.page
-                    icon.name: "go-next"
-                    onClicked: control.clicked()
-                }
+                children: [control.bar, control.button]
             }
         }
     }

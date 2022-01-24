@@ -11,8 +11,7 @@ T.Slider
 {
     id: control
     implicitHeight: 22 + topPadding + bottomPadding
-//topInset: 0-topPadding
-//bottomInset: 0-bottomPadding
+
     property alias iconSource : _icon.source
     property alias animatedRec : _animatedRec
 
@@ -62,7 +61,6 @@ T.Slider
                     radius: _bg.radius
                 }
             }
-
         }
     }
 

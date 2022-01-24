@@ -11,7 +11,9 @@ import org.cask.power 1.0 as CaskPower
 import QtQuick.Templates 2.15 as T
 import ".."
 
-SliderToggle
+import "../../../../templates" as Template
+
+Template.SliderToggle
 {
     id: control
     visible: _brightnessControl.screenBrightnessAvailable
@@ -54,7 +56,8 @@ SliderToggle
         }
     }
 
-    page: BrightnessPage{
+    page: BrightnessPage
+    {
 
     }
 }

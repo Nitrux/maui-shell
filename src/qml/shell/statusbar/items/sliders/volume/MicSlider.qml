@@ -13,8 +13,9 @@ import QtQuick.Templates 2.15 as T
 import org.kde.plasma.private.volume 0.1 as PA
 
 import ".."
+import "../../../../templates" as Template
 
-SliderToggle
+Template.SliderToggle
 {
     id: control
     property var defaultSourceValue: defaultSource ? defaultSource.volume / PA.PulseAudio.MaximalVolume * 100.0 : -1
@@ -56,7 +57,6 @@ SliderToggle
             defaultSource.muted = (target.value === 0)
         }
     }
-
 
     // Input devices
     PA.SourceModel

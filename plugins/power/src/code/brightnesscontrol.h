@@ -4,14 +4,14 @@ class PowermanagementEngine;
 class BrightnessControl : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int screenBrightness READ screenBrightness NOTIFY screenBrightnessChanged CONSTANT)
-    Q_PROPERTY(int keyboardBrightness READ keyboardBrightness NOTIFY keyboardBrightnessChanged CONSTANT)
+    Q_PROPERTY(int screenBrightness READ screenBrightness NOTIFY screenBrightnessChanged FINAL)
+    Q_PROPERTY(int keyboardBrightness READ keyboardBrightness NOTIFY keyboardBrightnessChanged FINAL)
 
-    Q_PROPERTY(bool screenBrightnessAvailable READ screenBrightnessAvailable NOTIFY screenBrightnessAvailableChanged CONSTANT)
-    Q_PROPERTY(bool keyboardBrightnessAvailable READ keyboardBrightnessAvailable NOTIFY keyboardBrightnessAvailableChanged CONSTANT)
+    Q_PROPERTY(bool screenBrightnessAvailable READ screenBrightnessAvailable NOTIFY screenBrightnessAvailableChanged FINAL)
+    Q_PROPERTY(bool keyboardBrightnessAvailable READ keyboardBrightnessAvailable NOTIFY keyboardBrightnessAvailableChanged FINAL)
 
-    Q_PROPERTY(int maximumScreenBrightness READ maximumScreenBrightness NOTIFY maximumScreenBrightnessChanged CONSTANT)
-    Q_PROPERTY(int maximumKeyboardBrightness READ maximumKeyboardBrightness NOTIFY maximumKeyboardBrightnessChanged CONSTANT)
+    Q_PROPERTY(int maximumScreenBrightness READ maximumScreenBrightness NOTIFY maximumScreenBrightnessChanged FINAL)
+    Q_PROPERTY(int maximumKeyboardBrightness READ maximumKeyboardBrightness NOTIFY maximumKeyboardBrightnessChanged FINAL)
 
 public:
     explicit BrightnessControl(QObject *parent = nullptr);
