@@ -19,7 +19,7 @@ AbstractBarToggle
     {
         id: _bar
         Layout.fillWidth: true
-        implicitHeight: 22
+        implicitHeight: 22 + topPadding + bottomPadding
 
         from: 1
         to : 100
@@ -28,14 +28,9 @@ AbstractBarToggle
 
         background: Rectangle
         {
-            x: _bar.leftPadding
-            y: _bar.topPadding + _bar.availableHeight / 2 - height / 2
-            implicitWidth: 200
-            implicitHeight: 4
-            width: _bar.availableWidth
-            height: implicitHeight
             radius: height/2
-            color: Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
+            color: control.enabled ? Qt.darker(Kirigami.Theme.backgroundColor, 1.2) : "transparent"
+            border.color: control.enabled ? "transparent" : Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
         }
 
         contentItem: Item

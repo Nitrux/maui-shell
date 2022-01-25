@@ -13,7 +13,7 @@ StackPage
 {
     id: control
     implicitHeight: Math.max(400, Math.min(400, _layout.implicitHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
-    title: i18n("Brightness")
+    title: i18n("Power")
     property alias model : _listView.model
 
     Maui.Holder
@@ -39,7 +39,7 @@ StackPage
             {
                 battery: model.Battery
                 width: ListView.view.width
-                label.text: battery.state
+                label.text: battery.prettyName + " - " + battery.type
             }
         }
     }

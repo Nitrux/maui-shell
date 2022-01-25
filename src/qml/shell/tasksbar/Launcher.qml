@@ -205,7 +205,7 @@ Maui.Page
                     {
                         width: parent.width
                         implicitHeight: contentHeight+ topPadding + topPadding + header.height
-//                        padding: Maui.Style.space.big
+                        //                        padding: Maui.Style.space.big
                         header: Item
                         {
                             width: parent.width
@@ -330,6 +330,21 @@ Maui.Page
                                         labelsVisible: !FB.FM.checkFileType(FB.FMList.IMAGE, model.mime)
                                         tooltipText: model.label
                                     }
+                                }
+                            }
+
+                            Maui.GalleryRollItem
+                            {
+                                implicitHeight: 220
+                                implicitWidth: 280
+                                images: _pictures.urls
+
+                                Cask.RecentFiles
+                                {
+                                    id: _pictures
+                                    url: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                                    filters: FB.FM.nameFilters(FB.FMList.IMAGE)
+
                                 }
                             }
                         }

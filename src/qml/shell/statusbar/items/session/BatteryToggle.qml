@@ -19,6 +19,7 @@ BatteryBar
     visible: _batteryInfo.hasBatteries
     battery: primaryBattery
     label.text: battery.product + " " + battery.vendor + " / " + battery.type
+    progressbar.enabled: primaryBattery
 
     iconSource: "preferences-system-power-management"
 
