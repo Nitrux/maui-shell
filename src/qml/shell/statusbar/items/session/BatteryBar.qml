@@ -58,7 +58,6 @@ AbstractBarToggle
         }
     }
 
-
     function batteryColor(state)
     {
         switch(state)

@@ -9,6 +9,7 @@ set(caskpower_SRCS
     code/powermanagementjob.cpp
     code/brightnesscontrol.cpp
     code/batteryinfo.cpp
+    code/powerprofile.cpp
     code/caskpowerplugin.cpp
 #    code/powermanagementservice.cpp
 )

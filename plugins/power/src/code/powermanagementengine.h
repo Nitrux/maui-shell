@@ -30,12 +30,12 @@ public:
     bool sourceRequestEvent(const QString &name);
 
     void setScreenBrightness(int value, bool silent);
+
 protected:
     bool updateSourceEvent(const QString &source);
     void init();
 
 private Q_SLOTS:
- void updateAcPlugState(bool onBattery);
 
     void keyboardBrightnessChanged(int brightness);
     void maximumKeyboardBrightnessChanged(int maximumBrightness);

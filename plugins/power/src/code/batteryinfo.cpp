@@ -135,6 +135,20 @@ Battery *BatteryInfo::primaryBattery() const
     return m_primaryBattery;
 }
 
+bool BatteryInfo::acPluggedIn() const
+{
+    return m_acPluggedIn;
+}
+
+void BatteryInfo::setAcPluggedIn(bool acPluggedIn)
+{
+    if (m_acPluggedIn == acPluggedIn)
+        return;
+
+    m_acPluggedIn = acPluggedIn;
+    emit acPluggedInChanged(m_acPluggedIn);
+}
+
 void BatteryInfo::init()
 {
     connect(Solid::DeviceNotifier::instance(), &Solid::DeviceNotifier::deviceAdded, this, &BatteryInfo::deviceAdded);
@@ -198,6 +212,19 @@ void BatteryInfo::init()
         watcher->deleteLater();
     });
 
+    QDBusConnection::sessionBus().connect(QStringLiteral("org.freedesktop.PowerManagement"),
+                                          QStringLiteral("/org/freedesktop/PowerManagement"),
+                                          QStringLiteral("org.freedesktop.PowerManagement"),
+                                          QStringLiteral("PowerSaveStatusChanged"),
+                                          this,
+                                          SLOT(onAcPlugStateChanged(bool)));
+
+    QDBusMessage acMsg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.PowerManagement"),
+                                                      QStringLiteral("/org/freedesktop/PowerManagement"),
+                                                      QStringLiteral("org.freedesktop.PowerManagement"),
+                                                      QStringLiteral("GetPowerSaveStatus"));
+    QDBusReply<bool> acReply = QDBusConnection::sessionBus().call(acMsg);
+    onAcPlugStateChanged(acReply.isValid() ? acReply.value() : false);
 }
 
 void BatteryInfo::setPrimaryBattery(Battery *battery)
@@ -454,6 +481,17 @@ void BatteryInfo::deviceAdded(const QString &udi)
 void BatteryInfo::onChargeStopThresholdChanged(const int &value)
 {
     m_primaryBattery->setChargeStopThreshold(value);
+}
+
+void BatteryInfo::onAcPlugStateChanged(const bool &value)
+{
+    if(value == m_acPluggedIn)
+    {
+        return;
+    }
+
+    m_acPluggedIn = value;
+    emit acPluggedInChanged(m_acPluggedIn);
 }
 
 

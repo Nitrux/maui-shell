@@ -49,8 +49,8 @@ PowermanagementEngine::PowermanagementEngine(QObject *parent)
 
 void PowermanagementEngine::init()
 {
-
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(SOLID_POWERMANAGEMENT_SERVICE)) {
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(SOLID_POWERMANAGEMENT_SERVICE))
+    {
         qDebug() << "POWER IS REGISTERED" << SOLID_POWERMANAGEMENT_SERVICE;
         if (!QDBusConnection::sessionBus().connect(SOLID_POWERMANAGEMENT_SERVICE,
                                                    QStringLiteral("/org/kde/Solid/PowerManagement/Actions/BrightnessControl"),
@@ -170,21 +170,7 @@ QStringList PowermanagementEngine::sources() const
 
 bool PowermanagementEngine::sourceRequestEvent(const QString &name)
 {
- if (name == QLatin1String("AC Adapter")) {
-        QDBusConnection::sessionBus().connect(QStringLiteral("org.freedesktop.PowerManagement"),
-                                              QStringLiteral("/org/freedesktop/PowerManagement"),
-                                              QStringLiteral("org.freedesktop.PowerManagement"),
-                                              QStringLiteral("PowerSaveStatusChanged"),
-                                              this,
-                                              SLOT(updateAcPlugState(bool)));
-
-        QDBusMessage msg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.PowerManagement"),
-                                                          QStringLiteral("/org/freedesktop/PowerManagement"),
-                                                          QStringLiteral("org.freedesktop.PowerManagement"),
-                                                          QStringLiteral("GetPowerSaveStatus"));
-        QDBusReply<bool> reply = QDBusConnection::sessionBus().call(msg);
-        updateAcPlugState(reply.isValid() ? reply.value() : false);
-    } else if (name == QLatin1String("Sleep States")) {
+ if (name == QLatin1String("Sleep States")) {
         //        setData(QStringLiteral("Sleep States"), QStringLiteral("Standby"), m_session->canSuspend());
         //        setData(QStringLiteral("Sleep States"), QStringLiteral("Suspend"), m_session->canSuspend());
         //        setData(QStringLiteral("Sleep States"), QStringLiteral("Hibernate"), m_session->canHibernate());
@@ -404,12 +390,6 @@ void PowermanagementEngine::setScreenBrightness(int value, bool silent)
 void PowermanagementEngine::setData(const QString &name, const QString &name2, const QVariant &value)
 {
     qDebug() << "POWER DATA CHANGED" << name << name2 << value;
-}
-
-
-void PowermanagementEngine::updateAcPlugState(bool onBattery)
-{
-    setData(QStringLiteral("AC Adapter"), QStringLiteral("Plugged in"), !onBattery);
 }
 
 void PowermanagementEngine::updatePowerProfileCurrentProfile(const QString &activeProfile)

@@ -135,6 +135,7 @@ class BatteryInfo : public QObject
     Q_PROPERTY(BatteryModel* batteries READ batteries NOTIFY batteriesChanged FINAL)
     Q_PROPERTY(bool hasBatteries READ hasBatteries NOTIFY hasBatteriesChanged FINAL)
     Q_PROPERTY(Battery* primaryBattery READ primaryBattery NOTIFY primaryBatteryChanged FINAL)
+    Q_PROPERTY(bool acPluggedIn READ acPluggedIn NOTIFY acPluggedInChanged FINAL)
 
 public:
     explicit BatteryInfo(QObject *parent = nullptr);
@@ -145,16 +146,23 @@ public:
 
     Battery *primaryBattery() const;
 
+    bool acPluggedIn() const;
+
+public slots:
+    void setAcPluggedIn(bool acPluggedIn);
+
 private:
     BatteryModel *m_batteries;
     Battery *m_primaryBattery;
     bool m_hasBatteries = false;
+    bool m_acPluggedIn = true;
 
     void deviceRemoved(const QString &udi);
     void deviceAdded(const QString &udi);
 
 private slots:
     void onChargeStopThresholdChanged(const int &value);
+    void onAcPlugStateChanged(const bool &value);
 
 protected:
     void init();
@@ -165,5 +173,6 @@ signals:
     void batteriesChanged();
     void hasBatteriesChanged();
     void primaryBatteryChanged();
+    void acPluggedInChanged(bool acPluggedIn);
 };
 

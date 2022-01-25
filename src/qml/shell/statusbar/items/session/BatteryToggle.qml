@@ -18,7 +18,7 @@ BatteryBar
     id: control
     visible: _batteryInfo.hasBatteries
     battery: primaryBattery
-    label.text: battery.product + " " + battery.vendor + " / " + battery.type
+    label.text: battery ? battery.product + " " + battery.vendor + " / " + battery.type : _batteryInfo.acPluggedIn
     progressbar.enabled: primaryBattery
 
     iconSource: "preferences-system-power-management"
