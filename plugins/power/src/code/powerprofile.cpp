@@ -5,6 +5,7 @@
 #include <QDBusMetaType>
 #include <QDBusPendingCallWatcher>
 #include <QDBusReply>
+#include <KService>
 
 #include <QDebug>
 
@@ -13,6 +14,7 @@ static const char SOLID_POWERMANAGEMENT_SERVICE[] = "org.kde.Solid.PowerManageme
 PowerProfile::PowerProfile(QObject *parent) : QObject(parent)
 {
     qDBusRegisterMetaType<QList<QVariantMap>>();
+    qDBusRegisterMetaType<QList<QVariant>>();
 
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered(SOLID_POWERMANAGEMENT_SERVICE))
     {
@@ -208,10 +210,42 @@ void PowerProfile::setPerformanceDegradedReason(QString performanceDegradedReaso
 
 void PowerProfile::setProfileHolds(QList<QVariantMap> profileHolds)
 {
-    if (m_profileHolds == profileHolds)
-        return;
+qDebug() << "PROFILE HOLDS CHANGED" << profileHolds;
+    QList<QVariantMap> out;
+    std::transform(profileHolds.cbegin(), profileHolds.cend(), std::back_inserter(out), [this](const QVariantMap &hold) {
+        QString prettyName;
+        QString icon;
+        populateApplicationData(hold[QStringLiteral("ApplicationId")].toString(), &prettyName, &icon);
+        return QVariantMap{
+            {QStringLiteral("Name"), prettyName},
+            {QStringLiteral("Icon"), icon},
+            {QStringLiteral("Reason"), hold[QStringLiteral("Reason")]},
+            {QStringLiteral("Profile"), hold[QStringLiteral("Profile")]},
+        };
+    });
 
-    m_profileHolds = profileHolds;
+    m_profileHolds = out;
     emit profileHoldsChanged(m_profileHolds);
 }
 
+void PowerProfile::populateApplicationData(const QString &name, QString *prettyName, QString *icon)
+{
+    if (m_applicationInfo.contains(name))
+    {
+        const auto &info = m_applicationInfo.value(name);
+        *prettyName = info.first;
+        *icon = info.second;
+    } else
+    {
+        KService::Ptr service = KService::serviceByStorageId(name + ".desktop");
+        if (service) {
+            *prettyName = service->property(QStringLiteral("Name"), QVariant::Invalid).toString(); // cannot be null
+            *icon = service->icon();
+
+            m_applicationInfo.insert(name, qMakePair(*prettyName, *icon));
+        } else {
+            *prettyName = name;
+            *icon = name.section(QLatin1Char('/'), -1).toLower();
+        }
+    }
+}

@@ -49,6 +49,10 @@ private:
 
     QList<QVariantMap> m_profileHolds;
 
+    QHash<QString, QPair<QString, QString>> m_applicationInfo; // <appname, <pretty name, icon>>
+
+    void populateApplicationData(const QString &name, QString *prettyName, QString *icon);
+
 signals:
 
     void currentProfileChanged(QString currentProfile);

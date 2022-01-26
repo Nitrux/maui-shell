@@ -38,18 +38,9 @@ private Q_SLOTS:
 
     void inhibitionsChanged(const QList<InhibitionInfo> &added, const QStringList &removed);
 
-
-    void updatePowerProfileCurrentProfile(const QString &profile);
-    void updatePowerProfileChoices(const QStringList &choices);
-    void updatePowerProfilePerformanceInhibitedReason(const QString &reason);
-    void updatePowerProfilePerformanceDegradedReason(const QString &reason);
-    void updatePowerProfileHolds(const QList<QVariantMap> &holds);
-
 private:
     PowerManagementJob *m_job;
-    void populateApplicationData(const QString &name, QString *prettyName, QString *icon);
 
-    QHash<QString, QPair<QString, QString>> m_applicationInfo; // <appname, <pretty name, icon>>
 
     void setData(const QString &name, const QString &name2, const QVariant &value);
 

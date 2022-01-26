@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.12
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -16,6 +17,11 @@ StackPage
     title: i18n("Power")
     property alias model : _listView.model
 
+    CaskPower.PowerProfile
+    {
+        id: _powerProfile
+    }
+
     Maui.Holder
     {
         anchors.fill: parent
@@ -28,7 +34,7 @@ StackPage
     Column
     {
         id: _layout
-        spacing: control.spacing
+        spacing: Maui.Style.space.medium
         anchors.fill: parent
 
         Maui.ListBrowser
@@ -45,6 +51,47 @@ StackPage
                 icon.source: batteryTypeIcon(battery.type)
             }
         }
+
+        RowLayout
+        {
+            width: parent.width
+            spacing: _layout.spacing
+
+            Repeater
+            {
+                model: _powerProfile.profileChoices
+
+                delegate: CardButton
+                {
+                    Layout.fillWidth: true
+
+                    text: modelData
+                    icon.name: "anchor"
+                    checked: _powerProfile.currentProfile === modelData
+                    display: ToolButton.TextUnderIcon
+                }
+            }
+        }
+
+        RowLayout
+        {
+            width: parent.width
+            spacing: _layout.spacing
+
+            Repeater
+            {
+                model: _powerProfile.profileHolds
+
+                delegate: CardButton
+                {
+                    Layout.fillWidth: true
+
+                    text: modelData.Name
+                    icon.name: modelData.Icon
+                    display: ToolButton.TextUnderIcon
+                }
+            }
+        }
     }
 
     function batteryTypeIcon(type)
@@ -59,7 +106,6 @@ StackPage
         case "Phone" : return "phone";
         case "Bluetooth" : return "bluetooth";
         case "GamingInput" : return "input-gamepad";
-
         }
     }
 }

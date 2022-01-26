@@ -99,44 +99,6 @@ void PowermanagementEngine::setData(const QString &name, const QString &name2, c
     qDebug() << "POWER DATA CHANGED" << name << name2 << value;
 }
 
-void PowermanagementEngine::updatePowerProfileCurrentProfile(const QString &activeProfile)
-{
-    setData(QStringLiteral("Power Profiles"), QStringLiteral("Current Profile"), activeProfile);
-}
-
-void PowermanagementEngine::updatePowerProfileChoices(const QStringList &choices)
-{
-    setData(QStringLiteral("Power Profiles"), QStringLiteral("Profiles"), choices);
-}
-
-void PowermanagementEngine::updatePowerProfilePerformanceInhibitedReason(const QString &reason)
-{
-    setData(QStringLiteral("Power Profiles"), QStringLiteral("Performance Inhibited Reason"), reason);
-}
-
-void PowermanagementEngine::updatePowerProfilePerformanceDegradedReason(const QString &reason)
-{
-    setData(QStringLiteral("Power Profiles"), QStringLiteral("Performance Degraded Reason"), reason);
-}
-
-void PowermanagementEngine::updatePowerProfileHolds(const QList<QVariantMap> &holds)
-{
-    QList<QVariantMap> out;
-    std::transform(holds.cbegin(), holds.cend(), std::back_inserter(out), [this](const QVariantMap &hold) {
-        QString prettyName;
-        QString icon;
-        populateApplicationData(hold[QStringLiteral("ApplicationId")].toString(), &prettyName, &icon);
-        return QVariantMap{
-            {QStringLiteral("Name"), prettyName},
-            {QStringLiteral("Icon"), icon},
-            {QStringLiteral("Reason"), hold[QStringLiteral("Reason")]},
-            {QStringLiteral("Profile"), hold[QStringLiteral("Profile")]},
-        };
-    });
-    setData(QStringLiteral("Power Profiles"), QStringLiteral("Profile Holds"), QVariant::fromValue(out));
-}
-
-
 void PowermanagementEngine::inhibitionsChanged(const QList<InhibitionInfo> &added, const QStringList &removed)
 {
     for (auto it = removed.constBegin(); it != removed.constEnd(); ++it) {
@@ -149,7 +111,7 @@ void PowermanagementEngine::inhibitionsChanged(const QList<InhibitionInfo> &adde
         QString icon;
         const QString &reason = (*it).second;
 
-        populateApplicationData(name, &prettyName, &icon);
+//        populateApplicationData(name, &prettyName, &icon);
 
         setData(QStringLiteral("Inhibitions"),
                 name,
@@ -157,23 +119,5 @@ void PowermanagementEngine::inhibitionsChanged(const QList<InhibitionInfo> &adde
     }
 }
 
-void PowermanagementEngine::populateApplicationData(const QString &name, QString *prettyName, QString *icon)
-{
-    if (m_applicationInfo.contains(name)) {
-        const auto &info = m_applicationInfo.value(name);
-        *prettyName = info.first;
-        *icon = info.second;
-    } else {
-        KService::Ptr service = KService::serviceByStorageId(name + ".desktop");
-        if (service) {
-            *prettyName = service->property(QStringLiteral("Name"), QVariant::Invalid).toString(); // cannot be null
-            *icon = service->icon();
 
-            m_applicationInfo.insert(name, qMakePair(*prettyName, *icon));
-        } else {
-            *prettyName = name;
-            *icon = name.section(QLatin1Char('/'), -1).toLower();
-        }
-    }
-}
 
