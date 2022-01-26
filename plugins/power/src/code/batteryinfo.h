@@ -23,6 +23,10 @@ public:
     Q_PROPERTY(Solid::Battery::ChargeState state READ state NOTIFY stateChanged FINAL)
     Q_PROPERTY(QString stateName READ stateName NOTIFY stateChanged FINAL)
     Q_PROPERTY(qulonglong remainingTime READ remainingTime WRITE setRemainingTime NOTIFY remainingTimeChanged)
+
+    Q_PROPERTY(qulonglong timeToEmpty READ timeToEmpty NOTIFY timeToEmptyChanged FINAL)
+    Q_PROPERTY(qulonglong timeToFull READ timeToFull NOTIFY timeToFullChanged FINAL)
+
     Q_PROPERTY(int chargeStopThreshold READ chargeStopThreshold WRITE setChargeStopThreshold NOTIFY chargeStopThresholdChanged)
 
     explicit Battery(const Solid::Device &deviceBattery);
@@ -58,6 +62,15 @@ public:
 
     const QString &stateName() const;
 
+    qulonglong timeToEmpty() const;
+
+    qulonglong timeToFull() const;
+
+public slots:
+    void setTimeToEmpty(qulonglong timeToEmpty);
+
+    void setTimeToFull(qulonglong timeToFull);
+
 signals:
     void udiChanged();
 
@@ -85,6 +98,10 @@ signals:
 
     void chargeStopThresholdChanged();
 
+    void timeToEmptyChanged(qulonglong timeToEmpty);
+
+    void timeToFullChanged(qulonglong timeToFull);
+
 private:
     const Solid::Battery *m_battery;
     QString m_udi;
@@ -100,6 +117,8 @@ private:
     QString batteryStateToString(int newState) const;
 
     void setState(const Solid::Battery::ChargeState &state);
+    qulonglong m_timeToEmpty;
+    qulonglong m_timeToFull;
 };
 
 class BatteryModel : public QAbstractListModel
@@ -147,9 +166,6 @@ public:
     Battery *primaryBattery() const;
 
     bool acPluggedIn() const;
-
-public slots:
-    void setAcPluggedIn(bool acPluggedIn);
 
 private:
     BatteryModel *m_batteries;

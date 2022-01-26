@@ -99,7 +99,11 @@ Cask.PanelItem
             width: parent.width
             height: currentItem.implicitHeight
             clip: true
-
+            padding: 0
+            leftPadding: padding
+            rightPadding: padding
+            topPadding: padding
+            bottomPadding: padding
             initialItem: Column
             {
                 spacing: control.card.spacing

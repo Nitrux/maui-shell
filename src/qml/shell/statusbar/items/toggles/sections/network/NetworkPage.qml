@@ -20,7 +20,6 @@ StackPage
     readonly property var displayWwanMessage: !wwanSwitchButton.checked && wwanSwitchButton.visible
     readonly property var displayplaneModeMessage: PlasmaNM.Configuration.airplaneModeEnabled
 
-
     headBar.rightContent: [
         Switch
         {
@@ -69,12 +68,10 @@ StackPage
         }
     }
 
-
     PlasmaNM.AvailableDevices
     {
         id: availableDevices
     }
-
 
     PlasmaNM.NetworkModel
     {
@@ -87,7 +84,6 @@ StackPage
 
         sourceModel: connectionModel
     }
-
 
     Timer
     {
@@ -116,7 +112,7 @@ StackPage
     {
         id: _listView
         anchors.fill: parent
-        //        model: ["camilog", "Camilo-5G", "xiaomi", "Familia Rodriguez", "peng-h"]
+        padding: 0
         model: appletProxyModel
         currentIndex: -1
         holder.title: "oops"

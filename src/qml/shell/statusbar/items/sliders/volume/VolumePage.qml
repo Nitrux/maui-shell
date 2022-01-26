@@ -16,7 +16,6 @@ StackPage
     implicitHeight: Math.max(400, Math.min(400, _layout.implicitHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
     title: i18n("Audio")
 
-
     Maui.Holder
     {
         anchors.fill: parent
@@ -36,13 +35,14 @@ StackPage
         {
             id: _listView
             width: parent.width
-
+            padding: 0
             model: paSinkFilterModel
 
             delegate: DeviceItem
             {
                 width: ListView.view.width
                 type: "sink"
+                label2.text: percent+"%"
             }
         }
 
@@ -50,7 +50,7 @@ StackPage
         {
             id: _appsList
             width: parent.width
-
+            padding: 0
             model: paSinkInputModel
 
             delegate: DeviceItem

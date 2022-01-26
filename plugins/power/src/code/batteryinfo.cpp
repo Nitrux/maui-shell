@@ -44,7 +44,6 @@ int BatteryModel::rowCount(const QModelIndex &parent) const
 
 QVariant BatteryModel::data(const QModelIndex &index, int role) const
 {
-
     if (!index.isValid())
         return QVariant();
 
@@ -140,15 +139,6 @@ bool BatteryInfo::acPluggedIn() const
     return m_acPluggedIn;
 }
 
-void BatteryInfo::setAcPluggedIn(bool acPluggedIn)
-{
-    if (m_acPluggedIn == acPluggedIn)
-        return;
-
-    m_acPluggedIn = acPluggedIn;
-    emit acPluggedInChanged(m_acPluggedIn);
-}
-
 void BatteryInfo::init()
 {
     connect(Solid::DeviceNotifier::instance(), &Solid::DeviceNotifier::deviceAdded, this, &BatteryInfo::deviceAdded);
@@ -158,7 +148,14 @@ void BatteryInfo::init()
     {
         qWarning() << SOLID_POWERMANAGEMENT_SERVICE << " is not registered";
         return;
-    }
+    }    
+
+    QDBusConnection::sessionBus().connect(QStringLiteral("org.freedesktop.PowerManagement"),
+                                          QStringLiteral("/org/freedesktop/PowerManagement"),
+                                          QStringLiteral("org.freedesktop.PowerManagement"),
+                                          QStringLiteral("PowerSaveStatusChanged"),
+                                          this,
+                                          SLOT(onAcPlugStateChanged(bool)));
 
     if (!QDBusConnection::sessionBus().connect(SOLID_POWERMANAGEMENT_SERVICE,
                                                QStringLiteral("/org/kde/Solid/PowerManagement"),
@@ -212,12 +209,6 @@ void BatteryInfo::init()
         watcher->deleteLater();
     });
 
-    QDBusConnection::sessionBus().connect(QStringLiteral("org.freedesktop.PowerManagement"),
-                                          QStringLiteral("/org/freedesktop/PowerManagement"),
-                                          QStringLiteral("org.freedesktop.PowerManagement"),
-                                          QStringLiteral("PowerSaveStatusChanged"),
-                                          this,
-                                          SLOT(onAcPlugStateChanged(bool)));
 
     QDBusMessage acMsg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.PowerManagement"),
                                                       QStringLiteral("/org/freedesktop/PowerManagement"),
@@ -259,7 +250,19 @@ Battery::Battery(const Solid::Device &deviceBattery) : QObject(nullptr) //not pa
   ,m_state(m_battery->chargeState())
   ,m_stateName(batteryStateToString(m_state))
   ,m_remainingTime(m_battery->remainingTime())
+  ,m_timeToEmpty(m_battery->timeToEmpty())
+  ,m_timeToFull(m_battery->timeToFull())
 {
+
+    connect(m_battery, &Solid::Battery::timeToEmptyChanged, this, [this](qulonglong value, QString)
+    {
+        this->setTimeToEmpty(value);
+    });
+
+    connect(m_battery, &Solid::Battery::timeToFullChanged, this, [this](qulonglong value, QString)
+    {
+        this->setTimeToFull(value);
+    });
 
     connect(m_battery, &Solid::Battery::chargeStateChanged, this, [this](int state, QString)
     {
@@ -593,4 +596,32 @@ int BatteryModel::count() const
 const QString &Battery::stateName() const
 {
     return m_stateName;
+}
+
+qulonglong Battery::timeToEmpty() const
+{
+    return m_timeToEmpty;
+}
+
+qulonglong Battery::timeToFull() const
+{
+    return m_timeToFull;
+}
+
+void Battery::setTimeToEmpty(qulonglong timeToEmpty)
+{
+    if (m_timeToEmpty == timeToEmpty)
+        return;
+
+    m_timeToEmpty = timeToEmpty;
+    emit timeToEmptyChanged(m_timeToEmpty);
+}
+
+void Battery::setTimeToFull(qulonglong timeToFull)
+{
+    if (m_timeToFull == timeToFull)
+        return;
+
+    m_timeToFull = timeToFull;
+    emit timeToFullChanged(m_timeToFull);
 }

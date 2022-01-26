@@ -269,18 +269,6 @@ Maui.Page
                                             placeClicked(model.path)
                                             FB.FM.openUrl(model.path)
                                         }
-
-                                        //                            onRightClicked:
-                                        //                            {
-                                        //                                _menu.path = model.path
-                                        //                                _menu.show()
-                                        //                            }
-
-                                        //                            onPressAndHold:
-                                        //                            {
-                                        //                                _menu.path = model.path
-                                        //                                _menu.show()
-                                        //                            }
                                     }
                                 }
                             }
@@ -301,7 +289,7 @@ Maui.Page
                                     list: Cask.RecentFiles
                                     {
                                         url: StandardPaths.writableLocation(StandardPaths.DownloadLocation)
-                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
+//                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
 
                                     }
                                 }
@@ -327,6 +315,7 @@ Maui.Page
                                         imageSource: model.thumbnail
                                         iconSizeHint: Maui.Style.iconSizes.medium
                                         label1.text: model.label
+                                        template.labelSizeHint: 32
                                         labelsVisible: !FB.FM.checkFileType(FB.FMList.IMAGE, model.mime)
                                         tooltipText: model.label
                                     }

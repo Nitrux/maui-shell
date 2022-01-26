@@ -35,12 +35,31 @@ StackPage
         {
             id: _listView
             width: parent.width
+            padding: 0
             delegate: BatteryBar
             {
                 battery: model.Battery
                 width: ListView.view.width
                 label.text: battery.prettyName + " - " + battery.type
+                label2.text: battery.percent + "%"
+                icon.source: batteryTypeIcon(battery.type)
             }
+        }
+    }
+
+    function batteryTypeIcon(type)
+    {
+        switch (type)
+        {
+        case "Mouse" : return "input-mouse";
+        case "Keyboard" : return "input-keyboard";
+        case "Battery" : return "battery-good";
+        case "Monitor" : return "monitor";
+        case "Pda" : return "input-mouse";
+        case "Phone" : return "phone";
+        case "Bluetooth" : return "bluetooth";
+        case "GamingInput" : return "input-gamepad";
+
         }
     }
 }

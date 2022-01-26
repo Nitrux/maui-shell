@@ -25,7 +25,6 @@ AbstractBarToggle
         to : 100
         value : control.battery.percent
 
-
         background: Rectangle
         {
             radius: height/2
@@ -45,6 +44,16 @@ AbstractBarToggle
                 width: _bar.visualPosition * parent.width
                 color: control.batteryColor(control.battery.stateName)
                 radius: height/2
+
+                NumberAnimation on opacity
+                {
+                    loops: 100
+                    running: true
+                    from : 0.3
+                    to: 1
+                    duration: Kirigami.Units.longDuration*10
+                    easing.type: Easing.InOutQuad
+                }
             }
 
             Kirigami.Icon

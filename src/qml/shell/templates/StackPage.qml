@@ -9,7 +9,8 @@ Maui.Page
     id: control
     headerColorSet: control.Kirigami.Theme.colorSet
     showTitle: true
-
+    padding: 0
+    margins: 0
     headBar.background: null
     headBar.farLeftContent: ToolButton
     {

@@ -19,6 +19,8 @@ T.Pane
     spacing: Maui.Style.space.medium
 
     property alias label : _label
+    property alias label2 : _label2
+    property alias icon : _icon
 
     padding: Maui.Style.space.medium
 
@@ -33,6 +35,7 @@ T.Pane
 
         radius: 10
     }
+
     property Item button : ToolButton
     {
         Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
@@ -50,18 +53,48 @@ T.Pane
         {
             id: _layout
             anchors.fill: parent
-
             spacing: control.spacing
 
-            Label
+            RowLayout
             {
-                id: _label
                 Layout.fillWidth: true
-                wrapMode: Text.NoWrap
-                elide: Text.ElideMiddle
-                font.bold: true
-                visible: text && text.length
-                color: Kirigami.Theme.textColor
+                spacing: control.spacing
+
+                Kirigami.Icon
+                {
+                    id: _icon
+                    visible: control.icon.source ? String(control.icon.source).length > 0 : false
+
+                    implicitHeight: visible ? 16 : 0
+                    implicitWidth: visible ? 16 : 0
+                }
+
+
+                Label
+                {
+                    id: _label
+                    Layout.fillWidth: true
+                    wrapMode: Text.NoWrap
+                    elide: Text.ElideMiddle
+                    font.bold: true
+                    visible: text && text.length
+                    color: Kirigami.Theme.textColor
+                    horizontalAlignment: Qt.AlignLeft
+                    Layout.alignment: Qt.AlignLeft
+                }
+
+                Label
+                {
+                    id: _label2
+                    wrapMode: Text.NoWrap
+                    elide: Text.ElideNone
+                    font.bold: false
+                    visible: text && text.length
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.7
+                    horizontalAlignment: Qt.AlignRight
+                    Layout.alignment: Qt.AlignRight
+                }
             }
 
             RowLayout

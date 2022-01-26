@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
+import QtQuick.Templates 2.15 as T
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -49,12 +50,13 @@ Cask.PanelItem
 
         onClosed: _togglesStack.pop()
 
-        StackView
+        T.StackView
         {
             id : _togglesStack
             width: parent.width
             height: currentItem.implicitHeight
             clip: true
+            padding: 0
 
             initialItem: Flow
             {
@@ -62,8 +64,6 @@ Cask.PanelItem
 
                 spacing: Maui.Style.space.medium
 
-
-                //                        model: ["network-bluetooth", "input-keyboard-virtual", "rotation-allowed","webcam", "accessories-calculator",  "settings-configure"]
                 NetworkToggle
                 {
                     onClicked: _togglesStack.push(page)

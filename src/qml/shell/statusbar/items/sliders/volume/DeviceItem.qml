@@ -23,7 +23,7 @@ Template.SliderToggle
     readonly property var currentPort: model.Ports[model.ActivePortIndex]
     readonly property bool muted: model.Muted
     readonly property int activePortIndex: model.ActivePortIndex
-
+readonly property int percent: (control.volume * 100) / PA.PulseAudio.NormalVolume
     readonly property bool isPlayback: type.startsWith("sink")
     slider.iconSource: "audio-volume-high"
 

@@ -55,6 +55,7 @@ Cask.PanelItem
             width: parent.width
             height: currentItem.implicitHeight
             clip: true
+            padding: 0
 
             initialItem: Column
             {
