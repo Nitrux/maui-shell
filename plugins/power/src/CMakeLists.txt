@@ -11,7 +11,7 @@ set(caskpower_SRCS
     code/batteryinfo.cpp
     code/powerprofile.cpp
     code/caskpowerplugin.cpp
-#    code/powermanagementservice.cpp
+    code/inhibitioncontrol.cpp
 )
 
 set(

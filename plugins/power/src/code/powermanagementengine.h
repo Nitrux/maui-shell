@@ -29,7 +29,6 @@ public:
     QStringList sources() const;
     bool sourceRequestEvent(const QString &name);
 
-    void setScreenBrightness(int value, bool silent);
 
 protected:
     bool updateSourceEvent(const QString &source);
@@ -37,13 +36,8 @@ protected:
 
 private Q_SLOTS:
 
-    void keyboardBrightnessChanged(int brightness);
-    void maximumKeyboardBrightnessChanged(int maximumBrightness);
-    void triggersLidActionChanged(bool triggers);
     void inhibitionsChanged(const QList<InhibitionInfo> &added, const QStringList &removed);
 
-    void onMaximumScreenBrightness(int maximumBrightness);
-    void onScreenBrightness(int brightness);
 
     void updatePowerProfileCurrentProfile(const QString &profile);
     void updatePowerProfileChoices(const QStringList &choices);
@@ -54,17 +48,10 @@ private Q_SLOTS:
 private:
     PowerManagementJob *m_job;
     void populateApplicationData(const QString &name, QString *prettyName, QString *icon);
-    QStringList basicSourceNames() const;
-
-    QStringList m_sources;
 
     QHash<QString, QPair<QString, QString>> m_applicationInfo; // <appname, <pretty name, icon>>
 
     void setData(const QString &name, const QString &name2, const QVariant &value);
 
-signals:
-    void screenBrightnessChanged(int brightness);
-    void screenBrightnessAvailableChanged(bool value);
-    void maximumScreenBrightnessChanged(int maximumBrightness);
 
 };
