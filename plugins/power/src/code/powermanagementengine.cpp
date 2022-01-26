@@ -137,19 +137,6 @@ void PowermanagementEngine::updatePowerProfileHolds(const QList<QVariantMap> &ho
 }
 
 
-
-//void PowermanagementEngine::screenBrightnessChanged(int brightness)
-//{
-//    setData(QStringLiteral("PowerDevil"), QStringLiteral("Screen Brightness"), brightness);
-//}
-
-//void PowermanagementEngine::maximumScreenBrightnessChanged(int maximumBrightness)
-//{
-//    setData(QStringLiteral("PowerDevil"), QStringLiteral("Maximum Screen Brightness"), maximumBrightness);
-//    setData(QStringLiteral("PowerDevil"), QStringLiteral("Screen Brightness Available"), maximumBrightness > 0);
-
-//}
-
 void PowermanagementEngine::inhibitionsChanged(const QList<InhibitionInfo> &added, const QStringList &removed)
 {
     for (auto it = removed.constBegin(); it != removed.constEnd(); ++it) {
