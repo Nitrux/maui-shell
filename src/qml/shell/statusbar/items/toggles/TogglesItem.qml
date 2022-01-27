@@ -10,6 +10,7 @@ import org.maui.cask 1.0 as Cask
 import "sections/network"
 import "sections/bluetooth"
 import "sections/screenshot"
+import "sections/devices"
 
 Cask.PanelItem
 {
@@ -98,6 +99,11 @@ Cask.PanelItem
                     {
                         _togglesStack.push(page)
                     }
+                }
+
+                DevicesToggle
+                {
+                    onClicked: _togglesStack.push(page)
                 }
 
                 ToggleTemplate

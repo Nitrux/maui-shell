@@ -55,6 +55,41 @@ Item
         }
     }
 
+    data: WheelHandler
+    {
+        //        orientation: Qt.Vertical
+        target: null
+        enabled: true
+        grabPermissions: PointerHandler.CanTakeOverFromAnything
+
+        //        property: "y"
+        //        rotationScale: 15
+        //        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+        onActiveChanged:
+        {
+            console.log("WHEEL HANMDLER ACTIVE", rotation)
+
+            if(!active)
+            {
+                if(rotation > 15)
+                {
+                    launcher.open()
+                }
+                else if(rotation < -60)
+                {
+                    if(launcher.opened)
+                    {
+                        return
+                    }
+
+                    launcher.close()
+                }
+                rotation = 0
+            }
+        }
+    }
+
+
     Launcher
     {
         id: _launcher

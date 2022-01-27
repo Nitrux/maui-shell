@@ -134,27 +134,9 @@ void PowerManagementJob::start(const QString &operation, const QVariantMap &para
 //            },
 //            this);
 //        return;
-//    } else if (operation == QLatin1String("setPowerProfile")) {
-//        auto pending = setPowerProfile(parameters().value(QStringLiteral("profile")).toString());
-//        callWhenFinished(
-//            pending,
-//            [this] (bool success) {
-//                setResult(success);
-//            },
-//            this);
-//        return;
 //    }
 
 //    qDebug() << "don't know what to do with " << operation;
 //    setResult(false);
 }
 
-QDBusPendingCall PowerManagementJob::setPowerProfile(const QString &value)
-{
-    QDBusMessage msg = QDBusMessage::createMethodCall(QStringLiteral("org.kde.Solid.PowerManagement"),
-                                                      QStringLiteral("/org/kde/Solid/PowerManagement/Actions/PowerProfile"),
-                                                      QStringLiteral("org.kde.Solid.PowerManagement.Actions.PowerProfile"),
-                                                      QStringLiteral("setProfile"));
-    msg << value;
-    return QDBusConnection::sessionBus().asyncCall(msg);
-}

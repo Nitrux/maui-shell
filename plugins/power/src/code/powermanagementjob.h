@@ -19,6 +19,4 @@ public:
     PowerManagementJob(QObject *parent = nullptr);
     void start(const QString &operation, const QVariantMap &parameters);
 
-private:
-    QDBusPendingCall setPowerProfile(const QString &value);
 };

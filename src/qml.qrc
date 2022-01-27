@@ -53,5 +53,8 @@
         <file>qml/shell/templates/SliderTemplate.qml</file>
         <file>qml/shell/statusbar/items/session/PowerPage.qml</file>
         <file>qml/shell/statusbar/items/session/BatteryBar.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/devices/DevicesToggle.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/devices/DevicesPage.qml</file>
+        <file>qml/shell/statusbar/items/toggles/sections/bluetooth/logic.js</file>
     </qresource>
 </RCC>

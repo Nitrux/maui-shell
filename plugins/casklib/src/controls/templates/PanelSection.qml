@@ -176,7 +176,6 @@ T.Control
         }
     }
 
-
     function isPanelCard(obj)
     {
         return obj instanceof PanelCard

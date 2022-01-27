@@ -7,11 +7,11 @@
 class PowerProfile : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString currentProfile READ currentProfile WRITE setCurrentProfile NOTIFY currentProfileChanged)
-    Q_PROPERTY(QStringList profileChoices READ profileChoices WRITE setProfileChoices NOTIFY profileChoicesChanged)
-    Q_PROPERTY(QString performanceInhibitedReason READ performanceInhibitedReason WRITE setPerformanceInhibitedReason NOTIFY performanceInhibitedReasonChanged)
-    Q_PROPERTY(QString performanceDegradedReason READ performanceDegradedReason WRITE setPerformanceDegradedReason NOTIFY performanceDegradedReasonChanged)
-    Q_PROPERTY(QList<QVariantMap> profileHolds READ profileHolds WRITE setProfileHolds NOTIFY profileHoldsChanged)
+    Q_PROPERTY(QString currentProfile READ currentProfile NOTIFY currentProfileChanged)
+    Q_PROPERTY(QStringList profileChoices READ profileChoices NOTIFY profileChoicesChanged FINAL)
+    Q_PROPERTY(QString performanceInhibitedReason READ performanceInhibitedReason NOTIFY performanceInhibitedReasonChanged FINAL)
+    Q_PROPERTY(QString performanceDegradedReason READ performanceDegradedReason NOTIFY performanceDegradedReasonChanged FINAL)
+    Q_PROPERTY(QList<QVariantMap> profileHolds READ profileHolds NOTIFY profileHoldsChanged FINAL)
 
 public:
     explicit PowerProfile(QObject *parent = nullptr);
@@ -26,8 +26,8 @@ public:
 
     QList<QVariantMap> profileHolds() const;
 
-public slots:
-
+private slots:
+    
     void setCurrentProfile(QString currentProfile);
 
     void setProfileChoices(QStringList profileChoices);
@@ -37,6 +37,9 @@ public slots:
     void setPerformanceDegradedReason(QString performanceDegradedReason);
 
     void setProfileHolds(QList<QVariantMap> profileHolds);
+
+public slots:
+    void changeProfile(const QString &value);
 
 private:
     QString m_currentProfile;

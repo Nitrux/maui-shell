@@ -228,6 +228,20 @@ qDebug() << "PROFILE HOLDS CHANGED" << profileHolds;
     emit profileHoldsChanged(m_profileHolds);
 }
 
+void PowerProfile::changeProfile(const QString &value)
+{
+    QDBusMessage msg = QDBusMessage::createMethodCall(QStringLiteral("org.kde.Solid.PowerManagement"),
+                                                      QStringLiteral("/org/kde/Solid/PowerManagement/Actions/PowerProfile"),
+                                                      QStringLiteral("org.kde.Solid.PowerManagement.Actions.PowerProfile"),
+                                                      QStringLiteral("setProfile"));
+    msg << value;
+
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(QDBusConnection::sessionBus().asyncCall(msg), this);
+    QObject::connect(watcher, &QDBusPendingCallWatcher::finished, this, [](QDBusPendingCallWatcher *watcher) {
+        watcher->deleteLater();
+    });
+}
+
 void PowerProfile::populateApplicationData(const QString &name, QString *prettyName, QString *icon)
 {
     if (m_applicationInfo.contains(name))

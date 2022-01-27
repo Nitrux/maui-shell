@@ -19,7 +19,7 @@ BatteryBar
     visible: _batteryInfo.hasBatteries
     battery: primaryBattery
     label.text: (battery ? battery.prettyName : "AC Powered")
-    label2.text:formatSecs(battery.timeToEmpty)
+    label2.text: formatSecs(battery.pluggedIn ? battery.timeToFull : battery.timeToEmpty)
     progressbar.enabled: primaryBattery
     icon.source: batteryIcon(battery.percent, battery.stateName === "Charging")
 

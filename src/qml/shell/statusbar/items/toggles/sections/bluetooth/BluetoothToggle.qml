@@ -13,8 +13,16 @@ ToggleTemplate
     template.label1.text: "PinePhone-Pro-2x"
     display: ToolButton.TextBesideIcon
 
+//    BusyIndicator
+//    {
+//        id: busyIndicator
+//        anchors.centerIn: parent
+//        running: _bluetoothPage.runningActions > 0
+//    }
+
+
     page: BluetoothPage
     {
-
+        id: _bluetoothPage
     }
 }

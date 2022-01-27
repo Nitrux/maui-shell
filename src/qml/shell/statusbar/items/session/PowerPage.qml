@@ -64,11 +64,13 @@ StackPage
                 delegate: CardButton
                 {
                     Layout.fillWidth: true
-
+                    implicitHeight: 64+ topPadding + bottomPadding
                     text: modelData
                     icon.name: "anchor"
                     checked: _powerProfile.currentProfile === modelData
                     display: ToolButton.TextUnderIcon
+
+                    onClicked: _powerProfile.changeProfile(modelData)
                 }
             }
         }
