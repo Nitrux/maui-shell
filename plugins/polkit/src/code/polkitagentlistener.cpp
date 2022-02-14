@@ -26,6 +26,7 @@ PolKitAgentListener::PolKitAgentListener(QObject *parent)
     : PolkitQt1::Agent::Listener(parent)
     , m_dialog(nullptr)
 {
+    qDebug() << "POLKIT STARTED";
 
 }
 
@@ -37,6 +38,7 @@ void PolKitAgentListener::initiateAuthentication(const QString &actionId,
                                                  const PolkitQt1::Identity::List &identities,
                                                  PolkitQt1::Agent::AsyncResult *result)
 {
+   qDebug() << "POLKIT CALLED" << actionId << message;
     Q_UNUSED(iconName);
     Q_UNUSED(details);
 
@@ -62,6 +64,7 @@ void PolKitAgentListener::request(const QString &request, bool echo)
 {
     Q_UNUSED(request);
     Q_UNUSED(echo);
+    qDebug() << "POLKIT CALLED" << 1;
 
     PolkitQt1::Agent::Session *session = qobject_cast<PolkitQt1::Agent::Session *>(sender());
     Q_ASSERT(session);
@@ -78,12 +81,13 @@ void PolKitAgentListener::request(const QString &request, bool echo)
         }
     });
 
-    m_dialog->show();
+    emit this->authenticationRequest(m_dialog);
 }
 
 void PolKitAgentListener::completed(bool gainedAuthorization)
 {
     Q_UNUSED(gainedAuthorization);
+    qDebug() << "POLKIT CALLED" << 2;
 
     PolkitQt1::Agent::Session *session = qobject_cast<PolkitQt1::Agent::Session *>(sender());
     Q_ASSERT(session);

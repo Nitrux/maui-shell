@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/cask/polkit">
+        <file alias="PolkitDialog.qml">controls/PolkitDialog.qml</file>
+    </qresource>
+</RCC>

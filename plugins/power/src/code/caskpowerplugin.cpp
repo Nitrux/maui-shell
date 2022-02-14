@@ -7,7 +7,7 @@
 #include "batteryinfo.h"
 #include "powerprofile.h"
 
-void CaskAudioPlugin::registerTypes(const char *uri)
+void CaskPowerPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<BrightnessControl>(uri, 1, 0, "BrightnessControl");
     qmlRegisterType<BatteryInfo>(uri, 1, 0, "BatteryInfo");

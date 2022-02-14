@@ -8,6 +8,7 @@ import QtWayland.Compositor 1.3
 import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
 import org.cask.notifications 1.0 as Nof
+import org.cask.polkit 1.0 as Polkit
 
 WaylandCompositor
 {
@@ -18,12 +19,40 @@ WaylandCompositor
         id: desktop
         compositor: comp
         position: Qt.point(virtualX, virtualY)
+
+
+    }
+
+    Component
+    {
+        id: _polkitDialogComponent
+        Polkit.PolkitDialog
+        {
+        }
     }
 
     Nof.Notifications
     {
         id: _notifications
+    }
 
+
+
+    Connections
+    {
+        target: _polkit.listener
+
+        function onAuthenticationRequest(dialog)
+        {
+            var popup2 = _polkitDialogComponent.createObject(desktop.window, {"parent" : desktop.window, "dialog": dialog});
+            popup2.open()
+
+        }
+    }
+
+    Polkit.Agent
+    {
+        id: _polkit
     }
 
     QtWindowManager

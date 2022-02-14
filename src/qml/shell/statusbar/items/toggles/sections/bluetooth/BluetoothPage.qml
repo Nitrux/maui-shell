@@ -5,7 +5,7 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
 import org.maui.cask 1.0 as Cask
-
+import QtQuick.Controls 1.0 as QQC1
 import org.kde.bluezqt 1.0 as BluezQt
 import org.kde.plasma.private.bluetooth 1.0 as PlasmaBt
 

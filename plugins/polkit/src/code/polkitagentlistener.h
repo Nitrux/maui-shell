@@ -43,10 +43,10 @@ public slots:
                                 const PolkitQt1::Details &details,
                                 const QString &cookie,
                                 const PolkitQt1::Identity::List &identities,
-                                PolkitQt1::Agent::AsyncResult *result);
+                                PolkitQt1::Agent::AsyncResult *result) override final;
 
-    bool initiateAuthenticationFinish() { return true; }
-    void cancelAuthentication() {}
+    bool initiateAuthenticationFinish() override final { return true; }
+    void cancelAuthentication() override final {}
 
     void request(const QString &request, bool echo);
     void completed(bool gainedAuthorization);
@@ -54,6 +54,9 @@ public slots:
 private:
     QHash<PolkitQt1::Agent::Session *,PolkitQt1::Identity> m_sessionIdentity;
     Dialog *m_dialog;
+
+signals:
+    void authenticationRequest(Dialog *dialog);
 };
 
 #endif // POLKITAGENTLISTENER_H
