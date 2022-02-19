@@ -1,0 +1,8 @@
+[Unit]
+Description=KDE Plasma Workspace
+Requires=plasma-core.target graphical-session.target
+Wants=plasma-restoresession.service plasma-xembedsniproxy.service plasma-gmenudbusmenuproxy.service plasma-powerdevil.service plasma-ksplash-ready.service plasma-polkit-agent.service kde-baloo.service plasma-foreground-booster.service plasma-kwallet-pam.service xdg-desktop-autostart.target
+BindsTo=graphical-session.target
+Before=graphical-session.target xdg-desktop-autostart.target plasma-ksplash-ready.service plasma-restoresession.service
+RefuseManualStart=yes
+StopWhenUnneeded=true

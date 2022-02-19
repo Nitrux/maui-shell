@@ -1,0 +1,4 @@
+[Unit]
+Requires=plasma-workspace.target
+Requires=plasma-kwin_wayland.service
+BindsTo=plasma-kwin_wayland.service

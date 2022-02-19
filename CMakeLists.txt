@@ -20,6 +20,9 @@ include(KDECMakeSettings)
 include(ECMInstallIcons)
 include(ECMAddAppIcon)
 include(ECMSetupVersion)
+include(ECMConfiguredInstall)
+include(ECMQtDeclareLoggingCategory)
+
 include(FeatureSummary)
 
 ecm_setup_version(${CASK_VERSION}
@@ -32,6 +35,7 @@ ecm_setup_version(${CASK_VERSION}
 
 set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/plugins ${CMAKE_BINARY_DIR}/org CACHE STRING "" FORCE)
 
+add_subdirectory(startcask)
 add_subdirectory(plugins)
 add_subdirectory(src)
 

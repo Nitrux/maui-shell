@@ -1,0 +1,3 @@
+This application runs all kcminit/autostart scripts needed for a plasma session.
+
+This application should only contain tasks relating to starting executables and setting environment variables so that an implementation of systemd units would not cause duplication.

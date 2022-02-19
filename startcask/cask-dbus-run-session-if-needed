@@ -1,0 +1,10 @@
+#!/bin/sh
+# Usage: plasma-dbus-run-session-if-needed PROGRAM [ARGUMENTS]
+# If the session bus is not available it is spawned and wrapper round our program
+# Otherwise we spawn our program directly
+drs=
+if [ -z "${DBUS_SESSION_BUS_ADDRESS}" ]
+then
+    drs=dbus-run-session
+fi
+exec ${drs} "$@"

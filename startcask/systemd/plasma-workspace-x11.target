@@ -1,0 +1,4 @@
+[Unit]
+Wants=plasma-kwin_x11.service
+Requires=plasma-workspace.target
+BindsTo=plasma-ksmserver.service
