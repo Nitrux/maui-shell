@@ -83,3 +83,10 @@ configure_file(config-startcask.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-start
 install(TARGETS startcask-wayland ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS cask-sourceenv.sh DESTINATION ${KDE_INSTALL_LIBEXECDIR})
 install(PROGRAMS cask-dbus-run-session-if-needed DESTINATION ${KDE_INSTALL_LIBEXECDIR})
+
+install(FILES cask-session.desktop
+        DESTINATION ${KDE_INSTALL_DATADIR}/wayland-sessions
+)
+install(FILES cask.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES cask.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
+
