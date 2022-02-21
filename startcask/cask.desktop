@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Cask (Wayland)
 Comment=Maui Shell is a convergent shell for desktops, tablets, and phones.
-Exec=startcask
+Exec=cask
 Type=Application
+OnlyShowIn=Cask;
+X-KDE-autostart-phase=0
+NoDisplay=true
+X-systemd-skip=true
