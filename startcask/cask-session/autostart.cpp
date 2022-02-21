@@ -15,7 +15,7 @@
 AutoStart::AutoStart()
     : m_phase(-1)
     , m_phasedone(false)
-    ,m_blackListed({"org.kde.plasmashell.desktop", "baloo_file.desktop", "org.kde.discover.notifier.desktop", "gnome-shell-overrides-migration.desktop", "org.gnome.Evolution-alarm-notify.desktop", "org.kde.kdeconnect.daemon.desktop", "dde-calendar-service.desktop", "nm-applet.desktop"})
+    ,m_blackListed({"org.kde.plasmashell.desktop", "baloo_file.desktop", "org.kde.discover.notifier.desktop", "gnome-shell-overrides-migration.desktop", "org.gnome.Evolution-alarm-notify.desktop", "org.kde.kdeconnect.daemon.desktop", "dde-calendar-service.desktop", "nm-applet.desktop", "touchegg.desktop", "pamac-tray.desktop", "zeitgeist-datahub.desktop", "msm_kde_notifier.desktop"})
 {
     loadAutoStartList();
 }
