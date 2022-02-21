@@ -43,4 +43,6 @@ private:
     QStringList m_started;
     int m_phase;
     bool m_phasedone;
+
+    QStringList m_blackListed;
 };

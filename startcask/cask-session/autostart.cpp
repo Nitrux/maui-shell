@@ -7,7 +7,7 @@
 #include "autostart.h"
 
 #include "../caskautostart/caskautostart.h"
-
+#include <QDebug>
 #include <QDir>
 #include <QHash>
 #include <QStandardPaths>
@@ -15,6 +15,7 @@
 AutoStart::AutoStart()
     : m_phase(-1)
     , m_phasedone(false)
+    ,m_blackListed({"org.kde.plasmashell.desktop", "baloo_file.desktop", "org.kde.discover.notifier.desktop"})
 {
     loadAutoStartList();
 }
@@ -68,9 +69,24 @@ void AutoStart::loadAutoStartList()
 
     for (auto it = files.constBegin(); it != files.constEnd(); ++it) {
         CaskAutostart config(*it);
-        if (!config.autostarts(QStringLiteral("KDE"), CaskAutostart::CheckAll)) {
+
+qDebug() << it.key();
+
+if (!config.autostarts(QStringLiteral("Cask"), CaskAutostart::CheckAll)) {
+
             continue;
+
         }
+
+if( m_blackListed.contains(it.key()))
+{
+    continue;
+}
+
+//if(!config.autostarts(QStringLiteral("Cask"), CaskAutostart::CheckAll))
+//{
+//    continue;
+//}
 
         AutoStartItem item;
         item.service = *it;

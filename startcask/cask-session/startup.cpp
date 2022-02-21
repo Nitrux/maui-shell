@@ -113,12 +113,10 @@ public:
         : Phase(autostart, parent)
     {
     }
-    void migrateKDE4Autostart();
 
     void start() override
     {
         qCDebug(CASK_SESSION) << "Phase 2";
-        migrateKDE4Autostart();
         addSubjob(new AutoStartAppsJob(m_autostart, 2));
         addSubjob(new KDEDInitJob());
     }
@@ -142,6 +140,8 @@ Startup::Startup(QObject *parent)
 {
     Q_ASSERT(!s_self);
     s_self = this;
+//    startDetached("cask", {});
+//return;
 //    new StartupAdaptor(this);
 //    QDBusConnection::sessionBus().registerObject(QStringLiteral("/Startup"), QStringLiteral("org.kde.Startup"), this);
 //    QDBusConnection::sessionBus().registerService(QStringLiteral("org.kde.Startup"));
@@ -179,6 +179,8 @@ Startup::Startup(QObject *parent)
 //        new RestoreSessionJob(),
         new StartupPhase2(autostart, this),
     };
+
+    qDebug() << "PASHE 0000000";
     KJob *last = nullptr;
     for (KJob *job : sequence) {
         if (!job) {
@@ -191,6 +193,9 @@ Startup::Startup(QObject *parent)
     }
 
     connect(sequence.last(), &KJob::finished, this, &Startup::finishStartup);
+
+    qDebug() << "PASHE 0000000 /end";
+
     sequence.first()->start();
 
     // app will be closed when all KJobs finish thanks to the QEventLoopLocker in each KJob
@@ -208,11 +213,13 @@ void Startup::upAndRunning(const QString &msg)
 
 void Startup::finishStartup()
 {
+    qDebug() << "PASHE 111111111 /end";
+
     qCDebug(CASK_SESSION) << "Finished";
 //    upAndRunning(QStringLiteral("ready"));
 
 
-    startDetached("cask", {});
+//    startDetached("cask", {});
 
 
 
@@ -296,50 +303,6 @@ void RestoreSessionJob::start()
 //        emitResult();
 //    });
 //    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QObject::deleteLater);
-}
-
-void StartupPhase2::migrateKDE4Autostart()
-{
-    // Migrate user autostart from kde4
-    Kdelibs4Migration migration;
-    if (!migration.kdeHomeFound()) {
-        return;
-    }
-
-    const QString autostartFolder =
-        QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QDir::separator() + QStringLiteral("autostart-scripts");
-    QDir dir(autostartFolder);
-    if (!dir.exists()) {
-        dir.mkpath(QStringLiteral("."));
-    }
-
-    // KDEHOME/Autostart was the default value for KGlobalSettings::autostart()
-    QString oldAutostart = migration.kdeHome() + QStringLiteral("/Autostart");
-    // That path could be customized in kdeglobals
-    const QString oldKdeGlobals = migration.locateLocal("config", QStringLiteral("kdeglobals"));
-    if (!oldKdeGlobals.isEmpty()) {
-        oldAutostart = KConfig(oldKdeGlobals).group("Paths").readEntry("Autostart", oldAutostart);
-    }
-
-    const QDir oldFolder(oldAutostart);
-    qCDebug(CASK_SESSION) << "Copying autostart files from" << oldFolder.path();
-    const QStringList entries = oldFolder.entryList(QDir::Files);
-    for (const QString &file : entries) {
-        const QString src = oldFolder.absolutePath() + QLatin1Char('/') + file;
-        const QString dest = autostartFolder + QLatin1Char('/') + file;
-        QFileInfo info(src);
-        bool success;
-        if (info.isSymLink()) {
-            // This will only work with absolute symlink targets
-            success = QFile::link(info.symLinkTarget(), dest);
-        } else {
-            success = QFile::copy(src, dest);
-        }
-        if (!success) {
-            qCWarning(CASK_SESSION) << "Error copying" << src << "to" << dest;
-        }
-    }
-    return;
 }
 
 AutoStartAppsJob::AutoStartAppsJob(const AutoStart &autostart, int phase)
