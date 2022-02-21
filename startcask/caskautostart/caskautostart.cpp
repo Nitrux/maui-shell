@@ -5,7 +5,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "plasmaautostart.h"
+#include "caskautostart.h"
 
 #include <KConfigGroup>
 #include <KDesktopFile>
@@ -14,7 +14,7 @@
 #include <QDir>
 #include <QFile>
 
-void PlasmaAutostart::copyIfNeeded()
+void CaskAutostart::copyIfNeeded()
 {
     if (copyIfNeededChecked) {
         return;
@@ -35,7 +35,7 @@ void PlasmaAutostart::copyIfNeeded()
     copyIfNeededChecked = true;
 }
 
-PlasmaAutostart::PlasmaAutostart(const QString &entryName, QObject *parent)
+CaskAutostart::CaskAutostart(const QString &entryName, QObject *parent)
     : QObject(parent)
 {
     const bool isAbsolute = QDir::isAbsolutePath(entryName);
@@ -63,9 +63,9 @@ PlasmaAutostart::PlasmaAutostart(const QString &entryName, QObject *parent)
     }
 }
 
-PlasmaAutostart::~PlasmaAutostart() = default;
+CaskAutostart::~CaskAutostart() = default;
 
-void PlasmaAutostart::setAutostarts(bool autostart)
+void CaskAutostart::setAutostarts(bool autostart)
 {
     bool currentAutostartState = !df->desktopGroup().readEntry("Hidden", false);
     if (currentAutostartState == autostart) {
@@ -76,7 +76,7 @@ void PlasmaAutostart::setAutostarts(bool autostart)
     df->desktopGroup().writeEntry("Hidden", !autostart);
 }
 
-bool PlasmaAutostart::autostarts(const QString &environment, Conditions check) const
+bool CaskAutostart::autostarts(const QString &environment, Conditions check) const
 {
     // check if this is actually a .desktop file
     bool starts = df->desktopGroup().exists();
@@ -99,12 +99,12 @@ bool PlasmaAutostart::autostarts(const QString &environment, Conditions check) c
     return starts;
 }
 
-bool PlasmaAutostart::checkStartCondition() const
+bool CaskAutostart::checkStartCondition() const
 {
-    return PlasmaAutostart::isStartConditionMet(df->desktopGroup().readEntry("X-KDE-autostart-condition"));
+    return CaskAutostart::isStartConditionMet(df->desktopGroup().readEntry("X-KDE-autostart-condition"));
 }
 
-bool PlasmaAutostart::isStartConditionMet(const QString &condition)
+bool CaskAutostart::isStartConditionMet(const QString &condition)
 {
     if (condition.isEmpty()) {
         return true;
@@ -126,7 +126,7 @@ bool PlasmaAutostart::isStartConditionMet(const QString &condition)
     return cg.readEntry(list[2], defaultValue);
 }
 
-bool PlasmaAutostart::checkAllowedEnvironment(const QString &environment) const
+bool CaskAutostart::checkAllowedEnvironment(const QString &environment) const
 {
     const QStringList allowed = allowedEnvironments();
     if (!allowed.isEmpty()) {
@@ -141,12 +141,12 @@ bool PlasmaAutostart::checkAllowedEnvironment(const QString &environment) const
     return true;
 }
 
-QString PlasmaAutostart::command() const
+QString CaskAutostart::command() const
 {
     return df->desktopGroup().readEntry("Exec", QString());
 }
 
-void PlasmaAutostart::setCommand(const QString &command)
+void CaskAutostart::setCommand(const QString &command)
 {
     if (df->desktopGroup().readEntry("Exec", QString()) == command) {
         return;
@@ -156,7 +156,7 @@ void PlasmaAutostart::setCommand(const QString &command)
     df->desktopGroup().writeEntry("Exec", command);
 }
 
-bool PlasmaAutostart::isServiceRegistered(const QString &entryName)
+bool CaskAutostart::isServiceRegistered(const QString &entryName)
 {
     const QString localDir = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/autostart/");
     return QFile::exists(localDir + entryName + QLatin1String(".desktop"));
@@ -164,7 +164,7 @@ bool PlasmaAutostart::isServiceRegistered(const QString &entryName)
 
 // do not specialize the readEntry template -
 // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=100911
-static PlasmaAutostart::StartPhase readEntry(const KConfigGroup &group, const char *key, PlasmaAutostart::StartPhase aDefault)
+static CaskAutostart::StartPhase readEntry(const KConfigGroup &group, const char *key, CaskAutostart::StartPhase aDefault)
 {
     const QByteArray data = group.readEntry(key, QByteArray());
 
@@ -173,32 +173,32 @@ static PlasmaAutostart::StartPhase readEntry(const KConfigGroup &group, const ch
     }
 
     if (data == "0" || data == "BaseDesktop") {
-        return PlasmaAutostart::BaseDesktop;
+        return CaskAutostart::BaseDesktop;
     } else if (data == "1" || data == "DesktopServices") {
-        return PlasmaAutostart::DesktopServices;
+        return CaskAutostart::DesktopServices;
     } else if (data == "2" || data == "Applications") {
-        return PlasmaAutostart::Applications;
+        return CaskAutostart::Applications;
     }
 
     return aDefault;
 }
 
-PlasmaAutostart::StartPhase PlasmaAutostart::startPhase() const
+CaskAutostart::StartPhase CaskAutostart::startPhase() const
 {
     return readEntry(df->desktopGroup(), "X-KDE-autostart-phase", Applications);
 }
 
-QStringList PlasmaAutostart::allowedEnvironments() const
+QStringList CaskAutostart::allowedEnvironments() const
 {
     return df->desktopGroup().readXdgListEntry("OnlyShowIn");
 }
 
-QStringList PlasmaAutostart::excludedEnvironments() const
+QStringList CaskAutostart::excludedEnvironments() const
 {
     return df->desktopGroup().readXdgListEntry("NotShowIn");
 }
 
-QString PlasmaAutostart::startAfter() const
+QString CaskAutostart::startAfter() const
 {
     return df->desktopGroup().readEntry("X-KDE-autostart-after");
 }

@@ -619,7 +619,7 @@ bool startCaskSession()
             }
         });
 
-        startCaskSession->start("cask", plasmaSessionOptions);
+        startCaskSession->start("cask_session", plasmaSessionOptions);
     } else {
         //        qCDebug(CASK_STARTUP) << "Using systemd boot";
         //        const QString platform = QStringLiteral("wayland");

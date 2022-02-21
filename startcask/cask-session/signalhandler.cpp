@@ -17,7 +17,7 @@ int SignalHandler::signalFd[2];
 SignalHandler::SignalHandler()
 {
     if (::socketpair(AF_UNIX, SOCK_STREAM, 0, signalFd)) {
-        qCWarning(PLASMA_SESSION) << "Couldn't create a socketpair";
+        qCWarning(CASK_SESSION) << "Couldn't create a socketpair";
         return;
     }
 

@@ -22,7 +22,7 @@ SessionTrack::SessionTrack(const QVector<QProcess *> &processes)
     });
 
     for (auto process : std::as_const(m_processes)) {
-        connect(process, &QProcess::finished, this, [this] {
+        connect(process,  static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, [this] {
             m_processes.removeAll(static_cast<QProcess *>(sender()));
         });
     }

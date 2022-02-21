@@ -18,9 +18,9 @@
 
 #include <unistd.h>
 
-#include "kcminit_interface.h"
+//#include "kcminit_interface.h"
 #include "kded_interface.h"
-#include "ksmserver_interface.h"
+//#include "ksmserver_interface.h"
 
 #include <KCompositeJob>
 #include <KConfig>
@@ -39,10 +39,10 @@
 #include <QTimer>
 
 #include "sessiontrack.h"
-#include "startupadaptor.h"
+//#include "startupadaptor.h"
 
-#include "../config-startplasma.h"
-#include "startplasma.h"
+#include "../config-startcask.h"
+#include "startcask.h"
 
 class Phase : public KCompositeJob
 {
@@ -83,9 +83,9 @@ public:
     }
     void start() override
     {
-        qCDebug(PLASMA_SESSION) << "Phase 0";
+        qCDebug(CASK_SESSION) << "Phase 0";
         addSubjob(new AutoStartAppsJob(m_autostart, 0));
-        addSubjob(new KCMInitJob());
+//        addSubjob(new KCMInitJob());
         addSubjob(new SleepJob());
     }
 };
@@ -100,7 +100,7 @@ public:
     }
     void start() override
     {
-        qCDebug(PLASMA_SESSION) << "Phase 1";
+        qCDebug(CASK_SESSION) << "Phase 1";
         addSubjob(new AutoStartAppsJob(m_autostart, 1));
     }
 };
@@ -117,7 +117,7 @@ public:
 
     void start() override
     {
-        qCDebug(PLASMA_SESSION) << "Phase 2";
+        qCDebug(CASK_SESSION) << "Phase 2";
         migrateKDE4Autostart();
         addSubjob(new AutoStartAppsJob(m_autostart, 2));
         addSubjob(new KDEDInitJob());
@@ -142,56 +142,41 @@ Startup::Startup(QObject *parent)
 {
     Q_ASSERT(!s_self);
     s_self = this;
-    new StartupAdaptor(this);
-    QDBusConnection::sessionBus().registerObject(QStringLiteral("/Startup"), QStringLiteral("org.kde.Startup"), this);
-    QDBusConnection::sessionBus().registerService(QStringLiteral("org.kde.Startup"));
+//    new StartupAdaptor(this);
+//    QDBusConnection::sessionBus().registerObject(QStringLiteral("/Startup"), QStringLiteral("org.kde.Startup"), this);
+//    QDBusConnection::sessionBus().registerService(QStringLiteral("org.kde.Startup"));
 
     const AutoStart autostart;
 
-    KJob *x11WindowManagerJob = nullptr;
-    if (qEnvironmentVariable("XDG_SESSION_TYPE") != QLatin1String("wayland")) {
-        QString windowManager;
-        if (qEnvironmentVariableIsSet("KDEWM")) {
-            windowManager = qEnvironmentVariable("KDEWM");
-        }
-        if (windowManager.isEmpty()) {
-            windowManager = QStringLiteral(KWIN_BIN);
-        }
+    //for wayland
+//    {
+//        // This must block until started as it sets the WAYLAND_DISPLAY/DISPLAY env variables needed for the rest of the boot
+//        // fortunately it's very fast as it's just starting a wrapper
+////        StartServiceJob kwinWaylandJob(QStringLiteral("kwin_wayland_wrapper"), {QStringLiteral("--xwayland")}, QStringLiteral("org.kde.KWinWrapper"));
+////        kwinWaylandJob.exec();
+//        // kslpash is only launched in plasma-session from the wayland mode, for X it's in startplasma-x11
 
-        if (windowManager == QLatin1String(KWIN_BIN)) {
-            x11WindowManagerJob = new StartServiceJob(windowManager, {}, QStringLiteral("org.kde.KWin"));
-        } else {
-            x11WindowManagerJob = new StartServiceJob(windowManager, {}, {});
-        }
-    } else {
-        // This must block until started as it sets the WAYLAND_DISPLAY/DISPLAY env variables needed for the rest of the boot
-        // fortunately it's very fast as it's just starting a wrapper
-        StartServiceJob kwinWaylandJob(QStringLiteral("kwin_wayland_wrapper"), {QStringLiteral("--xwayland")}, QStringLiteral("org.kde.KWinWrapper"));
-        kwinWaylandJob.exec();
-        // kslpash is only launched in plasma-session from the wayland mode, for X it's in startplasma-x11
-
-        const KConfig cfg(QStringLiteral("ksplashrc"));
-        // the splashscreen and progress indicator
-        KConfigGroup ksplashCfg = cfg.group("KSplash");
-        if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
-            QProcess::startDetached(QStringLiteral("ksplashqml"), {});
-        }
-    }
+//        const KConfig cfg(QStringLiteral("ksplashrc"));
+//        // the splashscreen and progress indicator
+//        KConfigGroup ksplashCfg = cfg.group("KSplash");
+//        if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
+//            QProcess::startDetached(QStringLiteral("ksplashqml"), {});
+//        }
+//    }
 
     // Keep for KF5; remove in KF6 (KInit will be gone then)
-    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
+//    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
 
     KJob *phase1 = nullptr;
     m_lock.reset(new QEventLoopLocker);
 
     const QVector<KJob *> sequence = {
-        new StartProcessJob(QStringLiteral("kcminit_startup"), {}),
+//        new StartProcessJob(QStringLiteral("kcminit_startup"), {}),
         new StartServiceJob(QStringLiteral("kded5"), {}, QStringLiteral("org.kde.kded5"), {}),
-        x11WindowManagerJob,
-        new StartServiceJob(QStringLiteral("ksmserver"), QCoreApplication::instance()->arguments().mid(1), QStringLiteral("org.kde.ksmserver")),
+//        new StartServiceJob(QStringLiteral("ksmserver"), QCoreApplication::instance()->arguments().mid(1), QStringLiteral("org.kde.ksmserver")),
         new StartupPhase0(autostart, this),
         phase1 = new StartupPhase1(autostart, this),
-        new RestoreSessionJob(),
+//        new RestoreSessionJob(),
         new StartupPhase2(autostart, this),
     };
     KJob *last = nullptr;
@@ -213,18 +198,23 @@ Startup::Startup(QObject *parent)
 
 void Startup::upAndRunning(const QString &msg)
 {
-    QDBusMessage ksplashProgressMessage = QDBusMessage::createMethodCall(QStringLiteral("org.kde.KSplash"),
-                                                                         QStringLiteral("/KSplash"),
-                                                                         QStringLiteral("org.kde.KSplash"),
-                                                                         QStringLiteral("setStage"));
-    ksplashProgressMessage.setArguments(QList<QVariant>() << msg);
-    QDBusConnection::sessionBus().asyncCall(ksplashProgressMessage);
+//    QDBusMessage ksplashProgressMessage = QDBusMessage::createMethodCall(QStringLiteral("org.kde.KSplash"),
+//                                                                         QStringLiteral("/KSplash"),
+//                                                                         QStringLiteral("org.kde.KSplash"),
+//                                                                         QStringLiteral("setStage"));
+//    ksplashProgressMessage.setArguments(QList<QVariant>() << msg);
+//    QDBusConnection::sessionBus().asyncCall(ksplashProgressMessage);
 }
 
 void Startup::finishStartup()
 {
-    qCDebug(PLASMA_SESSION) << "Finished";
-    upAndRunning(QStringLiteral("ready"));
+    qCDebug(CASK_SESSION) << "Finished";
+//    upAndRunning(QStringLiteral("ready"));
+
+
+    startDetached("cask", {});
+
+
 
     playStartupSound(this);
     new SessionTrack(m_processes);
@@ -263,15 +253,15 @@ KCMInitJob::KCMInitJob()
 
 void KCMInitJob::start()
 {
-    org::kde::KCMInit kcminit(QStringLiteral("org.kde.kcminit"), QStringLiteral("/kcminit"), QDBusConnection::sessionBus());
-    kcminit.setTimeout(10 * 1000);
+//    org::kde::KCMInit kcminit(QStringLiteral("org.kde.kcminit"), QStringLiteral("/kcminit"), QDBusConnection::sessionBus());
+//    kcminit.setTimeout(10 * 1000);
 
-    QDBusPendingReply<void> pending = kcminit.runPhase1();
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pending, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this]() {
-        emitResult();
-    });
-    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QObject::deleteLater);
+//    QDBusPendingReply<void> pending = kcminit.runPhase1();
+//    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pending, this);
+//    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this]() {
+//        emitResult();
+//    });
+//    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QObject::deleteLater);
 }
 
 KDEDInitJob::KDEDInitJob()
@@ -280,7 +270,7 @@ KDEDInitJob::KDEDInitJob()
 
 void KDEDInitJob::start()
 {
-    qCDebug(PLASMA_SESSION());
+    qCDebug(CASK_SESSION());
     org::kde::kded5 kded(QStringLiteral("org.kde.kded5"), QStringLiteral("/kded"), QDBusConnection::sessionBus());
     auto pending = kded.loadSecondPhase();
 
@@ -298,14 +288,14 @@ RestoreSessionJob::RestoreSessionJob()
 
 void RestoreSessionJob::start()
 {
-    OrgKdeKSMServerInterfaceInterface ksmserverIface(QStringLiteral("org.kde.ksmserver"), QStringLiteral("/KSMServer"), QDBusConnection::sessionBus());
-    auto pending = ksmserverIface.restoreSession();
+//    OrgKdeKSMServerInterfaceInterface ksmserverIface(QStringLiteral("org.kde.ksmserver"), QStringLiteral("/KSMServer"), QDBusConnection::sessionBus());
+//    auto pending = ksmserverIface.restoreSession();
 
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pending, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this]() {
-        emitResult();
-    });
-    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QObject::deleteLater);
+//    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pending, this);
+//    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this]() {
+//        emitResult();
+//    });
+//    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QObject::deleteLater);
 }
 
 void StartupPhase2::migrateKDE4Autostart()
@@ -332,7 +322,7 @@ void StartupPhase2::migrateKDE4Autostart()
     }
 
     const QDir oldFolder(oldAutostart);
-    qCDebug(PLASMA_SESSION) << "Copying autostart files from" << oldFolder.path();
+    qCDebug(CASK_SESSION) << "Copying autostart files from" << oldFolder.path();
     const QStringList entries = oldFolder.entryList(QDir::Files);
     for (const QString &file : entries) {
         const QString src = oldFolder.absolutePath() + QLatin1Char('/') + file;
@@ -346,7 +336,7 @@ void StartupPhase2::migrateKDE4Autostart()
             success = QFile::copy(src, dest);
         }
         if (!success) {
-            qCWarning(PLASMA_SESSION) << "Error copying" << src << "to" << dest;
+            qCWarning(CASK_SESSION) << "Error copying" << src << "to" << dest;
         }
     }
     return;
@@ -360,7 +350,7 @@ AutoStartAppsJob::AutoStartAppsJob(const AutoStart &autostart, int phase)
 
 void AutoStartAppsJob::start()
 {
-    qCDebug(PLASMA_SESSION);
+    qCDebug(CASK_SESSION);
 
     QTimer::singleShot(0, this, [=]() {
         do {
@@ -376,13 +366,13 @@ void AutoStartAppsJob::start()
             KService service(serviceName);
             auto arguments = KIO::DesktopExecParser(service, QList<QUrl>()).resultingArguments();
             if (arguments.isEmpty()) {
-                qCWarning(PLASMA_SESSION) << "failed to parse" << serviceName << "for autostart";
+                qCWarning(CASK_SESSION) << "failed to parse" << serviceName << "for autostart";
                 continue;
             }
-            qCInfo(PLASMA_SESSION) << "Starting autostart service " << serviceName << arguments;
+            qCInfo(CASK_SESSION) << "Starting autostart service " << serviceName << arguments;
             auto program = arguments.takeFirst();
             if (!Startup::self()->startDetached(program, arguments))
-                qCWarning(PLASMA_SESSION) << "could not start" << serviceName << ":" << program << arguments;
+                qCWarning(CASK_SESSION) << "could not start" << serviceName << ":" << program << arguments;
         } while (true);
     });
 }
@@ -407,13 +397,13 @@ void StartServiceJob::start()
     m_process->setProcessEnvironment(env);
 
     if (!m_serviceId.isEmpty() && QDBusConnection::sessionBus().interface()->isServiceRegistered(m_serviceId)) {
-        qCDebug(PLASMA_SESSION) << m_process << "already running";
+        qCDebug(CASK_SESSION) << m_process << "already running";
         emitResult();
         return;
     }
-    qCDebug(PLASMA_SESSION) << "Starting " << m_process->program() << m_process->arguments();
+    qCDebug(CASK_SESSION) << "Starting " << m_process->program() << m_process->arguments();
     if (!Startup::self()->startDetached(m_process)) {
-        qCWarning(PLASMA_SESSION) << "error starting process" << m_process->program() << m_process->arguments();
+        qCWarning(CASK_SESSION) << "error starting process" << m_process->program() << m_process->arguments();
         emitResult();
     }
 
@@ -432,15 +422,15 @@ StartProcessJob::StartProcessJob(const QString &process, const QStringList &args
     env.insert(additionalEnv);
     m_process->setProcessEnvironment(env);
 
-    connect(m_process, &QProcess::finished, [this](int exitCode) {
-        qCInfo(PLASMA_SESSION) << "process job " << m_process->program() << "finished with exit code " << exitCode;
+    connect(m_process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [this](int exitCode) {
+        qCInfo(CASK_SESSION) << "process job " << m_process->program() << "finished with exit code " << exitCode;
         emitResult();
     });
 }
 
 void StartProcessJob::start()
 {
-    qCDebug(PLASMA_SESSION) << "Starting " << m_process->program() << m_process->arguments();
+    qCDebug(CASK_SESSION) << "Starting " << m_process->program() << m_process->arguments();
 
     m_process->start();
 }

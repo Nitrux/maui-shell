@@ -16,7 +16,7 @@ class KDesktopFile;
 /*
  * This class was imported from KService at commit c2cedaaeba0a53939c96a1273ab92ed1d6ca7bcf
  */
-class PlasmaAutostart : public QObject
+class CaskAutostart : public QObject
 {
     Q_OBJECT
 
@@ -39,8 +39,8 @@ public:
      *        provided then it uses the name registered with KAboutData.
      * @param parent QObject
      */
-    explicit PlasmaAutostart(const QString &entryName = QString(), QObject *parent = nullptr);
-    ~PlasmaAutostart();
+    explicit CaskAutostart(const QString &entryName = QString(), QObject *parent = nullptr);
+    ~CaskAutostart();
 
     /**
      * Flags for each of the conditions that may affect whether or not
@@ -195,5 +195,5 @@ private:
     bool copyIfNeededChecked;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PlasmaAutostart::Conditions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(CaskAutostart::Conditions)
 #endif

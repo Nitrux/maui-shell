@@ -69,7 +69,7 @@ target_link_libraries(startcask-wayland PRIVATE
     startcask
     )
 message( "CASKSTARTUP" ${CMAKE_CURRENT_BINARY_DIR})
-#add_subdirectory(cask-session)
+add_subdirectory(cask-session)
 #add_subdirectory(plasma-shutdown)
 
 #FIXME: reconsider, looks fishy

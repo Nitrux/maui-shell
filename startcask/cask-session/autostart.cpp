@@ -6,7 +6,7 @@
 
 #include "autostart.h"
 
-#include "../plasmaautostart/plasmaautostart.h"
+#include "../caskautostart/caskautostart.h"
 
 #include <QDir>
 #include <QHash>
@@ -67,8 +67,8 @@ void AutoStart::loadAutoStartList()
     }
 
     for (auto it = files.constBegin(); it != files.constEnd(); ++it) {
-        PlasmaAutostart config(*it);
-        if (!config.autostarts(QStringLiteral("KDE"), PlasmaAutostart::CheckAll)) {
+        CaskAutostart config(*it);
+        if (!config.autostarts(QStringLiteral("KDE"), CaskAutostart::CheckAll)) {
             continue;
         }
 
@@ -76,7 +76,7 @@ void AutoStart::loadAutoStartList()
         item.service = *it;
         item.name = extractName(it.key());
         item.startAfter = config.startAfter();
-        item.phase = qMax(PlasmaAutostart::BaseDesktop, config.startPhase());
+        item.phase = qMax(CaskAutostart::BaseDesktop, config.startPhase());
         m_startList.append(item);
     }
 }

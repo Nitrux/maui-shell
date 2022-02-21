@@ -200,7 +200,15 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     // Automatically support HiDPI
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+//    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+
+    if (!qEnvironmentVariableIsSet("PLASMA_USE_QT_SCALING")) {
+           qunsetenv("QT_DEVICE_PIXEL_RATIO");
+           QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+       } else {
+           QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+       }
 
 
 //    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
