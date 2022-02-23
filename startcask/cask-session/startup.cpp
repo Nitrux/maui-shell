@@ -171,10 +171,10 @@ Startup::Startup(QObject *parent)
     m_lock.reset(new QEventLoopLocker);
 
     const QVector<KJob *> sequence = {
-        new StartProcessJob(QStringLiteral("kcminit_startup"), {}),
-        new StartServiceJob(QStringLiteral("kded5"), {}, QStringLiteral("org.kde.kded5"), {}),
+//        new StartProcessJob(QStringLiteral("kcminit_startup"), {}),
+//        new StartServiceJob(QStringLiteral("kded5"), {}, QStringLiteral("org.kde.kded5"), {}),
 //        new StartServiceJob(QStringLiteral("/usr/lib/org_kde_powerdevil"), {},"", {}),
-        new StartServiceJob(QStringLiteral("cask"), {},"", {}),
+ //       new StartServiceJob(QStringLiteral("cask"), {},"", {}),
 
 //        new StartServiceJob(QStringLiteral("ksmserver"), QCoreApplication::instance()->arguments().mid(1), QStringLiteral("org.kde.ksmserver")),
         new StartupPhase0(autostart, this),
