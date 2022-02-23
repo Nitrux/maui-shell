@@ -110,6 +110,7 @@ Cask.PanelItem
                 {
                     icon.name:  "contrast"
                     text: i18n("Nigh mode")
+                    onClicked: Maui.App.darkMode = !Maui.App.darkMode
                 }
 
                 ToggleTemplate

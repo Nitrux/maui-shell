@@ -22,9 +22,20 @@ T.AbstractButton
 
     background: Rectangle
     {
-        color: Qt.darker(Kirigami.Theme.backgroundColor)
+        readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+
+        color: m_color
         opacity: control.checked? 1 : 0.7
-        radius: 10
+        radius: 8
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 
     contentItem: Item

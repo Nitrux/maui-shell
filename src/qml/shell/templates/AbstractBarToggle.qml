@@ -34,6 +34,15 @@ T.Pane
         color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
 
         radius: 10
+
+        Behavior on color
+           {
+               ColorAnimation
+               {
+                   easing.type: Easing.InQuad
+                   duration: Kirigami.Units.longDuration
+               }
+           }
     }
 
     property Item button : ToolButton
@@ -57,6 +66,7 @@ T.Pane
 
             RowLayout
             {
+                visible: _label.visible || _icon.visible || _label2.visible
                 Layout.fillWidth: true
                 spacing: control.spacing
 
@@ -68,7 +78,6 @@ T.Pane
                     implicitHeight: visible ? 16 : 0
                     implicitWidth: visible ? 16 : 0
                 }
-
 
                 Label
                 {

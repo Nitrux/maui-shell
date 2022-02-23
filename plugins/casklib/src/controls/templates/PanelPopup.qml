@@ -72,8 +72,7 @@ T.Container
                 opacity: Math.min(0.7, (control.height/(availableGeometry.height* 0.7)))
 
                 anchors.fill: parent
-                Kirigami.Theme.inherit: false
-                Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
                 color: Kirigami.Theme.backgroundColor
                 radius: Maui.Style.radiusV
                 //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))

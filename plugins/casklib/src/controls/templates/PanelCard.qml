@@ -14,7 +14,7 @@ T.Pane
 
     padding: Maui.Style.space.medium
     clip: false
-    spacing: Maui.Style.space.medium
+    spacing: padding
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
 //    visible:
     readonly property bool isOpen: parent !== null && visible
@@ -71,15 +71,22 @@ T.Pane
             }
         }
 
+        Behavior on color
+           {
+               ColorAnimation
+               {
+                   easing.type: Easing.InQuad
+                   duration: Kirigami.Units.longDuration
+               }
+           }
+
         layer.enabled: true
         layer.effect: DropShadow
         {
-            transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
-            radius: 8.0
-            samples: 17
-            color: Qt.rgba(0,0,0,0.2)
+            samples: 10
+            color: Qt.rgba(0,0,0,0.5)
         }
     }
 

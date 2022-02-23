@@ -27,9 +27,6 @@ T.Control
     property bool hidden : contentItem.y === 0- control.height
     property bool autohide: false
 
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-
     Layout.fillWidth: true
     Layout.margins: floating ? Maui.Style.space.tiny : 0
 

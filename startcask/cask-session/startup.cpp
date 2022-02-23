@@ -140,7 +140,7 @@ Startup::Startup(QObject *parent)
 {
     Q_ASSERT(!s_self);
     s_self = this;
-//    startDetached("cask", {});
+ //startDetached("cask", {});
 //return;
 //    new StartupAdaptor(this);
 //    QDBusConnection::sessionBus().registerObject(QStringLiteral("/Startup"), QStringLiteral("org.kde.Startup"), this);
@@ -171,8 +171,11 @@ Startup::Startup(QObject *parent)
     m_lock.reset(new QEventLoopLocker);
 
     const QVector<KJob *> sequence = {
-//        new StartProcessJob(QStringLiteral("kcminit_startup"), {}),
+        new StartProcessJob(QStringLiteral("kcminit_startup"), {}),
         new StartServiceJob(QStringLiteral("kded5"), {}, QStringLiteral("org.kde.kded5"), {}),
+//        new StartServiceJob(QStringLiteral("/usr/lib/org_kde_powerdevil"), {},"", {}),
+//        new StartServiceJob(QStringLiteral("cask"), {},"", {}),
+
 //        new StartServiceJob(QStringLiteral("ksmserver"), QCoreApplication::instance()->arguments().mid(1), QStringLiteral("org.kde.ksmserver")),
         new StartupPhase0(autostart, this),
         phase1 = new StartupPhase1(autostart, this),

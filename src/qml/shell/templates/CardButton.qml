@@ -13,7 +13,7 @@ Maui.BasicToolButton
     id: control
     property string tooltipText : text
     Kirigami.Theme.inherit: true
-      Kirigami.Theme.colorSet: Kirigami.Theme.Button
+    Kirigami.Theme.colorSet: Kirigami.Theme.Button
     padding: 2
     spacing: 2
     icon.width: 22
@@ -26,6 +26,15 @@ Maui.BasicToolButton
         color: control.hovered ? control.Kirigami.Theme.hoverColor :( control.checked ||  control.containsPress ? control.Kirigami.Theme.highlightColor : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4))
 
         radius: 10
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 
     ToolTip.text: control.tooltipText
@@ -33,13 +42,13 @@ Maui.BasicToolButton
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.tooltipText
 
-//    contentItem: Maui.GridItemTemplate
-//    {
-//        hovered: control.hovered
-//        iconVisible: true
-//        iconSource: control.icon.name
-//        label1.text: control.text
-//        iconSizeHint: control.icon.width
-//        labelSizeHint: 32
-//    }
+    //    contentItem: Maui.GridItemTemplate
+    //    {
+    //        hovered: control.hovered
+    //        iconVisible: true
+    //        iconSource: control.icon.name
+    //        label1.text: control.text
+    //        iconSizeHint: control.icon.width
+    //        labelSizeHint: 32
+    //    }
 }

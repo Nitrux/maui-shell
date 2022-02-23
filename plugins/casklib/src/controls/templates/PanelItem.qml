@@ -15,6 +15,7 @@ T.AbstractButton
     property Cask.PanelCard card : null
     property Cask.PanelSection section : control.parent.parent
     property bool flat: isMobile
+
     focus: true
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
@@ -31,10 +32,10 @@ T.AbstractButton
     icon.height: iconSize
     icon.width: iconSize
 
-    leftPadding: spacing
-    rightPadding: leftPadding
+//    leftPadding: spacing
+//    rightPadding: leftPadding
 
-    padding: Maui.Style.space.small
+    padding: spacing
 
     icon.color: (control.checked || control.hovered || control.down || control.pressed) && !control.flat ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 
@@ -54,9 +55,10 @@ T.AbstractButton
         id: _bg
         visible: !control.flat
 
-        property color finalColor: control.checked ? Qt.darker(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+       readonly property color finalColor: Kirigami.Theme.backgroundColor
         color: finalColor
         radius: 6
+        opacity: control.checked ?  1 : 0.8
 
         ColorAnimation on color
         {
@@ -66,6 +68,15 @@ T.AbstractButton
             from: Kirigami.Theme.highlightColor
             to: _bg.finalColor
             duration: 1000
+        }
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
         }
     }
 

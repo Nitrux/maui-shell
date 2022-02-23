@@ -79,6 +79,7 @@ Cask.PanelItem
             background: null
             rightContent: [ToolButton
                 {
+                    visible:  _nofList.count !== 0
                     icon.name: "edit-clear-all"
                     onClicked: _notifications.notificationsModel.historyModel.clearAll()
                 },

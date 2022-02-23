@@ -22,8 +22,6 @@ Maui.Dialog
     closeButtonVisible: false
     maxWidth: 400
     hint: 1
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
     entryField: true
 

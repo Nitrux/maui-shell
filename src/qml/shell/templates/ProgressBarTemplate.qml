@@ -22,6 +22,15 @@ T.ProgressBar
         height: implicitHeight
         radius: height/2
         color: Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
+
+        Behavior on color
+           {
+               ColorAnimation
+               {
+                   easing.type: Easing.InQuad
+                   duration: Kirigami.Units.longDuration
+               }
+           }
     }
 
     contentItem: Item

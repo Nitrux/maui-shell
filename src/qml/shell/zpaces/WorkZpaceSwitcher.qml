@@ -18,8 +18,6 @@ import Zpaces 1.0 as ZP
 Rectangle
 {
     id: control
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
     property WorkZpace workzpace
 

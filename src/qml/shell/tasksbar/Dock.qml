@@ -33,14 +33,14 @@ Item
         anchors.fill: parent
         color: _launcher.Kirigami.Theme.backgroundColor
 
-        Behavior on opacity
-        {
-            NumberAnimation
-            {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.OutInQuad
-            }
-        }
+//        Behavior on opacity
+//        {
+//            NumberAnimation
+//            {
+//                duration: Kirigami.Units.shortDuration
+//                easing.type: Easing.OutInQuad
+//            }
+//        }
 
         MouseArea
         {

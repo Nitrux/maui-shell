@@ -4,10 +4,12 @@ import QtQuick.Controls 2.5
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.3 as Maui
+
 import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
-import QtQuick.Templates 2.15 as T
 
+import QtQuick.Templates 2.15 as T
+import QtGraphicalEffects 1.0
 
 import "../templates"
 
@@ -15,20 +17,35 @@ T.Control
 {
     id: control
 
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-
     implicitWidth: _section.implicitWidth + rightPadding + leftPadding
     implicitHeight: 64
 
     padding: Maui.Style.space.small
-    spacing: Maui.Style.space.medium
+    spacing: padding
 
     background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor
         opacity: _dropArea.containsDrag ? 1 : 0.8
         radius: 10
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
+
+        layer.enabled: win.formFactor === Cask.Env.Desktop
+        layer.effect: DropShadow
+        {
+            horizontalOffset: 0
+            verticalOffset: 0
+            samples: 10
+            color: Qt.rgba(0,0,0,0.5)
+        }
     }
 
     contentItem: Flickable
@@ -37,10 +54,10 @@ T.Control
         contentHeight: availableHeight
         clip: true
 
-        Row
+        RowLayout
         {
             id: _section
-
+            height: parent.height
             spacing: control.spacing
 
             DockItem
@@ -51,20 +68,7 @@ T.Control
                 onClicked: _launcher.toggle()
             }
 
-            DockItem
-            {
-                icon.name: "view-file-columns"
-                checked: _appsOverview.opened
-                onClicked: _appsOverview.toggle()
-            }
 
-            DockItem
-            {
-                icon.name: "list-add"
-
-                visible: overView
-                onClicked: _zpaces.insertZpace(0)
-            }
 
             Repeater
             {
@@ -142,15 +146,6 @@ T.Control
                         }
                     }
 
-                    //                    contentItem: Item
-                    //                    {
-                    //                        Kirigami.Icon
-                    //                        {
-                    //                            source: task.iconName
-                    //                            height: 48
-                    //                            width: height
-                    //                            anchors.centerIn: parent
-                    //                        }
 
                     Rectangle
                     {
@@ -162,16 +157,22 @@ T.Control
                         visible: task.window
                         color: Kirigami.Theme.highlightColor
                     }
-                    //                    }
                 }
+            }
 
+            DockItem
+            {
+                icon.name: "view-file-columns"
+                checked: _appsOverview.opened
+                onClicked: _appsOverview.toggle()
+            }
 
+            DockItem
+            {
+                icon.name: "list-add"
 
-                //    onContentDropped:
-                //    {
-                //        console.log("Dropped things" , drop.urls)
-                //        _tasksModel.append({icon: "vvave", title: "Apps Title", id : "appId", path: "desktopFIle"})
-                //    }
+                visible: overView
+                onClicked: _zpaces.insertZpace(0)
             }
         }
     }
@@ -193,6 +194,4 @@ T.Control
             }
         }
     }
-
-
 }

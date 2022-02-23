@@ -15,7 +15,7 @@
 AutoStart::AutoStart()
     : m_phase(-1)
     , m_phasedone(false)
-    ,m_blackListed({"org.kde.plasmashell.desktop", "baloo_file.desktop", "org.kde.discover.notifier.desktop", "gnome-shell-overrides-migration.desktop", "org.gnome.Evolution-alarm-notify.desktop", "org.kde.kdeconnect.daemon.desktop", "dde-calendar-service.desktop", "nm-applet.desktop", "touchegg.desktop", "pamac-tray.desktop", "zeitgeist-datahub.desktop", "msm_kde_notifier.desktop"})
+    ,m_blackListed({"org.kde.plasmashell.desktop", "baloo_file.desktop", "org.kde.discover.notifier.desktop", "gnome-shell-overrides-migration.desktop", "org.gnome.Evolution-alarm-notify.desktop", "org.kde.kdeconnect.daemon.desktop", "dde-calendar-service.desktop", "nm-applet.desktop", "touchegg.desktop", "pamac-tray.desktop", "zeitgeist-datahub.desktop", "msm_kde_notifier.desktop", "pam_kwallet_init.desktop", "pulseaudio.desktop"})
 {
     loadAutoStartList();
 }
@@ -70,23 +70,23 @@ void AutoStart::loadAutoStartList()
     for (auto it = files.constBegin(); it != files.constEnd(); ++it) {
         CaskAutostart config(*it);
 
-//qDebug() << it.key();
+        //qDebug() << it.key();
 
-if (!config.autostarts(QStringLiteral("Cask"), CaskAutostart::CheckAll)) {
+        if (!config.autostarts(QStringLiteral("Cask"), CaskAutostart::CheckAll)) {
 
             continue;
 
         }
 
-if( m_blackListed.contains(it.key()))
-{
-    continue;
-}
+        if( m_blackListed.contains(it.key()))
+        {
+            continue;
+        }
 
-//if(!config.autostarts(QStringLiteral("Cask"), CaskAutostart::CheckAll))
-//{
-//    continue;
-//}
+        //if(!config.autostarts(QStringLiteral("Cask"), CaskAutostart::CheckAll))
+        //{
+        //    continue;
+        //}
 
         AutoStartItem item;
         item.service = *it;

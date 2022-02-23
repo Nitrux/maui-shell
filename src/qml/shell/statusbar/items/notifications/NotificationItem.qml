@@ -13,8 +13,6 @@ ItemDelegate
     id: control
     implicitHeight: _layout.implicitHeight + topPadding + bottomPadding
     opacity: (width-Math.abs(x))/width
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
     leftPadding: 0
     rightPadding: 0
@@ -123,6 +121,15 @@ ItemDelegate
             anchors.fill: parent
             color:  Kirigami.Theme.backgroundColor
             radius: 10
+
+            Behavior on color
+            {
+                ColorAnimation
+                {
+                    easing.type: Easing.InQuad
+                    duration: Kirigami.Units.longDuration
+                }
+            }
 
             layer.enabled: true
             layer.effect: DropShadow

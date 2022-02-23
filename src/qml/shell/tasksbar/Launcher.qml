@@ -24,9 +24,6 @@ Maui.Page
 
     property bool opened : false
 
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-
     property alias searchBar : _searchBar
 
     signal placeClicked(string path)
@@ -35,7 +32,7 @@ Maui.Page
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Kirigami.Units.shortDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -44,9 +41,6 @@ Maui.Page
     headBar.background: null
     headBar.leftContent: ToolButton
     {
-        Kirigami.Theme.inherit: false
-        Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-
         icon.name: "go-previous"
         onClicked: _swipeView.decrementCurrentIndex()
         visible: _swipeView.currentIndex=== 1
@@ -55,8 +49,6 @@ Maui.Page
     headBar.middleContent: Maui.SearchField
     {
         id: _searchBar
-        Kirigami.Theme.inherit: false
-        Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
         Layout.maximumWidth: 500
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignCenter
@@ -83,15 +75,22 @@ Maui.Page
         opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.95
         radius: 10
 
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
+
         layer.enabled: win.formFactor === Cask.Env.Desktop
         layer.effect: DropShadow
         {
-            transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
-            radius: 8.0
-            samples: 17
-            color: Qt.rgba(0,0,0,0.2)
+            samples: 10
+            color: Qt.rgba(0,0,0,0.5)
         }
     }
 
@@ -289,7 +288,7 @@ Maui.Page
                                     list: Cask.RecentFiles
                                     {
                                         url: StandardPaths.writableLocation(StandardPaths.DownloadLocation)
-//                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
+                                        //                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
 
                                     }
                                 }
