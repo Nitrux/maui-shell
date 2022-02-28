@@ -1,5 +1,0 @@
-[Desktop Entry]
-Name=Cask (Wayland)
-Comment=Maui Shell is a convergent shell for desktops, tablets, and phones.
-Exec=startcask-wayland
-Type=Application

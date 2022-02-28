@@ -78,15 +78,20 @@ if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
         XCURSOR_PATH="${KDE_INSTALL_FULL_DATAROOTDIR}/icons:$XCURSOR_PATH:~/.icons:/usr/share/icons:/usr/share/pixmaps:/usr/X11R6/lib/X11/icons")
 endif()
 
+   set(CASK_WAYLAND_DESKTOP_FILENAME cask-session.desktop CACHE INTERNAL "Filename for Cask Wayland session")
+
 configure_file(config-startcask.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-startcask.h)
+configure_file(cask-session.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/${CASK_WAYLAND_DESKTOP_FILENAME})
 
 install(TARGETS startcask-wayland ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS cask-sourceenv.sh DESTINATION ${KDE_INSTALL_LIBEXECDIR})
 install(PROGRAMS cask-dbus-run-session-if-needed DESTINATION ${KDE_INSTALL_LIBEXECDIR})
 
-install(FILES cask-session.desktop
+install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/${CASK_WAYLAND_DESKTOP_FILENAME}
         DESTINATION ${KDE_INSTALL_DATADIR}/wayland-sessions
 )
+
 install(FILES cask.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES cask.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
 

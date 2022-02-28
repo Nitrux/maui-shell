@@ -1,5 +1,5 @@
 #!/bin/sh
-# Usage: plasma-dbus-run-session-if-needed PROGRAM [ARGUMENTS]
+# Usage: cask-dbus-run-session-if-needed PROGRAM [ARGUMENTS]
 # If the session bus is not available it is spawned and wrapper round our program
 # Otherwise we spawn our program directly
 drs=

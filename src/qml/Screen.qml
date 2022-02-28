@@ -77,7 +77,7 @@ WaylandOutput
         id: win
         width: 1024
         height: 760
-Maui.App.darkMode: true
+        Maui.App.darkMode: true
         readonly property int formFactor :
         {
             if(width > 1500)
@@ -95,7 +95,7 @@ Maui.App.darkMode: true
             anchors.fill: parent
             // Set this to false to disable the outer mouse cursor when running nested
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
-            windowSystemCursorEnabled: control.isNestedCompositor
+            windowSystemCursorEnabled: false
 
             //            ZP.WaylandCursorGrabber
             //            {
@@ -246,7 +246,8 @@ Maui.App.darkMode: true
 
             // Draws the mouse cursor for a given Wayland seat
             WaylandCursorItem {
-                inputEventsEnabled: false
+                visible: false
+//                inputEventsEnabled: false
                 x: mouseTracker.mouseX
                 y: mouseTracker.mouseY
                 seat: control.compositor.defaultSeat
