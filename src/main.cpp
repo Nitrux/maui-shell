@@ -30,6 +30,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickStyle>
+#include <QSessionManager>
 
 #include <errno.h>
 #include <signal.h>
@@ -218,10 +219,21 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Cask"); // defaults to name of the executable
     QApplication::setOrganizationName("maui");
     QApplication::setApplicationVersion("1.0");
-#ifndef QT_NO_SESSIONMANAGER
-    app.setFallbackSessionManagementEnabled(false);
-#endif
-    app.setQuitOnLastWindowClosed(false);
+//#ifndef QT_NO_SESSIONMANAGER
+//    app.setFallbackSessionManagementEnabled(false);
+//#endif
+//    app.setQuitOnLastWindowClosed(false);
+
+        app.setQuitOnLastWindowClosed(false);
+        QGuiApplication::setFallbackSessionManagementEnabled(false);
+        auto disableSessionManagement = [](QSessionManager &sm) {
+                    sm.setRestartHint(QSessionManager::RestartNever);
+                };
+
+        QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
+               QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);
+
+
 
     QQuickStyle::setStyle("maui-style");
 
@@ -265,7 +277,7 @@ int main(int argc, char *argv[])
     parser.addOption(windowOption);
 
     parser.process(app);
-    if (parser.isSet(respawnOption))
+//    if (parser.isSet(respawnOption))
         setupSignalHandler();
     if (parser.isSet(configDirOption))
         grefsenConfigDirPath = parser.value(configDirOption);

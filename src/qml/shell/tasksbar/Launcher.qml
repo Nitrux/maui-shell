@@ -28,6 +28,9 @@ Maui.Page
 
     signal placeClicked(string path)
 
+    Keys.enabled: true
+    Keys.onEscapePressed: control.close()
+
     Behavior on opacity
     {
         NumberAnimation

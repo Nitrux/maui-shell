@@ -28,7 +28,10 @@ int main(int argc, char **argv)
 
     createConfigDirectory();
     setupCursor();
-    signal(SIGTERM, sigtermHandler);
+//    signal(SIGTERM, sigtermHandler);
+
+    signal(SIGINT,  sigtermHandler);
+       signal(SIGTERM, sigtermHandler);
 
     {
         KConfig fonts(QStringLiteral("kcmfonts"));
@@ -72,7 +75,7 @@ int main(int argc, char **argv)
     runEnvironmentScripts();
 
     if (!qEnvironmentVariableIsSet("DBUS_SESSION_BUS_ADDRESS")) {
-        out << "startplasmacompositor: Could not start D-Bus. Can you call qdbus?\n";
+        out << "startcask session: Could not start D-Bus. Can you call qdbus?\n";
         return 1;
     }
 

@@ -41,9 +41,11 @@ QTextStream out(stderr);
 
 void sigtermHandler(int signalNumber)
 {
-    Q_UNUSED(signalNumber)
+    qDebug() << "terminating caks session" << signalNumber;
     if (QCoreApplication::instance()) {
         QCoreApplication::instance()->exit(-1);
+        qDebug() << "terminating caks session FINISHED" << signalNumber;
+
     }
 }
 
@@ -343,13 +345,13 @@ void setupCaskEnvironment()
     // otherwise apps that manually opt in for high DPI get auto scaled by the developer AND manually scaled by us
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
 
-    qputenv("KDE_FULL_SESSION", "true");
+    //    qputenv("KDE_FULL_SESSION", "true");
     qputenv("CASK_FULL_SESSION", "true");
     qputenv("CASK_SESSION_VERSION", "1");
     qputenv("CASK_SESSION_UID", QByteArray::number(getuid()));
     qputenv("XDG_CURRENT_DESKTOP", "CASK");
 
-    qputenv("KDE_APPLICATIONS_AS_SCOPE", "1");
+    //    qputenv("KDE_APPLICATIONS_AS_SCOPE", "1");
 
     // Add kdedefaults dir to allow config defaults overriding from a writable location
     QByteArray currentConfigDirs = qgetenv("XDG_CONFIG_DIRS");
@@ -363,9 +365,9 @@ void setupCaskEnvironment()
 
 void cleanupPlasmaEnvironment(const std::optional<QProcessEnvironment> &oldSystemdEnvironment)
 {
-    qunsetenv("KDE_FULL_SESSION");
-    qunsetenv("KDE_SESSION_VERSION");
-    qunsetenv("KDE_SESSION_UID");
+    qunsetenv("CASK_FULL_SESSION");
+    qunsetenv("CASK_SESSION_VERSION");
+    qunsetenv("CASK_SESSION_UID");
 
     if (!oldSystemdEnvironment) {
         return;
@@ -508,57 +510,11 @@ bool useSystemdBoot()
     return hasSystemdService(QStringLiteral("xdg-desktop-autostart.target"));
 }
 
-
-
-static void migrateUserScriptsAutostart()
-{
-    QDir configLocation(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
-    QDir autostartScriptsLocation(configLocation.filePath(QStringLiteral("autostart-scripts")));
-    if (!autostartScriptsLocation.exists()) {
-        return;
-    }
-    const QDir autostartScriptsMovedLocation(configLocation.filePath(QStringLiteral("old-autostart-scripts")));
-    const auto entries = autostartScriptsLocation.entryInfoList(QDir::Files);
-    for (const auto &info : entries) {
-        const auto scriptName = info.fileName();
-        const auto scriptPath = info.absoluteFilePath();
-        const auto scriptMovedPath = autostartScriptsMovedLocation.filePath(scriptName);
-
-        // Don't migrate backup files
-        if (scriptName.endsWith(QLatin1Char('~')) || scriptName.endsWith(QLatin1String(".bak"))
-                || (scriptName[0] == QLatin1Char('%') && scriptName.endsWith(QLatin1Char('%')))
-                || (scriptName[0] == QLatin1Char('#') && scriptName.endsWith(QLatin1Char('#')))) {
-            qCDebug(CASK_STARTUP) << "Not migrating backup autostart script" << scriptName;
-            continue;
-        }
-
-        // Migrate autostart script to a standard .desktop autostart file
-        AutostartScriptDesktopFile desktopFile(scriptName, info.isSymLink() ? info.symLinkTarget() : scriptMovedPath);
-        qCInfo(CASK_STARTUP) << "Migrated legacy autostart script" << scriptPath << "to" << desktopFile.fileName();
-
-        if (info.isSymLink() && QFile::remove(scriptPath)) {
-            qCInfo(CASK_STARTUP) << "Removed legacy autostart script" << scriptPath << "that pointed to" << info.symLinkTarget();
-        }
-    }
-    // Delete or rename autostart-scripts to old-autostart-scripts to avoid running the migration again
-    if (autostartScriptsLocation.entryInfoList(QDir::Files).empty()) {
-        autostartScriptsLocation.removeRecursively();
-    } else {
-        configLocation.rename(autostartScriptsLocation.dirName(), autostartScriptsMovedLocation.dirName());
-    }
-    // Reload systemd so that the XDG autostart generator is run again to pick up the new .desktop files
-    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.systemd1"),
-                                                          QStringLiteral("/org/freedesktop/systemd1"),
-                                                          QStringLiteral("org.freedesktop.systemd1.Manager"),
-                                                          QStringLiteral("Reload"));
-    QDBusConnection::sessionBus().call(message);
-}
-
 bool startCaskSession()
 {
     resetSystemdFailedUnits();
-//    OrgKdeKSplashInterface iface(QStringLiteral("org.kde.KSplash"), QStringLiteral("/KSplash"), QDBusConnection::sessionBus());
-//    iface.setStage(QStringLiteral("startPlasma"));
+    //    OrgKdeKSplashInterface iface(QStringLiteral("org.kde.KSplash"), QStringLiteral("/KSplash"), QDBusConnection::sessionBus());
+    //    iface.setStage(QStringLiteral("startPlasma"));
     // finally, give the session control to the session manager
     // see kdebase/ksmserver for the description of the rest of the startup sequence
     // if the KDEWM environment variable has been set, then it will be used as KDE's
@@ -580,9 +536,9 @@ bool startCaskSession()
 
     // We want to exit when both ksmserver and plasma-session-shutdown have finished
     // This also closes if ksmserver crashes unexpectedly, as in those cases plasma-shutdown is not running
-//    serviceWatcher.addWatchedService(QStringLiteral("org.kde.KWinWrapper"));
-//    serviceWatcher.addWatchedService(QStringLiteral("org.kde.Shutdown"));
-//    serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
+    //    serviceWatcher.addWatchedService(QStringLiteral("org.kde.KWinWrapper"));
+    //    serviceWatcher.addWatchedService(QStringLiteral("org.kde.Shutdown"));
+    //    serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
 
     QObject::connect(&serviceWatcher, &QDBusServiceWatcher::serviceUnregistered, [&]() {
         const QStringList watchedServices = serviceWatcher.watchedServices();
@@ -595,56 +551,35 @@ bool startCaskSession()
     });
 
     // Create .desktop files for the scripts in .config/autostart-scripts
-    migrateUserScriptsAutostart();
+    //    migrateUserScriptsAutostart();
 
     QScopedPointer<QProcess, KillBeforeDeleter> startCaskSession;
 
-    //    if (!useSystemdBoot()) {
-    auto useSystemdBoot = false;
-    if (!useSystemdBoot)
-    {
-        startCaskSession.reset(new QProcess);
-        qCDebug(CASK_STARTUP) << "Using classic boot";
+    startCaskSession.reset(new QProcess);
+    qCDebug(CASK_STARTUP) << "Using classic boot";
 
-        QStringList plasmaSessionOptions;
+    QStringList caskSessionOptions;
 
-        plasmaSessionOptions << QStringLiteral("");
+    caskSessionOptions << QStringLiteral("");
 
-        startCaskSession->setProcessChannelMode(QProcess::ForwardedChannels);
-        QObject::connect(startCaskSession.data(), static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), &e, [&rc](int exitCode, QProcess::ExitStatus) {
-            if (exitCode == 255) {
-                // Startup error
-                messageBox(QStringLiteral("startkde: Could not start plasma_session. Check your installation.\n"));
-                rc = false;
-            }
-        });
+    startCaskSession->setProcessChannelMode(QProcess::ForwardedChannels);
+    QObject::connect(startCaskSession.data(), static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), &e, [&rc](int exitCode, QProcess::ExitStatus) {
+        if (exitCode == 255) {
+            // Startup error
+            messageBox(QStringLiteral("startcask: Could not start cask_session. Check your installation.\n"));
+            rc = false;
+        }
+    });
 
-        startCaskSession->start("cask_session", plasmaSessionOptions);
-    } else {
-        //        qCDebug(CASK_STARTUP) << "Using systemd boot";
-        //        const QString platform = QStringLiteral("wayland");
+    startCaskSession->start("cask", caskSessionOptions);
 
-        //        auto msg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.systemd1"),
-        //                                                  QStringLiteral("/org/freedesktop/systemd1"),
-        //                                                  QStringLiteral("org.freedesktop.systemd1.Manager"),
-        //                                                  QStringLiteral("StartUnit"));
-        //        msg << QStringLiteral("plasma-workspace-%1.target").arg(platform) << QStringLiteral("fail");
-        //        QDBusReply<QDBusObjectPath> reply = QDBusConnection::sessionBus().call(msg);
-        //        if (!reply.isValid()) {
-        //            qCWarning(CASK_STARTUP) << "Could not start systemd managed Plasma session:" << reply.error().name() << reply.error().message();
-        //            messageBox(QStringLiteral("startkde: Could not start Plasma session.\n"));
-        //            rc = false;
-        //        } else {
-        //            playStartupSound(&e);
-        //        }
-        //        if (wayland) {
-        //            startKSplashViaSystemd();
-        //        }
-    }
+
     if (rc) {
         QObject::connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &e, &QEventLoop::quit);
         e.exec();
     }
+
+    qDebug() << "STOPPED CASK SHELL AMIN LOOP";
     return rc;
 }
 
