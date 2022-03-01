@@ -550,8 +550,6 @@ bool startCaskSession()
         }
     });
 
-    // Create .desktop files for the scripts in .config/autostart-scripts
-    //    migrateUserScriptsAutostart();
 
     QScopedPointer<QProcess, KillBeforeDeleter> startCaskSession;
 
@@ -571,7 +569,7 @@ bool startCaskSession()
         }
     });
 
-    startCaskSession->start("cask", caskSessionOptions);
+    startCaskSession->start("cask_session", caskSessionOptions);
 
 
     if (rc) {

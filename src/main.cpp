@@ -169,6 +169,17 @@ static qreal highestDPR(QList<QScreen *> &screens)
     return ret;
 }
 
+void sigtermHandler(int signalNumber)
+{
+    qDebug() << "terminating caks session" << signalNumber;
+    if (QCoreApplication::instance()) {
+//        QCoreApplication::instance()->exit(-1);
+        qDebug() << "terminating caks session FINISHED" << signalNumber;
+
+    }
+}
+
+
 #define ZPACES_URI "Zpaces"
 int main(int argc, char *argv[])
 {
@@ -223,8 +234,9 @@ int main(int argc, char *argv[])
 //    app.setFallbackSessionManagementEnabled(false);
 //#endif
 //    app.setQuitOnLastWindowClosed(false);
+    signal(SIGINT,  sigtermHandler);
 
-        app.setQuitOnLastWindowClosed(false);
+    app.setQuitOnLastWindowClosed(false);
         QGuiApplication::setFallbackSessionManagementEnabled(false);
         auto disableSessionManagement = [](QSessionManager &sm) {
                     sm.setRestartHint(QSessionManager::RestartNever);
