@@ -10,7 +10,7 @@ import "../.."
 ToggleTemplate
 {
     icon.name: "network-bluetooth"
-    template.label1.text: "PinePhone-Pro-2x"
+    text: "PinePhone-Pro-2x"
     display: ToolButton.TextBesideIcon
 
 //    BusyIndicator

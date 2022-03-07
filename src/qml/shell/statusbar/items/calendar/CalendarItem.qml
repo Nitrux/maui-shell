@@ -22,6 +22,7 @@ Cask.PanelItem
 
         Templates.StackPage
         {
+
             implicitHeight: Math.max(400, Math.min(400, _listView.implicitHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
             title: i18n("Tasks")
 
@@ -83,14 +84,31 @@ Cask.PanelItem
                     month: new Date().getMonth()
                     year: new Date().getFullYear()
                     locale: Qt.locale("en_US")
-                    delegate: Label
+                    delegate: T.ItemDelegate
+                    {
+                        id: _delegate
+                        enabled: model.day
+                        implicitWidth: implicitContentWidth + rightPadding + leftPadding
+
+                        implicitHeight: implicitContentHeight + topPadding +bottomPadding
+
+                        background: Rectangle
+                        {
+                            radius: 10
+                            color: _delegate.hovered || _delegate.down ? Kirigami.Theme.highlightColor : "transparent"
+                        }
+
+                        contentItem: Label
                     {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         opacity: model.month === _monthGrid.month ? 1 : 0
                         text: model.day
                         font: _monthGrid.font
-                        color: model.today ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                        color: model.today ?  Kirigami.Theme.highlightColor : (_delegate.hovered ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor)
+                    }
+
+                        onClicked: _stack.push(_tasksPageComponent)
                     }
                 }
             }

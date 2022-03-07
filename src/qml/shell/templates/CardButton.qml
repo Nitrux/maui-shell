@@ -14,8 +14,8 @@ Maui.BasicToolButton
     property string tooltipText : text
     Kirigami.Theme.inherit: true
     Kirigami.Theme.colorSet: Kirigami.Theme.Button
-    padding: 2
-    spacing: 2
+    padding: Maui.Style.space.small
+    spacing: padding
     icon.width: 22
     icon.height: 22
 
@@ -23,9 +23,10 @@ Maui.BasicToolButton
     {
         readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
-        color: control.hovered ? control.Kirigami.Theme.hoverColor :( control.checked ||  control.containsPress ? control.Kirigami.Theme.highlightColor : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4))
+        color: control.hovered ? control.Kirigami.Theme.hoverColor :( control.checked ||  control.containsPress ? control.Kirigami.Theme.highlightColor : m_color)
 
-        radius: 10
+        radius: 8
+        opacity: control.checked? 1 : 0.7
 
         Behavior on color
         {

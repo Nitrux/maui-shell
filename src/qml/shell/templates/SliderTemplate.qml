@@ -51,6 +51,15 @@ T.Slider
                 }
             }
 
+            Behavior on color
+            {
+                ColorAnimation
+                {
+                    easing.type: Easing.InQuad
+                    duration: Kirigami.Units.longDuration
+                }
+            }
+
             layer.enabled: _animatedRec.visible
             layer.effect: OpacityMask
             {
@@ -64,13 +73,13 @@ T.Slider
         }
 
         Behavior on color
-           {
-               ColorAnimation
-               {
-                   easing.type: Easing.InQuad
-                   duration: Kirigami.Units.longDuration
-               }
-           }
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 
     handle: Rectangle

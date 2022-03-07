@@ -31,18 +31,19 @@ T.Pane
     {
         readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
-        color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+        color: m_color
+        opacity: 0.7
 
-        radius: 10
+        radius: 8
 
         Behavior on color
-           {
-               ColorAnimation
-               {
-                   easing.type: Easing.InQuad
-                   duration: Kirigami.Units.longDuration
-               }
-           }
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 
     property Item button : ToolButton

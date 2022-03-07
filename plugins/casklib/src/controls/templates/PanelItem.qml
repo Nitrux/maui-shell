@@ -14,7 +14,7 @@ T.AbstractButton
     id: control
     property Cask.PanelCard card : null
     property Cask.PanelSection section : control.parent.parent
-    property bool flat: isMobile
+    property bool flat: win.formFactor !== Cask.Env.Desktop
 
     focus: true
     focusPolicy: Qt.StrongFocus
@@ -27,7 +27,7 @@ T.AbstractButton
 
     default property alias content : _layout.data
 
-    property int iconSize :Maui.Style.iconSizes.small
+    property int iconSize : Maui.Style.iconSizes.small
 
     icon.height: iconSize
     icon.width: iconSize
@@ -37,9 +37,9 @@ T.AbstractButton
 
     padding: spacing
 
-    icon.color: (control.checked || control.hovered || control.down || control.pressed) && !control.flat ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+    icon.color: Kirigami.Theme.textColor
 
-    spacing: isMobile ? Maui.Style.space.small : Maui.Style.space.medium
+    spacing: control.flat ? Maui.Style.space.small : Maui.Style.space.medium
 
     Behavior on iconSize
     {

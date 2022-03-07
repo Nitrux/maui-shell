@@ -157,7 +157,7 @@ Maui.Page
                                 {
                                     color:  Qt.lighter(Kirigami.Theme.backgroundColor)
                                     opacity: 0.5
-                                    radius: 12
+                                    radius: 10
                                 }
 
                                 contentItem: GridView
@@ -183,8 +183,8 @@ Maui.Page
                                         Kirigami.Icon
                                         {
                                             anchors.centerIn: parent
-                                            height: 32
-                                            width: height
+                                            height: width
+                                            width: parent.width* 0.8
                                             source: model.icon
                                         }
                                     }

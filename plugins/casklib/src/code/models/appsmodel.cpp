@@ -32,7 +32,7 @@ static FMH::MODEL_LIST groupData( KServiceGroup::Ptr group)
     {
         for(const auto &s : group->groupEntries())
         {
-            if (!s->noDisplay() && s->serviceEntries().length() > 0)
+            if (!s->noDisplay() && s->serviceEntries().length() > 0 && s->childCount() > 0)
                 res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, s->comment()}, {FMH::MODEL_KEY::ICON, s->icon()}, {FMH::MODEL_KEY::LABEL, s->name()}, {FMH::MODEL_KEY::PATH, s->entryPath()}};
 
         }

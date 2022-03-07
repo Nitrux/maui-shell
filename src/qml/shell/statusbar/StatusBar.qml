@@ -32,7 +32,8 @@ T.Control
 
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
 
-    padding: isMobile ? 0 : Maui.Style.space.tiny
+    spacing: padding
+    padding: !floating ? 0 : Maui.Style.space.tiny
     topPadding: padding
     bottomPadding: padding
     leftPadding: padding
@@ -57,6 +58,15 @@ T.Control
     }
 
     Behavior on padding
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Behavior on spacing
     {
         NumberAnimation
         {
@@ -133,7 +143,7 @@ T.Control
 
             Layout.fillWidth: true
             availableGeometry : desktop.availableGeometry
-
+            spacing: control.spacing
             popWidth: 320
             alignment: Qt.AlignLeft
 
@@ -164,6 +174,7 @@ T.Control
             alignment: Qt.AlignRight
             availableGeometry : desktop.availableGeometry
             popWidth: 340
+            spacing: control.spacing
 
             Connections
             {

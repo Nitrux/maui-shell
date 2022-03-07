@@ -29,14 +29,14 @@ T.Container
     property int alignment: Qt.AlignCenter
 
     signal overlayClicked()
-//        signal opened()
+    //        signal opened()
     signal closed()
 
     Keys.enabled: true
     Keys.onEscapePressed: control.overlayClicked()
 
     background: null
-    data: Item
+    data: MouseArea
     {
         id:_overlay
         opacity:  control.opacity
@@ -44,28 +44,18 @@ T.Container
         visible: control.visible
         anchors.fill: parent
         parent: _cask.overlayTopPanel;
+        propagateComposedEvents: win.formFactor === Cask.Env.Desktop
+        preventStealing: win.formFactor !== Cask.Env.Desktop
+        onPressed:
+        {
+            control.overlayClicked()
+            mouse.accepted = win.formFactor !== Cask.Env.Desktop
+        }
 
         Item
         {
             visible: win.formFactor !== Cask.Env.Desktop
             anchors.fill: parent
-//            Image
-//            {
-//                id: _img
-//                anchors.fill: parent
-//                fillMode: Image.PreserveAspectCrop
-//                source: _swipeView.currentItem.backgroundImage
-//            }
-
-//            FastBlur
-//            {
-//                anchors.fill: parent
-//                id: fastBlur
-//                source: _img
-//                radius: 64
-//                transparentBorder: false
-//                cached: true
-//            }
 
             Rectangle
             {
@@ -74,8 +64,7 @@ T.Container
                 anchors.fill: parent
 
                 color: Kirigami.Theme.backgroundColor
-                radius: Maui.Style.radiusV
-                //            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
                 Behavior on opacity
                 {
                     NumberAnimation
@@ -84,18 +73,15 @@ T.Container
                         easing.type: Easing.OutInQuad
                     }
                 }
-            }
-        }
 
-        MouseArea
-        {
-            anchors.fill: parent
-            propagateComposedEvents: win.formFactor === Cask.Env.Desktop
-            preventStealing: win.formFactor !== Cask.Env.Desktop
-            onPressed:
-            {
-                control.overlayClicked()
-                mouse.accepted = win.formFactor !== Cask.Env.Desktop
+                Behavior on color
+                {
+                    ColorAnimation
+                    {
+                        easing.type: Easing.InQuad
+                        duration: Kirigami.Units.longDuration
+                    }
+                }
             }
         }
     }
@@ -111,7 +97,7 @@ T.Container
         boundsBehavior: Flickable.StopAtBounds
         boundsMovement :Flickable.StopAtBounds
 
-//        interactive: Maui.Handy.isTouch
+        //        interactive: Maui.Handy.isTouch
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
         highlightResizeDuration : 0
@@ -120,9 +106,9 @@ T.Container
         {
             id: handler2
             dragThreshold: 100
-    //                enabled: popup.opened /*&& Maui.Handy.isTouch*/
+            //                enabled: popup.opened /*&& Maui.Handy.isTouch*/
             target: control
-    //                yAxis.maximum: popup.finalYPos
+            //                yAxis.maximum: popup.finalYPos
 
             xAxis.enabled : false
             grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
@@ -145,7 +131,7 @@ T.Container
         console.log("DESTROY PANEL POPUP")
     }
 
-        NumberAnimation
+    NumberAnimation
     {
         id: _slideDownAnimation
         target: control
@@ -181,7 +167,7 @@ T.Container
     {
         control.opened = true
         control.forceActiveFocus()
-//        control.opened()
+        //        control.opened()
     }
 
     function clear()

@@ -550,7 +550,6 @@ bool startCaskSession()
         }
     });
 
-
     QScopedPointer<QProcess, KillBeforeDeleter> startCaskSession;
 
     startCaskSession.reset(new QProcess);

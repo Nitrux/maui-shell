@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
 import org.maui.cask 1.0 as Cask
@@ -110,6 +110,16 @@ T.Pane
         }
     }
 
+    Kirigami.ImageColors
+    {
+        id: _imageColors
+        source: control.zpace.wallpaper.replace("file://", "")
+        onPaletteChanged:
+        {
+            Maui.App.accentColor = _imageColors.highlight
+        }
+    }
+
 
     DropArea
     {
@@ -120,7 +130,7 @@ T.Pane
         {
             if(drop.urls)
             {
-                control.zpace.wallpaper= drop.urls[0]
+                control.zpace.wallpaper = drop.urls[0]
             }
         }
     }

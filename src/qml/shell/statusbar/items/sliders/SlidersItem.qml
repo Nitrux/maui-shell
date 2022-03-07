@@ -80,8 +80,6 @@ Cask.PanelItem
                     width: parent.width
                     onClicked: _togglesStack.push(page)
                 }
-
-
             }
         }
     }

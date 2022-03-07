@@ -91,7 +91,7 @@ T.Control
     PanelPopup
     {
         id: popup
-        z: _content.z -2
+        z: _content.z - 6
         finalYPos : availableGeometry.y
 
         height: Math.min (availableGeometry.height, popup.implicitHeight)

@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
+import QtQuick.Templates 2.15 as T
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -15,6 +16,7 @@ StackPage
     id: control
     implicitHeight: Math.max(400, Math.min(400, _layout.implicitHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
     title: i18n("Audio")
+    spacing: _listView.spacing
 
     Maui.Holder
     {

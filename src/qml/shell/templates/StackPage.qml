@@ -17,4 +17,6 @@ Maui.Page
         icon.name: "go-previous"
         onClicked: control.StackView.view.pop()
     }
+
+    background: null
 }

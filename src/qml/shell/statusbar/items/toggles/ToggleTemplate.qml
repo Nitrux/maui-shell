@@ -29,26 +29,6 @@ CardButton
         isMask: false
         iconVisible: true
         iconSizeHint: Maui.Style.iconSizes.medium
-        headerSizeHint: control.implicitHeight
-
-        Loader
-        {
-            asynchronous: true
-            active: control.page
-            visible: active
-            Layout.preferredHeight: 16
-            Layout.preferredWidth: height
-            sourceComponent: Item
-            {
-                Kirigami.Icon
-                {
-                    color: Kirigami.Theme.textColor
-                    anchors.centerIn: parent
-                    source: "arrow-right"
-                    height: 8
-                    width: 8
-                }
-            }
-        }
+//        headerSizeHint: control.implicitHeight
     }
 }

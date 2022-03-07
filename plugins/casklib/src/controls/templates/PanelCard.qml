@@ -1,6 +1,6 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.0
- import QtQml.Models 2.15
+import QtQml.Models 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 import org.kde.kirigami 2.7 as Kirigami
@@ -16,7 +16,7 @@ T.Pane
     clip: false
     spacing: padding
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
-//    visible:
+    //    visible:
     readonly property bool isOpen: parent !== null && visible
     readonly property int index : ObjectModel.index
 
@@ -25,16 +25,16 @@ T.Pane
 
     opacity: isOpen ? 1 : 0
 
-//    onVisibleChanged:
-//    {
-//        if(visible)
-//        {
-//            control.opened()
-//        }else
-//        {
-//            control.closed()
-//        }
-//    }
+    //    onVisibleChanged:
+    //    {
+    //        if(visible)
+    //        {
+    //            control.opened()
+    //        }else
+    //        {
+    //            control.closed()
+    //        }
+    //    }
 
     ListView.onRemove: control.closed()
     ListView.onAdd: control.opened()
@@ -72,13 +72,13 @@ T.Pane
         }
 
         Behavior on color
-           {
-               ColorAnimation
-               {
-                   easing.type: Easing.InQuad
-                   duration: Kirigami.Units.longDuration
-               }
-           }
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
 
         layer.enabled: true
         layer.effect: DropShadow
