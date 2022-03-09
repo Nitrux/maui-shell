@@ -16,7 +16,7 @@ T.Container
     implicitHeight: _cardsList.contentHeight + topPadding + bottomPadding
 
     clip: isMobile
-    padding: 0
+    padding: isMobile ? 0 : _cardsList.spacing
     leftPadding: padding
     rightPadding: padding
     bottomPadding: padding

@@ -135,7 +135,7 @@ Maui.Page
 
                         Maui.GridBrowserDelegate
                         {
-                            height: parent.GridView.view.itemHeight- 10
+                            height: parent.GridView.view.itemHeight-10
                             width: parent.GridView.view.itemWidth-10
                             anchors.centerIn: parent
                             template.labelSizeHint: 22
@@ -154,11 +154,22 @@ Maui.Page
                             template.iconComponent: T.Pane
                             {
                                 background: Rectangle
-                                {
-                                    color:  Qt.lighter(Kirigami.Theme.backgroundColor)
-                                    opacity: 0.5
-                                    radius: 10
-                                }
+                                   {
+                                       readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+
+                                       color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+
+                                       radius: 8
+
+                                       Behavior on color
+                                       {
+                                           ColorAnimation
+                                           {
+                                               easing.type: Easing.InQuad
+                                               duration: Kirigami.Units.longDuration
+                                           }
+                                       }
+                                   }
 
                                 contentItem: GridView
                                 {
@@ -184,7 +195,7 @@ Maui.Page
                                         {
                                             anchors.centerIn: parent
                                             height: width
-                                            width: parent.width* 0.8
+                                            width: Maui.Style.mapToIconSizes(parent.width*0.8)
                                             source: model.icon
                                         }
                                     }
@@ -227,7 +238,7 @@ Maui.Page
                             GridView
                             {
                                 id: _quickSection
-                                implicitHeight: contentHeight + topMargin +  bottomMargin
+                                implicitHeight: contentHeight
                                 implicitWidth: 200
                                 currentIndex :-1
 
@@ -278,7 +289,7 @@ Maui.Page
                             GridView
                             {
                                 id: _recentSection
-                                implicitHeight: contentHeight +  topMargin+  bottomMargin
+                                implicitHeight: contentHeight
                                 implicitWidth: 300
                                 currentIndex :-1
 

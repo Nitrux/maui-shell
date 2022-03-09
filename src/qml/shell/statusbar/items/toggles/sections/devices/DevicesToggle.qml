@@ -9,9 +9,9 @@ import "../.."
 
 ToggleTemplate
 {
-    icon.name: "device-notifier"
+    icon.name: "drive-removable-media-usb"
     text:  "Devices"
-    display: ToolButton.TextBesideIcon
+    display: ToolButton.TextUnderIcon
 
     page: DevicesPage
     {

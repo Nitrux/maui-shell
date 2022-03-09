@@ -36,8 +36,6 @@ WaylandCompositor
         id: _notifications
     }
 
-
-
     Connections
     {
         target: _polkit.listener
@@ -111,6 +109,14 @@ WaylandCompositor
         property string options: "grp:shifts_toggle,compose:ralt,ctrl:nocaps"
         property string rules: ""
         property string model: ""
+    }
+
+    Settings
+    {
+        id: wallpaperSettings
+        property bool dim: true
+        property bool fill: true
+        property string defaultWallpaper: "qrc:/wallpapers/maui_shell_dev_bg.png"
     }
 
     //    Component.onCompleted:

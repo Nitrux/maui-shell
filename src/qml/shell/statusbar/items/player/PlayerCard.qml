@@ -71,19 +71,18 @@ T.ItemDelegate
             fillMode: Image.PreserveAspectCrop
             imageSource: control.albumArt
             iconSource: control.playerIcon
-            maskRadius: 10
+            maskRadius: 8
 
             LinearGradient
             {
                 anchors.fill: parent
-                start: Qt.point(0, _labels.implicitHeight + Maui.Style.space.big)
+                start: Qt.point(0, _labels.implicitHeight - Maui.Style.space.big)
                 end: Qt.point(0, parent.height)
                 gradient: Gradient {
                     GradientStop { position: 0.0; color: "transparent" }
                     GradientStop { position: 1.0; color: control.Kirigami.Theme.backgroundColor }
                 }
             }
-
 
             RowLayout
             {

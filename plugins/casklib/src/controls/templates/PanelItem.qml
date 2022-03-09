@@ -32,9 +32,6 @@ T.AbstractButton
     icon.height: iconSize
     icon.width: iconSize
 
-//    leftPadding: spacing
-//    rightPadding: leftPadding
-
     padding: spacing
 
     icon.color: Kirigami.Theme.textColor

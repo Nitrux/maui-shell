@@ -55,13 +55,22 @@ void RecentFilesModel::setFilters(QStringList filters)
   emit filtersChanged(m_filters);
 }
 
+void RecentFilesModel::setLimit(int limit)
+{
+    if (m_limit == limit)
+        return;
+
+    m_limit = limit;
+    emit limitChanged(m_limit);
+}
+
 void RecentFilesModel::setList()
 {
-  if (!m_url.isLocalFile () || !m_url.isValid () || m_url.isEmpty ())
-    return;
+    if (!m_url.isLocalFile () || !m_url.isValid () || m_url.isEmpty ())
+        return;
 
-//  m_loader->informer = &FMH::getFileInfoModel;
-//  m_loader->requestPath({m_url}, true, m_filters.isEmpty () ? QStringList () : m_filters, QDir::Files, 50);
+    //  m_loader->informer = &FMH::getFileInfoModel;
+    //  m_loader->requestPath({m_url}, true, m_filters.isEmpty () ? QStringList () : m_filters, QDir::Files, 50);
 
   QDir dir(m_url.toLocalFile ());
   dir.setNameFilters (m_filters);
@@ -74,7 +83,7 @@ void RecentFilesModel::setList()
   const auto urls = dir.entryInfoList ();
   for(const auto &url : urls)
     {
-      if(i >= 6)
+      if(i >= m_limit)
         break;
       qDebug() << "RECENT:" << url.filePath () << dir.path ();
       m_urls << QUrl::fromLocalFile (url.filePath ()).toString();
@@ -96,6 +105,11 @@ void RecentFilesModel::componentComplete()
 QStringList RecentFilesModel::urls() const
 {
     return m_urls;
+}
+
+int RecentFilesModel::limit() const
+{
+    return m_limit;
 }
 
 QStringList RecentFilesModel::filters() const

@@ -95,7 +95,7 @@ Cask.PanelItem
                 ListView
                 {
                     id: _playersList
-                    implicitHeight: Math.max(200, holder.implicitHeight)
+                    implicitHeight: Math.max(150, holder.implicitHeight)
                     Layout.fillWidth: true
 
                     Maui.Holder
@@ -160,6 +160,7 @@ Cask.PanelItem
                 {
                     implicitHeight: 22
                     Layout.fillWidth: true
+                    visible: _playersList.count > 1
                     PageIndicator
                     {
                         id: pageIndicator

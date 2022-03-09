@@ -1,15 +1,16 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
+import QtQuick.Templates 2.15 as T
+
 import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
 
 import Zpaces 1.0 as ZP
 
 import QtGraphicalEffects 1.0
-import QtQuick.Templates 2.15 as T
 
 T.Pane
 {
@@ -35,6 +36,24 @@ T.Pane
     {
         id: _bg
 
+        MouseArea
+        {
+            enabled: !overviewMode
+            acceptedButtons: Qt.RightButton
+            anchors.fill: parent
+            propagateComposedEvents: true
+            preventStealing: false
+            onClicked:
+            {
+                _menu.show()
+            }
+
+            onPressAndHold:
+            {
+                _menu.show()
+            }
+        }
+
         Item
         {
             id : _bgContainer
@@ -44,25 +63,30 @@ T.Pane
             {
                 id: _img
                 anchors.fill: parent
-                anchors.margins:  control.rise ? Maui.Style.space.large * 2 : 0
+                anchors.margins: control.rise ? Maui.Style.space.large * 2 : 0
                 asynchronous: true
                 sourceSize.width: Screen.width
                 sourceSize.height: Screen.height
-                fillMode: Image.PreserveAspectCrop
-                layer.enabled: control.radius > 0 || control.rise
-                layer.effect: OpacityMask
-                {
-                    maskSource: Item
-                    {
-                        width: _img.width
-                        height: _img.height
+                fillMode: wallpaperSettings.fill? Image.PreserveAspectCrop : Image.PreserveAspectFit
+                visible: false
 
-                        Rectangle
-                        {
-                            anchors.fill: parent
-                            radius: control.radius
-                        }
-                    }
+            }
+        }
+
+        ColorOverlay
+        {
+            anchors.fill: _bgContainer
+            source: _img
+            color: wallpaperSettings.dim && Maui.App.darkMode ? "#80800000" : "transparent"
+
+            layer.enabled: control.radius > 0 || control.rise
+            layer.effect: OpacityMask
+            {
+                maskSource: Rectangle
+                {
+                    width: _img.width
+                    height: _img.height
+                    radius: control.radius
                 }
             }
         }
@@ -79,8 +103,6 @@ T.Pane
             color: Qt.rgba(0,0,0,0.9)
             source: _bgContainer
         }
-
-
     }
 
     contentItem : Item
@@ -97,9 +119,9 @@ T.Pane
         {
             enabled: overviewMode
 
-//            anchors.fill: parent
-//            propagateComposedEvents: true
-//            preventStealing: false
+            //            anchors.fill: parent
+            //            propagateComposedEvents: true
+            //            preventStealing: false
             onTapped:
             {
 
@@ -110,16 +132,28 @@ T.Pane
         }
     }
 
-    Kirigami.ImageColors
+    WallpaperDialog
     {
-        id: _imageColors
-        source: control.zpace.wallpaper.replace("file://", "")
-        onPaletteChanged:
-        {
-            Maui.App.accentColor = _imageColors.highlight
-        }
+        id: _wallpapersDialog
     }
 
+    Maui.ContextualMenu
+    {
+        id: _menu
+
+        MenuItem
+        {
+            text: i18n("Wallpaper")
+            icon.name: "insert-image"
+            onTriggered: _wallpapersDialog.open()
+        }
+
+        MenuItem
+        {
+            text: i18n("Widgets")
+            icon.name: "draw-cuboid"
+        }
+    }
 
     DropArea
     {
@@ -131,6 +165,7 @@ T.Pane
             if(drop.urls)
             {
                 control.zpace.wallpaper = drop.urls[0]
+                wallpaperSettings.defaultWallpaper = drop.urls[0]
             }
         }
     }

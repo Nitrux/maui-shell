@@ -28,12 +28,12 @@ T.Control
     property bool autohide: false
 
     Layout.fillWidth: true
-    Layout.margins: floating ? Maui.Style.space.tiny : 0
+//    Layout.margins: floating ? Maui.Style.space.tiny : 0
 
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
 
     spacing: padding
-    padding: !floating ? 0 : Maui.Style.space.tiny
+    padding: !floating ? 0 : Maui.Style.space.medium
     topPadding: padding
     bottomPadding: padding
     leftPadding: padding
@@ -45,15 +45,6 @@ T.Control
         {
             _notificationsSection.popup.close()
             _statusSection.popup.close()
-        }
-    }
-
-    Behavior on Layout.margins
-    {
-        NumberAnimation
-        {
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.InOutQuad
         }
     }
 

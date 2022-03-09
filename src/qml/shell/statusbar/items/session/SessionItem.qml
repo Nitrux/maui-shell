@@ -118,7 +118,7 @@ Cask.PanelItem
                 RowLayout
                 {
                     width: parent.width
-                    property int display: ToolButton.TextUnderIcon
+                    property int display: ToolButton.OnlyIcon
                     spacing: Maui.Style.space.medium
 
                     SessionButton
@@ -126,6 +126,19 @@ Cask.PanelItem
                         Layout.fillWidth: true
                         icon.name: "system-log-out"
                         text: i18n("Quit")
+                        display: parent.display
+
+                        onClicked:
+                        {
+                            _sessioDialog.open()
+                        }
+                    }
+
+                    SessionButton
+                    {
+                        Layout.fillWidth: true
+                        icon.name: "system-switch-user-symbolic"
+                        text: i18n("Switch")
                         display: parent.display
 
                         onClicked:

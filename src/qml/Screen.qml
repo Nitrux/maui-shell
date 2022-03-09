@@ -72,12 +72,13 @@ WaylandOutput
         output: control
     }
 
-    window: Window
+    window: Maui.ApplicationWindow
     {
         id: win
         width: 1024
         height: 760
         Maui.App.darkMode: true
+        headBar.visible:false
         readonly property int formFactor :
         {
             if(width > 1500)
@@ -175,13 +176,18 @@ WaylandOutput
                         width: ListView.view.width
                         radius: ListView.view.overviewScale === 1 ? 0 : 20
                         clip: false
-                        backgroundImage: zpace.wallpaper
+                        backgroundImage: wallpaperSettings.defaultWallpaper
                         overviewMode: overView
                         zpace : model.Zpace
                         topPadding: _cask.topPanel.height
                         bottomPadding: formFactor === Cask.Env.Desktop ? _dock.height : 0
                         leftPadding: 0
                         rightPadding: 0
+
+                        onBackgroundImageChanged:
+                        {
+                            Maui.Style.adaptiveColorSchemeSource = wallpaperSettings.defaultWallpaper.replace("file://", "")
+                        }
 
                         Item
                         {
