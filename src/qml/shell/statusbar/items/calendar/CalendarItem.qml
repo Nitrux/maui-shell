@@ -95,18 +95,18 @@ Cask.PanelItem
                         background: Rectangle
                         {
                             radius: 10
-                            color: _delegate.hovered || _delegate.down ? Kirigami.Theme.highlightColor : "transparent"
+                            color: model.today || _delegate.hovered || _delegate.down ? Kirigami.Theme.highlightColor : "transparent"
                         }
 
                         contentItem: Label
-                    {
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        opacity: model.month === _monthGrid.month ? 1 : 0
-                        text: model.day
-                        font: _monthGrid.font
-                        color: model.today ?  Kirigami.Theme.highlightColor : (_delegate.hovered ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor)
-                    }
+                        {
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            opacity: model.month === _monthGrid.month ? 1 : 0
+                            text: model.day
+                            font: _monthGrid.font
+                            color: model.today || _delegate.hovered ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
+                        }
 
                         onClicked: _stack.push(_tasksPageComponent)
                     }
