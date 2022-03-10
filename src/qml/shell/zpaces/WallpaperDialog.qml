@@ -234,6 +234,21 @@ Maui.Dialog
 
                         Maui.SettingTemplate
                         {
+                            label1.text: i18n("Adaptive Colors")
+                            label2.text: i18n("Use wallpaper to ste the shell color scheme")
+
+                            Switch
+                            {
+                                checked: wallpaperSettings.adaptiveColorScheme
+                                onToggled:
+                                {
+                                    wallpaperSettings.adaptiveColorScheme = !wallpaperSettings.adaptiveColorScheme
+                                }
+                            }
+                        }
+
+                        Maui.SettingTemplate
+                        {
                             label1.text: i18n("Dim Wallpaper")
                             label2.text: i18n("On dark mode the wallpaper will be dimmed")
 
@@ -268,6 +283,7 @@ Maui.Dialog
 
                             Maui.ColorsRow
                             {
+                                colors: ["#EBBEB8", "#906576", "#594C5E", "#2D3245", "#594552"]
                             }
                         }
 

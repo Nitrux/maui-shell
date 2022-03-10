@@ -11,13 +11,14 @@ import "../.."
 ToggleTemplate
 {
     icon.name: connectionIconProvider.connectionIcon
-   text:  networkStatus.activeConnections.split(" ").pop()
+    text:  networkStatus.activeConnections.split(" ").pop()
     tooltipText: networkStatus.activeConnections
     display: ToolButton.TextBesideIcon
 
     property alias handler : handler
 
-    BusyIndicator {
+    BusyIndicator
+    {
         id: connectingIndicator
 
         anchors.centerIn: parent

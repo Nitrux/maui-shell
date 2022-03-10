@@ -78,6 +78,9 @@ WaylandOutput
         width: 1024
         height: 760
         Maui.App.darkMode: true
+        Maui.Style.adaptiveColorScheme: wallpaperSettings.adaptiveColorScheme
+        Maui.Style.adaptiveColorSchemeSource: wallpaperSettings.defaultWallpaper.replace("file://", "")
+
         headBar.visible:false
         readonly property int formFactor :
         {
@@ -184,10 +187,6 @@ WaylandOutput
                         leftPadding: 0
                         rightPadding: 0
 
-                        onBackgroundImageChanged:
-                        {
-                            Maui.Style.adaptiveColorSchemeSource = wallpaperSettings.defaultWallpaper.replace("file://", "")
-                        }
 
                         Item
                         {

@@ -14,6 +14,6 @@ CardButton
     id: control
 
     implicitWidth: 48 + leftPadding + rightPadding
-    implicitHeight: 48 + topPadding + bottomPadding
+    implicitHeight: 32 + topPadding + bottomPadding
 
 }

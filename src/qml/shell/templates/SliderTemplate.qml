@@ -5,15 +5,26 @@ import QtQuick.Templates 2.15 as T
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
+import org.maui.cask 1.0 as Cask
+
 import QtGraphicalEffects 1.15
 
 T.Slider
 {
     id: control
-    implicitHeight: 22 + topPadding + bottomPadding
+    implicitHeight: (win.formFactor === Cask.Env.Desktop ? 16 : 22 ) + topPadding + bottomPadding
 
     property alias iconSource : _icon.source
     property alias animatedRec : _animatedRec
+
+    Behavior on implicitHeight
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.shortDuration
+            easing.type: Easing.OutQuad
+        }
+    }
 
     background: Rectangle
     {
