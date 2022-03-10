@@ -10,7 +10,6 @@ import org.mauikit.filebrowsing 1.0 as FB
 
 import org.maui.cask 1.0 as Cask
 
-import Qt.labs.platform 1.1 as Labs
 import QtGraphicalEffects 1.0
 
 Maui.Dialog
@@ -226,7 +225,6 @@ Maui.Dialog
                                 text: i18n("Lock Screen")
                                 onClicked: _stackView.push(_wallpapersGridViewComponent)
                             }
-
                         }
                     }
 
@@ -259,11 +257,32 @@ Maui.Dialog
                         }
                     }
 
-                    Button
+                    Maui.SettingsSection
                     {
-                        text: i18n("Pick wallpaper")
-                        onClicked: _stackView.push(_wallpapersGridViewComponent)
+                        title: i18n("Customize")
+
+                        Maui.SettingTemplate
+                        {
+                            label1.text: i18n("Solid Color")
+                            label2.text: i18n("Pick a solid color")
+
+                            Maui.ColorsRow
+                            {
+                            }
+                        }
+
+                        Maui.SettingTemplate
+                        {
+                            label1.text: i18n("Widgets")
+                            label2.text: i18n("Show widgets")
+
+                            Switch
+                            {
+                            }
+                        }
                     }
+
+
                 }
             }
         }
@@ -284,7 +303,7 @@ Maui.Dialog
                 {
                     list: Cask.RecentFiles
                     {
-                        url: Labs.StandardPaths.writableLocation(Labs.StandardPaths.PicturesLocation) +"/Wallpapers"
+                        url: wallpaperSettings.sourcePath
                         filters: FB.FM.nameFilters(FB.FMList.IMAGE)
                         limit: 40
                     }

@@ -16,11 +16,9 @@ StackPage
     title: control.playerName
     property Cask.MprisPlayer player
 
-
     property string sourceName: player ? player.serviceName : ""
     property string playerName: player ? player.identity : ""
     property string playerIcon: player ? player.iconName : ""
-
 
     readonly property bool isPlaying : state === "Playing"
     property string state : player ? player.status : ""
@@ -117,7 +115,7 @@ StackPage
         {
             Layout.fillWidth: true
             Layout.fillHeight: true
-//            fillMode: Image.PreserveAspectCrop
+            //            fillMode: Image.PreserveAspectCrop
             imageSource: control.albumArt
             iconSource: control.playerIcon
             //            iconSizeHint: 48
@@ -168,77 +166,74 @@ StackPage
 
         }
 
-        RowLayout
+
+        ColumnLayout
         {
             Layout.fillWidth: true
+            Layout.margins: Maui.Style.space.medium
             Layout.alignment: Qt.AlignBottom
-            spacing: Maui.Style.space.big
+            spacing: Maui.Style.space.medium
 
-            ColumnLayout
+            Label
             {
+                visible: text.length
                 Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                text: control.track
+                wrapMode: Text.Wrap
+                font.pointSize: Maui.Style.fontSizes.big
+                font.bold: true
+            }
 
-                Label
+            Label
+            {
+                visible: text.length
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+                verticalAlignment: Qt.AlignVCenter
+                horizontalAlignment: Qt.AlignHCenter
+
+                wrapMode: Text.NoWrap
+                text: control.artist
+            }
+
+            Row
+            {
+                spacing: Maui.Style.space.medium
+                Layout.alignment: Qt.AlignHCenter
+                ToolButton
                 {
-                    visible: text.length
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignCenter
-                    horizontalAlignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
-                    text: control.track
-                    wrapMode: Text.Wrap
-                    font.pointSize: Maui.Style.fontSizes.big
-                    font.bold: true
+                    icon.name: "media-skip-backward"
+                    enabled: control.canGoPrevious
+                    onClicked:
+                    {
+                        seekSlider.value = 0    // Let the media start from beginning. Bug 362473
+                        control.action_previous()
+                    }
+
                 }
 
-                Label
+                ToolButton
                 {
-                    visible: text.length
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignCenter
-                    verticalAlignment: Qt.AlignVCenter
-                    horizontalAlignment: Qt.AlignHCenter
+                    //                        text: qsTr("Play and pause")
+                    enabled: control.canPlay
+                    icon.name: control.isPlaying ? "media-playback-pause" : "media-playback-start"
+                    onClicked: control.togglePlaying()
 
-                    wrapMode: Text.NoWrap
-                    text: control.artist
                 }
 
-                Row
+                ToolButton
                 {
-                    spacing: Maui.Style.space.medium
-                    Layout.alignment: Qt.AlignHCenter
-                    ToolButton
+                    icon.name: "media-skip-forward"
+                    enabled: control.canGoNext
+                    onClicked:
                     {
-                        icon.name: "media-skip-backward"
-                        enabled: control.canGoPrevious
-                        onClicked:
-                        {
-                            seekSlider.value = 0    // Let the media start from beginning. Bug 362473
-                            control.action_previous()
-                        }
-
+                        seekSlider.value = 0    // Let the media start from beginning. Bug 362473
+                        control.action_next()
                     }
 
-                    ToolButton
-                    {
-                        //                        text: qsTr("Play and pause")
-                        enabled: control.canPlay
-                        icon.name: control.isPlaying ? "media-playback-pause" : "media-playback-start"
-                        onClicked: control.togglePlaying()
-
-                    }
-
-                    ToolButton
-                    {
-                        icon.name: "media-skip-forward"
-                        enabled: control.canGoNext
-                        onClicked:
-                        {
-                            seekSlider.value = 0    // Let the media start from beginning. Bug 362473
-                            control.action_next()
-                        }
-
-                    }
                 }
             }
         }
@@ -268,7 +263,7 @@ StackPage
     }
 
     function action_pause() {
-        control.player.play()
+        control.player.pause()
     }
 
     function action_playPause() {

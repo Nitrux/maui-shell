@@ -1,5 +1,7 @@
 import QtQuick 2.12
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.1 as Labs
+
 import org.mauikit.controls 1.3 as Maui
 
 import QtWayland.Compositor 1.3
@@ -117,6 +119,7 @@ WaylandCompositor
         property bool dim: true
         property bool fill: true
         property string defaultWallpaper: "qrc:/wallpapers/maui_shell_dev_bg.png"
+        property string sourcePath:  Labs.StandardPaths.writableLocation(Labs.StandardPaths.PicturesLocation) +"/Wallpapers"
     }
 
     //    Component.onCompleted:
