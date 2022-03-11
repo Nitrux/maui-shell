@@ -5,11 +5,8 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
 import org.maui.cask 1.0 as Cask
-import QtQuick.Controls 1.0 as QQC1
 import org.kde.bluezqt 1.0 as BluezQt
-import org.kde.plasma.private.bluetooth 1.0 as PlasmaBt
 
-import "logic.js" as Logic
 
 import "../../../../../templates"
 
@@ -17,16 +14,12 @@ StackPage
 {
     id: control
 
-    property bool deviceConnected : false
-    property int runningActions : 0
-
-    property QtObject btManager : BluezQt.Manager
-
     implicitHeight: Math.max(400, Math.min(400, _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
     title: i18n("Bluetooth")
-    property string tooltipText
-    property int status
-    Action {
+
+
+    Action
+    {
         id: addBluetoothDeviceAction
 
         enabled: btManager.devices.length === 0
@@ -37,7 +30,8 @@ StackPage
         onTriggered: action_addNewDevice()
     }
 
-    Action {
+    Action
+    {
         id: enableBluetoothAction
 
         //        enabled: btManager.bluetoothBlocked
@@ -47,28 +41,6 @@ StackPage
 
         onTriggered: {
             toggleBluetooth();
-        }
-    }
-
-
-    Connections
-    {
-        target: btManager
-
-        function onDeviceAdded() {
-            Logic.updateStatus();
-        }
-        function onDeviceRemoved() {
-            Logic.updateStatus();
-        }
-        function onDeviceChanged() {
-            Logic.updateStatus();
-        }
-        function onBluetoothBlockedChanged() {
-            Logic.updateStatus();
-        }
-        function onBluetoothOperationalChanged() {
-            Logic.updateStatus();
         }
     }
 
@@ -83,7 +55,10 @@ StackPage
         {
             checkable: true
             checked: btManager.bluetoothOperational
-            action: enableBluetoothAction
+//            action: enableBluetoothAction
+            onToggled: {
+                toggleBluetooth();
+            }
         }
     ]
 
@@ -116,44 +91,6 @@ StackPage
         {
             width: ListView.view.width
         }
-    }
-
-    PlasmaBt.DevicesProxyModel
-    {
-        id: devicesModel
-        sourceModel: BluezQt.DevicesModel { }
-    }
-
-
-    function toggleBluetooth()
-    {
-        var enable = !btManager.bluetoothOperational;
-        btManager.bluetoothBlocked = !enable;
-
-        for (var i = 0; i < btManager.adapters.length; ++i)
-        {
-            var adapter = btManager.adapters[i];
-            adapter.powered = enable;
-        }
-    }
-
-    function action_configure() {
-        KCMShell.openSystemSettings("kcm_bluetooth");
-    }
-
-    function action_addNewDevice() {
-        PlasmaBt.LaunchApp.runCommand("bluedevil-wizard");
-    }
-
-    Component.onCompleted:
-    {
-        //           plasmoid.removeAction("configure");
-        //           plasmoid.setAction("configure", i18n("Configure &Bluetooth…"), "configure");
-
-        //           plasmoid.setAction("addNewDevice", i18n("Add New Device…"), "list-add");
-        //           plasmoid.action("addNewDevice").visible = Qt.binding(() => {return });
-
-        Logic.updateStatus();
     }
 
 }

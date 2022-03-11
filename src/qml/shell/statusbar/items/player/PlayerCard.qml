@@ -76,11 +76,12 @@ T.ItemDelegate
             LinearGradient
             {
                 anchors.fill: parent
-                start: Qt.point(0, _labels.implicitHeight - Maui.Style.space.big)
+                start: Qt.point(0, 0)
                 end: Qt.point(0, parent.height)
-                gradient: Gradient {
+                gradient: Gradient
+                {
                     GradientStop { position: 0.0; color: "transparent" }
-                    GradientStop { position: 1.0; color: control.Kirigami.Theme.backgroundColor }
+                    GradientStop { position: 1.2-Math.min(1, _labels.implicitHeight/height);  color: control.Kirigami.Theme.backgroundColor }
                 }
             }
 

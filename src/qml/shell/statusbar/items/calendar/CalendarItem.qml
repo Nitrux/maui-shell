@@ -22,24 +22,43 @@ Cask.PanelItem
 
         Templates.StackPage
         {
-
-            implicitHeight: Math.max(400, Math.min(400, _listView.implicitHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
+            id: _taskPage
+            property date date
+            implicitHeight: 400+ topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight
             title: i18n("Tasks")
 
-            Maui.Holder
+            ColumnLayout
             {
                 anchors.fill: parent
-                visible: _listView.count === 0
-                title: i18n("Nothing here")
-                body: i18n("No output or input devices found.")
-                emoji: "code-context"
-            }
 
-            Maui.ListBrowser
-            {
-                id: _listView
-                implicitHeight: contentHeight
+                Maui.ListItemTemplate
+                {
+                    Layout.fillWidth: true
 
+                    label1.text: Qt.formatDate(_taskPage.date, "dddd")
+                    label1.font.bold: true
+                    label1.font.weight: Font.Black
+                    label1.font.pointSize: Maui.Style.fontSizes.big
+                    label2.text: Qt.formatDate(_taskPage.date, "dd MMMM yyyy")
+                }
+
+                Maui.ListBrowser
+                {
+                    id: _listView
+                    implicitHeight: contentHeight
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    Maui.Holder
+                    {
+                        anchors.fill: parent
+                        visible: _listView.count === 0
+                        title: i18n("Nothing here")
+                        body: i18n("No output or input devices found.")
+                        emoji: "code-context"
+                    }
+
+                }
             }
         }
     }
@@ -84,17 +103,17 @@ Cask.PanelItem
                     month: new Date().getMonth()
                     year: new Date().getFullYear()
                     locale: Qt.locale("en_US")
+
                     delegate: T.ItemDelegate
                     {
                         id: _delegate
-                        enabled: model.day
                         implicitWidth: implicitContentWidth + rightPadding + leftPadding
 
                         implicitHeight: implicitContentHeight + topPadding +bottomPadding
 
                         background: Rectangle
                         {
-                            radius: 10
+                            radius: Maui.Style.radiusV
                             color: model.today || _delegate.hovered || _delegate.down ? Kirigami.Theme.highlightColor : "transparent"
                         }
 
@@ -102,13 +121,13 @@ Cask.PanelItem
                         {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            opacity: model.month === _monthGrid.month ? 1 : 0
-                            text: model.day
+                            opacity: model.month === _monthGrid.month ? 1 : 0.4
+                            text: String(model.day)
                             font: _monthGrid.font
                             color: model.today || _delegate.hovered ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
                         }
 
-                        onClicked: _stack.push(_tasksPageComponent)
+                        onClicked: _stack.push(_tasksPageComponent, {'date': model.date})
                     }
                 }
             }

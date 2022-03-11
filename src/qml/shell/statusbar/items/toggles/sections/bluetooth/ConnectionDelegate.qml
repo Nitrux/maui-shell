@@ -20,6 +20,9 @@ Maui.ListBrowserDelegate
     label1.text: model.DeviceFullName
     label2.text: infoText()
 
+    onToggled: connectToDevice()
+    onClicked: connectToDevice()
+
     BusyIndicator
     {
         id: busyIndicator
