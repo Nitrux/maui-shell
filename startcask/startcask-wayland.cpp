@@ -25,13 +25,9 @@ int main(int argc, char **argv)
 
    qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "1");
 
-
     createConfigDirectory();
     setupCursor();
-//    signal(SIGTERM, sigtermHandler);
-
-    signal(SIGINT,  sigtermHandler);
-       signal(SIGTERM, sigtermHandler);
+    signal(SIGINT, sigtermHandler);
 
     {
         KConfig fonts(QStringLiteral("kcmfonts"));
