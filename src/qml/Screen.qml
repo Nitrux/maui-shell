@@ -101,11 +101,6 @@ WaylandOutput
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
             windowSystemCursorEnabled: false
 
-            //            ZP.WaylandCursorGrabber
-            //            {
-            //                seat: control.compositor.defaultSeat
-            //                grab: mouseTracker.containsMouse
-            //            }
 
             Cask.Dashboard
             {

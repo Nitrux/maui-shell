@@ -17,6 +17,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QDate>
 #include <QDir>
 #include <QElapsedTimer>
 #include <QFontDatabase>
@@ -40,6 +41,10 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <MauiKit/Core/mauiapp.h>
+#include <KI18n/KLocalizedString>
+
+
 //models and controllers by Cask
 #include "code/controllers/zpaces.h"
 #include "code/controllers/zpace.h"
@@ -50,13 +55,16 @@
 #include "code/controllers/xdgwindow.h"
 #include "code/controllers/waylandcursorgrabber.h"
 
-static QByteArray grefsonExecutablePath;
-static qint64 grefsonPID;
+#include "../cask_version.h"
+
+#define ZPACES_URI "Zpaces"
+#define CASK_URI "org.maui.cask"
+
+static QByteArray caskExecutablePath;
+static qint64 caskPID;
 static void *signalHandlerStack;
 static QString logFilePath;
 static QElapsedTimer sinceStartup;
-
-QString grefsenConfigDirPath(QDir::homePath() + "/.config/grefsen/");
 
 extern "C" void signalHandler(int signal)
 {
@@ -70,9 +78,9 @@ extern "C" void signalHandler(int signal)
     case -1: // error
         break;
     case 0: // child
-        kill(grefsonPID, 9);
-        fprintf(stderr, "crashed (PID %lld SIG %d): respawn %s\n", grefsonPID, signal, grefsonExecutablePath.constData());
-        execl(grefsonExecutablePath.constData(), grefsonExecutablePath.constData(), (char *) 0);
+        kill(caskPID, 9);
+        fprintf(stderr, "crashed (PID %lld SIG %d): respawn %s\n", caskPID, signal, caskExecutablePath.constData());
+        execl(caskExecutablePath.constData(), caskExecutablePath.constData(), (char *) 0);
         _exit(EXIT_FAILURE);
     default: // parent
         prctl(PR_SET_PTRACER, pid, 0, 0, 0);
@@ -156,7 +164,6 @@ void qtMsgLog(QtMsgType type, const QMessageLogContext &context, const QString &
         abort();
 }
 
-
 static qreal highestDPR(QList<QScreen *> &screens)
 {
     qreal ret = 0;
@@ -173,34 +180,43 @@ void sigtermHandler(int signalNumber)
 {
     qDebug() << "terminating caks session" << signalNumber;
     if (QCoreApplication::instance()) {
-//        QCoreApplication::instance()->exit(-1);
+        //        QCoreApplication::instance()->exit(-1);
         qDebug() << "terminating caks session FINISHED" << signalNumber;
 
     }
 }
 
+static void registerTypes()
+{
+    qmlRegisterUncreatableType<Zpace>(ZPACES_URI, 1, 0, "Zpace", "Use it from a reference from Zpaces object");
+    qmlRegisterUncreatableType<Task>(ZPACES_URI, 1, 0, "Task", "Use it from Zpaces::TasksModel.task object");
+    qmlRegisterAnonymousType<ZpacesModel>(ZPACES_URI, 1);
+    qmlRegisterAnonymousType<TasksModel>(ZPACES_URI, 1);
+    qmlRegisterAnonymousType<SurfacesModel>(ZPACES_URI, 1);
+    qmlRegisterAnonymousType<AbstractWindow>(ZPACES_URI, 1);
+    qmlRegisterType<Zpaces>(ZPACES_URI, 1, 0, "Zpaces");
+    qmlRegisterUncreatableType<XdgWindow>(ZPACES_URI, 1, 0, "XdgWindow", "Create it from Zpaces::createXdgWIndow");
+    //    qmlRegisterType<WaylandCursorGrabber>(ZPACES_URI, 1, 0, "WaylandCursorGrabber");
+}
 
-#define ZPACES_URI "Zpaces"
 int main(int argc, char *argv[])
 {
     sinceStartup.start();
 
-    //    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
-    //        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
-
-
     if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
-         qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
-     if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
-         qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
- //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
- //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
-     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
-         qputenv("QT_QPA_PLATFORMTHEME", "generic");
+        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
 
+    if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
+        qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
 
-    //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
-    //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+    if (!qEnvironmentVariableIsSet("QT_LABS_CONTROLS_STYLE"))
+        qputenv("QT_LABS_CONTROLS_STYLE", "Universal");
+
+    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
+        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+
+    if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
+        qputenv("QT_QPA_PLATFORMTHEME", "generic");
 
     //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
     //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
@@ -209,48 +225,54 @@ int main(int argc, char *argv[])
     // ShareOpenGLContexts is needed for using the threaded renderer
     // on NVIDIA EGLStreams and multi output compositors in general
     // (see QTBUG-63039 and QTBUG-87597)
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    //    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     // Automatically support HiDPI
-//    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
+    //    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     if (!qEnvironmentVariableIsSet("PLASMA_USE_QT_SCALING")) {
-           qunsetenv("QT_DEVICE_PIXEL_RATIO");
-           QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
-       } else {
-           QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-       }
+        qunsetenv("QT_DEVICE_PIXEL_RATIO");
+        QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+    } else {
+        QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    }
 
-
-//    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+    //    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     //    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
     QGuiApplication app(argc, argv);
-    QCoreApplication::setApplicationName("Cask"); // defaults to name of the executable
-    QApplication::setOrganizationName("maui");
-    QApplication::setApplicationVersion("1.0");
-//#ifndef QT_NO_SESSIONMANAGER
-//    app.setFallbackSessionManagementEnabled(false);
-//#endif
-//    app.setQuitOnLastWindowClosed(false);
-    signal(SIGINT,  sigtermHandler);
+    app.setOrganizationName("maui");
+    app.setWindowIcon(QIcon("qrc:/mauikit-logo.png"));
+
+    MauiApp::instance()->setIconName("qrc:/mauikit-logo.png");
+
+    KLocalizedString::setApplicationDomain("cask");
+    KAboutData about(QStringLiteral("cask"), i18n("Cask"), CASK_VERSION_STRING, i18n("Convergent shell for desktop and mobile computers."), KAboutLicense::LGPL_V3, i18n("© 2021-%1 Maui Development Team", QString::number(QDate::currentDate().year())),QString(GIT_BRANCH) + "/" + QString(GIT_COMMIT_HASH));
+
+    about.addAuthor(i18n("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
+    about.setHomepage("https://mauikit.org");
+    about.setProductName("maui/cask");
+    about.setBugAddress("https://invent.kde.org/maui/vvave/-/issues");
+    about.setOrganizationDomain(CASK_URI);
+    about.setProgramLogo(app.windowIcon());
+
+    KAboutData::setApplicationData(about);
+
+    signal(SIGINT, sigtermHandler);
 
     app.setQuitOnLastWindowClosed(false);
-        QGuiApplication::setFallbackSessionManagementEnabled(false);
-        auto disableSessionManagement = [](QSessionManager &sm) {
-                    sm.setRestartHint(QSessionManager::RestartNever);
-                };
+    QGuiApplication::setFallbackSessionManagementEnabled(false);
+    auto disableSessionManagement = [](QSessionManager &sm) {
+        sm.setRestartHint(QSessionManager::RestartNever);
+    };
 
-        QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
-               QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);
-
-
+    QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
+    QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);
 
     QQuickStyle::setStyle("maui-style");
 
-    grefsonExecutablePath = app.applicationFilePath().toLocal8Bit();
-    grefsonPID = QCoreApplication::applicationPid();
+    caskExecutablePath = app.applicationFilePath().toLocal8Bit();
+    caskPID = QCoreApplication::applicationPid();
     bool windowed = false;
 
     QList<QScreen *> screens = QGuiApplication::screens();
@@ -261,23 +283,20 @@ int main(int argc, char *argv[])
     }
 
     QCommandLineParser parser;
+    about.setupCommandLine(&parser);
+
     parser.setApplicationDescription("Cask Qt/Wayland compositor");
     parser.addHelpOption();
     parser.addVersionOption();
 
     QCommandLineOption respawnOption(QStringList() << "r" << "respawn",
-                                     QCoreApplication::translate("main", "respawn grefsen after a crash"));
+                                     QCoreApplication::translate("main", "respawn cask after a crash"));
     parser.addOption(respawnOption);
 
     QCommandLineOption logFileOption(QStringList() << "l" << "log",
                                      QCoreApplication::translate("main", "redirect all debug/warning/error output to a log file"),
                                      QCoreApplication::translate("main", "file path"));
     parser.addOption(logFileOption);
-
-    QCommandLineOption configDirOption(QStringList() << "c" << "config",
-                                       QCoreApplication::translate("main", "load config files from the given directory (default is ~/.config/grefsen)"),
-                                       QCoreApplication::translate("main", "directory path"));
-    parser.addOption(configDirOption);
 
     QCommandLineOption screenOption(QStringList() << "s" << "screen",
                                     QCoreApplication::translate("main", "send output to the given screen"),
@@ -289,10 +308,11 @@ int main(int argc, char *argv[])
     parser.addOption(windowOption);
 
     parser.process(app);
-//    if (parser.isSet(respawnOption))
+    about.processCommandLine(&parser);
+
+    if (parser.isSet(respawnOption))
         setupSignalHandler();
-    if (parser.isSet(configDirOption))
-        grefsenConfigDirPath = parser.value(configDirOption);
+
     if (parser.isSet(logFileOption)) {
         logFilePath = parser.value(logFileOption);
         qInstallMessageHandler(qtMsgLog);
@@ -316,6 +336,7 @@ int main(int argc, char *argv[])
         windowed = true;
 
     qreal dpr = highestDPR(screens);
+
     if (!qEnvironmentVariableIsSet("XCURSOR_SIZE")) {
         // QTBUG-67579: we can't have different cursor sizes on different screens
         // or different windows yet, but we can override globally
@@ -324,10 +345,12 @@ int main(int argc, char *argv[])
         qputenv("XCURSOR_SIZE", QByteArray::number(cursorSize));
     }
 
+    registerTypes();
 
-    qputenv("QT_QPA_PLATFORM", "wayland"); // not for grefsen but for child processes
-    qputenv("GDK_BACKEND", "wayland"); // not for grefsen but for child processes
+    qputenv("QT_QPA_PLATFORM", "wayland"); // not for cask but for child processes
+    qputenv("GDK_BACKEND", "wayland"); // not for cask but for child processes
     qputenv("MOZ_ENABLE_WAYLAND", "1");
+
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
@@ -337,18 +360,7 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-
-    qmlRegisterUncreatableType<Zpace>(ZPACES_URI, 1, 0, "Zpace", "Use it from a reference from Zpaces object");
-    qmlRegisterUncreatableType<Task>(ZPACES_URI, 1, 0, "Task", "Use it from Zpaces::TasksModel.task object");
-    qmlRegisterAnonymousType<ZpacesModel>(ZPACES_URI, 1);
-    qmlRegisterAnonymousType<TasksModel>(ZPACES_URI, 1);
-    qmlRegisterAnonymousType<SurfacesModel>(ZPACES_URI, 1);
-    qmlRegisterAnonymousType<AbstractWindow>(ZPACES_URI, 1);
-    qmlRegisterType<Zpaces>(ZPACES_URI, 1, 0, "Zpaces");
-    qmlRegisterUncreatableType<XdgWindow>(ZPACES_URI, 1, 0, "XdgWindow", "Create it from Zpaces::createXdgWIndow");
-    qmlRegisterType<WaylandCursorGrabber>(ZPACES_URI, 1, 0, "WaylandCursorGrabber");
     engine.load(url);
-
 
     QObject *root = engine.rootObjects().first();
 

@@ -153,6 +153,14 @@ T.Pane
             text: i18n("Widgets")
             icon.name: "draw-cuboid"
         }
+
+        MenuSeparator {}
+
+        MenuItem
+        {
+            text: i18n("About")
+            onTriggered: win.about()
+        }
     }
 
     DropArea

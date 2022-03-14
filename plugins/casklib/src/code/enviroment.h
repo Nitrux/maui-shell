@@ -1,5 +1,4 @@
-#ifndef ENVIROMENT_H
-#define ENVIROMENT_H
+#pragma once
 
 #include <QObject>
 #include <QRectF>
@@ -27,4 +26,3 @@ signals:
 
 };
 
-#endif // ENVIROMENT_H

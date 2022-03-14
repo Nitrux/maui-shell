@@ -1,3 +1,7 @@
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR})
+
 set(cask_SRCS
     main.cpp
     code/models/zpacesmodel.cpp
@@ -22,10 +26,10 @@ add_executable(${PROJECT_NAME}
     ${cask_ASSETS}
     )
 
-target_link_libraries(${PROJECT_NAME} CaskLib Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Svg KF5::Service Qt5::WaylandCompositor KF5::I18n KF5::ConfigCore)
+target_link_libraries(${PROJECT_NAME} MauiKit CaskLib Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Svg KF5::Service Qt5::WaylandCompositor KF5::I18n KF5::ConfigCore)
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
+install(DIRECTORY assets/wallpapers/ DESTINATION ${KDE_INSTALL_WALLPAPERDIR}/Cask)
 
 #install(FILES org.kde.pix.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 

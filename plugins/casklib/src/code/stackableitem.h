@@ -1,6 +1,4 @@
-#ifndef STACKABLEITEM_H
-#define STACKABLEITEM_H
-
+#pragma once
 #include <QQuickItem>
 
 class StackableItem : public QQuickItem
@@ -14,4 +12,3 @@ public Q_SLOTS:
     void lower();
 };
 
-#endif // STACKABLEITEM_H

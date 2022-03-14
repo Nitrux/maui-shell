@@ -116,11 +116,11 @@ WaylandCompositor
     Settings
     {
         id: wallpaperSettings
-        category: "Wallpaper"
+        category: "Wallpaper3"
         property bool dim: true
         property bool fill: true
         property string defaultWallpaper: "qrc:/wallpapers/maui_shell_dev_bg.png"
-        property string sourcePath:  Labs.StandardPaths.writableLocation(Labs.StandardPaths.PicturesLocation) +"/Wallpapers"
+        property string sourcePath: "file:///usr/share/wallpapers/Cask"
         property bool adaptiveColorScheme : true
     }
 
