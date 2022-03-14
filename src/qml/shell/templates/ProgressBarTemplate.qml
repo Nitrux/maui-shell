@@ -5,10 +5,12 @@ import QtQuick.Templates 2.15 as T
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
+import org.maui.cask 1.0 as Cask
+
 T.ProgressBar
 {
     id: control
-    implicitHeight: 22
+    implicitHeight: (win.formFactor === Cask.Env.Desktop ? 16 : 22 ) + topPadding + bottomPadding
 
     property alias iconSource : _icon.source
 
