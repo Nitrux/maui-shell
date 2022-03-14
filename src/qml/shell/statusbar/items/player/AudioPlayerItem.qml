@@ -26,7 +26,7 @@ Cask.PanelItem
         }
         Kirigami.Icon
         {
-            source: isPlaying ? "media-playback-pause" : "media-playback-start"
+            source: isPlaying ? "media-playback-start" : "media-playback-pause"
 
             height: control.iconSize
             width: height
