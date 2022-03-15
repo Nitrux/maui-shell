@@ -15,6 +15,7 @@
 extern QTextStream out;
 
 void sigtermHandler(int signalNumber);
+void sigHandler(int signalNumber);
 QStringList allServices(const QLatin1String &prefix);
 int runSync(const QString &program, const QStringList &args, const QStringList &env = {});
 void sourceFiles(const QStringList &files);

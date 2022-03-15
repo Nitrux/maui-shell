@@ -176,15 +176,11 @@ static qreal highestDPR(QList<QScreen *> &screens)
     return ret;
 }
 
-void sigtermHandler(int signalNumber)
+void sigintHandler(int signalNumber)
 {
-    qDebug() << "terminating caks session" << signalNumber;
-    if (QCoreApplication::instance()) {
-        //        QCoreApplication::instance()->exit(-1);
-        qDebug() << "terminating caks session FINISHED" << signalNumber;
-
-    }
+    qDebug() << "terminating caks session" << signalNumber;    
 }
+
 
 static void registerTypes()
 {
@@ -258,7 +254,7 @@ int main(int argc, char *argv[])
 
     KAboutData::setApplicationData(about);
 
-    signal(SIGINT, sigtermHandler);
+    signal(SIGINT, sigintHandler);
 
     app.setQuitOnLastWindowClosed(false);
     QGuiApplication::setFallbackSessionManagementEnabled(false);

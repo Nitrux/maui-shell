@@ -27,7 +27,8 @@ int main(int argc, char **argv)
 
     createConfigDirectory();
     setupCursor();
-    signal(SIGINT, sigtermHandler);
+//    signal(SIGINT, sigHandler);
+    signal(SIGTERM, sigtermHandler);
 
     {
         KConfig fonts(QStringLiteral("kcmfonts"));
