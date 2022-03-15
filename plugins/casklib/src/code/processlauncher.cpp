@@ -52,7 +52,8 @@ void WaylandProcessLauncher::launch(const QString &program)
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.remove("QT_IM_MODULE");
     process->setProcessEnvironment(env);
-
+    process->setStandardInputFile(QProcess::nullDevice());
+        process->setProcessChannelMode(QProcess::ForwardedChannels);
     connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             process, &QProcess::deleteLater);
     connect(process, &QProcess::errorOccurred, &QProcess::deleteLater);
@@ -65,7 +66,7 @@ void WaylandProcessLauncher::launch(const QString &program)
     auto execList = program.split(" ");
     auto exec = execList.first();
             exec.remove("\"").remove(QRegExp(" %."));
-    process->start(exec, arguments);
+    process->startDetached(exec, arguments);
 
 }
 

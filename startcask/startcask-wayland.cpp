@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "1");
 
     signal(SIGTERM, sigtermHandler);
-//    signal(SIGINT, sigHandler);
+    signal(SIGINT, sigHandler);
 
     createConfigDirectory();
     setupCursor();
