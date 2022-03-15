@@ -23,12 +23,13 @@ int main(int argc, char **argv)
     qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
     qputenv("QT_WAYLAND_CLIENT_BUFFER_INTEGRATION", "wayland-egl");
 
-   qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "1");
+    qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "1");
+
+    signal(SIGTERM, sigtermHandler);
+//    signal(SIGINT, sigHandler);
 
     createConfigDirectory();
     setupCursor();
-//    signal(SIGINT, sigHandler);
-    signal(SIGTERM, sigtermHandler);
 
     {
         KConfig fonts(QStringLiteral("kcmfonts"));
@@ -44,7 +45,7 @@ int main(int argc, char **argv)
         const QString locale1Service = QStringLiteral("org.freedesktop.locale1");
         const QString locale1Path = QStringLiteral("/org/freedesktop/locale1");
         QDBusMessage message =
-            QDBusMessage::createMethodCall(locale1Service, locale1Path, QStringLiteral("org.freedesktop.DBus.Properties"), QLatin1String("GetAll"));
+                QDBusMessage::createMethodCall(locale1Service, locale1Path, QStringLiteral("org.freedesktop.DBus.Properties"), QLatin1String("GetAll"));
         message << locale1Service;
         QDBusMessage resultMessage = QDBusConnection::systemBus().call(message);
         if (resultMessage.type() == QDBusMessage::ReplyMessage) {

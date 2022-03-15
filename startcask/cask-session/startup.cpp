@@ -28,7 +28,6 @@
 #include <KIO/DesktopExecParser>
 #include <KProcess>
 #include <KService>
-#include <Kdelibs4Migration>
 
 #include <QDBusConnection>
 #include <QDBusMessage>
@@ -40,9 +39,11 @@
 
 #include "sessiontrack.h"
 //#include "startupadaptor.h"
+#include <signal.h>
 
 #include "../config-startcask.h"
 #include "startcask.h"
+
 
 class Phase : public KCompositeJob
 {
@@ -140,11 +141,14 @@ Startup::Startup(QObject *parent)
 {
     Q_ASSERT(!s_self);
     s_self = this;
+
+
  //startDetached("cask", {});
 //return;
 //    new StartupAdaptor(this);
 //    QDBusConnection::sessionBus().registerObject(QStringLiteral("/Startup"), QStringLiteral("org.kde.Startup"), this);
 //    QDBusConnection::sessionBus().registerService(QStringLiteral("org.kde.Startup"));
+    signal(SIGINT, sigHandler);
 
     const AutoStart autostart;
 
