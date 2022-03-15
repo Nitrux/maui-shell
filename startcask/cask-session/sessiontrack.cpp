@@ -15,6 +15,7 @@ SessionTrack::SessionTrack(const QVector<QProcess *> &processes)
     : m_processes(processes)
 {
     SignalHandler::self()->addSignal(SIGTERM);
+//    SignalHandler::self()->addSignal(SIGINT);
     connect(SignalHandler::self(), &SignalHandler::signalReceived, QCoreApplication::instance(), [](int signal) {
         if (signal == SIGTERM) {
             QCoreApplication::instance()->exit(0);
