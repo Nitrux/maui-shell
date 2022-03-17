@@ -18,7 +18,7 @@ Maui.Page
     id: control
     focus: true
 
-    opacity:  (y/finalYPos)
+    opacity: (y/finalYPos)
 
     readonly property int finalYPos :  0 - (control.height - _container.y)
 
@@ -30,6 +30,11 @@ Maui.Page
 
     Keys.enabled: true
     Keys.onEscapePressed: control.close()
+
+    Cask.AppsDB
+    {
+        id: _appsDB
+    }
 
     Behavior on opacity
     {
@@ -154,22 +159,22 @@ Maui.Page
                             template.iconComponent: T.Pane
                             {
                                 background: Rectangle
-                                   {
-                                       readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                                {
+                                    readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
-                                       color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+                                    color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
 
-                                       radius: 8
+                                    radius: 8
 
-                                       Behavior on color
-                                       {
-                                           ColorAnimation
-                                           {
-                                               easing.type: Easing.InQuad
-                                               duration: Kirigami.Units.longDuration
-                                           }
-                                       }
-                                   }
+                                    Behavior on color
+                                    {
+                                        ColorAnimation
+                                        {
+                                            easing.type: Easing.InQuad
+                                            duration: Kirigami.Units.longDuration
+                                        }
+                                    }
+                                }
 
                                 contentItem: GridView
                                 {
@@ -210,6 +215,43 @@ Maui.Page
                                         _allAppsModel.group = modelData.label
                                     }
                                 }
+                            }
+                        }
+                    }
+
+                    flickable.header: ColumnLayout
+                    {
+                        width: parent.width
+                        spacing: Maui.Style.space.medium
+
+                        Maui.SectionDropDown
+                        {
+                            Layout.fillWidth: true
+                            Layout.margins: Maui.Style.space.medium
+
+                            label1.text: i18n("Recent Apps")
+                            label2.text: i18n("Most recent apps")
+                        }
+
+                        ListView
+                        {
+                            orientation: ListView.Horizontal
+                            Layout.fillWidth: true
+                            Layout.margins: Maui.Style.space.medium
+                            Layout.preferredHeight: 140
+                            spacing: Maui.Style.space.medium
+                            model: _appsDB.recentApps
+
+                            delegate: Maui.GridBrowserDelegate
+                            {
+                                height: ListView.view.height
+                                width: height
+
+                                iconSource: model.icon
+                                label1.text: model.name
+
+                                iconSizeHint: 64
+                                template.labelSizeHint: 44
                             }
                         }
                     }
@@ -429,20 +471,22 @@ Maui.Page
                         width: parent.GridView.view.itemWidth-10
                         anchors.centerIn: parent
                         highlighted: parent.GridView.isCurrentItem
-                        template.labelSizeHint: 44
 
                         draggable: true
                         Drag.keys: ["text/uri-list"]
                         Drag.mimeData: { "text/uri-list": model.path }
                         //                    background: Item {}
                         iconSource:  model.icon
-                        iconSizeHint: 64
                         label1.text: model.label
+
+                        iconSizeHint: 64
+                        template.labelSizeHint: 44
 
                         onClicked:
                         {
                             console.log(model.executable)
                             launchExec(model.executable)
+                            _appsDB.addRecentApp(model.path)
                             control.close()
 
                         }

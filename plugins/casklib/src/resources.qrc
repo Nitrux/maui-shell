@@ -9,4 +9,7 @@
         <file>controls/WorkZpace.qml</file>
         <file>controls/Zpace.qml</file>
     </qresource>
+    <qresource prefix="/db">
+        <file>code/controllers/script.sql</file>
+    </qresource>
 </RCC>

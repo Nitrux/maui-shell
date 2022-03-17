@@ -7,20 +7,26 @@ set(caskplugin_SRCS
     code/caskplugin.cpp
     code/models/appsmodel.cpp
     code/models/recentfilesmodel.cpp
+    code/models/recentappsmodel.cpp
     code/stackableitem.cpp
     code/enviroment.cpp
     code/processlauncher.cpp
     code/controllers/panelsection.cpp
+    code/controllers/appsdb.cpp
+    code/controllers/db.cpp
     )
 
 set(caskplugin_HDRS
     code/caskplugin.h
     code/models/appsmodel.h
     code/models/recentfilesmodel.h
+    code/models/recentappsmodel.h
     code/stackableitem.h
     code/enviroment.h
     code/processlauncher.h
     code/controllers/panelsection.h
+    code/controllers/appsdb.h
+    code/controllers/db.h
     )
 
 set(mpris2_SRCS
@@ -82,6 +88,7 @@ target_link_libraries(${PROJECT_NAME}
     KF5::KIOFileWidgets
     Qt5::Core
     Qt5::DBus
+    Qt5::Sql
     Qt5::Quick)
 
 install(TARGETS ${PROJECT_NAME} EXPORT CaskLibTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

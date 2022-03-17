@@ -68,8 +68,8 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/casklib_version.h"
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/Maui/Cask
     COMPONENT Devel)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core Quick Concurrent DBus)
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Service KIO )
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core Quick Concurrent DBus Sql)
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Service KIO)
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
 
