@@ -98,6 +98,17 @@ void Task::setIconName(const QString &name)
     emit this->iconNameChanged(m_iconName);
 }
 
+void Task::setPath(const QString &path)
+{
+    if(path == m_path)
+    {
+        return;
+    }
+
+    m_path = path;
+    emit this->pathChanged(m_path);
+}
+
 QString Task::executable() const
 {
     return m_executable;
@@ -106,6 +117,11 @@ QString Task::executable() const
 bool Task::isPinned() const
 {
     return m_isPinned;
+}
+
+QString Task::path() const
+{
+    return m_path;
 }
 
 void Task::setIsPinned(bool isPinned)
@@ -158,6 +174,7 @@ void Task::setData()
     this->setName(file.readName());
     this->setFileName(file.fileName());
     KService service(&file);
+    this->setPath(service.entryPath());
     this->setExecutable(service.exec());
 }
 

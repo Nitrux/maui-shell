@@ -11,7 +11,7 @@ import org.maui.cask 1.0 as Cask
 import QtGraphicalEffects 1.0
 
 import QtQuick.Templates 2.15 as T
-import Qt.labs.platform 1.1
+import Qt.labs.platform 1.1 as Labs
 
 Maui.Page
 {
@@ -31,10 +31,6 @@ Maui.Page
     Keys.enabled: true
     Keys.onEscapePressed: control.close()
 
-    Cask.AppsDB
-    {
-        id: _appsDB
-    }
 
     Behavior on opacity
     {
@@ -44,6 +40,42 @@ Maui.Page
             easing.type: Easing.InOutQuad
         }
     }
+
+    Maui.ContextualMenu
+    {
+        id: _appMenu
+        property var app : ({})
+
+        title: app.label
+        subtitle: app.comment
+        titleIconSource: app.icon
+
+        MenuItem
+        {
+            text: i18n("Pin")
+        }
+
+        MenuItem
+        {
+            text: i18n("Launch")
+        }
+
+        MenuItem
+        {
+            text: i18n("Uninstall")
+        }
+
+        MenuItem
+        {
+            text: i18n("Information")
+        }
+
+        MenuItem
+        {
+            text: i18n("Hide")
+        }
+    }
+
 
     headBar.visible: true
     headBar.background: null
@@ -129,7 +161,7 @@ Maui.Page
 
                     verticalScrollBarPolicy: ScrollBar.AlwaysOff
 
-                    onAreaClicked: closeCard()
+                    onAreaClicked: control.close()
 
                     delegate: Item
                     {
@@ -224,21 +256,13 @@ Maui.Page
                         width: parent.width
                         spacing: Maui.Style.space.medium
 
-                        Maui.SectionDropDown
-                        {
-                            Layout.fillWidth: true
-                            Layout.margins: Maui.Style.space.medium
-
-                            label1.text: i18n("Recent Apps")
-                            label2.text: i18n("Most recent apps")
-                        }
-
                         ListView
                         {
+                            visible: count > 0
                             orientation: ListView.Horizontal
                             Layout.fillWidth: true
                             Layout.margins: Maui.Style.space.medium
-                            Layout.preferredHeight: 140
+                            Layout.preferredHeight: visible ? 140 : 0
                             spacing: Maui.Style.space.medium
                             model: _appsDB.recentApps
 
@@ -252,6 +276,12 @@ Maui.Page
 
                                 iconSizeHint: 64
                                 template.labelSizeHint: 44
+
+                                onClicked:
+                                {
+                                    _appsDB.launchApp(model.path)
+                                    control.close()
+                                }
                             }
                         }
                     }
@@ -343,7 +373,7 @@ Maui.Page
                                 {
                                     list: Cask.RecentFiles
                                     {
-                                        url: StandardPaths.writableLocation(StandardPaths.DownloadLocation)
+                                        url: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DownloadLocation)
                                         //                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
 
                                     }
@@ -386,7 +416,7 @@ Maui.Page
                                 Cask.RecentFiles
                                 {
                                     id: _pictures
-                                    url: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                                    url: Labs.StandardPaths.writableLocation(Labs.StandardPaths.PicturesLocation)
                                     filters: FB.FM.nameFilters(FB.FMList.IMAGE)
 
                                 }
@@ -410,6 +440,7 @@ Maui.Page
 
                 model: Maui.BaseModel
                 {
+                    id: _allAppsBaseModel
                     filter: _searchBar.text
                     sortOrder: Qt.DescendingOrder
                     recursiveFilteringEnabled: true
@@ -426,39 +457,11 @@ Maui.Page
                     console.log("Key _pressed", event.key, _gridView.model.get(_gridView.currentIndex).executable)
                     if(event.key == Qt.Key_Return)
                     {
-                        launchExec(_gridView.model.get(_gridView.currentIndex).executable)
+                        _appsDB.launchApp(_gridView.model.get(_gridView.currentIndex).path)
                         control.close()
                     }
                 }
 
-                Maui.ContextualMenu
-                {
-                    id: _appMenu
-                    MenuItem
-                    {
-                        text: i18n("Pin")
-                    }
-
-                    MenuItem
-                    {
-                        text: i18n("Launch")
-                    }
-
-                    MenuItem
-                    {
-                        text: i18n("Uninstall")
-                    }
-
-                    MenuItem
-                    {
-                        text: i18n("Information")
-                    }
-
-                    MenuItem
-                    {
-                        text: i18n("Hide")
-                    }
-                }
 
                 delegate: Item
                 {
@@ -484,15 +487,15 @@ Maui.Page
 
                         onClicked:
                         {
-                            console.log(model.executable)
-                            launchExec(model.executable)
-                            _appsDB.addRecentApp(model.path)
+                            _gridView.currentIndex = index
+                            _appsDB.launchApp(model.path)
                             control.close()
-
                         }
 
                         onRightClicked:
                         {
+                            _gridView.currentIndex = index
+                            _appMenu.app = _allAppsBaseModel.get(index)
                             _appMenu.show()
                         }
                     }

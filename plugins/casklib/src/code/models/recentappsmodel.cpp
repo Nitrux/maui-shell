@@ -10,7 +10,6 @@ RecentAppsModel::RecentAppsModel(AppsDB * parent) : QAbstractListModel(parent)
 void RecentAppsModel::setList(const QVariantList &list)
 {
     beginResetModel();
-//    m_list = list;
     for(const auto &item : list)
     {
         m_list << AppsDB::appInfo(item.toMap().value("name").toString());
@@ -18,8 +17,6 @@ void RecentAppsModel::setList(const QVariantList &list)
 
     endResetModel();
 }
-
-
 
 void RecentAppsModel::insert(const QString &desktopFile, const int &index)
 {

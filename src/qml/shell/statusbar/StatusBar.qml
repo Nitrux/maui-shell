@@ -21,6 +21,7 @@ T.Control
 {
     id: control
 
+    property rect availableGeometry
     readonly property bool floating : win.formFactor === Cask.Env.Desktop
     readonly property bool cardsOverlapping : (_notificationsSection.popup.width + _statusSection.popup.width) > availableGeometry.width
 
@@ -133,7 +134,7 @@ T.Control
             id: _notificationsSection
 
             Layout.fillWidth: true
-            availableGeometry : desktop.availableGeometry
+            availableGeometry: control.availableGeometry
             spacing: control.spacing
             popWidth: 320
             alignment: Qt.AlignLeft
@@ -163,7 +164,7 @@ T.Control
         {
             id: _statusSection
             alignment: Qt.AlignRight
-            availableGeometry : desktop.availableGeometry
+            availableGeometry : control.availableGeometry
             popWidth: 340
             spacing: control.spacing
 

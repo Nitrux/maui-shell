@@ -112,7 +112,7 @@ signals:
     void zpaceAdded(int index);
 
 private:
-   QVector<Zpace*> m_zpacesList;
+    QVector<Zpace*> m_zpacesList;
     Zpaces *m_zpacesRoot;
     bool indexIsValid(const int &index) const;
     Zpace * createZpace();

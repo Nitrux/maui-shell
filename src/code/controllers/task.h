@@ -9,6 +9,7 @@ class Task : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name NOTIFY nameChanged FINAL)
+    Q_PROPERTY(QString path READ path NOTIFY pathChanged FINAL)
     Q_PROPERTY(QString iconName READ iconName NOTIFY iconNameChanged FINAL)
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged FINAL)
     Q_PROPERTY(QString executable READ executable NOTIFY executableChanged FINAL)
@@ -30,10 +31,13 @@ public:
 
     void setName(const QString &name);
     void setIconName(const QString &name);
+    void setPath(const QString &path);
 
     QString executable() const;
 
     bool isPinned() const;
+
+    QString path() const;
 
 public slots:
     void setIsPinned(bool isPinned);
@@ -62,6 +66,8 @@ private:
     void pinTask();
     void unPinTask();
 
+    QString m_path;
+
 signals:
     void windowChanged();
     void idChanged();
@@ -71,6 +77,7 @@ signals:
     void executableChanged(QString executable);
     void isPinnedChanged(bool isPinned);
     void closed();
+    void pathChanged(QString path);
 };
 
 #endif // TASK_H

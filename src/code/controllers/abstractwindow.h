@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QtWaylandCompositor/QWaylandShellSurface>
 
+#include <QQuickItem>
+
 class AbstractWindow : public QObject
 {
     Q_OBJECT
@@ -16,8 +18,11 @@ class AbstractWindow : public QObject
     Q_PROPERTY(bool maximized READ maximized NOTIFY maximizedChanged)
     Q_PROPERTY(bool fullscreen READ fullscreen NOTIFY fullscreenChanged)
 
+    Q_PROPERTY(QQuickItem* chrome READ chrome WRITE setChrome NOTIFY chromeChanged)
+
 private:
-    bool m_minimized = false;
+    bool m_minimized = false;    
+    QQuickItem* m_chrome;
 
 public:
     explicit AbstractWindow();
@@ -33,6 +38,8 @@ public:
    virtual bool maximized() const = 0;
     virtual bool fullscreen() const = 0;
 
+    QQuickItem* chrome() const;
+
 public slots:
     virtual void close() = 0;
     virtual void minimize();
@@ -41,6 +48,8 @@ public slots:
     virtual void unmaximize();
     virtual void sendFullscreen();
     virtual void unfullscreen();
+
+    void setChrome(QQuickItem* chrome);
 
 signals:
     void titleChanged();
@@ -59,6 +68,7 @@ signals:
     void maximizedChanged();
     void fullscreenChanged();
     void closed();
+    void chromeChanged(QQuickItem* chrome);
 };
 
 #endif // ABSTRACTWINDOW_H

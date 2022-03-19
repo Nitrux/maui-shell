@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QObject>
 
+class QQuickItem;
 class AbstractWindow;
 class SurfacesModel : public QAbstractListModel
 {
@@ -63,6 +64,14 @@ public:
      * @return
      */
     bool windowExists(AbstractWindow *window);
+
+    /**
+     * @brief chromeFor
+     * Find a Chrome for a window base on surface parent relationship
+     * @param window
+     * @return
+     */
+    QQuickItem *chromeFor(AbstractWindow *window);
 
     /**
      * @brief count

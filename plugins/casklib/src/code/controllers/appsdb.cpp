@@ -14,8 +14,8 @@
 AppsDB::AppsDB(QObject *parent) : QObject(parent)
   ,m_db(new DB(this))
   ,m_recentApps(new RecentAppsModel(this))
+  ,m_launcher(new WaylandProcessLauncher(this))
 {
-
     m_recentApps->setList(this->recentAppsList());
 }
 
@@ -26,8 +26,7 @@ RecentAppsModel *AppsDB::recentApps() const
 
 QVariantList AppsDB::recentAppsList()
 {
-    return get("select * from RECENT_APPS order by adddate DESC");
-
+    return get("select * from RECENT_APPS order by count DESC");
 }
 
 void AppsDB::addRecentApp(const QString &desktopFile)
@@ -43,7 +42,9 @@ void AppsDB::addRecentApp(const QString &desktopFile)
 
 void AppsDB::launchApp(const QString &desktopFile)
 {
-
+    auto info = AppsDB::appInfo(desktopFile);
+    m_launcher->launch(info.value("executable").toString());
+    this->addRecentApp(desktopFile);
 }
 
 void AppsDB::countUpApp(const QString &desktopFile)
@@ -114,4 +115,9 @@ QVariantMap AppsDB::appInfo(const QString &desktopFile)
     res.insert("icon", service.icon());
 
     return res;
+}
+
+WaylandProcessLauncher *AppsDB::processLauncher() const
+{
+    return m_launcher;
 }

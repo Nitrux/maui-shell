@@ -1,6 +1,11 @@
 #include "surfacesmodel.h"
 #include "code/controllers/abstractwindow.h"
 #include <QDebug>
+#include <QQuickItem>
+
+#include <QtWaylandCompositor/QWaylandXdgSurface>
+#include "code/controllers/xdgwindow.h"
+
 #include <QWaylandShellSurface>
 
 SurfacesModel::SurfacesModel(QObject *parent) :  QAbstractListModel(parent)
@@ -51,7 +56,7 @@ void SurfacesModel::removeWindow(const int &index)
         return;
 qDebug() << "REMOVING WINDOW FORM MODEL";
     this->beginRemoveRows(QModelIndex(), index, index);
-    auto window = this->m_windows.takeAt(index);
+    auto window = this->m_windows.takeAt(index); //it is autodeleted ?
     this->endRemoveRows();
     emit this->countChanged();
 }
@@ -72,6 +77,19 @@ int SurfacesModel::indexOf(AbstractWindow *window)
 bool SurfacesModel::windowExists(AbstractWindow *window)
 {
     return this->indexOf(window)>= 0;
+}
+
+QQuickItem *SurfacesModel::chromeFor(AbstractWindow *window)
+{
+//    for(const auto &win : m_windows)
+//    {
+//        if(static_cast<XdgWindow*>(win)->xdgSurface()->parentSurface() == static_cast<XdgWindow*>(window)->xdgSurface()->parentSurface())
+//        {
+//            return win->chrome();
+//        }
+//    }
+
+    return nullptr;
 }
 
 bool SurfacesModel::indexIsValid(const int &index) const

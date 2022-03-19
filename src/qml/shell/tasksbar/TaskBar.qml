@@ -68,8 +68,6 @@ T.Control
                 onClicked: _launcher.toggle()
             }
 
-
-
             Repeater
             {
                 model: _zpaces.tasksModel
@@ -142,7 +140,7 @@ T.Control
                             }
                         }else
                         {
-                            launchExec(task.executable)
+                            _appsDB.launchApp(task.path)
                         }
                     }
 

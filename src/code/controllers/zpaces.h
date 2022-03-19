@@ -12,6 +12,8 @@ class QWaylandXdgToplevel;
 class XdgWindow;
 class QWaylandShellSurface;
 class SurfacesModel;
+class QQuickItem;
+
 class Zpaces : public QObject
 {
     Q_OBJECT
@@ -86,6 +88,14 @@ public slots:
      * @return
      */
     int indexOfWindow(AbstractWindow *window);
+
+    /**
+     * @brief windowChrome
+     * Chrome of a window
+     * @param window
+     * @return
+     */
+    QQuickItem *windowChrome(AbstractWindow *window);
 
     /**
      * @brief indexOfZpace
