@@ -22,7 +22,7 @@ Cask.PanelItem
 
         Kirigami.Icon
         {
-            source: "network-wireless"
+            source: _networkToggle.icon.name
             height: control.iconSize
             width: height
             color: control.icon.color
@@ -30,7 +30,7 @@ Cask.PanelItem
 
         Kirigami.Icon
         {
-            source: "network-bluetooth"
+            source: _bluetoothToggle.icon.name
             height: control.iconSize
             width: height
             color: control.icon.color
@@ -67,12 +67,14 @@ Cask.PanelItem
 
                 NetworkToggle
                 {
+                    id: _networkToggle
                     onClicked: _togglesStack.push(page)
                     width:  Math.floor(parent.width/2) - parent.spacing
                 }
 
                 BluetoothToggle
                 {
+                    id: _bluetoothToggle
                     onClicked: _togglesStack.push(page)
                     width:  Math.floor(parent.width/2)- parent.spacing
 
@@ -82,7 +84,7 @@ Cask.PanelItem
                 {
                     icon.name: _slidersItem.micItem.slider.iconSource
                     text: "Michrophone"
-                    checked: _slidersItem.micItem.muted
+                    checked: !_slidersItem.micItem.muted
                     onClicked: _slidersItem.micItem.toggleMute()
                 }
 
@@ -120,7 +122,6 @@ Cask.PanelItem
                     text: i18n("Settings")
                 }
             }
-
         }
     }
 }

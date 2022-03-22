@@ -54,11 +54,11 @@ function updateStatus() {
 function icon()
 {
     if (deviceConnected) {
-        return "preferences-system-bluetooth-activated";
+        return "network-bluetooth-activated";
     } else if (!btManager.bluetoothOperational) {
-        return "preferences-system-bluetooth-inactive";
+        return "network-bluetooth";
     }
-    return "preferences-system-bluetooth";
+    return "network-bluetooth";
 }
 
 function conectedDevicesCount() {

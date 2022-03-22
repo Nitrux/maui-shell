@@ -23,7 +23,7 @@ const QString objectPath(QStringLiteral("/org/mpris/MediaPlayer2"));
 const QString playerInterface(QStringLiteral("org.mpris.MediaPlayer2.Player"));
 const QString mprisInterface(QStringLiteral("org.mpris.MediaPlayer2"));
 
-Q_LOGGING_CATEGORY(MPRIS2_PLAYER, "liri.mpris2.player")
+Q_LOGGING_CATEGORY(MPRIS2_PLAYER, "cask.mpris2.player")
 
 static QVariant::Type propertyType(const QString &name)
 {
@@ -128,7 +128,7 @@ Mpris2Player::Mpris2Player(const QString &service, QObject *parent)
     , m_maximumRate(0)
     , m_volume(0)
 {
-    qRegisterMetaType<Mpris2Player::Capabilities>("Mpris2Player::Capabilities"); 
+    qRegisterMetaType<Mpris2Player::Capabilities>("Mpris2Player::Capabilities");
 
     // Create D-Bus adaptors
     m_propsInterface = new OrgFreedesktopDBusPropertiesInterface(service, objectPath,
@@ -260,9 +260,16 @@ void Mpris2Player::seek(qlonglong offset)
     m_playerInterface->Seek(offset);
 }
 
-void Mpris2Player::setPosition(const QString &trackId, qlonglong position)
+void Mpris2Player::setPosition(qlonglong position)
 {
-    m_playerInterface->SetPosition(QDBusObjectPath(trackId), position);
+    m_playerInterface->SetPosition(trackId(), position);
+}
+
+void Mpris2Player::updatePosition()
+{
+    QDBusPendingCall async = m_propsInterface->Get(OrgMprisMediaPlayer2PlayerInterface::staticInterfaceName(), QStringLiteral("Position"));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(async, this);
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, &Mpris2Player::getPositionFinished);
 }
 
 void Mpris2Player::openUrl(const QUrl &url)
@@ -357,7 +364,7 @@ void Mpris2Player::updateFromMap(const QVariantMap &map)
 
             if (i.value().type() == QVariant::Bool) {
 
-//                qDebug() << "CAP" << i.key() << i.value();
+                //                qDebug() << "CAP" << i.key() << i.value();
 
                 if (i.value().toBool())
                     m_capabilities |= capability;
@@ -524,5 +531,36 @@ void Mpris2Player::copyProperty(const QString &name, const QVariant &value,
         qCWarning(MPRIS2_PLAYER) << "Unhandled property:" << name << value << expectedType;
     }
 }
+
+void Mpris2Player::getPositionFinished(QDBusPendingCallWatcher *watcher)
+{
+    QDBusPendingReply<QVariant> propsReply = *watcher;
+    watcher->deleteLater();
+
+    if (propsReply.isError()) {
+        qCWarning(MPRIS2_PLAYER) << playerInterface << "does not implement" << OrgFreedesktopDBusPropertiesInterface::staticInterfaceName() << "correctly";
+        qCDebug(MPRIS2_PLAYER) << "Error message was" << propsReply.error().name() << propsReply.error().message();
+        return;
+    }
+
+    m_position = propsReply.value().toLongLong();
+    m_lastPosUpdate = QDateTime::currentDateTimeUtc();
+    Q_EMIT positionChanged();
+}
+
+QDBusObjectPath Mpris2Player::trackId() const
+{
+    QVariant mprisTrackId = m_metadata->value(QStringLiteral("mpris:trackid"));
+    if (mprisTrackId.canConvert<QDBusObjectPath>()) {
+        return mprisTrackId.value<QDBusObjectPath>();
+    }
+    QString mprisTrackIdString = mprisTrackId.toString();
+    if (!mprisTrackIdString.isEmpty()) {
+        return QDBusObjectPath(mprisTrackIdString);
+    }
+    return QDBusObjectPath();
+}
+
+
 
 #include "moc_mpris2player.cpp"

@@ -13,7 +13,7 @@ Item
     default property alias content: _content.data
     property alias overlayContent : _overlayContent.data
 
-    readonly property int avaliableHeight : _content.height-_topPanelContainer.height
+    readonly property int avaliableHeight : _content.height - _topPanelContainer.height
     readonly property int avaliableWidth : _content.width
 
     readonly property rect availableGeometry : Qt.rect(0, _topPanelContainer.height, avaliableWidth, avaliableHeight)

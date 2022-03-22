@@ -13,26 +13,22 @@ T.ProgressBar
     implicitHeight: (win.formFactor === Cask.Env.Desktop ? 16 : 22 ) + topPadding + bottomPadding
 
     property alias iconSource : _icon.source
+    property color color : Kirigami.Theme.highlightColor
 
     background: Rectangle
     {
-        x: control.leftPadding
-        y: control.topPadding + control.availableHeight / 2 - height / 2
-        implicitWidth: 200
-        implicitHeight: 4
-        width: control.availableWidth
-        height: implicitHeight
         radius: height/2
-        color: Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
+        color: control.enabled ? Qt.darker(Kirigami.Theme.backgroundColor, 1.2) : "transparent"
+        border.color: control.enabled ? "transparent" : Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
 
         Behavior on color
-           {
-               ColorAnimation
-               {
-                   easing.type: Easing.InQuad
-                   duration: Kirigami.Units.longDuration
-               }
-           }
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 
     contentItem: Item
@@ -44,9 +40,9 @@ T.ProgressBar
         {
             height: parent.height
 
-              width: control.visualPosition * parent.width
-              color: Kirigami.Theme.highlightColor
-              radius: height/2
+            width: control.visualPosition * parent.width
+            color: control.color
+            radius: height/2
         }
 
         Kirigami.Icon

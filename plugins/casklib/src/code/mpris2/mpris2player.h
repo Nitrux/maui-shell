@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#ifndef LIRI_MPRIS2PLAYER_H
-#define LIRI_MPRIS2PLAYER_H
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/QDateTime>
 #include <QtCore/QLoggingCategory>
 #include <QtDBus/QDBusMessage>
 #include <QtQml/QQmlPropertyMap>
+#include <QDBusObjectPath>
 
 class QDBusPendingCallWatcher;
 class OrgFreedesktopDBusPropertiesInterface;
@@ -54,6 +54,7 @@ public:
     Q_FLAGS(Capabilities)
 
     Mpris2Player(const QString &service, QObject *parent = 0);
+    QDBusObjectPath trackId() const;
 
 	QString serviceName() const;
 
@@ -93,7 +94,6 @@ Q_SIGNALS:
 
     void serviceNameChanged();
 
-
     void canPlayChanged();
 
 public Q_SLOTS:
@@ -109,7 +109,8 @@ public Q_SLOTS:
     void stop();
 
     void seek(qlonglong offset);
-    void setPosition(const QString &trackId, qlonglong position);
+    void setPosition(qlonglong position);
+    void updatePosition();
 
     void openUrl(const QUrl &url);
 
@@ -151,7 +152,8 @@ private Q_SLOTS:
     void updateFromMap(const QVariantMap &map);
     void copyProperty(const QString &name, const QVariant &value,
                       const QVariant::Type &expectedType);
+    void getPositionFinished(QDBusPendingCallWatcher *watcher);
+
 };
 Q_DECLARE_METATYPE(Mpris2Player::Capabilities)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Mpris2Player::Capabilities)
-#endif // LIRI_MPRIS2PLAYER_H

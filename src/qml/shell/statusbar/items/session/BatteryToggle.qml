@@ -18,12 +18,12 @@ BatteryBar
     id: control
     visible: _batteryInfo.hasBatteries
     battery: primaryBattery
-    label.text: (battery ? battery.prettyName : "AC Powered")
+    label.text: (primaryBattery ? battery.prettyName : i18n("AC Powered"))
     label2.text: formatSecs(battery.pluggedIn ? battery.timeToFull : battery.timeToEmpty)
     progressbar.enabled: primaryBattery
     icon.source: batteryIcon(battery.percent, battery.stateName === "Charging")
 
-    iconSource: "preferences-system-power-management"
+    iconSource: icon.source
 
     page: PowerPage
     {

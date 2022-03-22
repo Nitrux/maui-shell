@@ -19,15 +19,16 @@ Cask.PanelItem
         spacing: control.spacing
         Kirigami.Icon
         {
-            source: "battery-080"
-            height: control.iconSize
+            visible: _batteryProgressBar.primaryBattery
+            source: _batteryProgressBar.iconSource
+            height: visible ? control.iconSize : 0
             width: height
             color: control.icon.color
         }
 
         Kirigami.Icon
         {
-            source: "view-media-artist"
+            source: "system-shutdown"
             height: control.iconSize
             width: height
             color: control.icon.color
@@ -37,9 +38,24 @@ Cask.PanelItem
     CaskDialog
     {
         id: _sessioDialog
-        title: i18n("Quit Session")
-        message: i18n("Are you sure you want to quit the session and terminate runnig tasks?")
-        template.iconSource: "emblem-warning"
+        property string operation
+        title: switch(operation)
+               {
+               case "logout": return i18n("Quit Session");
+               case "reboot": return i18n("Restart");
+               case "shutdown": return i18n("Shutdown");
+               }
+
+        message: i18np("Are you sure you want to quit the session?", "Are you sure you want to quit the session and terminate runnig tasks?", _runningTasks.count+1);
+
+
+        template.iconSource: switch(operation)
+                             {
+                             case "logout": return i18n("system-log-out");
+                             case "reboot": return i18n("system-reboot");
+                             case "shutdown": return i18n("system-shutdown");
+                             }
+
         acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : i18n("Quit")
 
         ListView
@@ -52,7 +68,7 @@ Cask.PanelItem
                 anchors.fill: parent
                 visible: _runningTasks.count === 0
                 title: i18n("All Clear")
-                body: i18n("Session can quitt")
+                body: i18n("Session can be exited")
             }
 
             Layout.fillWidth: true
@@ -130,6 +146,7 @@ Cask.PanelItem
 
                         onClicked:
                         {
+                            _sessioDialog.operation = "logout"
                             _sessioDialog.open()
                         }
                     }
@@ -143,7 +160,7 @@ Cask.PanelItem
 
                         onClicked:
                         {
-                            _sessioDialog.open()
+
                         }
                     }
 
@@ -157,6 +174,8 @@ Cask.PanelItem
 
                         onClicked:
                         {
+                            _sessioDialog.operation = "reboot"
+                            _sessioDialog.open()
                         }
                     }
 
@@ -170,6 +189,8 @@ Cask.PanelItem
 
                         onClicked:
                         {
+                            _sessioDialog.operation = "shutdown"
+                            _sessioDialog.open()
                         }
                     }
                 }

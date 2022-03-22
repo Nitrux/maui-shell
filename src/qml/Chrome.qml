@@ -134,7 +134,6 @@ Cask.StackableItem
             rootChrome.x = 0
             rootChrome.y = 0
 
-
             toplevel.sendMaximized(Qt.size(_zpaceContainer.width, _zpaceContainer.height - titlebarHeight))
 
 

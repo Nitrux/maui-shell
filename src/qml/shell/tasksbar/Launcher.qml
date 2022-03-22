@@ -142,7 +142,9 @@ Maui.Page
         {
             id: _swipeView
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: currentItem.implicitHeight
+            Layout.maximumHeight: parent.height
+            Layout.alignment: Qt.AlignCenter
             background: null
             clip: true
 
@@ -155,6 +157,7 @@ Maui.Page
                     id: _categoriesGridView
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+
                     itemSize: Math.min(150, Math.floor(flickable.width/2))
                     itemHeight: 172
                     model: _allAppsModel.groups

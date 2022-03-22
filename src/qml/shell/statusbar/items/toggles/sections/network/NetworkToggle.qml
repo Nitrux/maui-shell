@@ -46,5 +46,4 @@ ToggleTemplate
     {
         id: handler
     }
-
 }

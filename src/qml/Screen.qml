@@ -25,7 +25,7 @@ import QtQuick.Window 2.15
 
 import QtGraphicalEffects 1.0
 
-import QtWayland.Compositor 1.0
+import QtWayland.Compositor 1.3
 
 import org.mauikit.controls 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
@@ -106,7 +106,7 @@ WaylandOutput
                 topPanel.data: StatusBar
                 {
                     id: _statusBar
-                    availableGeometry: control.availableGeometry
+                    availableGeometry: _cask.availableGeometry
                 }
 
                 overlayContent: [
@@ -193,16 +193,16 @@ WaylandOutput
                                 delegate: Chrome
                                 {
                                     id: _chromeDelegate
-                                    parent: control.viewsBySurface[model.window.shellSurface.parentSurface] || control.surfaceArea
+                                    parent: control.viewsBySurface[model.window.shellSurface.parentSurface] || control._zpaceContainer
                                     overviewMode: overView
                                     shellSurface: model.window.shellSurface
                                     window: model.window
                                     scale: isMobile ? 1 : _swipeView.scale
                                     moveItem: Item
                                     {
-                                        parent: control.surfaceArea
+//                                        parent: control.surfaceArea
                                         property bool moving: false
-//                                        parent: _zpaceContainer
+                                        parent: _zpaceContainer
 
                                         height: _chromeDelegate.surface.height
                                         width: _chromeDelegate.surface.width
