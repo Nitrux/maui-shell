@@ -79,6 +79,7 @@ Maui.Page
 
     headBar.visible: true
     headBar.background: null
+    headBar.forceCenterMiddleContent: !isMobile
     headBar.leftContent: ToolButton
     {
         icon.name: "go-previous"

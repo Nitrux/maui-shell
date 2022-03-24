@@ -12,8 +12,8 @@ Maui.BasicToolButton
 {
     id: control
     property string tooltipText : text
-    Kirigami.Theme.inherit: true
-    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+
+
     padding: Maui.Style.space.small
     spacing: padding
     icon.width: 22

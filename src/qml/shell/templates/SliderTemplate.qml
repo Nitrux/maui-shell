@@ -13,6 +13,7 @@ T.Slider
 {
     id: control
     implicitHeight: (win.formFactor === Cask.Env.Desktop ? 16 : 22 ) + topPadding + bottomPadding
+    opacity: enabled ? 1 : 0.7
 
     property alias iconSource : _icon.source
     property alias animatedRec : _animatedRec
@@ -30,7 +31,7 @@ T.Slider
     {
         radius: height/2
         color: control.enabled ? Qt.darker(Kirigami.Theme.backgroundColor, 1.2) : "transparent"
-        border.color: control.enabled ? "transparent" : Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
+        border.color: control.enabled ? "transparent" : Kirigami.Theme.textColor
 
         Rectangle
         {

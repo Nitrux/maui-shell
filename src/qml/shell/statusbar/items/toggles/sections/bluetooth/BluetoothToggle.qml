@@ -29,7 +29,6 @@ ToggleTemplate
 
     property QtObject btManager : BluezQt.Manager
 
-
     BusyIndicator
     {
         anchors.centerIn: parent

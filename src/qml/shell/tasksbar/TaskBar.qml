@@ -23,6 +23,15 @@ T.Control
     padding: Maui.Style.space.small
     spacing: padding
 
+    Behavior on implicitWidth
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.shortDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
     background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor

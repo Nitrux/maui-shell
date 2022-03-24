@@ -39,6 +39,7 @@ CardButton
         label1.wrapMode: Text.Wrap
         iconSource: control.icon.name
         isMask: false
+        isCurrentItem: control.checked
         iconVisible: true
         iconSizeHint: Maui.Style.iconSizes.medium
 //        headerSizeHint: control.implicitHeight

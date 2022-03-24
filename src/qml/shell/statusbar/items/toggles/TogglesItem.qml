@@ -30,6 +30,7 @@ Cask.PanelItem
 
         Kirigami.Icon
         {
+            visible: _bluetoothToggle.deviceConnected
             source: _bluetoothToggle.icon.name
             height: control.iconSize
             width: height
@@ -111,6 +112,7 @@ Cask.PanelItem
                 ToggleTemplate
                 {
                     icon.name:  "contrast"
+                    enabled: !Maui.Style.adaptiveColorScheme
                     text: i18n("Nigh mode")
                     checked: Maui.App.darkMode
                     onClicked: Maui.App.darkMode = !Maui.App.darkMode

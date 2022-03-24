@@ -24,7 +24,8 @@ T.AbstractButton
     {
         readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
-        color: m_color
+        color: control.pressed || control.down || control.checked ? control.Kirigami.Theme.highlightColor : (control.highlighted || control.hovered ? control.Kirigami.Theme.hoverColor : m_color)
+
         opacity: control.checked? 1 : 0.7
         radius: 8
 
@@ -43,7 +44,7 @@ T.AbstractButton
         Kirigami.Icon
         {
             source: control.icon.name
-            color: control.checked || control.down ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            color: control.checked || control.down ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
             height: control.icon.height
             width: control.icon.width
             anchors.centerIn: parent
