@@ -1,0 +1,109 @@
+# appimage-builder recipe see https://appimage-builder.readthedocs.io for details
+version: 1
+
+script:
+  - rm -rf ./AppDir || true
+  - export DESTDIR=$PWD/AppDir
+  - scripts/install-build-deps.sh
+  - mkdir -p build
+  - cd build
+  - ../scripts/deploy-mauikit.sh
+  - ../scripts/deploy-mauikit-filebrowsing.sh
+  - ../scripts/deploy-maui-shell.sh
+  - ../scripts/install-icon-theme.sh
+
+AppDir:
+  path: ./AppDir
+  app_info:
+    id: maui-shell
+    name: maui-shell
+    icon: utilities-terminal
+    version: latest
+    exec: usr/bin/cask
+    exec_args: $@
+  runtime:
+    env:
+      PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
+      # APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib:$APPDIR/usr/lib/x86_64-linux-gnu"
+      QT_QUICK_CONTROLS_STYLE: "maui-style"
+  after_bundle:
+    - cd $APPDIR/bin/ && ln -sf bash sh
+  apt:
+    arch:
+    - amd64
+    allow_unauthenticated: true
+    sources:
+    - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
+    - sourceline: deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+    - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
+    - sourceline: deb http://archive.neon.kde.org/user focal main
+      key_url: 'http://archive.neon.kde.org/public.key'
+
+    include:
+    # CORE DEPENDENCIES
+    - bash
+
+    # KF5 DEPENDENCIES
+    - libkf5kirigami2-5
+    - libkf5notifications5
+    - libkf5kiofilewidgets5
+    - libkf5solid5
+    - libkf5idletime5
+    - libkf5service5
+
+    # Other
+    - libqt5waylandcompositor5-dev
+    - kded5-dev
+    - libpolkit-agent-1-dev
+    - libpolkit-qt5-1-dev
+    - libfontconfig1-dev
+    - libphonon4qt5-dev
+    - bluedevil
+    - libkf5bluezqt6
+    - plasma-framework
+    - plasma-pa
+    - plasma-nm
+
+    # QML modules
+    - qml-module-qtquick-shapes
+    - qml-module-org-kde-bluezqt
+    - qml-module-org-kde-kirigami2
+    - qml-module-qt-labs-calendar
+    - qml-module-qt-labs-platform
+    - qml-module-qtwayland-compositor
+
+    # Other
+    - libappimage1.0
+
+    exclude:
+    - "*dbgsym*"
+    - "*-dev"
+    - sound-theme-freedesktop
+    - systemd
+    - systemd-*
+    - perl
+    - perl-*
+    - gnupg
+    - libstdc++6
+
+  files:
+    include:
+    - /usr/bin/which
+    exclude:
+    - usr/include
+    - usr/share/man
+    - usr/share/doc
+    - usr/share/doc/*/README.*
+    - usr/share/doc/*/changelog.*
+    - usr/share/doc/*/NEWS.*
+    - usr/share/doc/*/TODO.*
+    - lib/systemd
+    - etc/systemd
+    - usr/bin/systemd*
+    - usr/bin/dpkg*
+    - usr/bin/*-linux-gnu-*
+    - usr/share/locale
+
+AppImage:
+  arch: x86_64
+  update-information: guess
