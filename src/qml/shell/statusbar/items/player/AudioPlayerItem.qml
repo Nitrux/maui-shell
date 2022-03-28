@@ -24,10 +24,10 @@ Cask.PanelItem
             width: height
             color: control.icon.color
         }
+
         Kirigami.Icon
         {
             source: isPlaying ? "media-playback-start" : "media-playback-pause"
-
             height: control.iconSize
             width: height
             color: control.icon.color

@@ -52,13 +52,13 @@ ListView
 
     property int lastPos: 0
 
-    Label
-    {
-        text: control.currentIndex + "/" + control.lastPos
-        color: "orange"
-        font.bold: true
-        font.pointSize: 22
-    }
+//    Label
+//    {
+//        text: control.currentIndex + "/" + control.lastPos
+//        color: "orange"
+//        font.bold: true
+//        font.pointSize: 22
+//    }
 
 
     Connections

@@ -13,7 +13,6 @@ Maui.BasicToolButton
     id: control
     property string tooltipText : text
 
-
     padding: Maui.Style.space.small
     spacing: padding
     icon.width: 22
@@ -23,7 +22,9 @@ Maui.BasicToolButton
     {
         readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
-        color: control.hovered ? control.Kirigami.Theme.hoverColor :( control.checked ||  control.containsPress ? control.Kirigami.Theme.highlightColor : m_color)
+        color: control.enabled ? (control.hovered ? control.Kirigami.Theme.hoverColor :( control.checked ||  control.containsPress ? control.Kirigami.Theme.highlightColor : m_color)) :"transparent"
+
+        border.color: control.enabled ? "transparent" : (control.checked ||  control.containsPress ? control.Kirigami.Theme.highlightColor : m_color)
 
         radius: 8
         opacity: control.checked? 1 : 0.7
