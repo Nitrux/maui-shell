@@ -1,0 +1,47 @@
+name: Maui Shell AppImage
+
+on:
+  push:
+    branches: [ feature/mauishell-appimage ]
+
+jobs:
+  build-appimage:
+
+    runs-on: ubuntu-20.04
+
+    env:
+          BRANCH_MAUIKIT: v2.1
+          BRANCH_MAUIKIT_FILEBROWSING: v2.1
+
+    steps:
+      - name: Install basic packages
+        run: sudo apt-get -qy install curl wget
+
+      - name: Add required repo list
+        run: |
+          sudo touch /etc/apt/sources.list.d/neon.list
+          echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
+          curl 'http://archive.neon.kde.org/public.key' | sudo apt-key add -
+          
+          sudo apt-get update -q
+      
+      - name: Install appimagetool
+        run: |
+          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
+          sudo chmod +x /usr/bin/appimagetool
+          
+      - name: Install AppImage Builder
+        run: sudo pip3 install appimage-builder
+
+      - uses: actions/checkout@v2
+      - name: Build AppImage
+        run: sudo -E appimage-builder --skip-tests --recipe maui-shell-appimage.yml
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "continuous"
+          files: |
+            ./*.AppImage*
