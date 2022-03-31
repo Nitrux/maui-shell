@@ -1,8 +1,9 @@
 name: Maui Shell AppImage
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ feature/mauishell-appimage ]
+    branches: [ feature/mauishell-appimage, workflow_dispatch ]
 
 jobs:
   build-appimage:
