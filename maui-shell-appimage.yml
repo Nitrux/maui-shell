@@ -64,6 +64,15 @@ AppDir:
     - plasma-pa
     - plasma-nm
 
+    - libgl1
+    - libx11-6
+    - libxcb1
+    - libx11-xcb1
+    - libxcb-shm0
+    - libxcb-render0
+    - libxcb-shape0
+    - libegl1
+
     # QML modules
     - qml-module-qtquick-shapes
     - qml-module-org-kde-bluezqt
