@@ -24,7 +24,6 @@ AppDir:
   runtime:
     env:
       PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
-      # APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib:$APPDIR/usr/lib/x86_64-linux-gnu"
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
@@ -52,15 +51,13 @@ AppDir:
     - libkf5service5
 
     # Other
-    - libqt5waylandcompositor5-dev
-    - kded5-dev
-    - libpolkit-agent-1-dev
-    - libpolkit-qt5-1-dev
-    - libfontconfig1-dev
-    - libphonon4qt5-dev
+    - kded5
+    - libpolkit-agent-1-0
+    - libpolkit-qt5-1-1
+    - libfontconfig1
+    - libphonon4qt5-4
     - bluedevil
     - libkf5bluezqt6
-    - plasma-framework
     - plasma-pa
     - plasma-nm
 
