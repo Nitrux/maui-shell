@@ -61,15 +61,15 @@ Cask.StackableItem
     property int marginWidth : window.fullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
     //    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
 
-   readonly property int titlebarHeight : decorationVisible ? 36 : 0
+    readonly property int titlebarHeight : decorationVisible ? 36 : 0
     property string screenName: ""
 
     property real resizeAreaWidth: 12
 
     property rect previousRect
 
-   x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
-   y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+    x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
+    y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
@@ -134,7 +134,6 @@ Cask.StackableItem
             rootChrome.x = 0
             rootChrome.y = 0
 
-
             toplevel.sendMaximized(Qt.size(_zpaceContainer.width, _zpaceContainer.height - titlebarHeight))
 
 
@@ -147,7 +146,7 @@ Cask.StackableItem
             console.log("SET UNMAX", toplevel.maximized, oldPos)
             if(oldPos.width === -1)
             {
-               oldPos = Qt.rect(0, 0, rootChrome.width * 0.6, rootChrome.height*0.6)
+                oldPos = Qt.rect(0, 0, rootChrome.width * 0.6, rootChrome.height*0.6)
             }
 
             rootChrome.x = oldPos.x
@@ -190,6 +189,7 @@ Cask.StackableItem
 
     Component.onCompleted:
     {
+        control.window.chrome = control
         surfaceItem.forceActiveFocus()
     }
 
@@ -199,7 +199,7 @@ Cask.StackableItem
     {
         id: decoration
 
-//        Kirigami.Theme.inherit: false
+        //        Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: Kirigami.Theme.Window
         anchors.fill: parent
         border.width: 1
@@ -404,10 +404,10 @@ Cask.StackableItem
         target: _zpaceContainer
         ignoreUnknownSignals: true
         enabled: win.formFactor !== Cask.Env.Desktop
-        //                            onHeightChanged:  _chromeDelegate.shellSurface.toplevel.sendConfigure(Qt.size(desktop.availableGeometry.width, surfaceArea.height), [0])
+
         function onWidthChanged()
         {
-            if(desktop.formFactor !== Cask.Env.Desktop)
+            if(formFactor !== Cask.Env.Desktop)
             {
                 window.maximize()
             }
@@ -415,7 +415,7 @@ Cask.StackableItem
 
         function onHeightChanged()
         {
-            if(desktop.formFactor !== Cask.Env.Desktop)
+            if(formFactor !== Cask.Env.Desktop)
             {
                 window.maximize()
             }
@@ -606,16 +606,11 @@ Cask.StackableItem
     layer.enabled: _borders.visible
     layer.effect: OpacityMask
     {
-        maskSource: Item
+        maskSource: Rectangle
         {
             width: Math.floor(rootChrome.width)
             height: Math.floor(rootChrome.height)
-
-            Rectangle
-            {
-                anchors.fill: parent
-                radius: _borders.radius
-            }
+            radius: _borders.radius
         }
 
         layer.enabled: _borders.visible
@@ -730,27 +725,27 @@ Cask.StackableItem
         {
             if(!active && (target.y * -1) > 100)
                 window.close()
-//            else target.y = 0
+            //            else target.y = 0
         }
     }
 
 
 
-//    Rectangle {
-//        z: surfaceItem.z + 9999999999
-//        visible: true
-//        border.color: "white"
-//        color: "black"
-//        radius: 5
-//        anchors.centerIn: parent
-//        width: height * 10
-//        height: moveGeometryText.implicitHeight * 1.5
-//        Text {
-//            id: moveGeometryText
-//            color: "white"
-//            anchors.centerIn: parent
-//            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
-//        }
+    //    Rectangle {
+    //        z: surfaceItem.z + 9999999999
+    //        visible: true
+    //        border.color: "white"
+    //        color: "black"
+    //        radius: 5
+    //        anchors.centerIn: parent
+    //        width: height * 10
+    //        height: moveGeometryText.implicitHeight * 1.5
+    //        Text {
+    //            id: moveGeometryText
+    //            color: "white"
+    //            anchors.centerIn: parent
+    //            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
+    //        }
 
-//    }
+    //    }
 }

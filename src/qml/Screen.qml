@@ -25,7 +25,7 @@ import QtQuick.Window 2.15
 
 import QtGraphicalEffects 1.0
 
-import QtWayland.Compositor 1.0
+import QtWayland.Compositor 1.3
 
 import org.mauikit.controls 1.2 as Maui
 import org.kde.kirigami 2.8 as Kirigami
@@ -43,14 +43,12 @@ import Zpaces 1.0 as ZP
 WaylandOutput
 {
     id: control
-
+    property variant viewsBySurface: ({})
     property bool isNestedCompositor: Qt.platform.pluginName.startsWith("wayland") || Qt.platform.pluginName === "xcb"
     property alias surfaceArea: _cask.surface // Chrome instances are parented to compositorArea
     property alias targetScreen: win.screen
 
     property alias cask: _cask
-    //    property alias swipeView : _swipeView
-
     property bool showDesktop : true
 
     sizeFollowsWindow: isNestedCompositor
@@ -72,16 +70,14 @@ WaylandOutput
         output: control
     }
 
-    window: Maui.ApplicationWindow
+    window: ApplicationWindow
     {
         id: win
-        width: 1024
-        height: 760
+
         Maui.App.darkMode: true
         Maui.Style.adaptiveColorScheme: wallpaperSettings.adaptiveColorScheme
         Maui.Style.adaptiveColorSchemeSource: wallpaperSettings.defaultWallpaper.replace("file://", "")
 
-        headBar.visible:false
         readonly property int formFactor :
         {
             if(width > 1500)
@@ -101,14 +97,17 @@ WaylandOutput
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
             windowSystemCursorEnabled: false
 
-
             Cask.Dashboard
             {
                 id: _cask
                 clip: true
                 anchors.fill: parent
                 anchors.bottomMargin: _zpaceSwitcher.height
-                topPanel.data: StatusBar {id: _statusBar}
+                topPanel.data: StatusBar
+                {
+                    id: _statusBar
+                    availableGeometry: _cask.availableGeometry
+                }
 
                 overlayContent: [
                     Dock
@@ -182,7 +181,6 @@ WaylandOutput
                         leftPadding: 0
                         rightPadding: 0
 
-
                         Item
                         {
                             id: _zpaceContainer
@@ -195,27 +193,30 @@ WaylandOutput
                                 delegate: Chrome
                                 {
                                     id: _chromeDelegate
+                                    parent: control.viewsBySurface[model.window.shellSurface.parentSurface] || control._zpaceContainer
                                     overviewMode: overView
                                     shellSurface: model.window.shellSurface
                                     window: model.window
-                                    scale: isMobile ? 1  : _swipeView.scale
+                                    scale: isMobile ? 1 : _swipeView.scale
                                     moveItem: Item
                                     {
+//                                        parent: control.surfaceArea
                                         property bool moving: false
                                         parent: _zpaceContainer
 
-                                        height: _chromeDelegate.surface.size.height
-                                        width: _chromeDelegate.surface.size.width
+                                        height: _chromeDelegate.surface.height
+                                        width: _chromeDelegate.surface.width
+                                    }
+
+                                    Component.onCompleted:
+                                    {
+                                        control.viewsBySurface[shellSurface.surface] = _chromeDelegate
                                     }
                                 }
-
                             }
                         }
-
                     }
                 }
-
-
             }
 
             // Virtual Keyboard
@@ -246,11 +247,12 @@ WaylandOutput
 
             // Draws the mouse cursor for a given Wayland seat
             WaylandCursorItem {
-                visible: false
 //                inputEventsEnabled: false
+                id: cursor
                 x: mouseTracker.mouseX
                 y: mouseTracker.mouseY
                 seat: control.compositor.defaultSeat
+                visible: mouseTracker.containsMouse
             }
         }
     }

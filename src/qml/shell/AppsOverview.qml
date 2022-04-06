@@ -34,7 +34,7 @@ Maui.Page
         {
             anchors.fill: parent
             color: Kirigami.Theme.backgroundColor
-            opacity: (0.5 * parent.radius) /100
+            opacity: 0.8
         }
     }
 
@@ -52,7 +52,10 @@ Maui.Page
 
     //    footBar.opacity: _overviewList.opacity
     footBar.visible: true
-    footBar.middleContent: [
+    footBar.middleContent: Row
+    {
+        Layout.alignment: Qt.AlignCenter
+        spacing: footBar.spacing
         Button
         {
             text: qsTr("Clear all")
@@ -61,7 +64,7 @@ Maui.Page
                 overView = false
                 //                _listSurfaces.clear()
             }
-        },
+        }
 
         Button
         {
@@ -71,12 +74,13 @@ Maui.Page
                 control.close()
                 showDesktop = true
             }
-        },
+        }
 
         Button
         {
             text: qsTr("Settings")
-        }]
+        }
+    }
 
     MouseArea
     {
@@ -91,7 +95,7 @@ Maui.Page
         contentWidth: availableWidth
         contentHeight: _overviewList.implicitHeight
         contentX: _swipeView.contentX
-//        scale: control.initScale
+        //        scale: control.initScale
         interactive: false
 
         boundsBehavior: Flickable.StopAtBounds

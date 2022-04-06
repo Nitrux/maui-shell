@@ -6,6 +6,7 @@
 #include <QScreen>
 #include <QWindow>
 #include <QTouchDevice>
+#include <QQuickItem>
 
 #include <QtWaylandCompositor/QWaylandShellSurface>
 #include <QtWaylandCompositor/QWaylandXdgToplevel>
@@ -116,7 +117,6 @@ int Zpaces::moveWindow(AbstractWindow *window, Zpace *fromZpace, Zpace *toZpace)
     }
 
     return m_zpacesModel->indexOf(fromZpace);
-
 }
 
 void Zpaces::insertZpace(const int &index)
@@ -139,6 +139,23 @@ int Zpaces::indexOfWindow(AbstractWindow *window)
     }
 
     return -1;
+}
+
+QQuickItem *Zpaces::windowChrome(AbstractWindow *window)
+{
+    if(!window)
+        return nullptr;
+
+    for(const auto &zpace : m_zpacesModel->zpaces())
+    {
+        auto windows = zpace->windows();
+        if(windows->windowExists(window))
+        {
+            return windows->chromeFor(window);
+        }
+    }
+
+    return nullptr;
 }
 
 int Zpaces::indexOfZpace(AbstractWindow *window)

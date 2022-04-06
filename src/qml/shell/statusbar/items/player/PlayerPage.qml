@@ -64,13 +64,13 @@ StackPage
         }
     }
 
-    property int position: (control.player && control.player.position) || 0
+    property double position: (control.player && control.player.position) || 0
     readonly property real rate: (control.player && control.player.rate) || 1
     readonly property int length: currentMetadata ? currentMetadata["mpris:length"] || 0 : 0
 
     readonly property bool canSeek: (control.player && control.player.capabilities & Cask.MprisPlayer.CanSeek) || false
 
-    property bool noPlayer: control.players.count === 0
+    readonly property bool noPlayer: control.player
 
     readonly property string identity: !control.noPlayer ? player.identity || control.sourceName : ""
 
@@ -89,6 +89,61 @@ StackPage
     readonly property var loopStatus:  undefined
 
     property bool disablePositionUpdate: false
+
+    onPositionChanged:
+    {
+        // we don't want to interrupt the user dragging the slider
+        if (!seekSlider.pressed)
+        {
+            // we also don't want passive position updates
+            disablePositionUpdate = true
+            seekSlider.value = position
+            disablePositionUpdate = false
+        }
+    }
+
+    onLengthChanged:
+    {
+        disablePositionUpdate = true
+        // When reducing maximumValue, value is clamped to it, however
+        // when increasing it again it gets its old value back.
+        // To keep us from seeking to the end of the track when moving
+        // to a new track, we'll reset the value to zero and ask for the position again
+        seekSlider.value = 0
+        seekSlider.to = control.length
+        control.player.updatePosition()
+        disablePositionUpdate = false
+    }
+
+    Component.onCompleted:
+    {
+         control.player.updatePosition();
+    }
+
+    Timer
+    {
+        id: seekTimer
+        interval: 1000 / control.rate
+        repeat: true
+        running: control.isPlaying && interval > 0 && seekSlider.to >= 1000000
+        onTriggered:
+        {
+            // some players don't continuously update the seek slider position via mpris
+            // add one second; value in microseconds
+            if (!seekSlider.pressed)
+            {
+                disablePositionUpdate = true
+                if (seekSlider.value == seekSlider.to)
+                {
+                    control.player.updatePosition();
+                } else
+                {
+                    seekSlider.value += 1000000
+                }
+                disablePositionUpdate = false
+            }
+        }
+    }
 
 
     headBar.rightContent: [ToolButton
@@ -126,44 +181,35 @@ StackPage
         Slider
         {
             id: seekSlider
+            enabled: control.canSeek
             Layout.fillWidth: true
             implicitHeight: visible ? 22 : 0
             from: 0
-            value: control.position/control.length
-            to: 1
-            visible: control.canSeek
+            value: 0
+            to: control.length
+
             onMoved:
             {
-                var service = mpris2Source.serviceForSource(control.sourceName)
-                var operation = service.operationDescription("SetPosition")
-                operation.microseconds = seekSlider.value*control.length
-                service.startOperationCall(operation)
-
+                if (!disablePositionUpdate)
+                {
+                    // delay setting the position to avoid race conditions
+                    queuedPositionUpdate.restart()
+                }
             }
 
-            //            Timer
-            //            {
-            //                id: seekTimer
-            //                interval: 1000
-            //                repeat: true
-            //                running: control.state === "playing" && interval > 0 && seekSlider.to >= 1000000
-            //                onTriggered: {
-            //                    // some players don't continuously update the seek slider position via mpris
-            //                    // add one second; value in microseconds
-            //                    console.log("UPDATE SLIDER")
-            //                    if (!seekSlider.pressed)
-            //                    {
-            //                        disablePositionUpdate = true
-            //                        if (seekSlider.value == seekSlider.to) {
-            //                            retrievePosition()
-            //                        } else {
-            //                            seekSlider.value += 1000000
-            //                        }
-            //                        disablePositionUpdate = false
-            //                    }
-            //                }
-            //            }
+            Timer
+            {
+                id: queuedPositionUpdate
+                interval: 100
+                onTriggered:
+                {
+                    if (control.position == seekSlider.value) {
+                        return;
+                    }
 
+                    control.player.setPosition(seekSlider.value)
+                }
+            }
         }
 
 

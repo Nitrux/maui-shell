@@ -21,6 +21,7 @@ T.Control
 {
     id: control
 
+    property rect availableGeometry
     readonly property bool floating : win.formFactor === Cask.Env.Desktop
     readonly property bool cardsOverlapping : (_notificationsSection.popup.width + _statusSection.popup.width) > availableGeometry.width
 
@@ -28,7 +29,7 @@ T.Control
     property bool autohide: false
 
     Layout.fillWidth: true
-//    Layout.margins: floating ? Maui.Style.space.tiny : 0
+    //    Layout.margins: floating ? Maui.Style.space.tiny : 0
 
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
 
@@ -66,11 +67,23 @@ T.Control
         }
     }
 
-    background: Rectangle
+    background: Item
     {
-        visible: !control.floating
+        //        visible: !control.floating
         opacity:  _notificationsSection.popup.opened || _statusSection.popup.opened ? 1 : 0.8
-        color: Kirigami.Theme.backgroundColor
+
+        LinearGradient
+        {
+            anchors.fill: parent
+            opacity: 0.8
+            start: Qt.point(0, 0)
+            end: Qt.point(0, height)
+            gradient: Gradient
+            {
+                GradientStop { position: 0.0; color: "#333" }
+                GradientStop { position: 0.7; color: "transparent" }
+            }
+        }
 
         Behavior on opacity
         {
@@ -80,6 +93,14 @@ T.Control
                 easing.type: Easing.InOutQuad
             }
         }
+
+        Rectangle
+        {
+            anchors.fill: parent
+            color: !control.floating ? Kirigami.Theme.backgroundColor : "transparent"
+
+        }
+
     }
 
     Rectangle
@@ -133,7 +154,7 @@ T.Control
             id: _notificationsSection
 
             Layout.fillWidth: true
-            availableGeometry : desktop.availableGeometry
+            availableGeometry: control.availableGeometry
             spacing: control.spacing
             popWidth: 320
             alignment: Qt.AlignLeft
@@ -163,7 +184,7 @@ T.Control
         {
             id: _statusSection
             alignment: Qt.AlignRight
-            availableGeometry : desktop.availableGeometry
+            availableGeometry : control.availableGeometry
             popWidth: 340
             spacing: control.spacing
 
@@ -179,25 +200,27 @@ T.Control
                 }
             }
 
-            Cask.PanelItem
-            {
-                id: _revealer
-                icon.name: checked ? "arrow-right" : "arrow-left"
-                checkable: true
-                width: height
-                leftPadding: 0
-                rightPadding: 0
+//            Cask.PanelItem
+//            {
+//                id: _revealer
+////                visible: _statusSection.visibleChildren > 0
+//                icon.name: checked ? "arrow-right" : "arrow-left"
+//                checkable: true
+//                width: height
+//                leftPadding: 0
+//                rightPadding: 0
 
-                data: Timer
-                {
-                    running: _revealer.checked && !_statusSection.popup.opened && !_statusSection.hovered
-                    interval: 4000
-                    onTriggered: _revealer.toggle()
-                }
-            }
+//                data: Timer
+//                {
+//                    running: _revealer.checked && !_statusSection.popup.opened && !_statusSection.hovered
+//                    interval: 4000
+//                    onTriggered: _revealer.toggle()
+//                }
+//            }
 
             TogglesItem
             {
+                id: _togglesItem
             }
 
             SlidersItem
@@ -207,11 +230,13 @@ T.Control
 
             AudioPlayerItem
             {
+                id: _mediaController
                 visible: _revealer.checked || isPlaying
             }
 
             SessionItem
             {
+                id: _sessionItem
                 visible: !isMobile
             }
         }

@@ -13,58 +13,17 @@ AbstractBarToggle
     id: control
     property alias progressbar : _bar
     property CaskPower.Battery battery
-    property alias iconSource : _icon.source
+    property alias iconSource : _bar.iconSource
 
-    bar: T.ProgressBar
+    bar: ProgressBarTemplate
     {
         id: _bar
         Layout.fillWidth: true
-        implicitHeight: 22 + topPadding + bottomPadding
+        color: control.batteryColor(control.battery.stateName)
 
         from: 1
         to : 100
         value : control.battery.percent
-
-        background: Rectangle
-        {
-            radius: height/2
-            color: control.enabled ? Qt.darker(Kirigami.Theme.backgroundColor, 1.2) : "transparent"
-            border.color: control.enabled ? "transparent" : Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
-        }
-
-        contentItem: Item
-        {
-            implicitWidth: _bar.height
-            implicitHeight: _bar.height
-
-            Rectangle
-            {
-                height: parent.height
-
-                width: _bar.visualPosition * parent.width
-                color: control.batteryColor(control.battery.stateName)
-                radius: height/2
-
-                NumberAnimation on opacity
-                {
-                    loops: 100
-                    running: true
-                    from : 0.3
-                    to: 1
-                    duration: Kirigami.Units.longDuration*10
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Kirigami.Icon
-            {
-                id: _icon
-                height: 16
-                width : 16
-                color: Kirigami.Theme.highlightedTextColor
-                anchors.centerIn: parent
-            }
-        }
     }
 
     function batteryColor(state)

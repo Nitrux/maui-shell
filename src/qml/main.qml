@@ -1,35 +1,37 @@
-import QtQuick 2.12
+import QtQuick 2.15
+
+import QtWayland.Compositor 1.3
+
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.1 as Labs
 
 import org.mauikit.controls 1.3 as Maui
 
-import QtWayland.Compositor 1.3
-//import Liri.XWayland 1.0 as LXW
+import Zpaces 1.0 as ZP
 
 import org.maui.cask 1.0 as Cask
-import Zpaces 1.0 as ZP
 import org.cask.notifications 1.0 as Nof
 import org.cask.polkit 1.0 as Polkit
+
+//import Liri.XWayland 1.0 as LXW
 
 WaylandCompositor
 {
     id: comp
+    retainedSelection: true
+    useHardwareIntegrationExtension: true
 
-    Screen
+    Instantiator
     {
-        id: desktop
-        compositor: comp
-        position: Qt.point(virtualX, virtualY)
+        id: screens
+        model: Qt.application.screens
 
-
-    }
-
-    Component
-    {
-        id: _polkitDialogComponent
-        Polkit.PolkitDialog
+        delegate: Screen
         {
+            compositor: comp
+            targetScreen: modelData
+            Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
+            position: Qt.point(virtualX, virtualY)
         }
     }
 
@@ -38,15 +40,20 @@ WaylandCompositor
         id: _notifications
     }
 
+    Component
+    {
+        id: _polkitDialogComponent
+        Polkit.PolkitDialog {}
+    }
+
     Connections
     {
         target: _polkit.listener
 
         function onAuthenticationRequest(dialog)
         {
-            var popup2 = _polkitDialogComponent.createObject(desktop.window, {"parent" : desktop.window, "dialog": dialog});
+            var popup2 = _polkitDialogComponent.createObject(comp.defaultOutput.window, {"parent" : comp.defaultOutput.window, "dialog": dialog});
             popup2.open()
-
         }
     }
 
@@ -59,32 +66,28 @@ WaylandCompositor
     {
         id: qtWindowManager
         onShowIsFullScreenChanged: console.debug("Show is fullscreen hint for Qt applications:", showIsFullScreen)
-        showIsFullScreen: false
-            onOpenUrl: Session.Launcher.launchCommand("xdg-open %1".arg(url))
-
+//        showIsFullScreen: false
+        onOpenUrl:
+        {
+            console.log("Ask to open url", url)
+            Session.Launcher.launchCommand("xdg-open %1".arg(url))
+        }
     }
 
-//    WlShell {
-//        onWlShellSurfaceCreated: handleShellSurfaceCreated(shellSurface, shellSurface)
-//    }
+    //    WlShell {
+    //        onWlShellSurfaceCreated: handleShellSurfaceCreated(shellSurface, shellSurface)
+    //    }
 
     //    XdgShellV6
     //    {
     //        onToplevelCreated: handleShellSurfaceCreated(xdgSurface, toplevel)
     //    }
 
-
-
     XdgShell
     {
         // void toplevelCreated(QWaylandXdgToplevel *toplevel, QWaylandXdgSurface *xdgSurface);
         onToplevelCreated: handleShellSurfaceCreated(xdgSurface, toplevel)
     }
-
-//    // Minimalistic shell extension. Mainly used for embedded applications.
-//    IviApplication {
-//        onIviSurfaceCreated: handleShellSurfaceCreated(iviSurface, iviSurface)
-//    }
 
     XdgDecorationManagerV1
     {
@@ -116,7 +119,7 @@ WaylandCompositor
     Settings
     {
         id: wallpaperSettings
-        category: "Wallpaper3"
+        category: "Wallpaper"
         property bool dim: true
         property bool fill: true
         property string defaultWallpaper: "qrc:/wallpapers/maui_shell_dev_bg.png"
@@ -124,23 +127,17 @@ WaylandCompositor
         property bool adaptiveColorScheme : true
     }
 
-    //    Component.onCompleted:
-    //    {
-    //        xwayland.startServer();
-    //    }
-
     function handleShellSurfaceCreated(shellSurface, toplevel)
     {
-
         console.log(shellSurface.windowType)
 
+        let window = screens.objectAt(0).zpaces.createXdgWindow(shellSurface, toplevel)
 
-        console.log("QML TOPLEVEL TYPE", shellSurface.title)
-let window = desktop.zpaces.createXdgWindow(shellSurface, toplevel)
-        desktop.workspaces.currentIndex = desktop.zpaces.addWindow(window, desktop.workspaces.currentIndex);
-        if(desktop.formFactor !== Cask.Env.Desktop)
+        screens.objectAt(0).workspaces.currentIndex = screens.objectAt(0).zpaces.addWindow(window, screens.objectAt(0).workspaces.currentIndex)
+
+        if(screens.objectAt(0).formFactor !== Cask.Env.Desktop)
         {
-        window.maximize()
+            window.maximize()
         }
     }
 }

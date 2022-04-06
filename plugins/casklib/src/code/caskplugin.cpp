@@ -10,6 +10,8 @@
 #include "code/mpris2/mpris2player.h"
 #include "code/mpris2/playersmodel.h"
 
+#include "code/controllers/appsdb.h"
+
 void CaskPlugin::registerTypes(const char *uri)
 {
 
@@ -36,6 +38,7 @@ void CaskPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<AppsModel>(uri, 1, 0, "AppsModel");
     qmlRegisterType<RecentFilesModel>(uri, 1, 0, "RecentFiles");
+    qmlRegisterType<AppsDB>(uri, 1, 0, "AppsDB");
 
     //mpris stuff
     qmlRegisterAnonymousType<PlayersModel>(uri, 1);

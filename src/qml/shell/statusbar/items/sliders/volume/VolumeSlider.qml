@@ -25,7 +25,7 @@ Template.SliderToggle
     property int wheelDelta: 0
     property int volumePercentStep: 5
     property int currentMaxVolumePercent: 100
-       property int currentMaxVolumeValue: currentMaxVolumePercent * PA.PulseAudio.NormalVolume / 100.00
+    property int currentMaxVolumeValue: currentMaxVolumePercent * PA.PulseAudio.NormalVolume / 100.00
 
     page: VolumePage
     {
@@ -211,8 +211,8 @@ Template.SliderToggle
 
     function boundVolume(volume)
     {
-            return Math.max(PA.PulseAudio.MinimalVolume, Math.min(volume, currentMaxVolumeValue));
-        }
+        return Math.max(PA.PulseAudio.MinimalVolume, Math.min(volume, currentMaxVolumeValue));
+    }
 
 
     function isDummyOutput(output)

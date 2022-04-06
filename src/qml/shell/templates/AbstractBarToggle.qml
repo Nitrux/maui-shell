@@ -67,7 +67,7 @@ T.Pane
 
             RowLayout
             {
-                visible: _label.visible || _icon.visible || _label2.visible
+                visible: control.label.text.length || control.label2.text.length
                 Layout.fillWidth: true
                 spacing: control.spacing
 

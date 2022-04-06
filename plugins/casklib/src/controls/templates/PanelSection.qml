@@ -21,6 +21,7 @@ T.Control
     property int popWidth : Math.max(100, control.width)
     property alias popHeight : popup.height
     property alias alignment: popup.alignment
+    property alias visibleChildren: _content.visibleChildren
 
     property rect availableGeometry
 

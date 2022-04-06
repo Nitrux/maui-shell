@@ -39,7 +39,21 @@ void AbstractWindow::unfullscreen()
     emit unsetFullscreen();
 }
 
+void AbstractWindow::setChrome(QQuickItem *chrome)
+{
+    if (m_chrome == chrome)
+        return;
+
+    m_chrome = chrome;
+    emit chromeChanged(m_chrome);
+}
+
 bool AbstractWindow::minimized() const
 {
     return m_minimized;
+}
+
+QQuickItem *AbstractWindow::chrome() const
+{
+    return m_chrome;
 }

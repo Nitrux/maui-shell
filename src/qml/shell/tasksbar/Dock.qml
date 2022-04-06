@@ -17,9 +17,9 @@ Item
     property bool autohide: false
     property alias launcher : _launcher
 
-    Cask.ProcessLauncher
+    Cask.AppsDB
     {
-        id: processlauncher
+        id: _appsDB
     }
 
     Rectangle
@@ -28,7 +28,7 @@ Item
         visible: _launcher.visible
         parent: _cask.overlay
         //        z: control.z+2
-        opacity: Math.min(formFactor !== Cask.Env.Desktop ? 0.95 : 0.7, _launcher.opacity)
+        opacity: formFactor !== Cask.Env.Desktop ? 0.95 : 0.7
 
         anchors.fill: parent
         color: _launcher.Kirigami.Theme.backgroundColor
@@ -224,10 +224,5 @@ Item
     {
         _container.y = 0
         _taskbar.forceActiveFocus()
-    }
-
-    function launchExec(exec)
-    {
-        processlauncher.launch(exec)
     }
 }
