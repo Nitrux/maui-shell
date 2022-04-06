@@ -162,7 +162,7 @@ T.Control
             Connections
             {
                 target: _notificationsSection.popup
-                onOpenedChanged: //if the cards are open and the avaliable width is not enough close the right section
+                function onOpenedChanged() //if the cards are open and the avaliable width is not enough close the right section
                 {
                     if(target.opened && _statusSection.popup.opened && control.cardsOverlapping)
                     {
@@ -191,7 +191,7 @@ T.Control
             Connections
             {
                 target: _statusSection.popup
-                onOpenedChanged:
+                function onOpenedChanged()
                 {
                     if(target.opened && _notificationsSection.popup.opened && control.cardsOverlapping)
                     {

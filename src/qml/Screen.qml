@@ -110,7 +110,7 @@ WaylandOutput
                 }
 
                 overlayContent: [
-                    Dock
+                    Item
                     {
                         id: _dock
                         anchors.left: parent.left
@@ -123,7 +123,6 @@ WaylandOutput
                         id: _overlayNotificationContainer
                         width: Math.min(availableGeometry.width, 300)
                         y: _cask.topPanel.height
-
                     }
                 ]
 
@@ -193,7 +192,7 @@ WaylandOutput
                                 delegate: Chrome
                                 {
                                     id: _chromeDelegate
-                                    parent: control.viewsBySurface[model.window.shellSurface.parentSurface] || control._zpaceContainer
+                                    parent: control.viewsBySurface[model.window.shellSurface.parentSurface] || _zpaceContainer
                                     overviewMode: overView
                                     shellSurface: model.window.shellSurface
                                     window: model.window
