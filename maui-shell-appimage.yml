@@ -49,6 +49,7 @@ AppDir:
     - libkf5solid5
     - libkf5idletime5
     - libkf5service5
+    - libqt5sql5-sqlite
 
     # Other
     - kded5
