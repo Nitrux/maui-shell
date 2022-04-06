@@ -18,8 +18,8 @@ import org.cask.polkit 1.0 as Polkit
 WaylandCompositor
 {
     id: comp
-    retainedSelection: true
-    useHardwareIntegrationExtension: true
+//    retainedSelection: true
+//    useHardwareIntegrationExtension: true
 
     Instantiator
     {
