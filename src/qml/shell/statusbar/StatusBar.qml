@@ -223,10 +223,10 @@ T.Control
                 id: _togglesItem
             }
 
-            SlidersItem
-            {
-                id: _slidersItem
-            }
+//            SlidersItem
+//            {
+//                id: _slidersItem
+//            }
 
 //            AudioPlayerItem
 //            {
