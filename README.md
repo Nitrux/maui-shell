@@ -16,6 +16,12 @@ Maui Shell is composed of two parts:
 ![screenshot_2](https://nxos.org/wp-content/uploads/2021/12/promo-8-scaled.jpg "Tablet Mode")
 ![screenshot_3](https://nxos.org/wp-content/uploads/2021/12/promo-6.jpg "Phone Mode")
 
+# Download
+
+ Maui Shell is available as an AppImage. Click the button below to download it or head over to the _Releases_ tab.
+
+ [![appimage-button](https://github.com/UriHerrera/appimage-buttons/blob/main/buttons/appimage-btn-dark.svg)](https://github.com/Nitrux/maui-shell/releases)
+
 # Build
 
 Please check the [Wiki](https://github.com/Nitrux/maui-shell/wiki) for build instructions.
