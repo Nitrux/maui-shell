@@ -18,21 +18,16 @@ import org.cask.polkit 1.0 as Polkit
 WaylandCompositor
 {
     id: comp
-//    retainedSelection: true
-//    useHardwareIntegrationExtension: true
+    //    retainedSelection: true
+    //    useHardwareIntegrationExtension: true
 
-    Instantiator
+    Screen
     {
-        id: screens
-        model: Qt.application.screens
-
-        delegate: Screen
-        {
-            compositor: comp
-            targetScreen: modelData
-            Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
-            position: Qt.point(virtualX, virtualY)
-        }
+        id: screen
+        compositor: comp
+        targetScreen: modelData
+        Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
+        position: Qt.point(virtualX, virtualY)
     }
 
     Nof.Notifications
@@ -66,7 +61,7 @@ WaylandCompositor
     {
         id: qtWindowManager
         onShowIsFullScreenChanged: console.debug("Show is fullscreen hint for Qt applications:", showIsFullScreen)
-//        showIsFullScreen: false
+        //        showIsFullScreen: false
         onOpenUrl:
         {
             console.log("Ask to open url", url)
@@ -131,11 +126,11 @@ WaylandCompositor
     {
         console.log(shellSurface.windowType)
 
-        let window = screens.objectAt(0).zpaces.createXdgWindow(shellSurface, toplevel)
+        let window = screen.zpaces.createXdgWindow(shellSurface, toplevel)
 
-        screens.objectAt(0).workspaces.currentIndex = screens.objectAt(0).zpaces.addWindow(window, screens.objectAt(0).workspaces.currentIndex)
+        screen.workspaces.currentIndex = screen.zpaces.addWindow(window, screen.workspaces.currentIndex)
 
-        if(screens.objectAt(0).formFactor !== Cask.Env.Desktop)
+        if(screen.formFactor !== Cask.Env.Desktop)
         {
             window.maximize()
         }
