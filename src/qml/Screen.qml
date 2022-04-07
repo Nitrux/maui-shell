@@ -110,7 +110,7 @@ WaylandOutput
                 }
 
                 overlayContent: [
-                    Item
+                    Dock
                     {
                         id: _dock
                         anchors.left: parent.left
