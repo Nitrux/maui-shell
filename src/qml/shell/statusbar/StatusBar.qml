@@ -228,11 +228,11 @@ T.Control
                 id: _slidersItem
             }
 
-            AudioPlayerItem
-            {
-                id: _mediaController
-                visible: _revealer.checked || isPlaying
-            }
+//            AudioPlayerItem
+//            {
+//                id: _mediaController
+//                visible: _revealer.checked || isPlaying
+//            }
 
             SessionItem
             {
