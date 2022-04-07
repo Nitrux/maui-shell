@@ -200,39 +200,39 @@ T.Control
                 }
             }
 
-//            Cask.PanelItem
-//            {
-//                id: _revealer
-////                visible: _statusSection.visibleChildren > 0
-//                icon.name: checked ? "arrow-right" : "arrow-left"
-//                checkable: true
-//                width: height
-//                leftPadding: 0
-//                rightPadding: 0
+            //            Cask.PanelItem
+            //            {
+            //                id: _revealer
+            ////                visible: _statusSection.visibleChildren > 0
+            //                icon.name: checked ? "arrow-right" : "arrow-left"
+            //                checkable: true
+            //                width: height
+            //                leftPadding: 0
+            //                rightPadding: 0
 
-//                data: Timer
-//                {
-//                    running: _revealer.checked && !_statusSection.popup.opened && !_statusSection.hovered
-//                    interval: 4000
-//                    onTriggered: _revealer.toggle()
-//                }
-//            }
+            //                data: Timer
+            //                {
+            //                    running: _revealer.checked && !_statusSection.popup.opened && !_statusSection.hovered
+            //                    interval: 4000
+            //                    onTriggered: _revealer.toggle()
+            //                }
+            //            }
 
             TogglesItem
             {
                 id: _togglesItem
             }
 
-//            SlidersItem
-//            {
-//                id: _slidersItem
-//            }
+            SlidersItem
+            {
+                id: _slidersItem
+            }
 
-//            AudioPlayerItem
-//            {
-//                id: _mediaController
-//                visible: _revealer.checked || isPlaying
-//            }
+            AudioPlayerItem
+            {
+                id: _mediaController
+                visible: _revealer.checked || isPlaying
+            }
 
             SessionItem
             {
