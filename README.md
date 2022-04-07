@@ -28,41 +28,17 @@ Please check the [Wiki](https://github.com/Nitrux/maui-shell/wiki) for build ins
 
 # Running
 
-Maui Shell can run as a window inside an X11 session, open a terminal and run `cask`.
+Maui Shell can run as a window inside an X11 session, open a terminal and run `cask`. There is a Wayland session  too if you’d like to test the Maui Shell using a Wayland sesson.
 
-If you want to run it on the Linux console without an X11 session, you can use a startup script like this:
+To run un Cask in window mode, you can launch ‘cask -w,’ which will allow you to test different sizes to emulate tablet or phone form factors.
 
-```
-#!/bin/sh
-export QT_QPA_PLATFORM=eglfs
+Using a different TTY is also possible to test Maui Shell; in this case, you would need to use the program ‘startcask-wayland’.
 
-# don't enlarge stuff on "high-res" displays
-export QT_AUTO_SCREEN_SCALE_FACTOR=0 
+If you try it within another session, you can launch `cask -l /tmp/cask.log` to generate a log file; this is useful if you want to report an issue later.
 
-# in case it's not detected
-# or you wish to override
-#
-# export QT_QPA_EGLFS_PHYSICAL_WIDTH=480 
-# export QT_QPA_EGLFS_PHYSICAL_HEIGHT=270 
+To ensure the input works correctly, you need to add your user to the `input` group.
 
-# try to restart if it crashes; write a log file
-cask -r -l /tmp/cask.log
-```
-
-If you are on the console and have a problem with the keyboard, mouse, etc.
-don't work (which should be fixed in Qt 5.6 and above, theoretically) you can
-try various input plugins (after rebooting via ssh, or the power button ;-) by adding
-
-```
--plugin EvdevTouch -plugin EvdevMouse -plugin EvdevTablet -plugin EvdevKeyboard
-```
-or
-```
--plugin libinput
-```
-
-Cask can run Weston and GTK3 apps too eventually;
-that's mainly a matter of QtWayland having the XDG shell support finished.
+Eventually, Cask can run Weston and GTK3 apps.
 
 Cask does not include an embedded X server yet, but it might be possible.
 
