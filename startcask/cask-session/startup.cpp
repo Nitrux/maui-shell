@@ -184,7 +184,7 @@ Startup::Startup(QObject *parent)
         new StartupPhase0(autostart, this),
         phase1 = new StartupPhase1(autostart, this),
 //        new RestoreSessionJob(),
-        new StartupPhase2(autostart, this),
+//        new StartupPhase2(autostart, this),
     };
 
     qDebug() << "PASHE 0000000";
