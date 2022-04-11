@@ -137,7 +137,12 @@ void TasksModel::setPinnedTasks()
 {
     for(const auto &taskId : pinnedTasks())
     {
-        this->addTask(taskId, true);
+        KDesktopFile desktopfile(taskId);
+
+        if(QFile::exists(desktopfile.fileName()))
+        {
+            this->addTask(taskId, true);
+        }
     }
 }
 
