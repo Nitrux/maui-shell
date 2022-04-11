@@ -215,8 +215,27 @@ Maui.Page
                                 contentItem: GridView
                                 {
                                     interactive: false
-                                    cellWidth: width/2
-                                    cellHeight: height/2
+                                    cellWidth: switch(count)
+                                               {
+                                               case 4:
+                                               case 3:
+                                               case 2:
+                                                   return width/2;
+                                               case 1: return width
+                                                   default:  return width/2;
+                                               }
+
+                                    cellHeight: switch(count)
+                                                {
+                                                case 4:
+                                                case 3:
+                                                    return height/2;
+                                                case 2:
+                                                case 1: return height
+                                                default: return height/2;
+                                                }
+
+
                                     clip: true
                                     model: Maui.BaseModel
                                     {
