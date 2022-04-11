@@ -270,6 +270,21 @@ Maui.Dialog
                                 onToggled: wallpaperSettings.fill = !wallpaperSettings.fill
                             }
                         }
+
+                        Maui.SettingTemplate
+                        {
+                            label1.text: i18n("Fill Wallpaper")
+                            label2.text: i18n("Fill or fit wallpaper")
+
+                            SpinBox
+                            {
+                                value: shellSettings.scaleFactor
+                                stepSize: 1
+                               from: 1
+                               to : 10
+                                onValueModified: shellSettings.scaleFactor= value
+                            }
+                        }
                     }
 
                     Maui.SettingsSection

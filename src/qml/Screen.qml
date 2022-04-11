@@ -54,7 +54,7 @@ WaylandOutput
     sizeFollowsWindow: isNestedCompositor
     availableGeometry : _cask.availableGeometry
 
-    scaleFactor: Screen.devicePixelRatio
+//    scaleFactor: 1
     //transform: WaylandOutput.Transform180
     readonly property bool isMobile : formFactor === Cask.Env.Phone
 

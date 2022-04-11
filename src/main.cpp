@@ -255,6 +255,7 @@ int main(int argc, char *argv[])
     KAboutData::setApplicationData(about);
 
     signal(SIGINT, sigintHandler);
+    signal(SIGTSTP, sigintHandler);
 
     app.setQuitOnLastWindowClosed(false);
     QGuiApplication::setFallbackSessionManagementEnabled(false);

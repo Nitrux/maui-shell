@@ -113,6 +113,14 @@ WaylandCompositor
 
     Settings
     {
+        id: shellSettings
+        category: "Cask"
+        property int scaleFactor :  Screen.devicePixelRatio
+    }
+
+
+    Settings
+    {
         id: wallpaperSettings
         category: "Wallpaper"
         property bool dim: true
