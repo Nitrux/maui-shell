@@ -2,7 +2,7 @@ name: Maui Shell AppImage
 
 on:
   push:
-    branches: [ feature/mauishell-appimage ]
+    branches: [ master ]
 
 jobs:
   build-appimage:
