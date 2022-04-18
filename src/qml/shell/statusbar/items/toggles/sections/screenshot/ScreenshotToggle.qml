@@ -25,6 +25,7 @@ ToggleTemplate
         color: "orange"
         anchors.fill: parent
         opacity: 0
+
         PropertyAnimation
         {
             id: animation;
@@ -43,8 +44,12 @@ ToggleTemplate
                 });
             }
         }
+    }
 
 
+    function grabScreen()
+    {
+        animation.start()
     }
 
 }

@@ -32,6 +32,11 @@ StackPage
             display: control.display
             Layout.fillHeight: true
             Layout.fillWidth: true
+            onClicked:
+            {
+                console.log("take screenshot")
+                 grabScreen()
+            }
         }
 
         CardButton
