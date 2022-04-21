@@ -81,7 +81,9 @@ Maui.Dialog
                         Layout.margins: Maui.Style.space.medium
                         Layout.fillWidth: true
                         Layout.fillHeight: false
-                        Layout.preferredHeight: control.height*0.3
+                        Layout.preferredHeight: 180
+                        Layout.preferredWidth: 400
+                        Layout.alignment: Qt.AlignCenter
                         spacing: Maui.Style.space.big
 
                         ColumnLayout

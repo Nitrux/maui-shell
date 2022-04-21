@@ -20,14 +20,22 @@ T.AbstractButton
     icon.height: 22
     icon.width: 22
 
+    property bool colorize: false
+
     background: Rectangle
     {
-        readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+        readonly property color m_color : control.colorize ? _imgColors.dominant : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
         color: control.pressed || control.down || control.checked ? control.Kirigami.Theme.highlightColor : (control.highlighted || control.hovered ? control.Kirigami.Theme.hoverColor : m_color)
 
         opacity: control.checked? 1 : 0.7
         radius: 8
+
+        Kirigami.ImageColors
+        {
+            id: _imgColors
+            source: control.icon.name
+        }
 
         Behavior on color
         {

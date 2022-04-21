@@ -86,7 +86,7 @@ T.Control
                     focusPolicy: Qt.NoFocus
                     readonly property ZP.Task task : model.task
                     readonly property ZP.XdgWindow xdgWindow : task.window
-
+                    colorize: task.window ? task.window.toplevel.activated : false
                     icon.height: 32
                     icon.width: 32
 
