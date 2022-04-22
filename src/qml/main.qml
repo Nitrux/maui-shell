@@ -142,5 +142,7 @@ WaylandCompositor
         {
             window.maximize()
         }
+
+        window.activate()
     }
 }

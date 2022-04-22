@@ -222,7 +222,7 @@ Maui.Page
                                                case 2:
                                                    return width/2;
                                                case 1: return width
-                                                   default:  return width/2;
+                                               default:  return width/2;
                                                }
 
                                     cellHeight: switch(count)
@@ -277,11 +277,19 @@ Maui.Page
                     flickable.header: ColumnLayout
                     {
                         width: parent.width
-                        spacing: Maui.Style.space.medium
+                        spacing: Maui.Style.space.big
+                        visible: _recentListView.count > 0
+
+                        Maui.LabelDelegate
+                        {
+                            Layout.fillWidth: true
+                            isSection: true
+                            label: i18n("Most Used")
+                        }
 
                         ListView
                         {
-                            visible: count > 0
+                            id: _recentListView
                             orientation: ListView.Horizontal
                             Layout.fillWidth: true
                             Layout.margins: Maui.Style.space.medium
@@ -306,6 +314,13 @@ Maui.Page
                                     control.close()
                                 }
                             }
+                        }
+
+                        Kirigami.Separator
+                        {
+                            Layout.preferredWidth: 100
+//                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignCenter
                         }
                     }
 

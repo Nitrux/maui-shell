@@ -52,20 +52,28 @@ T.AbstractButton
         id: _bg
         visible: !control.flat
 
-       readonly property color finalColor: Kirigami.Theme.backgroundColor
+       readonly property color finalColor: control.Kirigami.Theme.backgroundColor
         color: finalColor
         radius: 6
         opacity: control.checked ?  1 : 0.8
 
-        ColorAnimation on color
+        Rectangle
         {
-            id: _animation
-            easing.type: Easing.InExpo
-            running: false
-            from: Kirigami.Theme.highlightColor
-            to: _bg.finalColor
-            duration: 1000
+            anchors.fill: parent
+            color: "transparent"
+            radius: parent.radius
+            ColorAnimation on color
+            {
+                id: _animation
+                easing.type: Easing.InExpo
+                running: false
+                from: control.Kirigami.Theme.highlightColor
+                to: "transparent"
+                duration: 1000
+            }
         }
+
+
 
         Behavior on color
         {
