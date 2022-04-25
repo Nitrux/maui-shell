@@ -17,8 +17,9 @@
 ****************************************************************************/
 
 import QtQuick 2.15
-import QtQuick.Controls 2.14
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQml 2.15
 
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
@@ -69,12 +70,27 @@ Cask.StackableItem
     property rect previousRect
 
     x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
-    y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
 
     visible: surfaceItem.valid && surfaceItem.paintEnabled
+
+
+    Binding on y
+    {
+        value:  surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+//        delayed: true
+        restoreMode: Binding.RestoreBindingOrValue
+    }
+
+    onYChanged:
+    {
+        if( y < 0 && toplevel.decorationMode !== XdgToplevel.ServerSideDecoration)
+        {
+            rootChrome.y = 0
+        }
+    }
 
     onIntersectsChanged:
     {
@@ -288,8 +304,7 @@ Cask.StackableItem
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-//                    text: rootChrome.title
-                    text: titlebarDrag.centroid
+                    text: rootChrome.title
                     horizontalAlignment: Qt.AlignHCenter
                     elide: Text.ElideMiddle
                     wrapMode: Text.NoWrap
@@ -734,21 +749,22 @@ Cask.StackableItem
 
 
 
-    //    Rectangle {
-    //        z: surfaceItem.z + 9999999999
-    //        visible: true
-    //        border.color: "white"
-    //        color: "black"
-    //        radius: 5
-    //        anchors.centerIn: parent
-    //        width: height * 10
-    //        height: moveGeometryText.implicitHeight * 1.5
-    //        Text {
-    //            id: moveGeometryText
-    //            color: "white"
-    //            anchors.centerIn: parent
-    //            text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
-    //        }
+        Rectangle {
+            z: surfaceItem.z + 9999999999
+            visible: true
+            border.color: "white"
+            color: "black"
+            radius: 5
+            anchors.centerIn: parent
+            width: height * 10
+            height: moveGeometryText.implicitHeight * 1.5
+            Text {
+                id: moveGeometryText
+                color: "white"
+                anchors.centerIn: parent
+//                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
+                text: rootChrome.y
+            }
 
-    //    }
+        }
 }
