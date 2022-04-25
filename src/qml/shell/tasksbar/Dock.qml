@@ -3,7 +3,7 @@ import QtQml 2.14
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 import QtQuick.Templates 2.15 as T
@@ -88,7 +88,6 @@ Item
             }
         }
     }
-
 
     Launcher
     {
@@ -177,16 +176,35 @@ Item
         }
     }
 
-    HoverHandler
+    Kirigami.ShadowedRectangle
     {
-        id: _dockHoverHandler
-        enabled: !handler.active && control.hidden
-        acceptedPointerTypes: PointerDevice.GenericPointer
-        onHoveredChanged:
+        visible: control.hidden
+        color: Kirigami.Theme.backgroundColor
+        opacity: 0.7
+        width: _taskbar.width
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        height: 20
+
+        corners
         {
-            _dockRevealTimer.restart()
+            topLeftRadius: _taskbar.radius
+            topRightRadius: _taskbar.radius
+        }
+
+        HoverHandler
+        {
+            id: _dockHoverHandler
+            enabled: !handler.active && control.hidden
+            acceptedPointerTypes: PointerDevice.GenericPointer
+            onHoveredChanged:
+            {
+                _dockRevealTimer.restart()
+            }
         }
     }
+
+
 
     Timer
     {
@@ -196,7 +214,7 @@ Item
         //            triggeredOnStart: true
         onTriggered:
         {
-            if(control.hidden)
+            if(control.hidden && _dockHoverHandler.hovered)
             {
                 control.show()
             }

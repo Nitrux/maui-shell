@@ -228,6 +228,8 @@ Cask.StackableItem
             {
                 id: titlebarDrag
                 target: rootChrome
+                yAxis.maximum: rootChrome.parent.height
+                yAxis.minimum: 0
                 //                enabled: rootChrome.activated
                 cursorShape: Qt.ClosedHandCursor
                 onActiveChanged:
@@ -286,7 +288,8 @@ Cask.StackableItem
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    text: rootChrome.title
+//                    text: rootChrome.title
+                    text: titlebarDrag.centroid
                     horizontalAlignment: Qt.AlignHCenter
                     elide: Text.ElideMiddle
                     wrapMode: Text.NoWrap

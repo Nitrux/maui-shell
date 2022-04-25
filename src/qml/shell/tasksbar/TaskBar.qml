@@ -23,6 +23,8 @@ T.Control
     padding: Maui.Style.space.small
     spacing: padding
 
+    property int radius: 10
+
     Behavior on implicitWidth
     {
         NumberAnimation
@@ -36,7 +38,7 @@ T.Control
     {
         color: Kirigami.Theme.backgroundColor
         opacity: _dropArea.containsDrag ? 1 : 0.8
-        radius: 10
+        radius: control.radius
 
         Behavior on color
         {
