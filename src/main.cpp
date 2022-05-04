@@ -178,7 +178,7 @@ static qreal highestDPR(QList<QScreen *> &screens)
 
 void sigintHandler(int signalNumber)
 {
-    qDebug() << "terminating caks session" << signalNumber;    
+    qDebug() << "terminating cask session" << signalNumber;
 }
 
 

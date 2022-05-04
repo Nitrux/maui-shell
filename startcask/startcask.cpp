@@ -41,7 +41,7 @@ QTextStream out(stderr);
 
 void sigtermHandler(int signalNumber)
 {
-    qDebug() << "terminating caks session" << signalNumber;
+    qDebug() << "terminating cask session" << signalNumber;
     if (QCoreApplication::instance()) {
         QCoreApplication::instance()->exit(-1);
         qDebug() << "terminating caks session FINISHED" << signalNumber;
