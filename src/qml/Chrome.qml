@@ -79,8 +79,8 @@ Cask.StackableItem
 
     Binding on y
     {
-        value:  surfaceItem.moveItem.y - surfaceItem.output.geometry.y
-//        delayed: true
+        value:  rootChrome.surfaceItem.moveItem.y - rootChrome.surfaceItem.output.geometry.y
+        delayed: true
         restoreMode: Binding.RestoreBindingOrValue
     }
 

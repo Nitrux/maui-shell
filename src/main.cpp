@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     about.setupCommandLine(&parser);
 
-    parser.setApplicationDescription("Cask Qt/Wayland compositor");
+    parser.setApplicationDescription(about.shortDescription());
     parser.addHelpOption();
     parser.addVersionOption();
 

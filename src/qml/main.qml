@@ -137,12 +137,12 @@ WaylandCompositor
         let window = screen.zpaces.createXdgWindow(shellSurface, toplevel)
 
         screen.workspaces.currentIndex = screen.zpaces.addWindow(window, screen.workspaces.currentIndex)
+                window.activate()
 
         if(screen.formFactor !== Cask.Env.Desktop)
         {
             window.maximize()
         }
 
-        window.activate()
     }
 }

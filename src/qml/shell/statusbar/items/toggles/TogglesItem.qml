@@ -18,23 +18,24 @@ Cask.PanelItem
 
     Row
     {
-        spacing: control.spacing       
+        spacing: control.spacing
 
-        Kirigami.Icon
+        Cask.IconLabel
         {
-            source: _networkToggle.icon.name
             height: control.iconSize
-            width: height
-            color: control.icon.color
-        }        
+            icon.source: _networkToggle.icon.name
+            icon.color: control.icon.color
+            text: _networkToggle.text
+        }
 
-        Kirigami.Icon
+        Cask.IconLabel
         {
             visible: _bluetoothToggle.deviceConnected
-            source: _bluetoothToggle.icon.name
+            icon.source: _bluetoothToggle.icon.name
+            icon.color: control.icon.color
+            text: _bluetoothToggle.text
+
             height: control.iconSize
-            width: height
-            color: control.icon.color
         }
 
         Kirigami.Icon

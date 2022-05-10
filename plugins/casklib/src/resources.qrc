@@ -8,6 +8,7 @@
         <file alias="Dashboard.qml">controls/Dashboard.qml</file>
         <file>controls/WorkZpace.qml</file>
         <file>controls/Zpace.qml</file>
+        <file alias="templates/IconLabel.qml">controls/IconLabel.qml</file>
     </qresource>
     <qresource prefix="/db">
         <file>code/controllers/script.sql</file>

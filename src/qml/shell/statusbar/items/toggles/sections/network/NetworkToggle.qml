@@ -11,7 +11,7 @@ import "../.."
 ToggleTemplate
 {
     icon.name: connectionIconProvider.connectionIcon
-    text:  networkStatus.activeConnections.split(" ").pop()
+    text: networkStatus.activeConnections.split(" ").pop()
     tooltipText: networkStatus.activeConnections
     display: ToolButton.TextBesideIcon
 

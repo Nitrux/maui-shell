@@ -18,28 +18,29 @@ Cask.PanelItem
     Row
     {
         spacing: control.spacing
-        Kirigami.Icon
+
+        Cask.IconLabel
         {
-            source: _audioSlider.slider.iconSource
+            icon.source: _audioSlider.slider.iconSource
+            icon.color: control.icon.color
+            text: Math.round(_audioSlider.defaultSinkValue)
             height: control.iconSize
-            width: height
-            color: control.icon.color
         }
 
-        Kirigami.Icon
+        Cask.IconLabel
         {
-            source: _micSlider.slider.iconSource
+            icon.source: _micSlider.slider.iconSource
             height: control.iconSize
-            width: height
-            color: control.icon.color
+            icon.color: control.icon.color
+            text: Math.round(_micSlider.defaultSourceValue)
         }
 
-        Kirigami.Icon
+        Cask.IconLabel
         {
-            source: "high-brightness"
+            icon.source: "high-brightness"
             height: control.iconSize
-            width: height
-            color: control.icon.color
+            icon.color: control.icon.color
+            text: Math.round(_brightnessSlider.slider.value)
         }
     }
 
@@ -77,6 +78,7 @@ Cask.PanelItem
 
                 BrightnessSlider
                 {
+                    id: _brightnessSlider
                     width: parent.width
                     onClicked: _togglesStack.push(page)
                 }
