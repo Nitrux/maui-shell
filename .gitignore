@@ -72,3 +72,12 @@ CMakeLists.txt.user*
 
 # Bazaar files
 .bzr
+
+# Exclude particular file
+!install-build-deps.sh
+!build-appimage-amd64.yml
+
+# Appimage build folders & appimage
+AppDir
+appimage-builder-cache
+*.AppImage
