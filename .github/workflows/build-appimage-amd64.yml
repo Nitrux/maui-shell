@@ -31,7 +31,7 @@ jobs:
           sudo chmod +x /usr/bin/appimagetool
           
       - name: Install AppImage Builder
-        run: sudo pip3 install appimage-builder
+        run: sudo pip3 install appimage-builder==0.9.2
 
       - uses: actions/checkout@v2
       - name: Build AppImage
