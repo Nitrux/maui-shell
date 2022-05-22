@@ -16,35 +16,31 @@ Cask.PanelItem
 {
     id: control
 
-    Row
+    Cask.IconLabel
     {
-        spacing: control.spacing
+        height: control.iconSize
+        icon.source: _networkToggle.icon.name
+        icon.color: control.icon.color
+        text: _networkToggle.text
+        labelVisible: labelsVisible
+    }
 
-        Cask.IconLabel
-        {
-            height: control.iconSize
-            icon.source: _networkToggle.icon.name
-            icon.color: control.icon.color
-            text: _networkToggle.text
-        }
+    Cask.IconLabel
+    {
+        visible: _bluetoothToggle.deviceConnected
+        icon.source: _bluetoothToggle.icon.name
+        icon.color: control.icon.color
+        text: _bluetoothToggle.text
+        labelVisible: labelsVisible
+        height: control.iconSize
+    }
 
-        Cask.IconLabel
-        {
-            visible: _bluetoothToggle.deviceConnected
-            icon.source: _bluetoothToggle.icon.name
-            icon.color: control.icon.color
-            text: _bluetoothToggle.text
-
-            height: control.iconSize
-        }
-
-        Kirigami.Icon
-        {
-            source: "settings-configure"
-            height: control.iconSize
-            width: height
-            color: control.icon.color
-        }
+    Cask.IconLabel
+    {
+        icon.source: "settings-configure"
+        height: control.iconSize
+        icon.color: control.icon.color
+        labelVisible: labelsVisible
     }
 
     card: Cask.PanelCard

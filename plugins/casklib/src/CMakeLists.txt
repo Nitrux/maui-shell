@@ -14,6 +14,8 @@ set(caskplugin_SRCS
     code/controllers/panelsection.cpp
     code/controllers/appsdb.cpp
     code/controllers/db.cpp
+    code/controllers/mauimaninterface.cpp
+    code/server/caskserver.cpp
     )
 
 set(caskplugin_HDRS
@@ -27,6 +29,8 @@ set(caskplugin_HDRS
     code/controllers/panelsection.h
     code/controllers/appsdb.h
     code/controllers/db.h
+    code/controllers/mauimaninterface.h
+    code/server/caskserver.h
     )
 
 set(mpris2_SRCS
@@ -80,6 +84,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
+    MauiMan
     MauiKit
     MauiKit::FileBrowsing
     KF5::Service

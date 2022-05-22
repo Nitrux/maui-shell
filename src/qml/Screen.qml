@@ -75,8 +75,8 @@ WaylandOutput
         id: win
 
         Maui.App.darkMode: true
-        Maui.Style.adaptiveColorScheme: wallpaperSettings.adaptiveColorScheme
-        Maui.Style.adaptiveColorSchemeSource: wallpaperSettings.defaultWallpaper.replace("file://", "")
+        Maui.Style.adaptiveColorScheme: true
+        Maui.Style.adaptiveColorSchemeSource: Cask.MauiMan.background.wallpaperSource.replace("file://", "")
 
         readonly property int formFactor :
         {
@@ -101,6 +101,7 @@ WaylandOutput
             {
                 id: _cask
                 clip: true
+                backgroundColor: Cask.MauiMan.background.solidColor
                 anchors.fill: parent
                 anchors.bottomMargin: _zpaceSwitcher.height
                 topPanel.data: StatusBar
@@ -172,7 +173,9 @@ WaylandOutput
                         width: ListView.view.width
                         radius: ListView.view.overviewScale === 1 ? 0 : 20
                         clip: false
-                        backgroundImage: wallpaperSettings.defaultWallpaper
+                        backgroundVisible: Cask.MauiMan.background.showWallpaper
+                        backgroundImage: Cask.MauiMan.background.wallpaperSource
+                        backgroundFillMode: Cask.MauiMan.background.fitWallpaper ? Image.PreserveAspectFit : Image.PreserveAspectCrop
                         overviewMode: overView
                         zpace : model.Zpace
                         topPadding: _cask.topPanel.height

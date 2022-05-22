@@ -68,7 +68,7 @@ T.Slider
                 ColorAnimation
                 {
                     easing.type: Easing.InQuad
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                 }
             }
 
@@ -89,7 +89,7 @@ T.Slider
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.longDuration
+                duration: Kirigami.Units.shortDuration
             }
         }
     }
@@ -108,8 +108,26 @@ T.Slider
             id: _icon
             height: 16
             width : 16
+            isMask: true
             color: Kirigami.Theme.highlightedTextColor
             anchors.centerIn: parent
+            Behavior on color
+            {
+                ColorAnimation
+                {
+                    easing.type: Easing.InQuad
+                    duration: Kirigami.Units.shortDuration
+                }
+            }
+        }
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.shortDuration
+            }
         }
     }
 }

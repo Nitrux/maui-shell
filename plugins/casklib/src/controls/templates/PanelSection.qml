@@ -18,17 +18,15 @@ T.Control
     property alias cards : popup.contentChildren
     property alias popup : popup
 
-    property int popWidth : Math.max(100, control.width)
+    property int popWidth : 340
     property alias popHeight : popup.height
     property alias alignment: popup.alignment
     property alias visibleChildren: _content.visibleChildren
 
     property rect availableGeometry
-
-    spacing: isMobile ? 0 : Maui.Style.space.medium
-
     property int currentCard : -1
 
+    spacing: isMobile ? 0 : Maui.Style.space.medium
     hoverEnabled: true
 
     padding: 0

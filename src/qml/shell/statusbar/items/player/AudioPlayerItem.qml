@@ -13,39 +13,34 @@ Cask.PanelItem
     id: control
     property var mprisSourcesModel: []
     readonly property bool isPlaying : _playersList.currentItem.item.isPlaying
-    property bool titleVisible: win.formFactor === Cask.Env.Desktop
 
-    RowLayout
+
+    Cask.IconLabel
     {
-        spacing: control.spacing
-
-        Kirigami.Icon
-        {
-            source: isPlaying ? "media-playback-start" : "media-playback-pause"
-            implicitHeight: control.iconSize
-            implicitWidth: height
-            color: control.icon.color
-        }
-
-        Kirigami.Icon
-        {
-            visible: !control.titleVisible
-            source: "headphones"
-            implicitHeight: control.iconSize
-            implicitWidth: height
-            color: control.icon.color
-        }
-
-        Maui.ListItemTemplate
-        {
-            visible: control.titleVisible
-            implicitWidth: 200
-            label1.text: _playersList.currentItem.item.track
-            imageSource: _playersList.currentItem.item.albumArt
-            maskRadius: 6
-            headerSizeHint: 32
-        }
+        icon.source: isPlaying ? "media-playback-start" : "media-playback-pause"
+        height: control.iconSize
+        icon.color: control.icon.color
     }
+
+    Cask.IconLabel
+    {
+        visible: labelsVisible
+        text: _playersList.currentItem.item.track
+        width: Math.min(implicitWidth, 200)
+        icon.source: "headphones"
+        height: control.iconSize
+        icon.color: control.icon.color
+    }
+
+//    Maui.ListItemTemplate
+//    {
+//        visible:  labelsVisible
+//        width: 200
+//        label1.text: _playersList.currentItem.item.track
+//        imageSource: _playersList.currentItem.item.albumArt
+//        maskRadius: 6
+//        headerSizeHint: 32
+//    }
 
     Cask.Mpris
     {

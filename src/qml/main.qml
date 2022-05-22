@@ -21,6 +21,7 @@ WaylandCompositor
     //    retainedSelection: true
     //    useHardwareIntegrationExtension: true
 
+
     Screen
     {
         id: screen
@@ -116,18 +117,6 @@ WaylandCompositor
         id: shellSettings
         category: "Cask"
         property int scaleFactor :  Screen.devicePixelRatio
-    }
-
-
-    Settings
-    {
-        id: wallpaperSettings
-        category: "Wallpaper"
-        property bool dim: true
-        property bool fill: true
-        property string defaultWallpaper: "qrc:/wallpapers/maui_shell_dev_bg.png"
-        property string sourcePath: "file:///usr/share/wallpapers/Cask"
-        property bool adaptiveColorScheme : true
     }
 
     function handleShellSurfaceCreated(shellSurface, toplevel)

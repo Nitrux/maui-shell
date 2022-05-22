@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
@@ -7,8 +6,8 @@ import org.mauikit.controls 1.3 as Maui
 Row
 {
     id: control
-    spacing: Maui.Style.space.medium
-
+    spacing: Maui.Style.space.small
+    padding: 0
     property alias text : _label.text
     property alias label : _label
 
@@ -17,16 +16,48 @@ Row
 
     property alias labelVisible : _label.visible
 
+    add: Transition {
+          NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+          NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 400 }
+      }
+
     Kirigami.Icon
     {
         id: _icon
-        implicitHeight: parent.height
-        implicitWidth: height
+        visible: String(_icon.source).length
+        height: visible ? parent.height : 0
+        width: height
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.shortDuration
+            }
+        }
     }
 
     Label
     {
         id: _label
-        height: parent.height
+        height: visible ? parent.height : 0
+        font.bold: true
+        //        font.weight: Font.Light
+        font.pointSize: Maui.Style.fontSizes.small
+        color: _icon.color
+        horizontalAlignment: Qt.AlignLeft
+        verticalAlignment: Qt.AlignVCenter
+        wrapMode: Text.NoWrap
+        elide: Text.ElideRight
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                easing.type: Easing.InQuad
+                duration: Kirigami.Units.shortDuration
+            }
+        }
     }
 }

@@ -27,6 +27,7 @@ T.Control
 
     property bool hidden : contentItem.y === 0- control.height
     property bool autohide: false
+    property bool labelsVisible: win.formFactor === Cask.Env.Desktop
 
     Layout.fillWidth: true
     //    Layout.margins: floating ? Maui.Style.space.tiny : 0
@@ -152,12 +153,10 @@ T.Control
         Cask.PanelSection
         {
             id: _notificationsSection
-
-            Layout.fillWidth: true
+            alignment: Qt.AlignLeft
             availableGeometry: control.availableGeometry
             spacing: control.spacing
-            popWidth: 320
-            alignment: Qt.AlignLeft
+            Layout.fillWidth: true
 
             Connections
             {
@@ -185,7 +184,6 @@ T.Control
             id: _statusSection
             alignment: Qt.AlignRight
             availableGeometry : control.availableGeometry
-            popWidth: 340
             spacing: control.spacing
 
             Connections

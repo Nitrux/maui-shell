@@ -21,6 +21,8 @@ T.Pane
     property int radius: 20
     property bool overviewMode : false
     property alias backgroundImage : _img.source
+    property alias backgroundFillMode : _img.fillMode
+    property alias backgroundVisible: _backgroundOverlay.visible
     readonly property bool rise : _dropArea.containsDrag
 
     Behavior on radius
@@ -67,17 +69,16 @@ T.Pane
                 asynchronous: true
                 sourceSize.width: Screen.width
                 sourceSize.height: Screen.height
-                fillMode: wallpaperSettings.fill? Image.PreserveAspectCrop : Image.PreserveAspectFit
                 visible: false
-
             }
         }
 
         ColorOverlay
         {
+            id: _backgroundOverlay
             anchors.fill: _bgContainer
             source: _img
-            color: wallpaperSettings.dim && Maui.App.darkMode ? "#80800000" : "transparent"
+            color: Cask.MauiMan.background.dimWallpaper ? "#80800000" : "transparent"
 
             layer.enabled: control.radius > 0 || control.rise
             layer.effect: OpacityMask
@@ -173,7 +174,7 @@ T.Pane
             if(drop.urls)
             {
                 control.zpace.wallpaper = drop.urls[0]
-                wallpaperSettings.defaultWallpaper = drop.urls[0]
+                Cask.MauiMan.background.wallpaperSource = drop.urls[0]
             }
         }
     }

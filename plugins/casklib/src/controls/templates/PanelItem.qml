@@ -1,41 +1,44 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import QtQuick.Layouts 1.3
-
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
+
 import QtQuick.Templates 2.15 as T
 
 T.AbstractButton
 {
     id: control
+
+    default property alias content : _layout.data
+
+    property int iconSize : Maui.Style.iconSizes.small
+
     property Cask.PanelCard card : null
     property Cask.PanelSection section : control.parent.parent
     property bool flat: win.formFactor !== Cask.Env.Desktop
 
     focus: true
     focusPolicy: Qt.StrongFocus
+
     hoverEnabled: true
+
     checkable: false
     checked: card ?  card.isOpen : false
 
     implicitWidth: implicitContentWidth + leftPadding + rightPadding
     implicitHeight: Math.max(iconSize, implicitContentHeight) + topPadding + bottomPadding //keep it fixed size
 
-    default property alias content : _layout.data
-
-    property int iconSize : Maui.Style.iconSizes.small
-
     icon.height: iconSize
     icon.width: iconSize
-
-    padding: spacing
-
     icon.color: Kirigami.Theme.textColor
 
+    font.bold: true
+    font.weight: Font.Bold
+
+    padding: spacing
     spacing: control.flat ? Maui.Style.space.small : Maui.Style.space.medium
 
     Behavior on iconSize
@@ -47,12 +50,20 @@ T.AbstractButton
         }
     }
 
+    Behavior on implicitWidth
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.shortDuration
+            easing.type: Easing.OutInQuad
+        }
+    }
+
     background: Rectangle
     {
-        id: _bg
         visible: !control.flat
 
-       readonly property color finalColor: control.Kirigami.Theme.backgroundColor
+        readonly property color finalColor: control.Kirigami.Theme.backgroundColor
         color: finalColor
         radius: 6
         opacity: control.checked ?  1 : 0.8
@@ -73,48 +84,32 @@ T.AbstractButton
             }
         }
 
-
-
         Behavior on color
         {
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.longDuration
+                duration: Kirigami.Units.shortDuration
             }
         }
     }
 
-    contentItem: RowLayout
+    contentItem: Row
     {
         id: _layout
         spacing: control.spacing
         clip: true
 
-        Kirigami.Icon
+        Cask.IconLabel
         {
-            id: _icon
-            visible: control.icon.name.length
-            Layout.preferredWidth: height
-            Layout.alignment: Qt.AlignCenter
-            implicitHeight: control.iconSize
+            visible: text.length || control.icon.name.length
+            height: control.iconSize
+            icon.source: control.icon.name
+            icon.color: control.icon.color
 
-            source: control.icon.name
-
-            color: control.icon.color
-        }
-
-        Label
-        {
-            visible: text.length && (control.display === ToolButton.TextBesideIcon)
-            Layout.preferredWidth: implicitWidth
+            labelVisible: text.length && (control.display === ToolButton.TextBesideIcon)
             text: control.text
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-            wrapMode: Text.NoWrap
-            elide: Text.ElideRight
-            color: _icon.color
-            font: control.font
+//            label.font: control.font
         }
     }
 

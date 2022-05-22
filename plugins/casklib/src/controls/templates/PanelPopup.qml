@@ -79,7 +79,7 @@ T.Container
                     ColorAnimation
                     {
                         easing.type: Easing.InQuad
-                        duration: Kirigami.Units.longDuration
+                        duration: Kirigami.Units.shortDuration
                     }
                 }
             }
@@ -124,6 +124,20 @@ T.Container
                 }
             }
         }
+
+        //        add: Transition
+        //        {
+        //            NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+        ////            NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 400 }
+        //        }
+
+        displaced: Transition
+        {
+            NumberAnimation
+            {
+                properties: "x,y"; duration: 400; easing.type: Easing.OutBounce
+            }
+        }
     }
 
     Component.onDestruction:
@@ -151,7 +165,8 @@ T.Container
         from: control.y
         to: 0 - control.height
         easing.type: Easing.InOutQuad
-        onFinished: {
+        onFinished:
+        {
             control.clear()
             control.close()
         }

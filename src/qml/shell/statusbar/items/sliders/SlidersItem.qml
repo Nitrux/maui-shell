@@ -15,38 +15,36 @@ Cask.PanelItem
     id: control
     property alias micItem : _micSlider
 
-    Row
+    Cask.IconLabel
     {
-        spacing: control.spacing
+        icon.source: _audioSlider.slider.iconSource
+        icon.color: control.icon.color
+        text: Math.round(_audioSlider.defaultSinkValue)
+        height: control.iconSize
+        labelVisible: labelsVisible
+    }
 
-        Cask.IconLabel
-        {
-            icon.source: _audioSlider.slider.iconSource
-            icon.color: control.icon.color
-            text: Math.round(_audioSlider.defaultSinkValue)
-            height: control.iconSize
-        }
+    Cask.IconLabel
+    {
+        icon.source: _micSlider.slider.iconSource
+        height: control.iconSize
+        icon.color: control.icon.color
+        text: Math.round(_micSlider.defaultSourceValue)
+        labelVisible: labelsVisible
+    }
 
-        Cask.IconLabel
-        {
-            icon.source: _micSlider.slider.iconSource
-            height: control.iconSize
-            icon.color: control.icon.color
-            text: Math.round(_micSlider.defaultSourceValue)
-        }
-
-        Cask.IconLabel
-        {
-            icon.source: "high-brightness"
-            height: control.iconSize
-            icon.color: control.icon.color
-            text: Math.round(_brightnessSlider.slider.value)
-        }
+    Cask.IconLabel
+    {
+        visible: _brightnessSlider.visible
+        icon.source: "high-brightness"
+        height: control.iconSize
+        icon.color: control.icon.color
+        text: Math.round(_brightnessSlider.slider.value)
+        labelVisible: labelsVisible
     }
 
     card: Cask.PanelCard
     {
-
         width: ListView.view.width
         onClosed: _togglesStack.pop()
 

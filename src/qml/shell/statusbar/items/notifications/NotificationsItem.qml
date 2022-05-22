@@ -12,7 +12,6 @@ Cask.PanelItem
 
     icon.name: "notifications"
     text: _nofList.count > 0 ? _nofList.count : ""
-    font.bold: true
 
     onTextChanged: animate()
 

@@ -12,6 +12,8 @@
 
 #include "code/controllers/appsdb.h"
 
+#include "code/controllers/mauimaninterface.h"
+
 void CaskPlugin::registerTypes(const char *uri)
 {
 
@@ -47,6 +49,12 @@ void CaskPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mpris2Engine>(uri, 1, 0, "Mpris");
     qmlRegisterUncreatableType<Mpris2Player>(uri, 1, 0, "MprisPlayer",
                                              QStringLiteral("Cannot create MprisPlayer object"));
+
+    qmlRegisterSingletonType<MauiManInterface>(uri, 1, 0, "MauiMan", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return new MauiManInterface;
+    });
 }
 
 void CaskPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

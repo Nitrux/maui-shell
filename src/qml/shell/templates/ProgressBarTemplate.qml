@@ -11,9 +11,18 @@ T.ProgressBar
 {
     id: control
     implicitHeight: (win.formFactor === Cask.Env.Desktop ? 16 : 22 ) + topPadding + bottomPadding
-opacity: enabled ? 1 : 0.7
+    opacity: enabled ? 1 : 0.7
     property alias iconSource : _icon.source
     property color color : Kirigami.Theme.highlightColor
+
+    Behavior on color
+    {
+        ColorAnimation
+        {
+            easing.type: Easing.InQuad
+            duration: Kirigami.Units.shortDuration
+        }
+    }
 
     background: Rectangle
     {
@@ -26,7 +35,7 @@ opacity: enabled ? 1 : 0.7
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.longDuration
+                duration: Kirigami.Units.shortDuration
             }
         }
     }
@@ -52,6 +61,14 @@ opacity: enabled ? 1 : 0.7
             width : 16
             color: Kirigami.Theme.highlightedTextColor
             anchors.centerIn: parent
+            Behavior on color
+            {
+                ColorAnimation
+                {
+                    easing.type: Easing.InQuad
+                    duration: Kirigami.Units.shortDuration
+                }
+            }
         }
     }
 }

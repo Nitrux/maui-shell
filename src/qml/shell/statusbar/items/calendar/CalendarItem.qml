@@ -12,9 +12,7 @@ import "../../../templates" as Templates
 Cask.PanelItem
 {
     id: control
-    font.bold: true
-    text: Qt.formatDateTime(new Date(), "hh:mm")
-
+    text: Qt.formatDateTime(new Date(), labelsVisible ? "hh:mm dd/MM" : "hh:mm")
 
     Component
     {
@@ -57,7 +55,6 @@ Cask.PanelItem
                         body: i18n("No output or input devices found.")
                         emoji: "code-context"
                     }
-
                 }
             }
         }
@@ -134,11 +131,9 @@ Cask.PanelItem
         }
     }
 
-
     Timer
     {
         interval: 60000; running: true; repeat: true
-        onTriggered: control.text = Qt.formatDateTime(new Date(), "hh:mm")
-
+        onTriggered: control.text = Qt.formatDateTime(new Date(), labelsVisible ? "hh:mm dd/MM" : "hh:mm")
     }
 }
