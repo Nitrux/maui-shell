@@ -74,9 +74,17 @@ WaylandOutput
     {
         id: win
 
-        Maui.App.darkMode: true
-        Maui.Style.adaptiveColorScheme: true
-        Maui.Style.adaptiveColorSchemeSource: Cask.MauiMan.background.wallpaperSource.replace("file://", "")
+//        Maui.Style.darkMode: preffersDarkMode
+
+//        readonly property bool preffersDarkMode :  Cask.MauiMan.theme.styleType === 1
+
+//        onPreffersDarkModeChanged:
+//        {
+//            Maui.Style.darkMode =  preffersDarkMode
+//        }
+
+//        Maui.Style.adaptiveColorScheme: Cask.MauiMan.theme.styleType === 2
+//        Maui.Style.adaptiveColorSchemeSource: Cask.MauiMan.background.wallpaperSource.replace("file://", "")
 
         readonly property int formFactor :
         {

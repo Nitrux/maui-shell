@@ -1,0 +1,42 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+<interface name="org.mauiman.Background">
+<method name="setWallpaperSource">
+<arg name="wallpaperSource" type="s" direction="in"/>
+</method>
+<method name="setDimWallpaper">
+<arg name="dimsWallpaper" type="b" direction="in"/>
+</method>
+<method name="setFitWallpaper">
+<arg name="fitWallpaper" type="b" direction="in"/>
+</method>
+<method name="setSolidColor">
+<arg name="solidColor" type="s" direction="in"/>
+</method>
+<method name="setShowWallpaper">
+<arg name="showWallpaper" type="b" direction="in"/>
+</method>
+
+<property name="wallpaperSource" type="s" access="read"/>
+<property name="dimWallpaper" type="b" access="read"/>
+<property name="fitWallpaper" type="b" access="read"/>
+<property name="solidColor" type="s" access="read"/>
+<property name="showWallpaper" type="b" access="read"/>
+
+<signal name="wallpaperSourceChanged">
+<arg type="s"/>
+</signal>
+<signal name="dimWallpaperChanged">
+<arg type="b"/>
+</signal>
+<signal name="fitWallpaperChanged">
+<arg type="b"/>
+</signal>
+<signal name="solidColorChanged">
+<arg type="s"/>
+</signal>
+<signal name="showWallpaperChanged">
+<arg type="b"/>
+</signal>
+</interface>
+</node>

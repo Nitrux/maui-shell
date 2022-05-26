@@ -480,7 +480,8 @@ Maui.Page
                 {
                     id: _allAppsBaseModel
                     filter: _searchBar.text
-                    sortOrder: Qt.DescendingOrder
+                    sortOrder: Qt.AscendingOrder
+                    sort: "label"
                     recursiveFilteringEnabled: true
                     sortCaseSensitivity: Qt.CaseInsensitive
                     filterCaseSensitivity: Qt.CaseInsensitive
@@ -499,7 +500,6 @@ Maui.Page
                         control.close()
                     }
                 }
-
 
                 delegate: Item
                 {

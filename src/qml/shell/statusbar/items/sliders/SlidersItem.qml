@@ -35,7 +35,7 @@ Cask.PanelItem
 
     Cask.IconLabel
     {
-        visible: _brightnessSlider.visible
+        visible: _brightnessSlider.available
         icon.source: "high-brightness"
         height: control.iconSize
         icon.color: control.icon.color

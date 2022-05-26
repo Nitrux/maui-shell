@@ -3,20 +3,25 @@
 
 #include <QObject>
 #include <MauiMan/backgroundmanager.h>
+#include <MauiMan/thememanager.h>
 
 class MauiManInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(MauiMan::BackgroundManager* background READ background)
+    Q_PROPERTY(MauiMan::ThemeManager* theme READ theme)
 
 public:
     explicit MauiManInterface(QObject *parent = nullptr);
 
     MauiMan::BackgroundManager* background() const;
 
+    MauiMan::ThemeManager *theme() const;
+
 private:
 
     MauiMan::BackgroundManager* m_background;
+    MauiMan::ThemeManager *m_theme;
 
 signals:
 

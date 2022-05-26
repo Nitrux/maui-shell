@@ -16,7 +16,8 @@ import "../../../../templates" as Template
 Template.SliderToggle
 {
     id: control
-    visible: _brightnessControl.screenBrightnessAvailable
+    readonly property alias available : _brightnessControl.screenBrightnessAvailable
+    visible: control.available
 
     CaskPower.BrightnessControl
     {

@@ -111,8 +111,8 @@ Cask.PanelItem
                     icon.name:  "contrast"
                     enabled: !Maui.Style.adaptiveColorScheme
                     text: i18n("Nigh mode")
-                    checked: Maui.App.darkMode
-                    onClicked: Maui.App.darkMode = !Maui.App.darkMode
+                    checked: Maui.Style.darkMode
+                    onClicked: Maui.Style.darkMode = !Maui.Style.darkMode
                 }
 
                 ToggleTemplate
