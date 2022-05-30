@@ -61,7 +61,7 @@ Maui.ListBrowserDelegate
 //        implicitHeight: 16
 //        implicitWidth: implicitHeight
 //        source: "object-locked"
-//        color: Kirigami.Theme.textColor
+//        color: Maui.Theme.textColor
 //    }
 
     BusyIndicator

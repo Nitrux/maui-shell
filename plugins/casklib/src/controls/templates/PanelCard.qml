@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.0
 import QtQml.Models 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
-import org.kde.kirigami 2.7 as Kirigami
+
 import org.mauikit.controls 1.2 as Maui
 import QtQuick.Templates 2.15 as T
 
@@ -43,7 +43,7 @@ T.Pane
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Maui.Style.units.longDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -52,21 +52,21 @@ T.Pane
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Maui.Style.units.longDuration
             easing.type: Easing.InOutQuad
         }
     }
 
     background: Rectangle
     {
-        color: Kirigami.Theme.backgroundColor
+        color: Maui.Theme.backgroundColor
         radius: isMobile ? 0 : 10
 
         Behavior on radius
         {
             NumberAnimation
             {
-                duration: Kirigami.Units.longDuration
+                duration: Maui.Style.units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -76,7 +76,7 @@ T.Pane
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.shortDuration
+                duration: Maui.Style.units.shortDuration
             }
         }
 

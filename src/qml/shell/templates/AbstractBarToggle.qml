@@ -29,7 +29,7 @@ T.Pane
 
     background: Rectangle
     {
-        readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+        readonly property color m_color : Qt.tint(Qt.lighter(control.Maui.Theme.textColor), Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
 
         color: m_color
         opacity: 0.7
@@ -41,14 +41,14 @@ T.Pane
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.shortDuration
+                duration: Maui.Style.units.shortDuration
             }
         }
     }
 
     property Item button : ToolButton
     {
-        Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+        Maui.Theme.colorSet: control.Maui.Theme.colorSet
         visible: control.page
         icon.name: "go-next"
         onClicked: control.clicked()
@@ -88,7 +88,7 @@ T.Pane
                     elide: Text.ElideMiddle
                     font.bold: true
                     visible: text && text.length
-                    color: Kirigami.Theme.textColor
+                    color: Maui.Theme.textColor
                     horizontalAlignment: Qt.AlignLeft
                     Layout.alignment: Qt.AlignLeft
                 }
@@ -100,7 +100,7 @@ T.Pane
                     elide: Text.ElideNone
                     font.bold: false
                     visible: text && text.length
-                    color: Kirigami.Theme.textColor
+                    color: Maui.Theme.textColor
                     opacity: 0.7
                     horizontalAlignment: Qt.AlignRight
                     Layout.alignment: Qt.AlignRight

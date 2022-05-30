@@ -3,7 +3,6 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Templates 2.15 as T
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
@@ -29,7 +28,7 @@ T.Pane
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Maui.Style.units.longDuration
             easing.type: Easing.OutInQuad
         }
     }
@@ -133,10 +132,7 @@ T.Pane
         }
     }
 
-    WallpaperDialog
-    {
-        id: _wallpapersDialog
-    }
+
 
     Maui.ContextualMenu
     {
@@ -146,7 +142,7 @@ T.Pane
         {
             text: i18n("Wallpaper")
             icon.name: "insert-image"
-            onTriggered: _wallpapersDialog.open()
+            onTriggered:  Cask.MauiMan.invokeManager("background")
         }
 
         MenuItem

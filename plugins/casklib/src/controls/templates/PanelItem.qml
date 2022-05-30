@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
@@ -33,7 +32,7 @@ T.AbstractButton
 
     icon.height: iconSize
     icon.width: iconSize
-    icon.color: Kirigami.Theme.textColor
+    icon.color: Maui.Theme.textColor
 
     font.bold: true
     font.weight: Font.Bold
@@ -45,7 +44,7 @@ T.AbstractButton
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Maui.Style.units.longDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -54,7 +53,7 @@ T.AbstractButton
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.shortDuration
+            duration: Maui.Style.units.shortDuration
             easing.type: Easing.OutInQuad
         }
     }
@@ -63,7 +62,7 @@ T.AbstractButton
     {
         visible: !control.flat
 
-        readonly property color finalColor: control.Kirigami.Theme.backgroundColor
+        readonly property color finalColor: control.Maui.Theme.backgroundColor
         color: finalColor
         radius: 6
         opacity: control.checked ?  1 : 0.8
@@ -78,7 +77,7 @@ T.AbstractButton
                 id: _animation
                 easing.type: Easing.InExpo
                 running: false
-                from: control.Kirigami.Theme.highlightColor
+                from: control.Maui.Theme.highlightColor
                 to: "transparent"
                 duration: 1000
             }
@@ -89,7 +88,7 @@ T.AbstractButton
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.shortDuration
+                duration: Maui.Style.units.shortDuration
             }
         }
     }

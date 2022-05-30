@@ -7,7 +7,7 @@ import org.mauikit.controls 1.3 as Maui
 Maui.Page
 {
     id: control
-    headerColorSet: control.Kirigami.Theme.colorSet
+    headerColorSet: control.Maui.Theme.colorSet
     showTitle: true
     padding: 0
     margins: 0

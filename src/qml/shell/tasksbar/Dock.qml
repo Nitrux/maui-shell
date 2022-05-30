@@ -31,13 +31,13 @@ Item
         opacity: formFactor !== Cask.Env.Desktop ? 0.95 : 0.7
 
         anchors.fill: parent
-        color: _launcher.Kirigami.Theme.backgroundColor
+        color: _launcher.Maui.Theme.backgroundColor
 
 //        Behavior on opacity
 //        {
 //            NumberAnimation
 //            {
-//                duration: Kirigami.Units.shortDuration
+//                duration: Maui.Style.units.shortDuration
 //                easing.type: Easing.OutInQuad
 //            }
 //        }
@@ -179,7 +179,7 @@ Item
     Kirigami.ShadowedRectangle
     {
         visible: control.hidden
-        color: Kirigami.Theme.backgroundColor
+        color: Maui.Theme.backgroundColor
         opacity: 0.7
         width: _taskbar.width
         anchors.horizontalCenter: parent.horizontalCenter

@@ -111,7 +111,7 @@ Cask.PanelItem
                         background: Rectangle
                         {
                             radius: Maui.Style.radiusV
-                            color: model.today || _delegate.hovered || _delegate.down ? Kirigami.Theme.highlightColor : "transparent"
+                            color: model.today || _delegate.hovered || _delegate.down ? Maui.Theme.highlightColor : "transparent"
                         }
 
                         contentItem: Label
@@ -121,7 +121,7 @@ Cask.PanelItem
                             opacity: model.month === _monthGrid.month ? 1 : 0.4
                             text: String(model.day)
                             font: _monthGrid.font
-                            color: model.today || _delegate.hovered ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
+                            color: model.today || _delegate.hovered ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
                         }
 
                         onClicked: _stack.push(_tasksPageComponent, {'date': model.date})

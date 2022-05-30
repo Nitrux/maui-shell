@@ -4,6 +4,7 @@
 #include <QObject>
 #include <MauiMan/backgroundmanager.h>
 #include <MauiMan/thememanager.h>
+#include <MauiMan/mauimanutils.h>
 
 class MauiManInterface : public QObject
 {
@@ -17,6 +18,9 @@ public:
     MauiMan::BackgroundManager* background() const;
 
     MauiMan::ThemeManager *theme() const;
+
+public slots:
+    void invokeManager(const QString &module);
 
 private:
 

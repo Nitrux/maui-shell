@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 
-import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
@@ -29,14 +28,14 @@ T.Control
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.shortDuration
+            duration: Maui.Style.units.shortDuration
             easing.type: Easing.InOutQuad
         }
     }
 
     background: Rectangle
     {
-        color: Kirigami.Theme.backgroundColor
+        color: Maui.Theme.backgroundColor
         opacity: _dropArea.containsDrag ? 1 : 0.8
         radius: control.radius
 
@@ -45,7 +44,7 @@ T.Control
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.shortDuration
+                duration: Maui.Style.units.shortDuration
             }
         }
 
@@ -164,7 +163,7 @@ T.Control
                         radius: height/2
                         anchors.bottom: parent.bottom
                         visible: task.window
-                        color: Kirigami.Theme.highlightColor
+                        color: Maui.Theme.highlightColor
                     }
                 }
             }

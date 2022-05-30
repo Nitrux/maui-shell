@@ -6,7 +6,6 @@ import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
 import org.maui.cask 1.0 as Cask
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import QtQuick.Templates 2.15 as T
 
@@ -63,13 +62,13 @@ T.Container
 
                 anchors.fill: parent
 
-                color: Kirigami.Theme.backgroundColor
+                color: Maui.Theme.backgroundColor
 
                 Behavior on opacity
                 {
                     NumberAnimation
                     {
-                        duration: Kirigami.Units.longDuration
+                        duration: Maui.Style.units.longDuration
                         easing.type: Easing.OutInQuad
                     }
                 }
@@ -79,7 +78,7 @@ T.Container
                     ColorAnimation
                     {
                         easing.type: Easing.InQuad
-                        duration: Kirigami.Units.shortDuration
+                        duration: Maui.Style.units.shortDuration
                     }
                 }
             }
@@ -150,7 +149,7 @@ T.Container
         id: _slideDownAnimation
         target: control
         property: "y"
-        duration: Kirigami.Units.shortDuration
+        duration: Maui.Style.units.shortDuration
         from: 0 - control.height
         to: control.finalYPos
         easing.type: Easing.OutInQuad
@@ -161,7 +160,7 @@ T.Container
         id: _slideUpAnimation
         target: control
         property: "y"
-        duration: Kirigami.Units.shortDuration
+        duration: Maui.Style.units.shortDuration
         from: control.y
         to: 0 - control.height
         easing.type: Easing.InOutQuad

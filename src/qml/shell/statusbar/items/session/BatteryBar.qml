@@ -30,10 +30,10 @@ AbstractBarToggle
     {
         switch(state)
         {
-        case "NoCharge" : return Kirigami.Theme.negativeBackgroundColor;
-        case "Charging" : return Kirigami.Theme.positiveBackgroundColor;
-        case "Discharging" : return Kirigami.Theme.neutralBackgroundColor;
-        case "FullyCharged" : return Kirigami.Theme.highlightColor;
+        case "NoCharge" : return Maui.Theme.negativeBackgroundColor;
+        case "Charging" : return Maui.Theme.positiveBackgroundColor;
+        case "Discharging" : return Maui.Theme.neutralBackgroundColor;
+        case "FullyCharged" : return Maui.Theme.highlightColor;
 
         }
     }

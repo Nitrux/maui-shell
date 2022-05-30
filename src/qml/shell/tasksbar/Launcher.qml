@@ -36,7 +36,7 @@ Maui.Page
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.shortDuration
+            duration: Maui.Style.units.shortDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -76,6 +76,10 @@ Maui.Page
         }
     }
 
+    Cask.AppsModel
+    {
+        id: _allAppsModel
+    }
 
     headBar.visible: true
     headBar.background: null
@@ -83,8 +87,8 @@ Maui.Page
     headBar.leftContent: ToolButton
     {
         icon.name: "go-previous"
-        onClicked: _swipeView.decrementCurrentIndex()
-        visible: _swipeView.currentIndex=== 1
+        onClicked: _stackView.pop()
+        visible: _stackView.depth >1
     }
 
     headBar.middleContent: Maui.SearchField
@@ -98,8 +102,8 @@ Maui.Page
         onCleared: _gridView.model.filter = ""
         onTextChanged:
         {
-            if(_swipeView.currentIndex === 0)
-                _swipeView.currentIndex = 1
+            if(_stackView.depth === 1)
+                _stackView.push(_appsListComponent)
         }
 
         Keys.onReturnPressed:
@@ -112,7 +116,7 @@ Maui.Page
 
     background: Rectangle
     {
-        color: Kirigami.Theme.backgroundColor
+        color: Maui.Theme.backgroundColor
         opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.95
         radius: 10
 
@@ -121,7 +125,7 @@ Maui.Page
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.shortDuration
+                duration: Maui.Style.units.shortDuration
             }
         }
 
@@ -135,335 +139,339 @@ Maui.Page
         }
     }
 
-    ColumnLayout
+
+    Maui.StackView
     {
+        id: _stackView
         anchors.fill: parent
 
-        SwipeView
+        //            Layout.fillWidth: true
+        //            Layout.preferredHeight: currentItem.implicitHeight
+        //            Layout.maximumHeight: parent.height
+        //            Layout.alignment: Qt.AlignCenter
+        background: null
+        clip: true
+
+        initialItem: ColumnLayout
         {
-            id: _swipeView
-            Layout.fillWidth: true
-            Layout.preferredHeight: currentItem.implicitHeight
-            Layout.maximumHeight: parent.height
-            Layout.alignment: Qt.AlignCenter
-            background: null
-            clip: true
+            spacing: Maui.Style.space.medium
 
-            ColumnLayout
+            Maui.GridView
             {
-                spacing: Maui.Style.space.medium
+                id: _categoriesGridView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                Maui.GridView
+                itemSize: Math.min(150, Math.floor(flickable.width/2))
+                itemHeight: 172
+                model: _allAppsModel.groups
+
+                verticalScrollBarPolicy: ScrollBar.AlwaysOff
+
+                onAreaClicked: control.close()
+
+                delegate: Item
                 {
-                    id: _categoriesGridView
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    id: _delegate
+                    property string group: modelData.label
+                    width: GridView.view.cellWidth
+                    height: GridView.view.cellHeight
 
-                    itemSize: Math.min(150, Math.floor(flickable.width/2))
-                    itemHeight: 172
-                    model: _allAppsModel.groups
-
-                    verticalScrollBarPolicy: ScrollBar.AlwaysOff
-
-                    onAreaClicked: control.close()
-
-                    delegate: Item
+                    Maui.GridBrowserDelegate
                     {
-                        id: _delegate
-                        property string group: modelData.label
-                        width: GridView.view.cellWidth
-                        height: GridView.view.cellHeight
+                        height: parent.GridView.view.itemHeight-10
+                        width: parent.GridView.view.itemWidth-10
+                        anchors.centerIn: parent
+                        template.labelSizeHint: 22
+                        iconSizeHint: width
+                        label1.font.bold: true
+                        label1.font.weight: Font.ExtraBold
+                        label1.text: modelData.label.replace("/", "")
+                        background: null
 
-                        Maui.GridBrowserDelegate
+                        onClicked:
                         {
-                            height: parent.GridView.view.itemHeight-10
-                            width: parent.GridView.view.itemWidth-10
-                            anchors.centerIn: parent
-                            template.labelSizeHint: 22
-                            iconSizeHint: width
-                            label1.font.bold: true
-                            label1.font.weight: Font.ExtraBold
-                            label1.text: modelData.label.replace("/", "")
-                            background: null
+                            _stackView.push(_appsListComponent)
+                            _allAppsModel.group = modelData.label
+                        }
 
-                            onClicked:
+                        template.iconComponent: T.Pane
+                        {
+                            background: Rectangle
                             {
-                                _swipeView.incrementCurrentIndex()
-                                _allAppsModel.group = modelData.label
-                            }
+                                readonly property color m_color : Qt.tint(Qt.lighter(control.Maui.Theme.textColor), Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
 
-                            template.iconComponent: T.Pane
-                            {
-                                background: Rectangle
+                                color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+
+                                radius: 8
+
+                                Behavior on color
                                 {
-                                    readonly property color m_color : Qt.tint(Qt.lighter(control.Kirigami.Theme.textColor), Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-
-                                    color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
-
-                                    radius: 8
-
-                                    Behavior on color
+                                    ColorAnimation
                                     {
-                                        ColorAnimation
-                                        {
-                                            easing.type: Easing.InQuad
-                                            duration: Kirigami.Units.shortDuration
-                                        }
-                                    }
-                                }
-
-                                contentItem: GridView
-                                {
-                                    interactive: false
-                                    cellWidth: switch(count)
-                                               {
-                                               case 4:
-                                               case 3:
-                                               case 2:
-                                                   return width/2;
-                                               case 1: return width
-                                               default:  return width/2;
-                                               }
-
-                                    cellHeight: switch(count)
-                                                {
-                                                case 4:
-                                                case 3:
-                                                    return height/2;
-                                                case 2:
-                                                case 1: return height
-                                                default: return height/2;
-                                                }
-
-
-                                    clip: true
-                                    model: Maui.BaseModel
-                                    {
-                                        list: Cask.AppsModel
-                                        {
-                                            group: modelData.label
-                                            limit: 4
-                                        }
-                                    }
-
-                                    delegate: Item
-                                    {
-                                        height: GridView.view.cellHeight
-                                        width: GridView.view.cellWidth
-
-                                        Kirigami.Icon
-                                        {
-                                            anchors.centerIn: parent
-                                            height: width
-                                            width: Maui.Style.mapToIconSizes(parent.width*0.8)
-                                            source: model.icon
-                                        }
-                                    }
-                                }
-
-                                MouseArea
-                                {
-                                    anchors.fill: parent
-                                    onClicked:
-                                    {
-                                        _swipeView.incrementCurrentIndex()
-                                        _allAppsModel.group = modelData.label
+                                        easing.type: Easing.InQuad
+                                        duration: Maui.Style.units.shortDuration
                                     }
                                 }
                             }
-                        }
-                    }
 
-                    flickable.header: ColumnLayout
-                    {
-                        width: parent.width
-                        spacing: Maui.Style.space.big
-                        visible: _recentListView.count > 0
-
-                        Maui.LabelDelegate
-                        {
-                            Layout.fillWidth: true
-                            isSection: true
-                            label: i18n("Most Used")
-                        }
-
-                        ListView
-                        {
-                            id: _recentListView
-                            orientation: ListView.Horizontal
-                            Layout.fillWidth: true
-                            Layout.margins: Maui.Style.space.medium
-                            Layout.preferredHeight: visible ? 140 : 0
-                            spacing: Maui.Style.space.medium
-                            model: _appsDB.recentApps
-
-                            delegate: Maui.GridBrowserDelegate
+                            contentItem: GridView
                             {
-                                height: ListView.view.height
-                                width: height
+                                interactive: false
+                                cellWidth: switch(count)
+                                           {
+                                           case 4:
+                                           case 3:
+                                           case 2:
+                                               return width/2;
+                                           case 1: return width
+                                           default:  return width/2;
+                                           }
 
-                                iconSource: model.icon
-                                label1.text: model.name
+                                cellHeight: switch(count)
+                                            {
+                                            case 4:
+                                            case 3:
+                                                return height/2;
+                                            case 2:
+                                            case 1: return height
+                                            default: return height/2;
+                                            }
 
-                                iconSizeHint: 64
-                                template.labelSizeHint: 44
 
+                                clip: true
+                                model: Maui.BaseModel
+                                {
+                                    list: Cask.AppsModel
+                                    {
+                                        group: modelData.label
+                                        limit: 4
+                                    }
+                                }
+
+                                delegate: Item
+                                {
+                                    height: GridView.view.cellHeight
+                                    width: GridView.view.cellWidth
+
+                                    Kirigami.Icon
+                                    {
+                                        anchors.centerIn: parent
+                                        height: width
+                                        width: Maui.Style.mapToIconSizes(parent.width*0.8)
+                                        source: model.icon
+                                    }
+                                }
+                            }
+
+                            MouseArea
+                            {
+                                anchors.fill: parent
                                 onClicked:
                                 {
-                                    _appsDB.launchApp(model.path)
-                                    control.close()
-                                }
-                            }
-                        }
-
-                        Kirigami.Separator
-                        {
-                            Layout.preferredWidth: 100
-//                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignCenter
-                        }
-                    }
-
-                    flickable.footer: T.Page
-                    {
-                        width: parent.width
-                        implicitHeight: contentHeight+ topPadding + topPadding + header.height
-                        //                        padding: Maui.Style.space.big
-                        header: Item
-                        {
-                            width: parent.width
-                            height: 60
-
-                            Kirigami.Separator
-                            {
-                                anchors.centerIn: parent
-                                width: 100
-                                opacity: 0.5
-                            }
-                        }
-
-                        contentItem: Flow
-                        {
-
-                            GridView
-                            {
-                                id: _quickSection
-                                implicitHeight: contentHeight
-                                implicitWidth: 200
-                                currentIndex :-1
-
-                                cellWidth: Math.floor(width/3)
-                                cellHeight: cellWidth
-                                interactive: false
-
-                                model: Maui.BaseModel
-                                {
-                                    list: FB.PlacesList
-                                    {
-                                        groups: [FB.FMList.QUICK_PATH, FB.FMList.PLACES_PATH]
-                                    }
-                                }
-
-                                header: Maui.LabelDelegate
-                                {
-                                    width: parent.width
-                                    isSection: true
-                                    label: i18n("Places")
-                                }
-
-                                delegate: Item
-                                {
-                                    height: GridView.view.cellHeight
-                                    width: GridView.view.cellWidth
-
-                                    Maui.GridBrowserDelegate
-                                    {
-                                        isCurrentItem: parent.GridView.isCurrentItem
-                                        anchors.fill: parent
-                                        anchors.margins: Maui.Style.space.tiny
-                                        iconSource: model.icon
-                                        iconSizeHint: Maui.Style.iconSizes.medium
-                                        template.isMask: true
-                                        label1.text: model.label
-                                        labelsVisible: false
-                                        tooltipText: model.label
-                                        onClicked:
-                                        {
-                                            placeClicked(model.path)
-                                            FB.FM.openUrl(model.path)
-                                        }
-                                    }
-                                }
-                            }
-
-                            GridView
-                            {
-                                id: _recentSection
-                                implicitHeight: contentHeight
-                                implicitWidth: 300
-                                currentIndex :-1
-
-                                cellWidth: Math.floor(width/3)
-                                cellHeight: cellWidth
-                                interactive: false
-
-                                model: Maui.BaseModel
-                                {
-                                    list: Cask.RecentFiles
-                                    {
-                                        url: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DownloadLocation)
-                                        //                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
-
-                                    }
-                                }
-
-                                header: Maui.LabelDelegate
-                                {
-                                    width: parent.width
-                                    isSection: true
-                                    label: i18n("Downloads")
-                                }
-
-                                delegate: Item
-                                {
-                                    height: GridView.view.cellHeight
-                                    width: GridView.view.cellWidth
-
-                                    Maui.GridBrowserDelegate
-                                    {
-                                        isCurrentItem: parent.GridView.isCurrentItem
-                                        anchors.fill: parent
-                                        anchors.margins: Maui.Style.space.tiny
-                                        iconSource: model.icon
-                                        imageSource: model.thumbnail
-                                        iconSizeHint: Maui.Style.iconSizes.medium
-                                        label1.text: model.label
-                                        template.labelSizeHint: 32
-                                        labelsVisible: !FB.FM.checkFileType(FB.FMList.IMAGE, model.mime)
-                                        tooltipText: model.label
-                                    }
-                                }
-                            }
-
-                            Maui.GalleryRollItem
-                            {
-                                implicitHeight: 220
-                                implicitWidth: 280
-                                images: _pictures.urls
-
-                                Cask.RecentFiles
-                                {
-                                    id: _pictures
-                                    url: Labs.StandardPaths.writableLocation(Labs.StandardPaths.PicturesLocation)
-                                    filters: FB.FM.nameFilters(FB.FMList.IMAGE)
-
+                                    _stackView.push(_appsListComponent)
+                                    _allAppsModel.group = modelData.label
                                 }
                             }
                         }
                     }
                 }
-            }
 
+                flickable.header: ColumnLayout
+                {
+                    width: parent.width
+                    spacing: Maui.Style.space.big
+                    visible: _recentListView.count > 0
+
+                    Maui.LabelDelegate
+                    {
+                        Layout.fillWidth: true
+                        isSection: true
+                        label: i18n("Most Used")
+                    }
+
+                    ListView
+                    {
+                        id: _recentListView
+                        orientation: ListView.Horizontal
+                        Layout.fillWidth: true
+                        Layout.margins: Maui.Style.space.medium
+                        Layout.preferredHeight: visible ? 140 : 0
+                        spacing: Maui.Style.space.medium
+                        model: _appsDB.recentApps
+
+                        delegate: Maui.GridBrowserDelegate
+                        {
+                            height: ListView.view.height
+                            width: height
+
+                            iconSource: model.icon
+                            label1.text: model.name
+
+                            iconSizeHint: 64
+                            template.labelSizeHint: 44
+
+                            onClicked:
+                            {
+                                _appsDB.launchApp(model.path)
+                                control.close()
+                            }
+                        }
+                    }
+
+                    Maui.Separator
+                    {
+                        Layout.preferredWidth: 100
+                        //                            Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignCenter
+                    }
+                }
+
+                flickable.footer: T.Page
+                {
+                    width: parent.width
+                    implicitHeight: contentHeight+ topPadding + topPadding + header.height
+                    //                        padding: Maui.Style.space.big
+                    header: Item
+                    {
+                        width: parent.width
+                        height: 60
+
+                        Maui.Separator
+                        {
+                            anchors.centerIn: parent
+                            width: 100
+                            opacity: 0.5
+                        }
+                    }
+
+                    contentItem: Flow
+                    {
+
+                        GridView
+                        {
+                            id: _quickSection
+                            implicitHeight: contentHeight
+                            implicitWidth: 200
+                            currentIndex :-1
+
+                            cellWidth: Math.floor(width/3)
+                            cellHeight: cellWidth
+                            interactive: false
+
+                            model: Maui.BaseModel
+                            {
+                                list: FB.PlacesList
+                                {
+                                    groups: [FB.FMList.QUICK_PATH, FB.FMList.PLACES_PATH]
+                                }
+                            }
+
+                            header: Maui.LabelDelegate
+                            {
+                                width: parent.width
+                                isSection: true
+                                label: i18n("Places")
+                            }
+
+                            delegate: Item
+                            {
+                                height: GridView.view.cellHeight
+                                width: GridView.view.cellWidth
+
+                                Maui.GridBrowserDelegate
+                                {
+                                    isCurrentItem: parent.GridView.isCurrentItem
+                                    anchors.fill: parent
+                                    anchors.margins: Maui.Style.space.tiny
+                                    iconSource: model.icon
+                                    iconSizeHint: Maui.Style.iconSizes.medium
+                                    template.isMask: true
+                                    label1.text: model.label
+                                    labelsVisible: false
+                                    tooltipText: model.label
+                                    onClicked:
+                                    {
+                                        placeClicked(model.path)
+                                        FB.FM.openUrl(model.path)
+                                    }
+                                }
+                            }
+                        }
+
+                        GridView
+                        {
+                            id: _recentSection
+                            implicitHeight: contentHeight
+                            implicitWidth: 300
+                            currentIndex :-1
+
+                            cellWidth: Math.floor(width/3)
+                            cellHeight: cellWidth
+                            interactive: false
+
+                            model: Maui.BaseModel
+                            {
+                                list: Cask.RecentFiles
+                                {
+                                    url: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DownloadLocation)
+                                    //                                        filters: FB.FM.nameFilters(FB.FMList.IMAGE)
+
+                                }
+                            }
+
+                            header: Maui.LabelDelegate
+                            {
+                                width: parent.width
+                                isSection: true
+                                label: i18n("Downloads")
+                            }
+
+                            delegate: Item
+                            {
+                                height: GridView.view.cellHeight
+                                width: GridView.view.cellWidth
+
+                                Maui.GridBrowserDelegate
+                                {
+                                    isCurrentItem: parent.GridView.isCurrentItem
+                                    anchors.fill: parent
+                                    anchors.margins: Maui.Style.space.tiny
+                                    iconSource: model.icon
+                                    imageSource: model.thumbnail
+                                    iconSizeHint: Maui.Style.iconSizes.medium
+                                    label1.text: model.label
+                                    template.labelSizeHint: 32
+                                    labelsVisible: !FB.FM.checkFileType(FB.FMList.IMAGE, model.mime)
+                                    tooltipText: model.label
+                                }
+                            }
+                        }
+
+                        Maui.GalleryRollItem
+                        {
+                            implicitHeight: 220
+                            implicitWidth: 280
+                            images: _pictures.urls
+
+                            Cask.RecentFiles
+                            {
+                                id: _pictures
+                                url: Labs.StandardPaths.writableLocation(Labs.StandardPaths.PicturesLocation)
+                                filters: FB.FM.nameFilters(FB.FMList.IMAGE)
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        Component
+        {
+            id: _appsListComponent
             Maui.GridView
             {
                 id: _gridView
@@ -485,10 +493,7 @@ Maui.Page
                     recursiveFilteringEnabled: true
                     sortCaseSensitivity: Qt.CaseInsensitive
                     filterCaseSensitivity: Qt.CaseInsensitive
-                    list: Cask.AppsModel
-                    {
-                        id: _allAppsModel
-                    }
+                    list: _allAppsModel
                 }
 
                 onKeyPress:
@@ -540,23 +545,10 @@ Maui.Page
                 }
             }
         }
-
-        Item
-        {
-            Layout.fillWidth: true
-            implicitHeight: 22
-            PageIndicator
-            {
-                id: pageIndicator
-                height: parent.height
-                interactive: true
-                count: _swipeView.count
-                currentIndex: _swipeView.currentIndex
-
-                anchors.centerIn: parent
-            }
-        }
     }
+
+
+
 
     DragHandler
     {

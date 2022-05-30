@@ -23,7 +23,7 @@ Rectangle
 
     opacity: 0.9
 
-    color: Kirigami.Theme.backgroundColor
+    color: Maui.Theme.backgroundColor
 
 
     HoverHandler
@@ -38,7 +38,7 @@ Rectangle
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height - 12
         width: Math.min(100, parent.width * 0.5)
-        color: _hadleHandler.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+        color: _hadleHandler.hovered ? Maui.Theme.highlightColor : Maui.Theme.textColor
         radius: 4
     }
 

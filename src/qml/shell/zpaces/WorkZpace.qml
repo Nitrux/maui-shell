@@ -1,16 +1,11 @@
 import QtQuick 2.15
 import QtQml 2.14
 import QtQuick.Controls 2.14
-import QtQuick.Layouts 1.3
-
-import QtQuick.Window 2.15
-
-import QtGraphicalEffects 1.0
 
 import QtWayland.Compositor 1.0
 
 import org.mauikit.controls 1.2 as Maui
-import org.kde.kirigami 2.8 as Kirigami
+
 import org.maui.cask 1.0 as Cask
 
 import Zpaces 1.0 as ZP
@@ -41,7 +36,7 @@ ListView
     boundsBehavior: overviewMode ? Flickable.OvershootBounds : Flickable.StopAtBounds
 
     highlightFollowsCurrentItem: true
-    highlightMoveDuration: Kirigami.Units.longDuration
+    highlightMoveDuration: Maui.Style.units.longDuration
     //    highlightResizeDuration: 0
     cacheBuffer: width * count
     //                    preferredHighlightEnd: width

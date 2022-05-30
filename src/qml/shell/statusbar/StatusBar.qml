@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 import QtGraphicalEffects 1.0
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 import QtQuick.Templates 2.15 as T
 
@@ -54,7 +53,7 @@ T.Control
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Maui.Style.units.longDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -63,7 +62,7 @@ T.Control
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Maui.Style.units.longDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -90,7 +89,7 @@ T.Control
         {
             NumberAnimation
             {
-                duration: Kirigami.Units.longDuration
+                duration: Maui.Style.units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -98,7 +97,7 @@ T.Control
         Rectangle
         {
             anchors.fill: parent
-            color: !control.floating ? Kirigami.Theme.backgroundColor : "transparent"
+            color: !control.floating ? Maui.Theme.backgroundColor : "transparent"
 
         }
 

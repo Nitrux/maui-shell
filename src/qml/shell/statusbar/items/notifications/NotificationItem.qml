@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 import QtGraphicalEffects 1.0
 
@@ -67,9 +66,9 @@ ItemDelegate
             radius: 2
             color: switch(control.urgency)
                    {
-                   case 0: return Kirigami.Theme.positiveBackgroundColor;
-                   case 1: return Kirigami.Theme.neutralBackgroundColor;
-                   case 2: return Kirigami.Theme.negativeBackgroundColor
+                   case 0: return Maui.Theme.positiveBackgroundColor;
+                   case 1: return Maui.Theme.neutralBackgroundColor;
+                   case 2: return Maui.Theme.negativeBackgroundColor
 
                    }
         }
@@ -99,13 +98,13 @@ ItemDelegate
 
             background: Rectangle
             {
-                color: _button.hovered || _button.down || _button.pressed ? Kirigami.Theme.highlightColor : Qt.lighter(Kirigami.Theme.backgroundColor)
+                color: _button.hovered || _button.down || _button.pressed ? Maui.Theme.highlightColor : Qt.lighter(Maui.Theme.backgroundColor)
             }
 
             contentItem: Label
             {
                 text: _button.text
-                color:  _button.hovered || _button.down || _button.pressed ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
+                color:  _button.hovered || _button.down || _button.pressed ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
             }
@@ -119,7 +118,7 @@ ItemDelegate
         {
             id: _backRec
             anchors.fill: parent
-            color:  Kirigami.Theme.backgroundColor
+            color:  Maui.Theme.backgroundColor
             radius: 10
 
             Behavior on color
@@ -127,7 +126,7 @@ ItemDelegate
                 ColorAnimation
                 {
                     easing.type: Easing.InQuad
-                    duration: Kirigami.Units.shortDuration
+                    duration: Maui.Style.units.shortDuration
                 }
             }
 
@@ -191,7 +190,7 @@ ItemDelegate
                 property: "x";
                 easing.type: Easing.OutInQuad
                 to: 0-control.width;
-                duration: Kirigami.Units.longDuration
+                duration: Maui.Style.units.longDuration
 
             }
         }

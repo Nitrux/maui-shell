@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
 import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
 
@@ -22,7 +22,7 @@ T.Slider
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.shortDuration
+            duration: Maui.Style.units.shortDuration
             easing.type: Easing.OutQuad
         }
     }
@@ -30,8 +30,8 @@ T.Slider
     background: Rectangle
     {
         radius: height/2
-        color: control.enabled ? Qt.darker(Kirigami.Theme.backgroundColor, 1.2) : "transparent"
-        border.color: control.enabled ? "transparent" : Kirigami.Theme.textColor
+        color: control.enabled ? Qt.darker(Maui.Theme.backgroundColor, 1.2) : "transparent"
+        border.color: control.enabled ? "transparent" : Maui.Theme.textColor
 
         Rectangle
         {
@@ -40,8 +40,8 @@ T.Slider
             width: Math.max(height, control.visualPosition * parent.width)
             height: control.height
             anchors.verticalCenter: parent.verticalCenter
-            color: control.enabled ? Kirigami.Theme.highlightColor : "transparent"
-            border.color: control.enabled ? "transparent" : Kirigami.Theme.highlightColor
+            color: control.enabled ? Maui.Theme.highlightColor : "transparent"
+            border.color: control.enabled ? "transparent" : Maui.Theme.highlightColor
             radius: height/2
             clip: true
 
@@ -57,7 +57,7 @@ T.Slider
                     NumberAnimation
                     {
                         id: animation
-                        duration: Kirigami.Units.shortDuration
+                        duration: Maui.Style.units.shortDuration
                         easing.type: Easing.OutQuad
                     }
                 }
@@ -68,7 +68,7 @@ T.Slider
                 ColorAnimation
                 {
                     easing.type: Easing.InQuad
-                    duration: Kirigami.Units.shortDuration
+                    duration: Maui.Style.units.shortDuration
                 }
             }
 
@@ -89,7 +89,7 @@ T.Slider
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.shortDuration
+                duration: Maui.Style.units.shortDuration
             }
         }
     }
@@ -100,7 +100,7 @@ T.Slider
         y: control.topPadding + control.availableHeight / 2 - height / 2
         implicitWidth: control.height
         implicitHeight: control.height
-        color: control.enabled ? Kirigami.Theme.highlightColor : "transparent"
+        color: control.enabled ? Maui.Theme.highlightColor : "transparent"
         radius: height/2
 
         Kirigami.Icon
@@ -109,14 +109,14 @@ T.Slider
             height: 16
             width : 16
             isMask: true
-            color: Kirigami.Theme.highlightedTextColor
+            color: Maui.Theme.highlightedTextColor
             anchors.centerIn: parent
             Behavior on color
             {
                 ColorAnimation
                 {
                     easing.type: Easing.InQuad
-                    duration: Kirigami.Units.shortDuration
+                    duration: Maui.Style.units.shortDuration
                 }
             }
         }
@@ -126,7 +126,7 @@ T.Slider
             ColorAnimation
             {
                 easing.type: Easing.InQuad
-                duration: Kirigami.Units.shortDuration
+                duration: Maui.Style.units.shortDuration
             }
         }
     }

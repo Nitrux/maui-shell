@@ -216,13 +216,13 @@ Cask.StackableItem
     {
         id: decoration
 
-        //        Kirigami.Theme.inherit: false
-        Kirigami.Theme.colorSet: Kirigami.Theme.Window
+        //        Maui.Theme.inherit: false
+        Maui.Theme.colorSet: Maui.Theme.Window
         anchors.fill: parent
         border.width: 1
         radius: window.maximized ? 0 : Maui.Style.radiusV
         border.color: window.maximized ? "transparent" : (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
-        color: Kirigami.Theme.backgroundColor
+        color: Maui.Theme.backgroundColor
         visible: rootChrome.decorationVisible
 
         TapHandler
@@ -309,7 +309,7 @@ Cask.StackableItem
                     horizontalAlignment: Qt.AlignHCenter
                     elide: Text.ElideMiddle
                     wrapMode: Text.NoWrap
-                    color: Kirigami.Theme.textColor
+                    color: Maui.Theme.textColor
                 }
 
                 Loader
@@ -651,7 +651,7 @@ Cask.StackableItem
         //         anchors.margins: Maui.Style.space.small
         radius: decoration.radius
         color: "transparent"
-        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+        border.color: Qt.darker(Maui.Theme.backgroundColor, 2.7)
         opacity: 0.8
         border.width: 1
         Rectangle
@@ -661,7 +661,7 @@ Cask.StackableItem
             color: "transparent"
             radius: parent.radius - 0.5
             border.width: 1
-            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            border.color: Qt.lighter(Maui.Theme.backgroundColor, 2)
             opacity: 0.2
         }
     }

@@ -81,7 +81,7 @@ T.ItemDelegate
                 gradient: Gradient
                 {
                     GradientStop { position: 0.0; color: "transparent" }
-                    GradientStop { position: 1.2-Math.min(1, _labels.implicitHeight/height);  color: control.Kirigami.Theme.backgroundColor }
+                    GradientStop { position: 1.2-Math.min(1, _labels.implicitHeight/height);  color: control.Maui.Theme.backgroundColor }
                 }
             }
 

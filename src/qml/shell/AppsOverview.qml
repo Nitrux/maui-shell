@@ -33,7 +33,7 @@ Maui.Page
         Rectangle
         {
             anchors.fill: parent
-            color: Kirigami.Theme.backgroundColor
+            color: Maui.Theme.backgroundColor
             opacity: 0.8
         }
     }
@@ -203,7 +203,7 @@ Maui.Page
                                 //         anchors.margins: Maui.Style.space.small
                                 radius: Maui.Style.radiusV
                                 color: "transparent"
-                                border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+                                border.color: Qt.darker(Maui.Theme.backgroundColor, 2.7)
                                 opacity: 0.5
 
                                 Rectangle
@@ -212,7 +212,7 @@ Maui.Page
                                     anchors.margins: 1
                                     color: "transparent"
                                     radius: parent.radius - 0.5
-                                    border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                                    border.color: Qt.lighter(Maui.Theme.backgroundColor, 2)
                                     opacity: 0.7
                                 }
                             }
@@ -221,7 +221,7 @@ Maui.Page
                             {
                                 parent: _thumbnail
                                 id: _closeButton
-                                color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+                                color: hovered || pressed ? Maui.Theme.negativeTextColor : Maui.Theme.backgroundColor
 
                                 property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
 
@@ -230,10 +230,10 @@ Maui.Page
                                     height: Maui.Style.iconSizes.tiny
                                     width: height
                                     anchors.centerIn: parent
-                                    color: Kirigami.Theme.textColor
+                                    color: Maui.Theme.textColor
                                 }
 
-                                border.color: Kirigami.Theme.textColor
+                                border.color: Maui.Theme.textColor
 
                                 anchors
                                 {

@@ -66,7 +66,7 @@ Cask.PanelItem
                 onDismissed:_notifications.notificationsModel.historyModel.remove(index)
                 background: Rectangle
                 {
-                    color: hovered? Qt.lighter(Kirigami.Theme.backgroundColor) : Kirigami.Theme.backgroundColor
+                    color: hovered? Qt.lighter(Maui.Theme.backgroundColor) : Maui.Theme.backgroundColor
                     radius: 10
                 }
             }

@@ -20,3 +20,8 @@ MauiMan::ThemeManager *MauiManInterface::theme() const
 {
     return m_theme;
 }
+
+void MauiManInterface::invokeManager(const QString &module)
+{
+    MauiManUtils::invokeManager(module);
+}

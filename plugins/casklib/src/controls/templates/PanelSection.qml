@@ -2,9 +2,8 @@ import QtQuick 2.15
 import QtQml 2.14
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.7 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+
+import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 
 import QtQuick.Templates 2.15 as T
@@ -42,7 +41,7 @@ T.Control
     {
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Maui.Style.units.longDuration
             easing.type: Easing.OutInQuad
         }
     }
@@ -117,7 +116,6 @@ T.Control
             delayed: true
             restoreMode: Binding.RestoreBindingOrValue
             value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
-
         }
 
         x: handler.active && win.formFactor === Cask.Env.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)

@@ -109,16 +109,17 @@ Cask.PanelItem
                 ToggleTemplate
                 {
                     icon.name:  "contrast"
-                    enabled: !Maui.Style.adaptiveColorScheme
+                    enabled: Maui.Style.styleType !== Maui.Style.Adaptive
                     text: i18n("Nigh mode")
-                    checked: Maui.Style.darkMode
-                    onClicked: Maui.Style.darkMode = !Maui.Style.darkMode
+                    checked: Maui.Style.styleType === Maui.Style.Dark
+                    onClicked: Maui.Style.styleType = (Maui.Style.styleType === Maui.Style.Dark ? Maui.Style.Light : Maui.Style.Dark)
                 }
 
                 ToggleTemplate
                 {
                     icon.name:  "settings-configure"
                     text: i18n("Settings")
+                    onClicked: Cask.MauiMan.invokeManager("background")
                 }
             }
         }

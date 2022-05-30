@@ -14,7 +14,7 @@ Maui.Dialog
     id: control
     page.margins: Maui.Style.space.big
     spacing: Maui.Style.space.medium
-    page.headerColorSet: control.Kirigami.Theme.colorSet
+    page.headerColorSet: control.Maui.Theme.colorSet
     closeButtonVisible: false
     maxWidth: 400
     hint: 1

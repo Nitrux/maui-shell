@@ -180,7 +180,7 @@ Startup::Startup(QObject *parent)
 //        new StartServiceJob(QStringLiteral("/usr/lib/org_kde_powerdevil"), {},"", {}),
  //       new StartServiceJob(QStringLiteral("cask"), {},"", {}),
 
-//        new StartServiceJob(QStringLiteral("ksmserver"), QCoreApplication::instance()->arguments().mid(1), QStringLiteral("org.kde.ksmserver")),
+        new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), ""),
         new StartupPhase0(autostart, this),
         phase1 = new StartupPhase1(autostart, this),
 //        new RestoreSessionJob(),
