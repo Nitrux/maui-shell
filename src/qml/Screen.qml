@@ -51,7 +51,7 @@ WaylandOutput
     property alias cask: _cask
     property bool showDesktop : true
 
-    sizeFollowsWindow: isNestedCompositor
+    sizeFollowsWindow: true
     availableGeometry : _cask.availableGeometry
 
 //    scaleFactor: 1
@@ -70,21 +70,9 @@ WaylandOutput
         output: control
     }
 
-    window: ApplicationWindow
+    window: Window
     {
         id: win
-
-//        Maui.Style.darkMode: preffersDarkMode
-
-//        readonly property bool preffersDarkMode :  Cask.MauiMan.theme.styleType === 1
-
-//        onPreffersDarkModeChanged:
-//        {
-//            Maui.Style.darkMode =  preffersDarkMode
-//        }
-
-//        Maui.Style.adaptiveColorScheme: Cask.MauiMan.theme.styleType === 2
-//        Maui.Style.adaptiveColorSchemeSource: Cask.MauiMan.background.wallpaperSource.replace("file://", "")
 
         readonly property int formFactor :
         {

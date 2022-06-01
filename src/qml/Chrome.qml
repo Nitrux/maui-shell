@@ -288,24 +288,18 @@ Cask.StackableItem
             {
                 anchors.fill: parent
 
-                Loader
+
+                Item
                 {
-                    id: _leftControlsLoader
-                    visible: active
-                    active: Maui.App.leftWindowControls.length
-                    Layout.preferredWidth: active ? implicitWidth : 0
-                    sourceComponent: Maui.CSDControls
-                    {
-                        side: Qt.LeftEdge
-                        onButtonClicked: performActiveWindowAction(type)
-                    }
+                    Layout.maximumWidth: _rightControlsLoader.implicitWidth
+                    Layout.minimumWidth: 0
                 }
 
                 Label
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    text: rootChrome.title
+                    text: Maui.App.controls.source
                     horizontalAlignment: Qt.AlignHCenter
                     elide: Text.ElideMiddle
                     wrapMode: Text.NoWrap
@@ -315,15 +309,10 @@ Cask.StackableItem
                 Loader
                 {
                     id: _rightControlsLoader
-                    visible: active
-                    active: Maui.App.rightWindowControls.length
-                    Layout.preferredWidth: active ? implicitWidth : 0
+
                     sourceComponent: Maui.CSDControls
                     {
-                        side: Qt.RightEdge
-                        maximized: rootChrome.toplevel.maximized
-                        isActiveWindow: rootChrome.activated
-                        onButtonClicked: rootChrome.performActiveWindowAction(type)
+                        onButtonClicked: performActiveWindowAction(type)
                     }
                 }
             }
