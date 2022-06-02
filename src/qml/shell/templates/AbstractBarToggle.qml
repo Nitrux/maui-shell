@@ -15,6 +15,9 @@ T.Pane
     property Component page : null
     property Item bar
 
+    Maui.Theme.colorSet: Maui.Theme.Button
+    Maui.Theme.inherit: false
+
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
     spacing: Maui.Style.space.medium
 
@@ -29,9 +32,7 @@ T.Pane
 
     background: Rectangle
     {
-        readonly property color m_color : Qt.tint(Qt.lighter(control.Maui.Theme.textColor), Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
-
-        color: m_color
+        color: Maui.Theme.backgroundColor
         opacity: 0.7
 
         radius: 8

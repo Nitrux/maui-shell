@@ -19,9 +19,7 @@ Maui.BasicToolButton
 
     background: Rectangle
     {
-        readonly property color m_color : Qt.tint(Qt.lighter(Maui.Theme.textColor), Qt.rgba(Maui.Theme.backgroundColor.r, Maui.Theme.backgroundColor.g, Maui.Theme.backgroundColor.b, 0.9))
-
-        color: control.enabled ? (control.hovered ? Maui.Theme.hoverColor :( control.checked ||  control.containsPress ? Maui.Theme.highlightColor : m_color)) :"transparent"
+        color: control.enabled ? (control.hovered ? Maui.Theme.hoverColor :( control.checked ||  control.containsPress ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor)) :"transparent"
 
         border.color: control.enabled ? "transparent" : (control.checked ||  control.containsPress ? control.Maui.Theme.highlightColor : m_color)
 
