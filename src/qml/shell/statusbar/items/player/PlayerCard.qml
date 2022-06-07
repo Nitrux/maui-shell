@@ -71,7 +71,7 @@ T.ItemDelegate
             fillMode: Image.PreserveAspectCrop
             imageSource: control.albumArt
             iconSource: control.playerIcon
-            maskRadius: 8
+            maskRadius: Maui.Style.radiusV
 
             LinearGradient
             {

@@ -167,7 +167,7 @@ WaylandOutput
                         //                        scale: ListView.view.overviewScale
                         height: ListView.view.height
                         width: ListView.view.width
-                        radius: ListView.view.overviewScale === 1 ? 0 : 20
+                        radius: ListView.view.overviewScale === 1 ? 0 : Maui.Style.radiusV
                         clip: false
                         backgroundVisible: Cask.MauiMan.background.showWallpaper
                         backgroundImage: Cask.MauiMan.background.wallpaperSource

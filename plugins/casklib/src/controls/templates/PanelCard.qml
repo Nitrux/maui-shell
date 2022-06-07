@@ -60,7 +60,7 @@ T.Pane
     background: Rectangle
     {
         color: Maui.Theme.backgroundColor
-        radius: isMobile ? 0 : 10
+        radius: isMobile ? 0 : Maui.Style.radiusV
 
         Behavior on radius
         {

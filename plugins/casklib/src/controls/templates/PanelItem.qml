@@ -64,7 +64,7 @@ T.AbstractButton
 
         readonly property color finalColor: control.Maui.Theme.backgroundColor
         color: finalColor
-        radius: 6
+        radius: Maui.Style.radiusV
         opacity: control.checked ?  1 : 0.8
 
         Rectangle
@@ -72,6 +72,7 @@ T.AbstractButton
             anchors.fill: parent
             color: "transparent"
             radius: parent.radius
+
             ColorAnimation on color
             {
                 id: _animation

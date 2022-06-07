@@ -260,7 +260,6 @@ Maui.Page
                         source: _thumbnail
                     }
 
-
                     DragHandler
                     {
                         target: parent

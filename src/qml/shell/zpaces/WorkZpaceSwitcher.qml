@@ -39,7 +39,7 @@ Rectangle
         height: parent.height - 12
         width: Math.min(100, parent.width * 0.5)
         color: _hadleHandler.hovered ? Maui.Theme.highlightColor : Maui.Theme.textColor
-        radius: 4
+        radius: Maui.Style.radiusV
     }
 
 //    Label

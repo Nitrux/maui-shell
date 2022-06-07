@@ -22,7 +22,7 @@ T.Control
     padding: Maui.Style.space.small
     spacing: padding
 
-    property int radius: 10
+    property int radius: Maui.Style.radiusV
 
     Behavior on implicitWidth
     {

@@ -30,7 +30,7 @@ T.AbstractButton
         color: control.pressed || control.down || control.checked ? control.Maui.Theme.highlightColor : (control.highlighted || control.hovered ? control.Maui.Theme.hoverColor : m_color)
 
         opacity: control.checked? 1 : 0.7
-        radius: 8
+        radius: Maui.Style.radiusV
 
         Maui.ImageColors
         {

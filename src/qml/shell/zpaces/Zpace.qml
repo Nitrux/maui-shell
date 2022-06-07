@@ -17,7 +17,7 @@ T.Pane
     property ZP.Zpace zpace
 
     default property alias content: _content.data
-    property int radius: 20
+    property int radius: Maui.Style.radiusV
     property bool overviewMode : false
     property alias backgroundImage : _img.source
     property alias backgroundFillMode : _img.fillMode

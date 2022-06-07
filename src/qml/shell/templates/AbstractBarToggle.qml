@@ -35,7 +35,7 @@ T.Pane
         color: Maui.Theme.backgroundColor
         opacity: 0.7
 
-        radius: 8
+        radius: Maui.Style.radiusV
 
         Behavior on color
         {

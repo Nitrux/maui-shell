@@ -118,7 +118,7 @@ Maui.Page
     {
         color: Maui.Theme.backgroundColor
         opacity: win.formFactor !== Cask.Env.Desktop ? 0 : 0.95
-        radius: 10
+        radius: Maui.Style.radiusV
 
         Behavior on color
         {
@@ -203,7 +203,7 @@ Maui.Page
 
                                 color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
 
-                                radius: 8
+                                radius: Maui.Style.radiusV
 
                                 Behavior on color
                                 {

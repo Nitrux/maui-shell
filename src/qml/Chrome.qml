@@ -739,12 +739,13 @@ Cask.StackableItem
 
 
 
-    Rectangle {
+    Rectangle
+    {
         z: surfaceItem.z + 9999999999
         visible: true
         border.color: "white"
         color: "black"
-        radius: 5
+        radius: Maui.Style.radiusV
         anchors.centerIn: parent
         width: height * 10
         height: moveGeometryText.implicitHeight * 1.5

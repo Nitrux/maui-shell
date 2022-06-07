@@ -174,7 +174,7 @@ StackPage
             imageSource: control.albumArt
             iconSource: control.playerIcon
             //            iconSizeHint: 48
-            maskRadius: 10
+            maskRadius: Maui.Style.radiusV
             //            imageSizeHint: 80
         }
 
