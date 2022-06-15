@@ -2,8 +2,6 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
-import org.kde.kirigami 2.7 as Kirigami
-
 import org.mauikit.controls 1.3 as Maui
 import org.mauikit.filebrowsing 1.0 as FB
 
@@ -199,9 +197,8 @@ Maui.Page
                         {
                             background: Rectangle
                             {
-                                readonly property color m_color : Qt.tint(Qt.lighter(control.Maui.Theme.textColor), Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
 
-                                color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+                                color: Maui.Theme.alternateBackgroundColor
 
                                 radius: Maui.Style.radiusV
 
@@ -254,7 +251,7 @@ Maui.Page
                                     height: GridView.view.cellHeight
                                     width: GridView.view.cellWidth
 
-                                    Kirigami.Icon
+                                    Maui.Icon
                                     {
                                         anchors.centerIn: parent
                                         height: width

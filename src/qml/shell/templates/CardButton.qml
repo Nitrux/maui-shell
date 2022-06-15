@@ -21,7 +21,7 @@ Maui.BasicToolButton
     {
         color: control.enabled ? (control.hovered ? Maui.Theme.hoverColor :( control.checked ||  control.containsPress ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor)) :"transparent"
 
-        border.color: control.enabled ? "transparent" : (control.checked ||  control.containsPress ? control.Maui.Theme.highlightColor : m_color)
+        border.color: control.enabled ? "transparent" : (control.checked ||  control.containsPress ? control.Maui.Theme.highlightColor : Maui.Theme.alternateBackgroundColor)
 
         radius: Maui.Style.radiusV
         opacity: control.checked? 1 : 0.7

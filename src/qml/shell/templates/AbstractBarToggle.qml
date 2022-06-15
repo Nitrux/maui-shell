@@ -3,7 +3,6 @@ import QtQuick.Controls 2.15
 
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
@@ -72,7 +71,7 @@ T.Pane
                 Layout.fillWidth: true
                 spacing: control.spacing
 
-                Kirigami.Icon
+                Maui.Icon
                 {
                     id: _icon
                     visible: control.icon.source ? String(control.icon.source).length > 0 : false

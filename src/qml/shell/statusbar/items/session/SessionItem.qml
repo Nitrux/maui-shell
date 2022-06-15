@@ -3,8 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Templates 2.15 as T
 
-import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "../../../templates"
@@ -17,7 +16,7 @@ Cask.PanelItem
     Row
     {
         spacing: control.spacing
-        Kirigami.Icon
+        Maui.Icon
         {
             visible: _batteryProgressBar.primaryBattery
             source: _batteryProgressBar.iconSource
@@ -26,7 +25,7 @@ Cask.PanelItem
             color: control.icon.color
         }
 
-        Kirigami.Icon
+        Maui.Icon
         {
             source: "system-shutdown"
             height: control.iconSize

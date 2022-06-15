@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 Row
@@ -21,7 +20,7 @@ Row
           NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 400 }
       }
 
-    Kirigami.Icon
+    Maui.Icon
     {
         id: _icon
         visible: String(_icon.source).length

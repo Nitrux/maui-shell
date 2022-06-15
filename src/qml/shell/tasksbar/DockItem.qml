@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.5
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
@@ -25,13 +24,11 @@ T.AbstractButton
 
     background: Rectangle
     {
-        readonly property color m_color : control.colorize ? _imgColors.dominant : Qt.tint(Qt.lighter(control.Maui.Theme.textColor), Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
+        color: control.pressed || control.down || control.checked ? Maui.Theme.highlightColor : (control.highlighted || control.hovered ? Maui.Theme.hoverColor : Maui.Theme.alternateBackgroundColor)
 
-        color: control.pressed || control.down || control.checked ? control.Maui.Theme.highlightColor : (control.highlighted || control.hovered ? control.Maui.Theme.hoverColor : m_color)
 
-        opacity: control.checked? 1 : 0.7
-        radius: Maui.Style.radiusV
-
+//        opacity: control.checked? 1 : 0.7
+        radius: 8
         Maui.ImageColors
         {
             id: _imgColors
@@ -50,7 +47,7 @@ T.AbstractButton
 
     contentItem: Item
     {
-        Kirigami.Icon
+        Maui.Icon
         {
             source: control.icon.name
             color: control.checked || control.down ? Maui.Theme.highlightedTextColor : Maui.Theme.textColor
