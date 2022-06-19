@@ -25,7 +25,6 @@ import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
 
 import org.mauikit.controls 1.3 as Maui
-import org.kde.kirigami 2.14 as Kirigami
 import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
 
@@ -216,8 +215,8 @@ Cask.StackableItem
     {
         id: decoration
 
-        //        Maui.Theme.inherit: false
-        Maui.Theme.colorSet: Maui.Theme.Window
+        Maui.Theme.inherit: false
+        Maui.Theme.colorSet: Maui.Theme.Header
         anchors.fill: parent
         border.width: 1
         radius: window.maximized ? 0 : Maui.Style.radiusV

@@ -65,7 +65,7 @@ T.AbstractButton
         readonly property color finalColor: control.Maui.Theme.backgroundColor
         color: finalColor
         radius: Maui.Style.radiusV
-        opacity: control.checked ?  1 : 0.8
+//        opacity: control.checked ?  1 : 0.8
 
         Rectangle
         {

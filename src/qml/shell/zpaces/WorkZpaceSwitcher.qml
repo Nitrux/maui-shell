@@ -9,8 +9,7 @@ import QtGraphicalEffects 1.0
 
 import QtWayland.Compositor 1.0
 
-import org.mauikit.controls 1.2 as Maui
-import org.kde.kirigami 2.8 as Kirigami
+import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 
 import Zpaces 1.0 as ZP
