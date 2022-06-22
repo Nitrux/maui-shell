@@ -84,7 +84,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    MauiMan
+    MauiMan::MauiMan
     MauiKit
     MauiKit::FileBrowsing
     KF5::Service

@@ -364,7 +364,8 @@ int main(int argc, char *argv[])
     QList<QWindow *> windows = root->findChildren<QWindow *>();
     auto windowIter = windows.begin();
     auto screenIter = screens.begin();
-    while (windowIter != windows.end() && screenIter != screens.end()) {
+    while (windowIter != windows.end() && screenIter != screens.end())
+    {
         QWindow * window = *windowIter;
         QScreen * screen = *screenIter;
         window->setScreen(screen);
