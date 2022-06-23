@@ -21,7 +21,7 @@ jobs:
         run: |
           sudo touch /etc/apt/sources.list.d/neon.list
           echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
-          curl 'http://archive.neon.kde.org/public.key' | sudo apt-key add -
+          curl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D' | sudo apt-key add -
           
           sudo apt-get update -q
       
