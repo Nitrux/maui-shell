@@ -7,6 +7,7 @@ script:
   - scripts/install-build-deps.sh
   - mkdir -p build
   - cd build
+  - ../scripts/deploy-mauiman.sh
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
   - ../scripts/deploy-maui-shell.sh
@@ -27,6 +28,7 @@ AppDir:
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
+    - cp -n $APPDIR/opt/libc/lib/x86_64-linux-gnu/libnsl* $APPDIR/lib/x86_64-linux-gnu/
   apt:
     arch:
     - amd64
@@ -36,7 +38,7 @@ AppDir:
     - sourceline: deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
     - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
     - sourceline: deb http://archive.neon.kde.org/user focal main
-      key_url: 'http://archive.neon.kde.org/public.key'
+      key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D'
 
     include:
     # CORE DEPENDENCIES
@@ -50,6 +52,7 @@ AppDir:
     - libkf5idletime5
     - libkf5service5
     - libqt5sql5-sqlite
+    - qdbus-qt5
 
     # Other
     - kded5
@@ -61,6 +64,7 @@ AppDir:
     - libkf5bluezqt6
     - plasma-pa
     - plasma-nm
+    - libpulse0
 
     # QML modules
     - qml-module-qtquick-shapes
