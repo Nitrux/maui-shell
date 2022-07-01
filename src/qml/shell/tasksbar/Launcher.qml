@@ -161,7 +161,7 @@ property alias atYBeginning : _categoriesGridView.flickable.atYBeginning
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                itemSize: Math.min(150, Math.floor(flickable.width/2))
+                itemSize: Math.min(150, Math.floor(flickable.width/3))
                 itemHeight: 172
                 model: _allAppsModel.groups
 
