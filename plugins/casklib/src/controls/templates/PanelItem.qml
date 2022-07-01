@@ -106,7 +106,7 @@ T.AbstractButton
             height: control.iconSize
             icon.source: control.icon.name
             icon.color: control.icon.color
-
+            font: control.font
             labelVisible: text.length && (control.display === ToolButton.TextBesideIcon)
             text: control.text
 //            label.font: control.font

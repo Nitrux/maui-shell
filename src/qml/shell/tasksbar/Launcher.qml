@@ -153,6 +153,7 @@ Maui.Page
         initialItem: ColumnLayout
         {
             spacing: Maui.Style.space.medium
+property alias atYBeginning : _categoriesGridView.flickable.atYBeginning
 
             Maui.GridView
             {
@@ -274,18 +275,12 @@ Maui.Page
                     }
                 }
 
-                flickable.header: ColumnLayout
+                flickable.header: Maui.SettingsSection
                 {
                     width: parent.width
-                    spacing: Maui.Style.space.big
                     visible: _recentListView.count > 0
+                    title: i18n("Most Used")
 
-                    Maui.LabelDelegate
-                    {
-                        Layout.fillWidth: true
-                        isSection: true
-                        label: i18n("Most Used")
-                    }
 
                     ListView
                     {
@@ -293,7 +288,7 @@ Maui.Page
                         orientation: ListView.Horizontal
                         Layout.fillWidth: true
                         Layout.margins: Maui.Style.space.medium
-                        Layout.preferredHeight: visible ? 140 : 0
+                        Layout.preferredHeight: 140
                         spacing: Maui.Style.space.medium
                         model: _appsDB.recentApps
 
@@ -464,14 +459,14 @@ Maui.Page
             }
         }
 
-
-
         Component
         {
             id: _appsListComponent
             Maui.GridView
             {
                 id: _gridView
+                property bool atYBeginning : _gridView.flickable.atYBeginning
+
                 focus: true
                 itemSize: Math.min(150, Math.floor(flickable.width/3))
                 currentIndex: 0
@@ -544,15 +539,12 @@ Maui.Page
         }
     }
 
-
-
-
     DragHandler
     {
         id: handler3
         target: control
         dragThreshold: 60
-        enabled: control.opened
+        enabled: control.opened && _stackView.currentItem.atYBeginning
         yAxis.minimum: control.finalYPos
 
         xAxis.enabled : false

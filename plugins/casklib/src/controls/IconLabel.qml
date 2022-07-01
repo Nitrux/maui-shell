@@ -12,6 +12,7 @@ Row
 
     property alias iconSource: _icon.source
     property alias icon : _icon
+    property alias font : _label.font
 
     property alias labelVisible : _label.visible
 

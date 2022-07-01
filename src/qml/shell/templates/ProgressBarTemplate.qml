@@ -9,8 +9,9 @@ import org.maui.cask 1.0 as Cask
 T.ProgressBar
 {
     id: control
-    implicitHeight: (win.formFactor === Cask.Env.Desktop ? 16 : 22 ) + topPadding + bottomPadding
+    implicitHeight: 16 + topPadding + bottomPadding
     opacity: enabled ? 1 : 0.7
+
     property alias iconSource : _icon.source
     property color color : Maui.Theme.highlightColor
 
