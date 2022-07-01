@@ -278,16 +278,15 @@ property alias atYBeginning : _categoriesGridView.flickable.atYBeginning
                 flickable.header: Maui.SettingsSection
                 {
                     width: parent.width
+                    height: visible ? implicitHeight : 0
                     visible: _recentListView.count > 0
                     title: i18n("Most Used")
-
 
                     ListView
                     {
                         id: _recentListView
                         orientation: ListView.Horizontal
                         Layout.fillWidth: true
-                        Layout.margins: Maui.Style.space.medium
                         Layout.preferredHeight: 140
                         spacing: Maui.Style.space.medium
                         model: _appsDB.recentApps
