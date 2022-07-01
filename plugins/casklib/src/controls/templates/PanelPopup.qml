@@ -105,8 +105,10 @@ T.Container
         {
             id: handler2
             dragThreshold: 100
+            enabled: _cardsList.atYEnd
             //                enabled: popup.opened /*&& Maui.Handy.isTouch*/
             target: control
+            yAxis.maximum: control.y
             //                yAxis.maximum: popup.finalYPos
 
             xAxis.enabled : false
