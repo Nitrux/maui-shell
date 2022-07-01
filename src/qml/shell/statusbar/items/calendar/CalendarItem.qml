@@ -23,7 +23,7 @@ Cask.PanelItem
         {
             id: _taskPage
             property date date
-            implicitHeight: 400+ topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight
+            implicitHeight: 400 + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight
             title: i18n("Tasks")
 
             ColumnLayout
@@ -107,7 +107,7 @@ Cask.PanelItem
 //                        id: _delegate
 //                        implicitWidth: implicitContentWidth + rightPadding + leftPadding
 
-//                        implicitHeight: implicitContentHeight + topPadding +bottomPadding
+//                        implicitHeight: implicitContentHeight + topPadding + bottomPadding
 
 //                        background: Rectangle
 //                        {
@@ -122,7 +122,7 @@ Cask.PanelItem
 //                            opacity: model.month === _monthGrid.month ? 1 : 0.4
 //                            text: String(model.day)
 //                            font: _monthGrid.font
-//                            color: model.today || _delegate.hovered ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
+//                            color: model.today || _delegate.hovered ? Maui.Theme.highlightedTextColor : Maui.Theme.textColor
 //                        }
 
 //                        onClicked: _stack.push(_tasksPageComponent, {'date': model.date})
