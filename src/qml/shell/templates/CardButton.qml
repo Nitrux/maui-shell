@@ -14,8 +14,8 @@ Maui.BasicToolButton
 
     padding: Maui.Style.space.small
     spacing: padding
-    icon.width: 22
-    icon.height: 22
+    icon.width: Maui.Style.iconSize
+    icon.height: Maui.Style.iconSize
 
     background: Rectangle
     {

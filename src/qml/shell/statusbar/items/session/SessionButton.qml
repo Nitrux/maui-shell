@@ -14,5 +14,4 @@ CardButton
 
     implicitWidth: 48 + leftPadding + rightPadding
     implicitHeight: 32 + topPadding + bottomPadding
-
 }

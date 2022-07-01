@@ -5,8 +5,10 @@ import QtQuick.Templates 2.15 as T
 
 import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
-import Qt.labs.calendar 1.0
+
 import "../../../templates" as Templates
+
+import org.maui.calendar 1.0 as Cal
 
 Cask.PanelItem
 {
@@ -89,42 +91,42 @@ Cask.PanelItem
                     }
                 }
 
-                MonthGrid
+                Cal.MonthView
                 {
                     id: _monthGrid
 
                     width: parent.width
                     height: 200
 
-                    month: new Date().getMonth()
-                    year: new Date().getFullYear()
-                    locale: Qt.locale("en_US")
+//                    month: new Date().getMonth()
+//                    year: new Date().getFullYear()
+//                    locale: Qt.locale("en_US")
 
-                    delegate: T.ItemDelegate
-                    {
-                        id: _delegate
-                        implicitWidth: implicitContentWidth + rightPadding + leftPadding
+//                    delegate: T.ItemDelegate
+//                    {
+//                        id: _delegate
+//                        implicitWidth: implicitContentWidth + rightPadding + leftPadding
 
-                        implicitHeight: implicitContentHeight + topPadding +bottomPadding
+//                        implicitHeight: implicitContentHeight + topPadding +bottomPadding
 
-                        background: Rectangle
-                        {
-                            radius: Maui.Style.radiusV
-                            color: model.today || _delegate.hovered || _delegate.down ? Maui.Theme.highlightColor : "transparent"
-                        }
+//                        background: Rectangle
+//                        {
+//                            radius: Maui.Style.radiusV
+//                            color: model.today || _delegate.hovered || _delegate.down ? Maui.Theme.highlightColor : "transparent"
+//                        }
 
-                        contentItem: Label
-                        {
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            opacity: model.month === _monthGrid.month ? 1 : 0.4
-                            text: String(model.day)
-                            font: _monthGrid.font
-                            color: model.today || _delegate.hovered ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
-                        }
+//                        contentItem: Label
+//                        {
+//                            horizontalAlignment: Text.AlignHCenter
+//                            verticalAlignment: Text.AlignVCenter
+//                            opacity: model.month === _monthGrid.month ? 1 : 0.4
+//                            text: String(model.day)
+//                            font: _monthGrid.font
+//                            color: model.today || _delegate.hovered ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
+//                        }
 
-                        onClicked: _stack.push(_tasksPageComponent, {'date': model.date})
-                    }
+//                        onClicked: _stack.push(_tasksPageComponent, {'date': model.date})
+//                    }
                 }
             }
         }
