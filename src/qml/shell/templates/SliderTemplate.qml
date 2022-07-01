@@ -11,7 +11,7 @@ import QtGraphicalEffects 1.15
 T.Slider
 {
     id: control
-    implicitHeight: (win.formFactor === Cask.Env.Desktop ? 16 : 22 ) + topPadding + bottomPadding
+    implicitHeight: 16 + topPadding + bottomPadding
     opacity: enabled ? 1 : 0.7
 
     property alias iconSource : _icon.source
