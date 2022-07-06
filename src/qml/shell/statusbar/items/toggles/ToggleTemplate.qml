@@ -11,7 +11,7 @@ import "../../../templates"
 CardButton
 {
     id: control
-    implicitHeight: 32 + topPadding + bottomPadding
+    implicitHeight: (isMobile ? 32 : 44) + topPadding + bottomPadding
     implicitWidth: Math.max(_template.layout.implicitWidth, implicitHeight) + leftPadding + rightPadding
     property alias template : _template
 

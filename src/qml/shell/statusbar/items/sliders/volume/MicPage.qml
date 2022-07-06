@@ -12,7 +12,7 @@ import org.kde.plasma.private.volume 0.1 as PA
 StackPage
 {
     id: control
-    implicitHeight: Math.max(400, Math.min(400, _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
+    implicitHeight: _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big
     title: i18n("Microphone")
 
     Maui.ListBrowser

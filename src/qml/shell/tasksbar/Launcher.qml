@@ -220,17 +220,15 @@ property alias atYBeginning : _categoriesGridView.flickable.atYBeginning
                                            {
                                            case 4:
                                            case 3:
-                                           case 2:
-                                               return width/2;
+                                           case 2: return width/2;
                                            case 1: return width
-                                           default:  return width/2;
+                                           default: return width/2;
                                            }
 
                                 cellHeight: switch(count)
                                             {
                                             case 4:
-                                            case 3:
-                                                return height/2;
+                                            case 3: return height/2;
                                             case 2:
                                             case 1: return height
                                             default: return height/2;
@@ -255,8 +253,9 @@ property alias atYBeginning : _categoriesGridView.flickable.atYBeginning
                                     Maui.Icon
                                     {
                                         anchors.centerIn: parent
+                                        property int size: Math.min(parent.width, parent.height)
                                         height: width
-                                        width: Maui.Style.mapToIconSizes(parent.width*0.8)
+                                        width: Maui.Style.mapToIconSizes(size*0.8)
                                         source: model.icon
                                     }
                                 }

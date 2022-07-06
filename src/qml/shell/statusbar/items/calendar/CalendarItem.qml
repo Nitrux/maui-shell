@@ -96,8 +96,10 @@ Cask.PanelItem
                     id: _monthGrid
 
                     width: parent.width
-                    height: 200
+                    height: 320
+                    headBar.visible: false
 
+                    background: null
 //                    month: new Date().getMonth()
 //                    year: new Date().getFullYear()
 //                    locale: Qt.locale("en_US")

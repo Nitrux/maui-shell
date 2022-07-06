@@ -171,18 +171,19 @@ Startup::Startup(QObject *parent)
     // Keep for KF5; remove in KF6 (KInit will be gone then)
 //    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
 
-    KJob *phase1 = nullptr;
+//    KJob *phase1 = nullptr;
     m_lock.reset(new QEventLoopLocker);
 
     const QVector<KJob *> sequence = {
 //        new StartProcessJob(QStringLiteral("kcminit_startup"), {}),
 //        new StartServiceJob(QStringLiteral("kded5"), {}, QStringLiteral("org.kde.kded5"), {}),
 //        new StartServiceJob(QStringLiteral("/usr/lib/org_kde_powerdevil"), {},"", {}),
- //       new StartServiceJob(QStringLiteral("cask"), {},"", {}),
 
         new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), ""),
-        new StartupPhase0(autostart, this),
-        phase1 = new StartupPhase1(autostart, this),
+        new StartServiceJob(QStringLiteral("cask"), {},"", {}),
+
+//        new StartupPhase0(autostart, this),
+//        phase1 = new StartupPhase1(autostart, this),
 //        new RestoreSessionJob(),
 //        new StartupPhase2(autostart, this),
     };

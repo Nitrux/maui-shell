@@ -48,7 +48,7 @@ Cask.PanelItem
 
         onClosed: _togglesStack.pop()
 
-        T.StackView
+        StackView
         {
             id : _togglesStack
             width: parent.width
@@ -56,25 +56,36 @@ Cask.PanelItem
             clip: true
             padding: 0
 
-            initialItem: Flow
+            initialItem: Item
             {
+                implicitHeight: 140
+                GridLayout
+            {
+                anchors.fill: parent
                 id:_tooglesGrid
+                rows: 3
+                columns: 5
 
-                spacing: Maui.Style.space.medium
+//                spacing: Maui.Style.space.medium
 
                 NetworkToggle
                 {
                     id: _networkToggle
                     onClicked: _togglesStack.push(page)
-                    width:  Math.floor(parent.width/2) - parent.spacing
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 2
+                    Layout.fillHeight: true
                 }
 
                 BluetoothToggle
                 {
                     id: _bluetoothToggle
                     onClicked: _togglesStack.push(page)
-                    width:  Math.floor(parent.width/2)- parent.spacing
-
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 2
+                    Layout.rowSpan: 2
+                    Layout.fillHeight: true
+//                    display: ToolButton.TextUnderIcon
                 }
 
                 ToggleTemplate
@@ -83,17 +94,21 @@ Cask.PanelItem
                     text: "Michrophone"
                     checked: !_slidersItem.micItem.muted
                     onClicked: _slidersItem.micItem.toggleMute()
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
 
                 AirplaneModeToggle
                 {
-
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
 
                 ScreenshotToggle
                 {
                     id: _screenshotToggle
-
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     onClicked:
                     {
                         _togglesStack.push(page)
@@ -103,6 +118,8 @@ Cask.PanelItem
                 DevicesToggle
                 {
                     onClicked: _togglesStack.push(page)
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
 
                 ToggleTemplate
@@ -112,6 +129,8 @@ Cask.PanelItem
                     text: i18n("Nigh mode")
                     checked: Maui.Style.styleType === Maui.Style.Dark
                     onClicked: Maui.Style.styleType = (Maui.Style.styleType === Maui.Style.Dark ? Maui.Style.Light : Maui.Style.Dark)
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
 
                 ToggleTemplate
@@ -119,7 +138,10 @@ Cask.PanelItem
                     icon.name:  "settings-configure"
                     text: i18n("Settings")
                     onClicked: Cask.MauiMan.invokeManager("background")
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
+            }
             }
         }
     }

@@ -13,7 +13,7 @@ import org.kde.plasma.private.volume 0.1 as PA
 StackPage
 {
     id: control
-    implicitHeight: Math.max(400, Math.min(400, _layout.implicitHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
+    implicitHeight: _layout.implicitHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big
     title: i18n("Audio")
     spacing: _listView.spacing
 
