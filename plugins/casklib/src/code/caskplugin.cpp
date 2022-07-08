@@ -14,9 +14,10 @@
 
 #include "code/controllers/mauimaninterface.h"
 
+#include "code/server/caskserver.h"
+
 void CaskPlugin::registerTypes(const char *uri)
 {
-
     qmlRegisterType(resolveFileUrl(QStringLiteral("templates/PanelItem.qml")), uri, 1, 0, "PanelItem");
 
     qmlRegisterType(resolveFileUrl(QStringLiteral("templates/Panel.qml")), uri, 1, 0, "Panel");
@@ -55,6 +56,8 @@ void CaskPlugin::registerTypes(const char *uri)
         Q_UNUSED(scriptEngine)
         return new MauiManInterface;
     });
+
+    qmlRegisterSingletonInstance<CaskServer>(uri,1,0,"Server", CaskServer::instance());
 }
 
 void CaskPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

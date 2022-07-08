@@ -41,6 +41,13 @@ set(mpris2_SRCS
     code/mpris2/playersmodel.cpp
     )
 
+set(server_SRCS
+    code/server/caskserver.cpp
+    code/server/powerserver.cpp
+    )
+
+qt5_add_dbus_adaptor(dbus_SRCS code/server/org.cask.Power.xml code/server/powerserver.h PowerServer)
+
 set_source_files_properties(code/mpris2/org.freedesktop.DBus.Properties.xml PROPERTIES NO_NAMESPACE true)
 qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.freedesktop.DBus.Properties.xml properties_interface)
 
@@ -68,6 +75,9 @@ add_library(${PROJECT_NAME}
     ${caskplugin_ASSETS}
     ${mpris2_SRCS}
     ${caskplugin_QML_QRC}
+
+    ${server_SRCS}
+    ${dbus_SRCS}
     )
 
 generate_export_header(${PROJECT_NAME} BASE_NAME CaskLib)

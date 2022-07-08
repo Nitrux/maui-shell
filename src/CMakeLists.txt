@@ -30,8 +30,3 @@ target_link_libraries(${PROJECT_NAME} MauiKit CaskLib Qt5::Qml Qt5::Quick Qt5::Q
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(DIRECTORY assets/wallpapers/ DESTINATION ${KDE_INSTALL_WALLPAPERDIR}/Cask)
-
-#install(FILES org.kde.pix.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-
-#TODO: port to ecm_install_icons()
-#install(FILES assets/pix.svg DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor/scalable/apps)

@@ -55,6 +55,9 @@
 #include "code/controllers/xdgwindow.h"
 #include "code/controllers/waylandcursorgrabber.h"
 
+#include "code/server/caskserver.h"
+#include "code/server/powerserver.h"
+
 #include "../cask_version.h"
 
 #define ZPACES_URI "Zpaces"
@@ -262,6 +265,12 @@ int main(int argc, char *argv[])
     auto disableSessionManagement = [](QSessionManager &sm) {
         sm.setRestartHint(QSessionManager::RestartNever);
     };
+
+    auto power = CaskServer::instance()->power();
+    QObject::connect(power, &PowerServer::shutdownRequested, [&app]()
+    {
+        app.quit();
+    });
 
     QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
     QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);

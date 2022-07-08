@@ -542,8 +542,8 @@ bool startCaskSession()
     // We want to exit when both ksmserver and plasma-session-shutdown have finished
     // This also closes if ksmserver crashes unexpectedly, as in those cases plasma-shutdown is not running
     //    serviceWatcher.addWatchedService(QStringLiteral("org.kde.KWinWrapper"));
-    //    serviceWatcher.addWatchedService(QStringLiteral("org.kde.Shutdown"));
-    //    serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
+        serviceWatcher.addWatchedService(QStringLiteral("org.cask.Server"));
+        serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
 
     QObject::connect(&serviceWatcher, &QDBusServiceWatcher::serviceUnregistered, [&]() {
         const QStringList watchedServices = serviceWatcher.watchedServices();
