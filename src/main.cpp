@@ -60,6 +60,8 @@
 
 #include "../cask_version.h"
 
+#include <MauiMan/screenmanager.h>
+
 #define ZPACES_URI "Zpaces"
 #define CASK_URI "org.maui.cask"
 
@@ -227,17 +229,15 @@ int main(int argc, char *argv[])
     //    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     // Automatically support HiDPI
-    //    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    if (!qEnvironmentVariableIsSet("PLASMA_USE_QT_SCALING")) {
-        qunsetenv("QT_DEVICE_PIXEL_RATIO");
-        QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
-    } else {
-        QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    }
 
     //    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-    //    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
+    {
+        MauiMan::ScreenManager screenManager;
+        qputenv("QT_SCALE_FACTOR", QByteArray::number(screenManager.scaleFactor()));
+    }
 
     QGuiApplication app(argc, argv);
     app.setOrganizationName(QStringLiteral("Maui"));
@@ -319,10 +319,12 @@ int main(int argc, char *argv[])
     if (parser.isSet(respawnOption))
         setupSignalHandler();
 
-    if (parser.isSet(logFileOption)) {
+    if (parser.isSet(logFileOption))
+    {
         logFilePath = parser.value(logFileOption);
         qInstallMessageHandler(qtMsgLog);
     }
+
     if (parser.isSet(screenOption))
     {
         QStringList scrNames = parser.values(screenOption);
@@ -330,7 +332,8 @@ int main(int argc, char *argv[])
         foreach (QScreen *scr, screens)
             if (scrNames.contains(scr->name(), Qt::CaseInsensitive))
                 keepers << scr;
-        if (keepers.isEmpty()) {
+        if (keepers.isEmpty())
+        {
             qWarning() << "None of the screens" << scrNames << "exist; available screens:";
             foreach (QScreen *scr, screens)
                 qWarning() << "   " << scr->name() << scr->geometry();
@@ -338,12 +341,14 @@ int main(int argc, char *argv[])
         }
         screens = keepers;
     }
+
     if (parser.isSet(windowOption))
         windowed = true;
 
     qreal dpr = highestDPR(screens);
 
-    if (!qEnvironmentVariableIsSet("XCURSOR_SIZE")) {
+    if (!qEnvironmentVariableIsSet("XCURSOR_SIZE"))
+    {
         // QTBUG-67579: we can't have different cursor sizes on different screens
         // or different windows yet, but we can override globally
         int cursorSize = int(32 * dpr);
@@ -356,7 +361,6 @@ int main(int argc, char *argv[])
     qputenv("QT_QPA_PLATFORM", "wayland"); // not for cask but for child processes
     qputenv("GDK_BACKEND", "wayland"); // not for cask but for child processes
     qputenv("MOZ_ENABLE_WAYLAND", "1");
-
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));

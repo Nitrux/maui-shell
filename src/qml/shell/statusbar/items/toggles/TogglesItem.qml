@@ -137,7 +137,7 @@ Cask.PanelItem
                 {
                     icon.name:  "settings-configure"
                     text: i18n("Settings")
-                    onClicked: Cask.MauiMan.invokeManager("background")
+                    onClicked: Cask.MauiMan.invokeManager()
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                 }

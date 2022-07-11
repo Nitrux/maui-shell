@@ -53,7 +53,7 @@ WaylandOutput
     sizeFollowsWindow: true
     availableGeometry : _cask.availableGeometry
 
-//    scaleFactor: 1
+    scaleFactor: Cask.MauiMan.screen.scaleFactor
     //transform: WaylandOutput.Transform180
     readonly property bool isMobile : formFactor === Cask.Env.Phone
 

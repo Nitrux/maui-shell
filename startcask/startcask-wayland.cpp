@@ -105,10 +105,7 @@ int main(int argc, char **argv)
     waitForKonqi();
     out << "startcask-wayland: Shutting down...\n";
 
-    // Keep for KF5; remove in KF6 (KInit will be gone then)
-    runSync(QStringLiteral("kdeinit5_shutdown"), {});
-
-    out << "startplasmacompositor: Shutting down...\n";
+      out << "startplasmacompositor: Shutting down...\n";
     cleanupPlasmaEnvironment(oldSystemdEnvironment);
     out << "startplasmacompositor: Done.\n";
 

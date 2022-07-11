@@ -142,7 +142,7 @@ T.Pane
         {
             text: i18n("Wallpaper")
             icon.name: "insert-image"
-            onTriggered:  Cask.MauiMan.invokeManager("background")
+            onTriggered:  Cask.MauiMan.invokeManager("Background")
         }
 
         MenuItem
