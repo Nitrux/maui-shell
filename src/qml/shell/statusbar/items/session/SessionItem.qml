@@ -92,7 +92,12 @@ Cask.PanelItem
             _zpaces.clearAllSurfaces()
             if(_zpaces.allSurfaces.count === 0)
             {
-                Cask.Server.power.shutdown()
+                switch(_sessioDialog.operation)
+                {
+                case "logout": Cask.Server.power.logout(); break;
+                case "reboot": Cask.Server.power.reboot(); break;
+                case "shutdown": Cask.Server.power.shutdown(); break;
+                }
             }
         }
 

@@ -21,6 +21,7 @@ signals:
     void shutdownRequested();
     void sleepRequested();
 
+    void quit();
 };
 
 #endif // POWERSERVER_H

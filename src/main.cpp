@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
     };
 
     auto power = CaskServer::instance()->power();
-    QObject::connect(power, &PowerServer::shutdownRequested, [&app]()
+    QObject::connect(power, &PowerServer::logoutRequested, [&app]()
     {
         app.quit();
     });
@@ -359,10 +359,6 @@ int main(int argc, char *argv[])
 
     registerTypes();
 
-    qputenv("QT_QPA_PLATFORM", "wayland"); // not for cask but for child processes
-    qputenv("GDK_BACKEND", "wayland"); // not for cask but for child processes
-    qputenv("MOZ_ENABLE_WAYLAND", "1");
-
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -374,6 +370,10 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     qunsetenv("QT_SCALE_FACTOR");
+
+    qputenv("QT_QPA_PLATFORM", "wayland"); // not for cask but for child processes
+    qputenv("GDK_BACKEND", "wayland"); // not for cask but for child processes
+    qputenv("MOZ_ENABLE_WAYLAND", "1");
 
     QObject *root = engine.rootObjects().first();
 

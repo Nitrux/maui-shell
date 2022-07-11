@@ -54,7 +54,15 @@ WaylandOutput
     availableGeometry : _cask.availableGeometry
 
     scaleFactor: Cask.MauiMan.screen.scaleFactor
-    //transform: WaylandOutput.Transform180
+    transform: switch(Cask.MauiMan.screen.orientation)
+               {
+               case 0: return WaylandOutput.TransformNormal
+               case 1: return WaylandOutput.Transform90
+               case 2: return WaylandOutput.Transform180
+               case 3: return WaylandOutput.Transform270
+               case 4: return WaylandOutput.TransformFlipped
+               default: return WaylandOutput.TransformNormal
+               }
     readonly property bool isMobile : formFactor === Cask.Env.Phone
 
     property alias overView:  _swipeView.overviewMode
