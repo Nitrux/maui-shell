@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
     //    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     {
         MauiMan::ScreenManager screenManager;
-        qputenv("QT_SCREEN_SCALE_FACTORS", QByteArray::number(screenManager.scaleFactor()));
+        qputenv("QT_SCALE_FACTOR", QByteArray::number(screenManager.scaleFactor()));
     }
 
     QGuiApplication app(argc, argv);
@@ -372,6 +372,8 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     engine.load(url);
+
+    qunsetenv("QT_SCALE_FACTOR");
 
     QObject *root = engine.rootObjects().first();
 

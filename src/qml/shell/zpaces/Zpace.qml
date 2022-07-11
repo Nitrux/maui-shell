@@ -132,8 +132,6 @@ T.Pane
         }
     }
 
-
-
     Maui.ContextualMenu
     {
         id: _menu
