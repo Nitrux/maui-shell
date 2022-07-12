@@ -89,7 +89,15 @@ WaylandOutput
     window: Window
     {
         id: win
-        contentOrientation: control.orientation
+        contentOrientation: switch(control.orientation)
+                            {
+                            case Qt.PrimaryOrientation: return Qt.PrimaryOrientation
+                            case Qt.PortraitOrientation: return Qt.LandscapeOrientation
+                            case Qt.LandscapeOrientation: return Qt.PortraitOrientation
+                            case Qt.InvertedPortraitOrientation: return Qt.InvertedLandscapeOrientation
+                            case Qt.InvertedLandscapeOrientation: return Qt.InvertedPortraitOrientation
+                            }
+
         readonly property int formFactor :
         {
             if(width > 1500)
@@ -111,7 +119,7 @@ WaylandOutput
                        case Qt.PrimaryOrientation: return 0;
                        case Qt.PortraitOrientation: return 90;
                        case Qt.LandscapeOrientation: return 0;
-                       case Qt.InvertedPortraitOrientation: return -90;
+                       case Qt.InvertedPortraitOrientation: return 270;
                        case Qt.InvertedLandscapeOrientation: return 180;
                        default: return 0;
                        }
