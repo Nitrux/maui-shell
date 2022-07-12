@@ -207,14 +207,14 @@ int main(int argc, char *argv[])
     if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
         qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
 
-    if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
-        qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
+//    if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
+//        qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
 
     if (!qEnvironmentVariableIsSet("QT_LABS_CONTROLS_STYLE"))
         qputenv("QT_LABS_CONTROLS_STYLE", "Universal");
 
-    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
-        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+//    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
+//        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
 
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
         qputenv("QT_QPA_PLATFORMTHEME", "generic");
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
     // ShareOpenGLContexts is needed for using the threaded renderer
     // on NVIDIA EGLStreams and multi output compositors in general
     // (see QTBUG-63039 and QTBUG-87597)
-    //    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+        QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     // Automatically support HiDPI
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -370,7 +370,6 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     qunsetenv("QT_SCALE_FACTOR");
-
     qputenv("QT_QPA_PLATFORM", "wayland"); // not for cask but for child processes
     qputenv("GDK_BACKEND", "wayland"); // not for cask but for child processes
     qputenv("MOZ_ENABLE_WAYLAND", "1");

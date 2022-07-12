@@ -20,7 +20,6 @@ int main(int argc, char **argv)
     QCoreApplication app(argc, argv);
 
     qputenv("QT_QPA_PLATFORM", "eglfs");
-    qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
     qputenv("QT_WAYLAND_CLIENT_BUFFER_INTEGRATION", "wayland-egl");
 
     qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "1");

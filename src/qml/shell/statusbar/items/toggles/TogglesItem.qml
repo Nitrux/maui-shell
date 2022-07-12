@@ -142,6 +142,15 @@ Cask.PanelItem
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                     }
+
+                    ToggleTemplate
+                    {
+                        icon.name:  "screen-rotate-auto-on"
+                        text: i18n("Rotate")
+                        onClicked: Cask.MauiMan.screen.orientation = Cask.MauiMan.screen.orientation === 4 ? 0 :   Cask.MauiMan.screen.orientation+1
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }

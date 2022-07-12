@@ -18,9 +18,8 @@ import org.cask.polkit 1.0 as Polkit
 WaylandCompositor
 {
     id: comp
-    //    retainedSelection: true
+        retainedSelection: true
     //    useHardwareIntegrationExtension: true
-
 
     Screen
     {
@@ -110,13 +109,6 @@ WaylandCompositor
         property string options: "grp:shifts_toggle,compose:ralt,ctrl:nocaps"
         property string rules: ""
         property string model: ""
-    }
-
-    Settings
-    {
-        id: shellSettings
-        category: "Cask"
-        property int scaleFactor :  Screen.devicePixelRatio
     }
 
     function handleShellSurfaceCreated(shellSurface, toplevel)

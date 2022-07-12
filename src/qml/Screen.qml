@@ -54,13 +54,13 @@ WaylandOutput
     availableGeometry : _cask.availableGeometry
 
     scaleFactor: Cask.MauiMan.screen.scaleFactor
-    transform: switch(Cask.MauiMan.screen.orientation)
+    transform: switch(control.orientation)
                {
-               case 0: return WaylandOutput.TransformNormal
-               case 1: return WaylandOutput.Transform90
-               case 2: return WaylandOutput.Transform180
-               case 3: return WaylandOutput.Transform270
-               case 4: return WaylandOutput.TransformFlipped
+               case Qt.PrimaryOrientation: return WaylandOutput.TransformNormal
+               case Qt.PortraitOrientation: return WaylandOutput.Transform90
+               case Qt.LandscapeOrientation: return WaylandOutput.Transform180
+               case Qt.InvertedPortraitOrientation: return WaylandOutput.Transform270
+               case Qt.InvertedLandscapeOrientation: return WaylandOutput.TransformFlipped
                default: return WaylandOutput.TransformNormal
                }
     readonly property bool isMobile : formFactor === Cask.Env.Phone
@@ -71,6 +71,15 @@ WaylandOutput
     property alias zpaces : _zpaces
     property alias dock : _dock
 
+    readonly property int orientation : switch(Cask.MauiMan.screen.orientation)
+                                        {
+                                        case 0: return Qt.PrimaryOrientation
+                                        case 1: return Qt.PortraitOrientation
+                                        case 2: return Qt.LandscapeOrientation
+                                        case 3: return Qt.InvertedPortraitOrientation
+                                        case 4: return Qt.InvertedLandscapeOrientation
+                                        default: return Qt.PrimaryOrientation
+                                        }
     ZP.Zpaces
     {
         id: _zpaces
@@ -80,7 +89,7 @@ WaylandOutput
     window: Window
     {
         id: win
-
+        contentOrientation: control.orientation
         readonly property int formFactor :
         {
             if(width > 1500)
@@ -95,7 +104,56 @@ WaylandOutput
         {
             id: mouseTracker
             objectName: "wmt on " + Screen.name
-            anchors.fill: parent
+            transform: Rotation
+            {
+                angle: switch(control.orientation)
+                       {
+                       case Qt.PrimaryOrientation: return 0;
+                       case Qt.PortraitOrientation: return 90;
+                       case Qt.LandscapeOrientation: return 0;
+                       case Qt.InvertedPortraitOrientation: return -90;
+                       case Qt.InvertedLandscapeOrientation: return 180;
+                       default: return 0;
+                       }
+
+                origin.x: switch(control.orientation)
+                          {
+                          case Qt.PortraitOrientation:
+                              return win.width / 2
+                          case Qt.InvertedPortraitOrientation:
+                              return win.height / 2
+                          case Qt.InvertedLandscapeOrientation:
+                              return win.width/2
+                          }
+
+                origin.y: switch(control.orientation)
+                          {
+                          case Qt.PortraitOrientation:
+                              return win.width / 2
+                          case Qt.InvertedPortraitOrientation:
+                              return win.height / 2
+                          case Qt.InvertedLandscapeOrientation:
+                              return win.height/2
+                          }
+            }
+            width: switch(control.orientation)
+                   {
+                   case Qt.PrimaryOrientation:
+                   case Qt.LandscapeOrientation:
+                   case Qt.InvertedLandscapeOrientation:
+                       return win.width
+                   default: win.height
+                   }
+
+            height: switch(control.orientation)
+                    {
+                    case Qt.PrimaryOrientation:
+                    case Qt.LandscapeOrientation:
+                    case Qt.InvertedLandscapeOrientation:
+                        return win.height
+                    default: win.width
+                    }
+
             // Set this to false to disable the outer mouse cursor when running nested
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
             windowSystemCursorEnabled: false
@@ -205,7 +263,7 @@ WaylandOutput
                                     scale: isMobile ? 1 : _swipeView.scale
                                     moveItem: Item
                                     {
-//                                        parent: control.surfaceArea
+                                        //                                        parent: control.surfaceArea
                                         property bool moving: false
                                         parent: _zpaceContainer
 
@@ -252,7 +310,7 @@ WaylandOutput
 
             // Draws the mouse cursor for a given Wayland seat
             WaylandCursorItem {
-//                inputEventsEnabled: false
+                //                inputEventsEnabled: false
                 id: cursor
                 x: mouseTracker.mouseX
                 y: mouseTracker.mouseY
