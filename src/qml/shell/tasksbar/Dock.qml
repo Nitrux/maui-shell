@@ -101,7 +101,7 @@ Item
             restoreMode: Binding.RestoreBindingOrValue
         }
 
-        x: handler2.active && win.formFactor === Cask.Env.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((control.width/2 ) - (_launcher.width/2));
+        x: handler2.active && win.formFactor === Cask.Env.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((_taskbar.width/2 ) - (_launcher.width/2));
 
     }
 
@@ -122,16 +122,22 @@ Item
             {
                 id: handler2
                 target: null
-                xAxis.enabled : false
-                dragThreshold: 64
+
+                xAxis.enabled :  screen.orientation === Qt.PortraitOrientation ||  screen.orientation === Qt.InvertedPortraitOrientation || screen.orientation === Qt.PrimaryOrientation
+                yAxis.enabled: screen.orientation === Qt.LandscapeOrientation ||  screen.orientation === Qt.InvertedLandscapeOrientation || screen.orientation === Qt.PrimaryOrientation
+
+//                dragThreshold: 64
                 enabled: !_launcher.opened
-                yAxis.minimum: availableGeometry.height
-                yAxis.maximum:  0
+
                 grabPermissions: PointerHandler.CanTakeOverFromAnything
 
                 onActiveChanged:
                 {
-                    const condition = handler2.centroid.scenePressPosition.y -handler2.centroid.scenePosition.y > 200
+                    const scenePressPos = screen.orientation === Qt.PortraitOrientation ? handler2.centroid.scenePressPosition.x : handler2.centroid.scenePressPosition.y
+                    const scenePos = screen.orientation === Qt.PortraitOrientation ? handler2.centroid.scenePosition.x : handler2.centroid.scenePosition.y
+
+                    const condition =  Math.abs(scenePressPos -scenePos)  > 200
+
                     if(!active && condition)
                     {
                         _launcher.open()
@@ -141,6 +147,36 @@ Item
                     }
                 }
             }
+
+            Maui.ShadowedRectangle
+            {
+                visible: control.hidden
+                color: Maui.Theme.backgroundColor
+                opacity: 0.7
+                width: parent.width
+                y: 0-(_taskbar.y + height)
+                height: 20
+
+                corners
+                {
+                    topLeftRadius: _taskbar.radius
+                    topRightRadius: _taskbar.radius
+                }
+
+                HoverHandler
+                {
+                    id: _dockHoverHandler
+                    enabled: !handler.active && control.hidden
+                    acceptedPointerTypes: PointerDevice.GenericPointer
+                    onHoveredChanged:
+                    {
+                        _dockRevealTimer.restart()
+                    }
+                }
+            }
+
+
+
         }
 
         Behavior on y
@@ -158,9 +194,9 @@ Item
             //            dragThreshold: 100
             //            target: _bottomPanelContainer
             margin: 20
-            yAxis.minimum: 0
-            yAxis.maximum: control.height
-            xAxis.enabled : false
+//            yAxis.minimum: 0
+//            yAxis.maximum: control.height
+//            xAxis.enabled : false
             //            grabPermissions: PointerHandler.CanTakeOverFromAnything | PointerHandler.ApprovesTakeOverByHandlersOfSameType
             onActiveChanged:
             {
@@ -174,35 +210,6 @@ Item
             }
         }
     }
-
-    Maui.ShadowedRectangle
-    {
-        visible: control.hidden
-        color: Maui.Theme.backgroundColor
-        opacity: 0.7
-        width: _taskbar.width
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        height: 20
-
-        corners
-        {
-            topLeftRadius: _taskbar.radius
-            topRightRadius: _taskbar.radius
-        }
-
-        HoverHandler
-        {
-            id: _dockHoverHandler
-            enabled: !handler.active && control.hidden
-            acceptedPointerTypes: PointerDevice.GenericPointer
-            onHoveredChanged:
-            {
-                _dockRevealTimer.restart()
-            }
-        }
-    }
-
 
 
     Timer

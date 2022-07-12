@@ -64,19 +64,24 @@ T.Control
         dragThreshold: 20
         enabled: !popup.opened /*&& Maui.Handy.isTouch*/
         target: null
-        yAxis.minimum: 0
-        yAxis.maximum: popup.finalYPos + 10
-        xAxis.enabled : false
+
+//        yAxis.minimum: 0
+//        yAxis.maximum: popup.finalYPos + 10
+        xAxis.enabled :  screen.orientation === Qt.PortraitOrientation ||  screen.orientation === Qt.InvertedPortraitOrientation || screen.orientation === Qt.PrimaryOrientation
+        yAxis.enabled: screen.orientation === Qt.LandscapeOrientation ||  screen.orientation === Qt.InvertedLandscapeOrientation || screen.orientation === Qt.PrimaryOrientation
         grabPermissions: PointerHandler.CanTakeOverFromAnything
         onActiveChanged:
         {
-            console.log(Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y))
+            console.log(Math.abs(handler.centroid.scenePressPosition.y - handler.centroid.scenePosition.y))
             if(active)
             {
                 control.fillPopup()
             }
 
-            if(!active && Math.abs(handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y) > 60)
+            const scenePressPos = screen.orientation === Qt.PortraitOrientation ? handler.centroid.scenePressPosition.x : handler.centroid.scenePressPosition.y
+            const scenePos = screen.orientation === Qt.PortraitOrientation ? handler.centroid.scenePosition.x : handler.centroid.scenePosition.y
+
+            if(!active && Math.abs(scenePressPos -scenePos) > 60)
             {
                 popup.open()
             }else
