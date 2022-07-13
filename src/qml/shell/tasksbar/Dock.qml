@@ -7,12 +7,18 @@ import org.mauikit.controls 1.2 as Maui
 import org.maui.cask 1.0 as Cask
 import QtQuick.Templates 2.15 as T
 
+import QtGraphicalEffects 1.0
+
 Item
 {
     //    color: "purple"
     id: control
-    implicitHeight: _container.implicitHeight
-    property bool hidden : _container.y === height
+
+    implicitHeight: 64+ topPadding+ bottomPadding
+    property int padding: Maui.Style.space.medium
+    property int topPadding: padding
+    property int bottomPadding: padding
+    property bool hidden : _taskbar.y === height
     property bool autohide: false
     property alias launcher : _launcher
 
@@ -32,14 +38,44 @@ Item
         anchors.fill: parent
         color: _launcher.Maui.Theme.backgroundColor
 
-//        Behavior on opacity
-//        {
-//            NumberAnimation
-//            {
-//                duration: Maui.Style.units.shortDuration
-//                easing.type: Easing.OutInQuad
-//            }
-//        }
+        //        Behavior on opacity
+        //        {
+        //            NumberAnimation
+        //            {
+        //                duration: Maui.Style.units.shortDuration
+        //                easing.type: Easing.OutInQuad
+        //            }
+        //        }
+
+
+        Image
+        {
+            id: _img
+            visible: win.formFactor !== Cask.Env.Desktop
+
+            anchors.fill: parent
+            asynchronous: true
+            source: Cask.MauiMan.background.wallpaperSource
+            fillMode: Cask.MauiMan.background.fitWallpaper ? Image.PreserveAspectFit : Image.PreserveAspectCrop
+        }
+
+        FastBlur
+        {
+            id: fastBlur
+            visible: _img.visible
+            anchors.fill: parent
+            source: _img
+            radius: 64
+            transparentBorder: false
+            cached: true
+
+            Rectangle
+            {
+                anchors.fill: parent
+                color: Maui.Theme.backgroundColor
+                opacity: 0.8
+            }
+        }
 
         MouseArea
         {
@@ -93,7 +129,7 @@ Item
         id: _launcher
         visible: handler2.active || opened
         width: Math.min(800, parent.width)
-        height: win.formFactor !== Cask.Env.Desktop ? _cask.avaliableHeight - (control.height - _container.y): Math.min(_cask.avaliableHeight - (control.height - _container.y) , 800)
+        height: win.formFactor !== Cask.Env.Desktop ? _cask.avaliableHeight- (control.height) : Math.min(_cask.avaliableHeight - (control.height) , 800)
 
         Binding on y
         {
@@ -101,32 +137,67 @@ Item
             restoreMode: Binding.RestoreBindingOrValue
         }
 
-        x: handler2.active && win.formFactor === Cask.Env.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((_taskbar.width/2 ) - (_launcher.width/2));
+        x: handler2.active && win.formFactor === Cask.Env.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((control.width/2 ) - (_launcher.width/2));
 
     }
 
-    RowLayout
+    Item
     {
         id: _container
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
+        anchors.margins: control.padding
+
 
         TaskBar
         {
             id: _taskbar
-            Layout.preferredWidth: Math.min(implicitWidth, parent.width -   (Layout.margins*2))
-            Layout.alignment: Qt.AlignCenter
-            Layout.margins: Maui.Style.space.medium
+            width: Math.min(implicitWidth, parent.width)
+            height: parent.height
+            x: parent.width/2 - width/2
+
+
+            Behavior on y
+            {
+                NumberAnimation
+                {
+                    duration: 540
+                    easing.type: Easing.OutBack
+                }
+            }
+
+            DragHandler
+            {
+                id: handler
+                //            dragThreshold: 100
+                //            target: _bottomPanelContainer
+                margin: control.height/2
+                yAxis.minimum: 0
+                yAxis.maximum: control.height
+                xAxis.enabled : screen.orientation === Qt.PortraitOrientation ||  screen.orientation === Qt.InvertedPortraitOrientation || screen.orientation === Qt.PrimaryOrientation
+                yAxis.enabled : screen.orientation === Qt.PortraitOrientation ||  screen.orientation === Qt.InvertedPortraitOrientation || screen.orientation === Qt.PrimaryOrientation
+
+                //            grabPermissions: PointerHandler.CanTakeOverFromAnything | PointerHandler.ApprovesTakeOverByHandlersOfSameType
+                onActiveChanged:
+                {
+                    if(!active && handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y > 60)
+                    {
+                        control.show()
+                    }else
+                    {
+                        control.hide()
+                    }
+                }
+            }
 
             DragHandler
             {
                 id: handler2
                 target: null
 
-                xAxis.enabled :  screen.orientation === Qt.PortraitOrientation ||  screen.orientation === Qt.InvertedPortraitOrientation || screen.orientation === Qt.PrimaryOrientation
+                xAxis.enabled : screen.orientation === Qt.PortraitOrientation ||  screen.orientation === Qt.InvertedPortraitOrientation || screen.orientation === Qt.PrimaryOrientation
                 yAxis.enabled: screen.orientation === Qt.LandscapeOrientation ||  screen.orientation === Qt.InvertedLandscapeOrientation || screen.orientation === Qt.PrimaryOrientation
 
-//                dragThreshold: 64
+                dragThreshold: control.height+10
                 enabled: !_launcher.opened
 
                 grabPermissions: PointerHandler.CanTakeOverFromAnything
@@ -154,7 +225,7 @@ Item
                 color: Maui.Theme.backgroundColor
                 opacity: 0.7
                 width: parent.width
-                y: 0-(_taskbar.y + height)
+                y: 0-(height)
                 height: 20
 
                 corners
@@ -179,36 +250,7 @@ Item
 
         }
 
-        Behavior on y
-        {
-            NumberAnimation
-            {
-                duration: 540
-                easing.type: Easing.OutBack
-            }
-        }
 
-        DragHandler
-        {
-            id: handler
-            //            dragThreshold: 100
-            //            target: _bottomPanelContainer
-            margin: 20
-//            yAxis.minimum: 0
-//            yAxis.maximum: control.height
-//            xAxis.enabled : false
-            //            grabPermissions: PointerHandler.CanTakeOverFromAnything | PointerHandler.ApprovesTakeOverByHandlersOfSameType
-            onActiveChanged:
-            {
-                if(!active && handler.centroid.scenePressPosition.y -handler.centroid.scenePosition.y > 60)
-                {
-                    control.show()
-                }else
-                {
-                    control.hide()
-                }
-            }
-        }
     }
 
 
@@ -241,12 +283,12 @@ Item
 
     function hide()
     {
-        _container.y = height
+        _taskbar.y = height
     }
 
     function show()
     {
-        _container.y = 0
+        _taskbar.y = 0
         _taskbar.forceActiveFocus()
     }
 }

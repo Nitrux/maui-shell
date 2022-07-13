@@ -11,6 +11,7 @@ import QtQuick.Templates 2.15 as T
 T.AbstractButton
 {
     id: control
+    Layout.fillHeight: true
     implicitHeight: 48
     implicitWidth: 48
 

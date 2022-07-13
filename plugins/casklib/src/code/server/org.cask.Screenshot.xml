@@ -1,0 +1,22 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+<interface name="org.cask.Power">
+<method name="restart">
+</method>
+<method name="shutdown">
+</method>
+<method name="logout">
+</method>
+<method name="sleep">
+</method>
+
+<signal name="restartRequested">
+</signal>
+<signal name="shutdownRequested">
+</signal>
+<signal name="logoutRequested">
+</signal>
+<signal name="sleepRequested">
+</signal>
+</interface>
+</node>
