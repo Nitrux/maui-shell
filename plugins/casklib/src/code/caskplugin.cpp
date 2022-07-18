@@ -57,7 +57,10 @@ void CaskPlugin::registerTypes(const char *uri)
         return new MauiManInterface;
     });
 
-    qmlRegisterSingletonInstance<CaskServer>(uri,1,0,"Server", CaskServer::instance());
+    qmlRegisterSingletonType<CaskServer>(uri,1,0, "Server", [](QQmlEngine *, QJSEngine*)
+    {
+        return CaskServer::instance();
+    });
 }
 
 void CaskPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

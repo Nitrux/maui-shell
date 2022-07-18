@@ -37,6 +37,8 @@
 
 #include "debug.h"
 
+#include <CaskServer/caskpower.h>
+
 QTextStream out(stderr);
 
 void sigtermHandler(int signalNumber)
@@ -94,9 +96,11 @@ void gentleTermination(QProcess *p)
     p->terminate();
 
     // Wait longer for a session than a greeter
-    if (!p->waitForFinished(5000)) {
+    if (!p->waitForFinished(5000))
+    {
         p->kill();
-        if (!p->waitForFinished(5000)) {
+        if (!p->waitForFinished(5000))
+        {
             qCWarning(CASK_STARTUP) << "Could not fully finish the process" << p->program();
         }
     }
@@ -536,26 +540,37 @@ bool startCaskSession()
     bool rc = true;
     QEventLoop e;
 
-    QDBusServiceWatcher serviceWatcher;
-    serviceWatcher.setConnection(QDBusConnection::sessionBus());
+//    QDBusServiceWatcher serviceWatcher;
+//    serviceWatcher.setConnection(QDBusConnection::sessionBus());
 
     // We want to exit when both ksmserver and plasma-session-shutdown have finished
     // This also closes if ksmserver crashes unexpectedly, as in those cases plasma-shutdown is not running
     //    serviceWatcher.addWatchedService(QStringLiteral("org.kde.KWinWrapper"));
-        serviceWatcher.addWatchedService(QStringLiteral("org.cask.Server"));
-        serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
+//        serviceWatcher.addWatchedService(QStringLiteral("org.cask.Server"));
+//        serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
 
-    QObject::connect(&serviceWatcher, &QDBusServiceWatcher::serviceUnregistered, [&]() {
-        const QStringList watchedServices = serviceWatcher.watchedServices();
-        bool plasmaSessionRunning = std::any_of(watchedServices.constBegin(), watchedServices.constEnd(), [](const QString &service) {
-            return QDBusConnection::sessionBus().interface()->isServiceRegistered(service);
-        });
-        if (!plasmaSessionRunning) {
-            e.quit();
-        }
+//    QObject::connect(&serviceWatcher, &QDBusServiceWatcher::serviceUnregistered, [&]()
+//    {
+//        const QStringList watchedServices = serviceWatcher.watchedServices();
+
+//        bool plasmaSessionRunning = std::any_of(watchedServices.constBegin(), watchedServices.constEnd(), [](const QString &service) {
+//            return QDBusConnection::sessionBus().interface()->isServiceRegistered(service);
+//        });
+
+//        if (!plasmaSessionRunning)
+//        {
+//            e.quit();
+//        }
+//    });
+
+
+    QScopedPointer<QProcess> startCaskSession;
+    auto power = std::make_unique<CaskPower*>(new CaskPower);
+    QObject::connect(*power, &CaskPower::logoutRequested, [&]()
+    {
+        qDebug() << "(1) REQUEST TO QUIT SESSION";
+        startCaskSession.data()->terminate();
     });
-
-    QScopedPointer<QProcess, KillBeforeDeleter> startCaskSession;
 
     startCaskSession.reset(new QProcess);
     qCDebug(CASK_STARTUP) << "Using classic boot";
@@ -565,19 +580,29 @@ bool startCaskSession()
     caskSessionOptions << QStringLiteral("");
 
     startCaskSession->setProcessChannelMode(QProcess::ForwardedChannels);
-    QObject::connect(startCaskSession.data(), static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), &e, [&rc](int exitCode, QProcess::ExitStatus) {
-        if (exitCode == 255) {
+
+    QObject::connect(startCaskSession.data(), static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), &e, [&rc, &e](int exitCode, QProcess::ExitStatus) {
+
+        if (exitCode == 255)
+        {
             // Startup error
             messageBox(QStringLiteral("startcask: Could not start cask_session. Check your installation.\n"));
             rc = false;
         }
+
+        if(e.isRunning())
+        {
+            e.quit();
+        }
+
     });
 
     startCaskSession->start("cask_session", caskSessionOptions);
 
-
-    if (rc) {
+    if (rc)
+    {
         QObject::connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &e, &QEventLoop::quit);
+
         e.exec();
     }
 

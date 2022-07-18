@@ -142,12 +142,6 @@ Startup::Startup(QObject *parent)
     Q_ASSERT(!s_self);
     s_self = this;
 
-
- //startDetached("cask", {});
-//return;
-//    new StartupAdaptor(this);
-//    QDBusConnection::sessionBus().registerObject(QStringLiteral("/Startup"), QStringLiteral("org.kde.Startup"), this);
-//    QDBusConnection::sessionBus().registerService(QStringLiteral("org.kde.Startup"));
     signal(SIGINT, sigHandler);
 
     const AutoStart autostart;
@@ -179,8 +173,9 @@ Startup::Startup(QObject *parent)
 //        new StartServiceJob(QStringLiteral("kded5"), {}, QStringLiteral("org.kde.kded5"), {}),
 //        new StartServiceJob(QStringLiteral("/usr/lib/org_kde_powerdevil"), {},"", {}),
 
-        new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), ""),
-        new StartServiceJob(QStringLiteral("cask"), {},"", {}),
+        new StartServiceJob(QStringLiteral("CaskServer"), QStringList(), "org.cask.Server"),
+        new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), "org.mauiman.Manager"),
+        new StartServiceJob(QStringLiteral("cask"), {}, "", {}),
 
 //        new StartupPhase0(autostart, this),
 //        phase1 = new StartupPhase1(autostart, this),

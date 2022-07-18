@@ -10,6 +10,7 @@
 #include <QDBusConnection>
 #include <QDBusServiceWatcher>
 #include <signal.h>
+#include <QDebug>
 
 SessionTrack::SessionTrack(const QVector<QProcess *> &processes)
     : m_processes(processes)
@@ -33,12 +34,21 @@ SessionTrack::SessionTrack(const QVector<QProcess *> &processes)
 
 SessionTrack::~SessionTrack()
 {
+    qDebug() << "(2) REQUEST TO QUIT SESSION SUB PROCESSES";
+
     disconnect(this, nullptr, QCoreApplication::instance(), nullptr);
 
-    for (auto process : std::as_const(m_processes)) {
+    for (auto process : std::as_const(m_processes))
+    {
+        qDebug() << "(2) REQUEST TO QUIT SESSION SUB PROCESSES" << process->program();
+
         process->terminate();
     }
-    for (auto process : std::as_const(m_processes)) {
+
+    for (auto process : std::as_const(m_processes))
+    {
+        qDebug() << "(2) REQUEST TO QUIT SESSION SUB PROCESSES" << process->program();
+
         if (process->state() == QProcess::Running && !process->waitForFinished(500)) {
             process->kill();
         } else {

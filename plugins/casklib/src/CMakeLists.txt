@@ -41,13 +41,6 @@ set(mpris2_SRCS
     code/mpris2/playersmodel.cpp
     )
 
-set(server_SRCS
-    code/server/caskserver.cpp
-    code/server/powerserver.cpp
-    )
-
-qt5_add_dbus_adaptor(dbus_SRCS code/server/org.cask.Power.xml code/server/powerserver.h PowerServer)
-
 set_source_files_properties(code/mpris2/org.freedesktop.DBus.Properties.xml PROPERTIES NO_NAMESPACE true)
 qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.freedesktop.DBus.Properties.xml properties_interface)
 
@@ -76,7 +69,6 @@ add_library(${PROJECT_NAME}
     ${mpris2_SRCS}
     ${caskplugin_QML_QRC}
 
-    ${server_SRCS}
     ${dbus_SRCS}
     )
 
@@ -95,6 +87,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     MauiMan::MauiMan
+    CaskServer::CaskServerLib
     MauiKit
     MauiKit::FileBrowsing
     KF5::Service

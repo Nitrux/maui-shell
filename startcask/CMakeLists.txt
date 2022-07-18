@@ -5,6 +5,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     Archive IconThemes UnitConversion ItemModels Init TextEditor)
 
 find_package(KDED CONFIG REQUIRED)
+find_package(CaskServer REQUIRED)
 
 find_package(Fontconfig)
 set_package_properties(Fontconfig PROPERTIES DESCRIPTION "Font access configuration library"
@@ -12,6 +13,7 @@ set_package_properties(Fontconfig PROPERTIES DESCRIPTION "Font access configurat
     TYPE OPTIONAL
     PURPOSE "Needed to build font configuration and installation tools"
     )
+
 if(FONTCONFIG_FOUND)
     # kfontinst
     find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS PrintSupport)
@@ -55,12 +57,11 @@ add_library(startcask OBJECT startcask.cpp ${startcask_SRCS})
 target_link_libraries(startcask PUBLIC
     Qt::Core
     Qt::DBus
+    CaskServer::CaskServerLib
     KF5::ConfigCore
     KF5::Notifications
     KF5::Package
     ${PHONON_LIBRARIES}
-    #PW::KWorkspace
-    #lookandfeelmanager
     )
 
 add_executable(startcask-wayland ${START_CASK_COMMON_SRCS} startcask-wayland.cpp)

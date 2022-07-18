@@ -1,21 +1,16 @@
-#ifndef CASKSERVER_H
-#define CASKSERVER_H
-
+#pragma once
 #include <QObject>
 #include "casklib_export.h"
+#include <CaskServer/caskpower.h>
 
-class PowerServer;
 class CASKLIB_EXPORT CaskServer : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY_MOVE(CaskServer)
 
-    Q_PROPERTY(PowerServer* power READ power CONSTANT FINAL)
+    Q_PROPERTY(CaskPower* power READ power CONSTANT FINAL)
 
 public:
-
-    bool init();
-
     static CaskServer *instance()
     {
         if(!m_instance)
@@ -25,16 +20,15 @@ public:
 
         return m_instance;
     }
-    PowerServer *power();
+    CaskPower *power();
 
 private:
     inline static CaskServer *m_instance = nullptr;
     explicit CaskServer(QObject *parent = nullptr);
 
-    PowerServer *m_power;
+    CaskPower *m_power;
 
 signals:
 
 };
 
-#endif // CASKSERVER_H

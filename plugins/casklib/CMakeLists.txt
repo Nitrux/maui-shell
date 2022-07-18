@@ -73,6 +73,7 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Service KIO)
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
 find_package(MauiMan REQUIRED)
+find_package(CaskServer REQUIRED)
 
 if(QUICK_COMPILER)
     find_package(Qt5QuickCompiler)

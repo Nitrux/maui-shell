@@ -55,8 +55,7 @@
 #include "code/controllers/xdgwindow.h"
 #include "code/controllers/waylandcursorgrabber.h"
 
-#include "code/server/caskserver.h"
-#include "code/server/powerserver.h"
+#include <CaskServer/caskpower.h>
 
 #include "../cask_version.h"
 
@@ -267,11 +266,12 @@ int main(int argc, char *argv[])
         sm.setRestartHint(QSessionManager::RestartNever);
     };
 
-    auto power = CaskServer::instance()->power();
-    QObject::connect(power, &PowerServer::logoutRequested, [&app]()
-    {
-        app.quit();
-    });
+//    auto power = new CaskPower();
+//    QObject::connect(power, &CaskPower::logoutRequested, [&app, power]()
+//    {
+//        power->deleteLater();
+//        app.quit();
+//    });
 
     QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
     QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);
