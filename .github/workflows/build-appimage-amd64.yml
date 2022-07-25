@@ -9,13 +9,20 @@ jobs:
 
     runs-on: ubuntu-20.04
 
+    container:
+      image: ubuntu:focal
+      env:
+        DEBIAN_FRONTEND: noninteractive
+
     env:
           BRANCH_MAUIKIT: master
           BRANCH_MAUIKIT_FILEBROWSING: master
+          BRANCH_MAUIMAN: master
+          BRANCH_CASK_SERVER: master
 
     steps:
       - name: Install basic packages
-        run: sudo apt-get -qy install curl wget
+        run: apt-get update -q && apt-get -qy install sudo && apt-get -qy install curl wget gnupg python3-pip patchelf
 
       - name: Add required repo list
         run: |
@@ -27,8 +34,14 @@ jobs:
       
       - name: Install appimagetool
         run: |
-          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
-          sudo chmod +x /usr/bin/appimagetool
+          wget -qc https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /opt/appimagetool
+          cd /opt/ && \
+          chmod +x appimagetool && \
+          sed -i 's|AI\x02|\x00\x00\x00|' appimagetool && \
+          ./appimagetool --appimage-extract && \
+          mv /opt/squashfs-root /opt/appimagetool.AppDir && \
+          ln -s /opt/appimagetool.AppDir/AppRun /usr/local/bin/appimagetool && \
+          rm /opt/appimagetool
           
       - name: Install AppImage Builder
         run: sudo pip3 install appimage-builder==0.9.2
