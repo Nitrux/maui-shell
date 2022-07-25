@@ -19,6 +19,7 @@ jobs:
           BRANCH_MAUIKIT_FILEBROWSING: master
           BRANCH_MAUIMAN: master
           BRANCH_CASK_SERVER: main
+          BRANCH_MAUI_CALENDAR: main
 
     steps:
       - name: Install basic packages
