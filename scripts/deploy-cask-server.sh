@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CASK_SERVER_VERSION=$([ -z $BRANCH_CASK_SERVER ] && echo "master" || echo $BRANCH_CASK_SERVER)
+CASK_SERVER_VERSION=$([ -z $BRANCH_CASK_SERVER ] && echo "main" || echo $BRANCH_CASK_SERVER)
 
 echo "Cloning Cask Server from branch $CASK_SERVER_VERSION"
 
