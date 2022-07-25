@@ -71,4 +71,8 @@ $APT_COMMAND install -qy --no-install-recommends \
     libpolkit-agent-1-dev \
     libpolkit-qt5-1-dev \
     libfontconfig1-dev \
-    libphonon4qt5-dev
+    libphonon4qt5-dev \
+    libkf5akonadi-dev \
+    libkf5akonadicontact-dev \
+    libkf5akonadicontact-dev \
+    libkf5eventviews-dev
