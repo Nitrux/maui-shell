@@ -22,6 +22,7 @@ DEBIAN_FRONTEND=noninteractive apt -qq update
 ### Install Package Build Dependencies #2
 
 DEBIAN_FRONTEND=noninteractive apt -qq -yy install --no-install-recommends \
+	cask-server-git \
 	mauikit-git \
 	mauikit-filebrowsing-git
 
