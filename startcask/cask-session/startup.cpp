@@ -119,7 +119,7 @@ public:
     {
         qCDebug(CASK_SESSION) << "Phase 2";
         addSubjob(new AutoStartAppsJob(m_autostart, 2));
-        addSubjob(new KDEDInitJob());
+//        addSubjob(new KDEDInitJob());
     }
 };
 
@@ -255,46 +255,6 @@ bool Startup::startDetached(QProcess *process)
 }
 
 Startup *Startup::s_self = nullptr;
-
-KCMInitJob::KCMInitJob()
-    : KJob()
-{
-}
-
-void KCMInitJob::start()
-{
-//    org::kde::KCMInit kcminit(QStringLiteral("org.kde.kcminit"), QStringLiteral("/kcminit"), QDBusConnection::sessionBus());
-//    kcminit.setTimeout(10 * 1000);
-
-//    QDBusPendingReply<void> pending = kcminit.runPhase1();
-//    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pending, this);
-//    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this]() {
-//        emitResult();
-//    });
-//    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QObject::deleteLater);
-}
-
-KDEDInitJob::KDEDInitJob()
-{
-}
-
-void KDEDInitJob::start()
-{
-    qCDebug(CASK_SESSION());
-    org::kde::kded5 kded(QStringLiteral("org.kde.kded5"), QStringLiteral("/kded"), QDBusConnection::sessionBus());
-    auto pending = kded.loadSecondPhase();
-
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pending, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this]() {
-        emitResult();
-    });
-    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QObject::deleteLater);
-}
-
-RestoreSessionJob::RestoreSessionJob()
-    : KJob()
-{
-}
 
 void RestoreSessionJob::start()
 {

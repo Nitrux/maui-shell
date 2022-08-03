@@ -5,7 +5,6 @@ import QtQuick.Templates 2.15 as T
 
 import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
-import org.kde.plasma.core 2.0 as PlasmaCore
 
 import "../../../templates"
 
@@ -94,9 +93,9 @@ Cask.PanelItem
             {
                 switch(_sessioDialog.operation)
                 {
-                case "logout": Cask.Server.power.logout(); break;
-                case "reboot": Cask.Server.power.reboot(); break;
-                case "shutdown": Cask.Server.power.shutdown(); break;
+                case "logout": Cask.Power.logout(); break;
+                case "reboot": Cask.Power.reboot(); break;
+                case "shutdown": Cask.Power.shutdown(); break;
                 }
             }
         }
@@ -190,6 +189,7 @@ Cask.PanelItem
                         icon.name: "system-shutdown"
                         text: i18n("Shutdown")
                         display: parent.display
+                        enabled: Cask.Power.canShutdown
 
                         onClicked:
                         {

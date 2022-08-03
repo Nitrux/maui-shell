@@ -15,6 +15,7 @@
 #include "code/controllers/mauimaninterface.h"
 
 #include "code/server/caskserver.h"
+#include "code/power/powermanager.h"
 
 void CaskPlugin::registerTypes(const char *uri)
 {
@@ -39,6 +40,7 @@ void CaskPlugin::registerTypes(const char *uri)
         Q_UNUSED(scriptEngine)
         return new Enviroment;
     });
+
     qmlRegisterType<WaylandProcessLauncher>(uri, 1, 0, "ProcessLauncher");
 
     qmlRegisterType<AppsModel>(uri, 1, 0, "AppsModel");
@@ -60,7 +62,14 @@ void CaskPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<CaskServer>(uri,1,0, "Server", [](QQmlEngine *, QJSEngine*)
     {
         return CaskServer::instance();
+    });    
+
+
+    qmlRegisterSingletonType<PowerManager>(uri,1,0, "Power", [](QQmlEngine *, QJSEngine*)
+    {
+        return PowerManager::instance();
     });
+
 }
 
 void CaskPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
