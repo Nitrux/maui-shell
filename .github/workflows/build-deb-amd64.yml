@@ -1,0 +1,65 @@
+name: Maui Shell Deb
+
+on:
+  workflow_dispatch:
+    inputs:
+      mauishellBranch:
+        description: 'Maui Shell Branch'
+        required: true
+        type: string
+      packageCloudRepo:
+        description: 'Package Cloud Repo'
+        required: true
+        default: 'testing'
+        type: choice
+        options:
+        - repo
+        - testing
+        - compat
+      packageVersion:
+        description: 'Package Version'
+        required: true
+        type: string
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-20.04
+
+    container:
+      image: ubuntu:focal
+      env:
+        DEBIAN_FRONTEND: noninteractive
+        PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
+    steps:
+      - name: Install basic packages
+        run: apt-get update -q && apt-get -qy install sudo && apt-get -qy install curl wget gnupg python3-pip patchelf build-essential ruby-full
+
+      - name: Install package cloud
+        run: gem install package_cloud
+
+      - name: Add required repo list
+        run: |
+          sudo touch /etc/apt/sources.list.d/neon.list
+          echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
+          curl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D' | sudo apt-key add -
+      
+      - uses: actions/checkout@v2
+      - name: Install build dependencies
+        run: ./scripts/install-build-deps.sh
+
+      - name: Generate deb
+        run: ./scripts/build-deb.sh
+        env:
+          PACKAGE_VERSION: ${{ inputs.packageVersion }}
+          MAUISHELL_BRANCH: ${{ inputs.mauishellBranch }}
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: deb-package
+          path: ./build/*.deb
+          retention-days: 1
+      
+      - name: Upload package to Package Cloud
+        run: package_cloud push nitrux/${{ inputs.packageCloudRepo }}/debian/trixie ./build/*.deb
