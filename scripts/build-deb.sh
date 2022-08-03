@@ -66,11 +66,12 @@ make -j$(nproc)
 checkinstall -D -y \
 	--install=no \
 	--fstrans=yes \
+	--pkgname=maui-shell-git \
 	--pkgversion=$PACKAGE_VERSION \
 	--pkgarch=amd64 \
 	--pkgrelease="1" \
 	--pkglicense=LGPL-3 \
-	--pkggroup=lib \
+	--pkggroup=utils \
 	--pkgsource=maui-shell \
 	--pakdir=. \
 	--maintainer=uri_herrera@nxos.org \
