@@ -88,5 +88,4 @@ $APT_COMMAND install -qy --no-install-recommends \
     qtquickcontrols2-5-dev \
     qtwayland5 \
     qtwayland5-dev-tools \
-    qtwayland5-private-dev \
-    qtwayland5-private-devppstream
+    qtwayland5-private-dev
