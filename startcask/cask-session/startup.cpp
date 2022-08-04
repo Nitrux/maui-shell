@@ -18,10 +18,6 @@
 
 #include <unistd.h>
 
-//#include "kcminit_interface.h"
-#include "kded_interface.h"
-//#include "ksmserver_interface.h"
-
 #include <KCompositeJob>
 #include <KConfig>
 #include <KConfigGroup>
@@ -30,6 +26,8 @@
 #include <KService>
 
 #include <QDBusConnection>
+#include <QDBusConnectionInterface>
+#include <QDBusServiceWatcher>
 #include <QDBusMessage>
 #include <QDBusPendingCall>
 #include <QDir>
@@ -144,7 +142,7 @@ Startup::Startup(QObject *parent)
 
     signal(SIGINT, sigHandler);
 
-    const AutoStart autostart;
+//    const AutoStart autostart;
 
     //for wayland
 //    {
@@ -175,7 +173,7 @@ Startup::Startup(QObject *parent)
 
         new StartServiceJob(QStringLiteral("CaskServer"), QStringList(), "org.cask.Server"),
         new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), "org.mauiman.Manager"),
-        new StartServiceJob(QStringLiteral("cask"), {}, "", {}),
+        new StartServiceJob(QStringLiteral("cask"), QStringList(), ""),
 
 //        new StartupPhase0(autostart, this),
 //        phase1 = new StartupPhase1(autostart, this),
@@ -322,18 +320,23 @@ void StartServiceJob::start()
     env.insert(m_additionalEnv);
     m_process->setProcessEnvironment(env);
 
-    if (!m_serviceId.isEmpty() && QDBusConnection::sessionBus().interface()->isServiceRegistered(m_serviceId)) {
+    if (!m_serviceId.isEmpty() && QDBusConnection::sessionBus().interface()->isServiceRegistered(m_serviceId))
+    {
         qCDebug(CASK_SESSION) << m_process << "already running";
         emitResult();
         return;
     }
+
     qCDebug(CASK_SESSION) << "Starting " << m_process->program() << m_process->arguments();
-    if (!Startup::self()->startDetached(m_process)) {
+
+    if (!Startup::self()->startDetached(m_process))
+    {
         qCWarning(CASK_SESSION) << "error starting process" << m_process->program() << m_process->arguments();
         emitResult();
     }
 
-    if (m_serviceId.isEmpty()) {
+    if (m_serviceId.isEmpty())
+    {
         emitResult();
     }
 }

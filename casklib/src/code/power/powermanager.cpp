@@ -10,6 +10,7 @@
 PowerManager *PowerManager::m_instance = nullptr;
 
 PowerManager::PowerManager(QObject *parent) : QObject(parent)
+//  , m_server(new CaskPower(this))
 {
     m_login1 = new OrgFreedesktopLogin1ManagerInterface(QStringLiteral("org.freedesktop.login1"),
                                                         QStringLiteral("/org/freedesktop/login1"),
@@ -72,32 +73,41 @@ PowerManager::PowerManager(QObject *parent) : QObject(parent)
         }
     });
 
+//    connect(m_server, &CaskPower::logoutRequested, [this]()
+//    {
+//       emit this->logoutRequested();
+//    });
+
+//    connect(m_server, &CaskPower::shutdownRequested, [this]()
+//    {
+//       emit this->shutdownRequested();
+//    });
 }
 
 void PowerManager::shutdown()
 {
+    logout();
     m_login1->PowerOff(true).waitForFinished();
 }
 
-void PowerManager::restart()
+void PowerManager::reboot()
 {
     m_login1->Reboot(true).waitForFinished();
 }
 
-void PowerManager::sleep()
+void PowerManager::suspend()
 {
-
+    m_login1->Suspend(true).waitForFinished();
 }
 
 void PowerManager::hibernate()
 {
-        m_login1->Hibernate(true).waitForFinished();
+    m_login1->Hibernate(true).waitForFinished();
 }
 
 void PowerManager::logout()
 {
-    CaskPower power;
-    power.logout();
+//    m_server->logout();
 }
 
 bool PowerManager::canShutdown()
@@ -105,12 +115,12 @@ bool PowerManager::canShutdown()
     return m_canShutdown;
 }
 
-bool PowerManager::canRestart()
+bool PowerManager::canReboot()
 {
     return m_canReboot;
 }
 
-bool PowerManager::canSleep()
+bool PowerManager::canSuspend()
 {
     return m_canSuspend;
 }
