@@ -173,6 +173,7 @@ Startup::Startup(QObject *parent)
 
         new StartServiceJob(QStringLiteral("CaskServer"), QStringList(), "org.cask.Server"),
         new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), "org.mauiman.Manager"),
+
         new StartServiceJob(QStringLiteral("cask"), QStringList(), ""),
 
 //        new StartupPhase0(autostart, this),

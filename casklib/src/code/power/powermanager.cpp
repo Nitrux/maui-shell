@@ -107,7 +107,8 @@ void PowerManager::hibernate()
 
 void PowerManager::logout()
 {
-//    m_server->logout();
+    m_server->logout();
+    qApp->quit();
 }
 
 bool PowerManager::canShutdown()
