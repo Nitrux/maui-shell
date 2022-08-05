@@ -10,7 +10,7 @@
 PowerManager *PowerManager::m_instance = nullptr;
 
 PowerManager::PowerManager(QObject *parent) : QObject(parent)
-//  , m_server(new CaskPower(this))
+  , m_server(new CaskPower(this))
 {
     m_login1 = new OrgFreedesktopLogin1ManagerInterface(QStringLiteral("org.freedesktop.login1"),
                                                         QStringLiteral("/org/freedesktop/login1"),
@@ -86,7 +86,7 @@ PowerManager::PowerManager(QObject *parent) : QObject(parent)
 
 void PowerManager::shutdown()
 {
-    logout();
+//    logout();
     m_login1->PowerOff(true).waitForFinished();
 }
 
@@ -108,7 +108,7 @@ void PowerManager::hibernate()
 void PowerManager::logout()
 {
     m_server->logout();
-    qApp->quit();
+//    qApp->quit();
 }
 
 bool PowerManager::canShutdown()

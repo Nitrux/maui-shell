@@ -17,7 +17,7 @@ Cask.PanelItem
     {
         target: Cask.Power
         onShutdownRequested: control.shutdown()
-        onLogoutRequested: control.logout()
+//        onLogoutRequested: control.logout()
         onRebootRequested: control.reboot()
     }
 

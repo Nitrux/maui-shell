@@ -40,24 +40,11 @@ SessionTrack::~SessionTrack()
 
     disconnect(this, nullptr, QCoreApplication::instance(), nullptr);
 
+       for (auto process : std::as_const(m_processes)) {
+           process->terminate();
+       }
 
-    for (auto p : std::as_const(m_processes))
-    {
-        qDebug() << "(2) SUB PROCESSES" << p->program();
-    }
-
-    for (auto process : std::as_const(m_processes))
-    {
-        qDebug() << "(2) REQUEST TO TERMINATE SESSION SUB PROCESSES" << process->program();
-
-        process->terminate();
-    }
-
-    for (auto p : std::as_const(m_processes))
-    {
-        qDebug() << "(3) SUB PROCESSES" << p->program();
-    }
-    // copy before the loop as we remove finished processes from the vector
+       // copy before the loop as we remove finished processes from the vector
        const QVector<QProcess *> processesCopy = m_processes;
        for (auto process : processesCopy) {
            if (process->state() == QProcess::Running && !process->waitForFinished(500)) {
@@ -68,10 +55,4 @@ SessionTrack::~SessionTrack()
        }
 
 
-    for (auto p : std::as_const(m_processes))
-    {
-        qDebug() << "(4) SUB PROCESSES" << p->program() ;
-    }
-
-//    qDeleteAll(m_processes);
 }
