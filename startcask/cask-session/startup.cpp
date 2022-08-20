@@ -184,7 +184,8 @@ Startup::Startup(QObject *parent)
 
     qDebug() << "PASHE 0000000";
     KJob *last = nullptr;
-    for (KJob *job : sequence) {
+    for (KJob *job : sequence)
+    {
         if (!job) {
             continue;
         }

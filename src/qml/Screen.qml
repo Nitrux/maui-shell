@@ -196,10 +196,31 @@ WaylandOutput
                     }
                 ]
 
+                Keys.enabled: true
+                Keys.onPressed: (event)=> {
+                        if (event.key == Qt.Key_Left) {
+                            console.log("move left");
+                                        dock.launcher.toggle()
+
+                            event.accepted = true;
+                        }
+
+                                    if((event.key === Qt.Key_Meta))
+                                              {
+                                        console.log("move meta");
+
+                                                    dock.launcher.toggle()
+                                                  event.accepted = true
+                                              }
+                    }
                 Shortcut
                 {
                     sequence: "Meta+A" // maybe not the best one... or maybe we don't need it at all
-                    onActivated: dock.launcher.toggle()
+                    onActivated:
+                    {
+                        console.log("META AAAA")
+                         dock.launcher.toggle()
+                    }
                 }
 
 
