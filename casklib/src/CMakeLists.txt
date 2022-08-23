@@ -119,6 +119,8 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     MauiMan::MauiMan
     CaskServer::CaskServerLib
+    MauiCore::Audio
+    MauiCore::Notifications
     MauiKit
     MauiKit::FileBrowsing
     KF5::Service

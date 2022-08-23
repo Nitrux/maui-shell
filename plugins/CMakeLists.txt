@@ -1,4 +1,3 @@
 
-add_subdirectory(notifications)
-add_subdirectory(power)
+#add_subdirectory(mpris)
 add_subdirectory(polkit)

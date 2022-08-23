@@ -13,9 +13,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml Quick Svg QuickControls2 WaylandCompositor)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Config Service)
+
 find_package(MauiKit)
 find_package(MauiMan)
 find_package(CaskServer)
+find_package(MauiCore REQUIRED COMPONENTS Audio Notifications Power)
 
 include(KDEInstallDirs)
 include(KDECompilerSettings NO_POLICY_SCOPE)

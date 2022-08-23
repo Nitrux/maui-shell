@@ -10,7 +10,7 @@ import org.mauikit.controls 1.3 as Maui
 import Zpaces 1.0 as ZP
 
 import org.maui.cask 1.0 as Cask
-import org.cask.notifications 1.0 as Nof
+import org.mauicore.notifications 1.0 as Nof
 import org.cask.polkit 1.0 as Polkit
 
 //import Liri.XWayland 1.0 as LXW

@@ -10,19 +10,14 @@ import org.cask.polkit 1.0 as Polkit
 
 import QtQuick.Templates 2.15 as T
 
-Maui.Dialog
+Maui.NewDialog
 {
     id: control
     property Polkit.Dialog dialog
 
-    page.margins: Maui.Style.space.big
-    spacing: Maui.Style.space.medium
-    page.headerColorSet: control.Maui.Theme.colorSet
     closeButtonVisible: false
     maxWidth: 400
     hint: 1
-
-    entryField: true
 
     template.iconSource: "unlock"
     title: i18n("Authenticate")

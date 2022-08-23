@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import org.mauikit.controls 1.2 as Maui
 
 import org.maui.cask 1.0 as Cask
-import org.cask.power 1.0 as CaskPower
+import org.mauicore.power 1.0 as CaskPower
 import "../../../templates"
 import org.kde.plasma.private.volume 0.1 as PA
 

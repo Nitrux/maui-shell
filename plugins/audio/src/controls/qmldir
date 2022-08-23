@@ -1,5 +1,0 @@
-module org.cask.audio
-plugin CaskAudio
-classname CaskAudioPlugin
-
-typeinfo plugins.qmltypes

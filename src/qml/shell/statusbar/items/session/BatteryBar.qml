@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import QtQuick.Templates 2.15 as T
-import org.cask.power 1.0 as CaskPower
+import org.mauicore.power 1.0 as CaskPower
 
 import "../../../templates"
 
