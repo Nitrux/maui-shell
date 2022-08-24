@@ -8,8 +8,7 @@ import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 import QtQuick.Templates 2.15 as T
 
-//import org.cask.audio 1.0 as CaskAudio
-import org.kde.plasma.private.volume 0.1 as PA
+import org.mauicore.audio 1.0 as MauiCore
 
 import ".."
 import "../../../../templates" as Template
@@ -17,7 +16,7 @@ import "../../../../templates" as Template
 Template.SliderToggle
 {
     id: control
-    property var defaultSourceValue: defaultSource ? defaultSource.volume / PA.PulseAudio.MaximalVolume * 100.0 : -1
+    property var defaultSourceValue: defaultSource ? defaultSource.volume / MauiCore.PulseAudio.MaximalVolume * 100.0 : -1
     property var defaultSource: paSourceModel.defaultSource
     readonly property bool muted : defaultSource ?  defaultSource.muted : true
 
@@ -39,9 +38,9 @@ Template.SliderToggle
 
     }
 
-    slider.from: PA.PulseAudio.MinimalVolume
-    slider.to: PA.PulseAudio.MaximalVolume
-    slider.stepSize: slider.to / (slider.to / PA.PulseAudio.MaximalVolume * 100.0)
+    slider.from: MauiCore.PulseAudio.MinimalVolume
+    slider.to: MauiCore.PulseAudio.MaximalVolume
+    slider.stepSize: slider.to / (slider.to / MauiCore.PulseAudio.MaximalVolume * 100.0)
 
     slider.value: defaultSource ? defaultSource.volume : 0
     Connections
@@ -58,13 +57,13 @@ Template.SliderToggle
     }
 
     // Input devices
-    PA.SourceModel
+    MauiCore.SourceModel
     {
         id: paSourceModel
     }
 
     // active input devices
-    PA.PulseObjectFilterModel
+    MauiCore.PulseObjectFilterModel
     {
         id: paSourceFilterModel
         sortRole: "SortByDefault"
@@ -73,7 +72,7 @@ Template.SliderToggle
         sourceModel: paSourceModel
     }
 
-    PA.CardModel
+    MauiCore.CardModel
     {
         id: paCardModel
     }

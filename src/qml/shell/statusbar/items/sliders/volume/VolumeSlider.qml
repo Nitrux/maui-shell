@@ -8,8 +8,7 @@ import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 import QtQuick.Templates 2.15 as T
 
-//import org.cask.audio 1.0 as CaskAudio
-import org.kde.plasma.private.volume 0.1 as PA
+import org.mauicore.audio 1.0 as MauiCore
 
 import ".."
 import "../../../../templates" as Template
@@ -17,14 +16,14 @@ import "../../../../templates" as Template
 Template.SliderToggle
 {
     id: control
-    property var defaultSinkValue: defaultSink ? defaultSink.volume / PA.PulseAudio.MaximalVolume * 100.0 : -1
+    property var defaultSinkValue: defaultSink ? defaultSink.volume / MauiCore.PulseAudio.MaximalVolume * 100.0 : -1
     property var defaultSink: paSinkModel.defaultSink
     property bool globalMute: false
     readonly property string dummyOutputName: "auto_null"
     property int wheelDelta: 0
     property int volumePercentStep: 5
     property int currentMaxVolumePercent: 100
-    property int currentMaxVolumeValue: currentMaxVolumePercent * PA.PulseAudio.NormalVolume / 100.00
+    property int currentMaxVolumeValue: currentMaxVolumePercent * MauiCore.PulseAudio.NormalVolume / 100.00
 
     page: VolumePage
     {
@@ -32,9 +31,9 @@ Template.SliderToggle
     }
 
     slider.iconSource: volumeIconName
-    slider.from: PA.PulseAudio.MinimalVolume
-    slider.to: PA.PulseAudio.MaximalVolume
-    slider.stepSize: slider.to / (slider.to / PA.PulseAudio.MaximalVolume * 100.0)
+    slider.from: MauiCore.PulseAudio.MinimalVolume
+    slider.to: MauiCore.PulseAudio.MaximalVolume
+    slider.stepSize: slider.to / (slider.to / MauiCore.PulseAudio.MaximalVolume * 100.0)
     slider.value: defaultSink ? defaultSink.volume : 0
 
     onWheel:
@@ -86,7 +85,7 @@ Template.SliderToggle
             return "audio-volume-high"
     }
 
-    PA.SinkModel
+    MauiCore.SinkModel
     {
         id: paSinkModel
 
@@ -99,16 +98,16 @@ Template.SliderToggle
     }
 
     // Input devices
-    PA.SourceModel
+    MauiCore.SourceModel
     {
         id: paSourceModel
     }
     // Confusingly, Sink Input is what PulseAudio calls streams that send audio to an output device
-    PA.SinkInputModel { id: paSinkInputModel }
+    MauiCore.SinkInputModel { id: paSinkInputModel }
 
     // Confusingly, Source Output is what PulseAudio calls streams that take audio from an input device
-    PA.SourceOutputModel { id: paSourceOutputModel }
-    PA.PulseObjectFilterModel
+    MauiCore.SourceOutputModel { id: paSourceOutputModel }
+    MauiCore.PulseObjectFilterModel
     {
         id: paSinkFilterModel
         sortRole: "SortByDefault"
@@ -118,25 +117,25 @@ Template.SliderToggle
     }
 
     // non-virtual streams going to output devices
-    PA.PulseObjectFilterModel {
+    MauiCore.PulseObjectFilterModel {
         id: paSinkInputFilterModel
         filters: [ { role: "VirtualStream", value: false } ]
         sourceModel: paSinkInputModel
     }
 
     // non-virtual streams coming from input devices
-    PA.PulseObjectFilterModel {
+    MauiCore.PulseObjectFilterModel {
         id: paSourceOutputFilterModel
         filters: [ { role: "VirtualStream", value: false } ]
         sourceModel: paSourceOutputModel
     }
 
-    PA.CardModel
+    MauiCore.CardModel
     {
         id: paCardModel
     }
 
-    PA.VolumeFeedback
+    MauiCore.VolumeFeedback
     {
         id: feedback
     }
@@ -184,7 +183,7 @@ Template.SliderToggle
         const oldVolume = volumeObject.volume;
         const oldPercent = volumePercent(oldVolume);
         const targetPercent = oldPercent + deltaPercent;
-        const newVolume = boundVolume(Math.round(PA.PulseAudio.NormalVolume * (targetPercent/100)));
+        const newVolume = boundVolume(Math.round(MauiCore.PulseAudio.NormalVolume * (targetPercent/100)));
         const newPercent = volumePercent(newVolume);
         volumeObject.muted = newPercent == 0;
         volumeObject.volume = newVolume;
@@ -193,7 +192,7 @@ Template.SliderToggle
 
     function volumePercent(volume)
     {
-        return Math.round(volume / PA.PulseAudio.NormalVolume * 100.0);
+        return Math.round(volume / MauiCore.PulseAudio.NormalVolume * 100.0);
     }
 
     function disableGlobalMute()
@@ -210,7 +209,7 @@ Template.SliderToggle
 
     function boundVolume(volume)
     {
-        return Math.max(PA.PulseAudio.MinimalVolume, Math.min(volume, currentMaxVolumeValue));
+        return Math.max(MauiCore.PulseAudio.MinimalVolume, Math.min(volume, currentMaxVolumeValue));
     }
 
 

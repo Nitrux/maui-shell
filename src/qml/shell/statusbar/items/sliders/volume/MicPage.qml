@@ -5,7 +5,6 @@ import org.mauikit.controls 1.2 as Maui
 
 import org.maui.cask 1.0 as Cask
 import "../../../../templates"
-import org.kde.plasma.private.volume 0.1 as PA
 
 //import org.cask.audio 1.0 as CaskAudio
 
