@@ -7,6 +7,7 @@ script:
   - scripts/install-build-deps.sh
   - mkdir -p build
   - cd build
+  - ../scripts/deploy-mauicore.sh
   - ../scripts/deploy-mauiman.sh
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
@@ -53,6 +54,7 @@ AppDir:
     - libkf5solid5
     - libkf5idletime5
     - libkf5service5
+    - libkf5akonadicalendar5
     - libqt5sql5-sqlite
     - qdbus-qt5
 

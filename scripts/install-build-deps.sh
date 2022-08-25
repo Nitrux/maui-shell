@@ -80,6 +80,8 @@ $APT_COMMAND install -qy --no-install-recommends \
     libwayland-dev \
     libxcb-icccm4-dev \
     libxcb-shape0-dev \
+    libcanberra-dev \
+    libpulse-dev \
     lintian \
     qtbase5-dev \
     qtdeclarative5-dev \
