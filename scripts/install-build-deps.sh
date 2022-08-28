@@ -83,6 +83,7 @@ $APT_COMMAND install -qy --no-install-recommends \
     libcanberra-dev \
     libpulse-dev \
     lintian \
+    pulseaudio \
     qtbase5-dev \
     qtdeclarative5-dev \
     qtmultimedia5-dev \
