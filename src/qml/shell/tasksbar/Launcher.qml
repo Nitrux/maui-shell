@@ -140,6 +140,7 @@ Maui.Page
     {
         anchors.fill: parent
         background:null
+
         StackView
         {
             id: _stackView
@@ -163,7 +164,7 @@ Maui.Page
                     Layout.fillHeight: true
 
                     itemSize: Math.min(150, Math.floor(flickable.width/3))
-                    itemHeight: 172
+                    itemHeight: itemSize
                     model: _allAppsModel.groups
 
                     verticalScrollBarPolicy: ScrollBar.AlwaysOff
@@ -197,9 +198,9 @@ Maui.Page
 
                             template.iconComponent: T.Pane
                             {
+                                padding: Maui.Style.space.small
                                 background: Rectangle
                                 {
-
                                     color: Maui.Theme.alternateBackgroundColor
 
                                     radius: Maui.Style.radiusV
@@ -325,13 +326,14 @@ Maui.Page
             Component
             {
                 id: _appsListComponent
+
                 Maui.GridView
                 {
                     id: _gridView
                     property bool atYBeginning : _gridView.flickable.atYBeginning
 
                     focus: true
-                    itemSize: Math.min(150, Math.floor(flickable.width/3))
+                    itemSize: Math.min(120, Math.floor(flickable.width/3))
                     currentIndex: 0
 
                     holder.visible: _gridView.count === 0
@@ -368,7 +370,7 @@ Maui.Page
 
                         Maui.GridBrowserDelegate
                         {
-                            height: parent.GridView.view.itemHeight- 10
+                            height: parent.GridView.view.itemHeight-10
                             width: parent.GridView.view.itemWidth-10
                             anchors.centerIn: parent
                             highlighted: parent.GridView.isCurrentItem
@@ -381,7 +383,7 @@ Maui.Page
                             label1.text: model.label
 
                             iconSizeHint: 64
-                            template.labelSizeHint: 44
+                            template.labelSizeHint: 40
 
                             onClicked:
                             {

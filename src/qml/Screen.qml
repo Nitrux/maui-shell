@@ -174,18 +174,18 @@ WaylandOutput
             width: switch(control.orientation)
                    {
                    case Qt.LandscapeOrientation:
-                   case Qt.InvertedLandscapeOrientation: return win.height
+                   case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.width : win.height)
                    case Qt.InvertedPortraitOrientation:
-                   case Qt.PortraitOrientation: return win.height
+                   case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation? win.width : win.height)
                    default: return win.width
                    }
 
             height: switch(control.orientation)
                     {
                     case Qt.LandscapeOrientation:
-                    case Qt.InvertedLandscapeOrientation: return win.width
+                    case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.height : win.width)
                     case Qt.InvertedPortraitOrientation:
-                    case Qt.PortraitOrientation: return win.width
+                    case Qt.PortraitOrientation:  return (control.primaryOrientation === Qt.PortraitOrientation? win.height : win.width)
                     default: return win.height
 
                     }
