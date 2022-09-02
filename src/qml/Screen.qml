@@ -42,12 +42,47 @@ import Zpaces 1.0 as ZP
 WaylandOutput
 {
     id: control
-    property variant viewsBySurface: ({})
-    property bool isNestedCompositor: Qt.platform.pluginName.startsWith("wayland") || Qt.platform.pluginName === "xcb"
+
+    readonly property alias formFactor : win.formFactor
+
+    readonly property bool isMobile : formFactor === Cask.Env.Phone
+
+    //Orientations values
+    //Qt.PortraitOrientation => 1
+    //Qt.LandscapeOrientation => 2
+    //Qt.InvertedPortraitOrientation => 4
+    //Qt.InvertedLandscapeOrientation => 8
+    //Qt.PrimaryOrientation => 0
+
+    readonly property int primaryOrientation : Screen.primaryOrientation
+    readonly property int orientation :
+    {
+        //                                            if(Screen.primaryOrientation === Screen.orientation)
+        //                                            {
+        //                                                return Screen.primaryOrientation;
+        //                                            }
+
+        switch(Cask.MauiMan.screen.orientation)
+        {
+        case 0: return Qt.PortraitOrientation // => 1
+        case 1: return Qt.LandscapeOrientation // => 2
+            //                                                case 2: return Qt.InvertedPortraitOrientation
+            //                                                case 3: return Qt.InvertedLandscapeOrientation
+        default: return Qt.PrimaryOrientation
+        }
+    }
+
     property alias surfaceArea: _cask.surface // Chrome instances are parented to compositorArea
     property alias targetScreen: win.screen
-
     property alias cask: _cask
+    property alias overView:  _swipeView.overviewMode
+    property alias workspaces : _swipeView
+    property alias zpaces : _zpaces
+    property alias dock : _dock
+
+    property variant viewsBySurface: ({})
+
+    property bool isNestedCompositor: Qt.platform.pluginName.startsWith("wayland") || Qt.platform.pluginName === "xcb"
     property bool showDesktop : true
 
     sizeFollowsWindow: true
@@ -63,23 +98,8 @@ WaylandOutput
                case Qt.InvertedLandscapeOrientation: return WaylandOutput.TransformFlipped
                default: return WaylandOutput.TransformNormal
                }
-    readonly property bool isMobile : formFactor === Cask.Env.Phone
 
-    property alias overView:  _swipeView.overviewMode
-    readonly property alias formFactor : win.formFactor
-    property alias workspaces : _swipeView
-    property alias zpaces : _zpaces
-    property alias dock : _dock
 
-    readonly property int orientation : switch(Cask.MauiMan.screen.orientation)
-                                        {
-                                        case 0: return Qt.PrimaryOrientation
-                                        case 1: return Qt.PortraitOrientation
-                                        case 2: return Qt.LandscapeOrientation
-                                        case 3: return Qt.InvertedPortraitOrientation
-                                        case 4: return Qt.InvertedLandscapeOrientation
-                                        default: return Qt.PrimaryOrientation
-                                        }
     ZP.Zpaces
     {
         id: _zpaces
@@ -198,55 +218,30 @@ WaylandOutput
 
                 Keys.enabled: true
                 Keys.onPressed: (event)=> {
-                        if (event.key == Qt.Key_Left) {
-                            console.log("move left");
+                                    if (event.key == Qt.Key_Left) {
+                                        console.log("move left");
                                         dock.launcher.toggle()
 
-                            event.accepted = true;
-                        }
+                                        event.accepted = true;
+                                    }
 
                                     if((event.key === Qt.Key_Meta))
-                                              {
+                                    {
                                         console.log("move meta");
 
-                                                    dock.launcher.toggle()
-                                                  event.accepted = true
-                                              }
-                    }
+                                        dock.launcher.toggle()
+                                        event.accepted = true
+                                    }
+                                }
                 Shortcut
                 {
                     sequence: "Meta+A" // maybe not the best one... or maybe we don't need it at all
                     onActivated:
                     {
                         console.log("META AAAA")
-                         dock.launcher.toggle()
+                        dock.launcher.toggle()
                     }
                 }
-
-
-                //                Rectangle
-                //                {
-                //                    color: "orange"
-                //                    height: 64
-                //                    width: 100
-                //                    anchors.horizontalCenter: parent.horizontalCenter
-                //                    anchors.bottom: parent.bottom
-                //                    anchors.bottomMargin: height
-
-                //                    radius: Maui.Style.radiusV
-
-                //                    Label
-                //                    {
-                //                        color: "#333"
-                //                        width: parent.width
-                //                        horizontalAlignment: Qt.AlignHCenter
-                //                        font.bold: true
-                //                        font.pointSize: Maui.Style.fontSizes.big
-                //                        font.weight: Font.Bold
-                //                        anchors.centerIn: parent
-                //                        text: control.surfaceArea.x + " / " + control.surfaceArea.y + " - " + control.surfaceArea.width + " / " + control.surfaceArea.height
-                //                    }
-                //                }
 
                 WorkZpace
                 {
@@ -307,6 +302,31 @@ WaylandOutput
                                 }
                             }
                         }
+                    }
+                }
+
+
+                Rectangle
+                {
+                    color: "orange"
+                    height: 64
+                    width: 100
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: height
+
+                    radius: Maui.Style.radiusV
+
+                    Label
+                    {
+                        color: "#333"
+                        width: parent.width
+                        horizontalAlignment: Qt.AlignHCenter
+                        font.bold: true
+                        font.pointSize: Maui.Style.fontSizes.big
+                        font.weight: Font.Bold
+                        anchors.centerIn: parent
+                        text: control.orientation + " / " + control.primaryOrientation
                     }
                 }
             }

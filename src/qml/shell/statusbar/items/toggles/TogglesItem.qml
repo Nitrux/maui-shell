@@ -147,7 +147,11 @@ Cask.PanelItem
                     {
                         icon.name:  "screen-rotate-auto-on"
                         text: i18n("Rotate")
-                        onClicked: Cask.MauiMan.screen.orientation = Cask.MauiMan.screen.orientation === 4 ? 0 :   Cask.MauiMan.screen.orientation+1
+                        onClicked:
+                        {
+                            Cask.MauiMan.screen.orientation = Cask.MauiMan.screen.orientation === 0 ? 1 : 0
+                        }
+
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                     }
