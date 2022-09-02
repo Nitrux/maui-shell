@@ -92,8 +92,8 @@ WaylandOutput
     transform: switch(control.orientation)
                {
                case Qt.PrimaryOrientation: return WaylandOutput.TransformNormal
-               case Qt.PortraitOrientation: return WaylandOutput.Transform90
-               case Qt.LandscapeOrientation: return WaylandOutput.Transform180
+               case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? WaylandOutput.TransformNormal : WaylandOutput.Transform90)
+               case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? WaylandOutput.TransformNormal : WaylandOutput.Transform90)
                case Qt.InvertedPortraitOrientation: return WaylandOutput.Transform270
                case Qt.InvertedLandscapeOrientation: return WaylandOutput.TransformFlipped
                default: return WaylandOutput.TransformNormal
@@ -137,8 +137,8 @@ WaylandOutput
                 angle: switch(control.orientation)
                        {
                        case Qt.PrimaryOrientation: return 0;
-                       case Qt.PortraitOrientation: return 90;
-                       case Qt.LandscapeOrientation: return 0;
+                       case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? 0 : 90);
+                       case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? 0 : 90);
                        case Qt.InvertedPortraitOrientation: return 270;
                        case Qt.InvertedLandscapeOrientation: return 180;
                        default: return 0;
@@ -146,16 +146,15 @@ WaylandOutput
 
                 origin.x: switch(control.orientation)
                           {
-                          case Qt.PortraitOrientation:
-                              return win.width / 2
-                          case Qt.InvertedPortraitOrientation:
-                              return win.height / 2
-                          case Qt.InvertedLandscapeOrientation:
-                              return win.width/2
+                          case Qt.PrimaryOrientation: return 0;
+                          case Qt.PortraitOrientation: return win.width / 2
+                          case Qt.InvertedPortraitOrientation: return win.height / 2
+                          case Qt.InvertedLandscapeOrientation: return win.width/2
                           }
 
                 origin.y: switch(control.orientation)
                           {
+                          case Qt.PrimaryOrientation: return 0;
                           case Qt.PortraitOrientation:
                               return win.width / 2
                           case Qt.InvertedPortraitOrientation:
@@ -164,22 +163,21 @@ WaylandOutput
                               return win.height/2
                           }
             }
+
             width: switch(control.orientation)
                    {
-                   case Qt.PrimaryOrientation:
                    case Qt.LandscapeOrientation:
-                   case Qt.InvertedLandscapeOrientation:
-                       return win.width
-                   default: win.height
+                   case Qt.InvertedLandscapeOrientation: return win.width
+                   case Qt.InvertedPortraitOrientation:
+                   case Qt.PortraitOrientation: return win.height
                    }
 
             height: switch(control.orientation)
                     {
-                    case Qt.PrimaryOrientation:
                     case Qt.LandscapeOrientation:
-                    case Qt.InvertedLandscapeOrientation:
-                        return win.height
-                    default: win.width
+                    case Qt.InvertedLandscapeOrientation: return win.height
+                    case Qt.InvertedPortraitOrientation:
+                    case Qt.PortraitOrientation: return win.width
                     }
 
             // Set this to false to disable the outer mouse cursor when running nested
@@ -326,7 +324,7 @@ WaylandOutput
                         font.pointSize: Maui.Style.fontSizes.big
                         font.weight: Font.Bold
                         anchors.centerIn: parent
-                        text: control.orientation + " / " + control.primaryOrientation
+                        text: control.orientation + " / " + control.primaryOrientation + " / " + Screen.orientation
                     }
                 }
             }
