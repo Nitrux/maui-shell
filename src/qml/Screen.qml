@@ -55,12 +55,16 @@ WaylandOutput
     //Qt.PrimaryOrientation => 0
 
     readonly property int primaryOrientation : Screen.primaryOrientation
+
+    // mapped values
+    //0 => Qt.PortraitOrientation
+    //1 => Qt.LandscapeOrientation
     readonly property int orientation :
     {
-        //                                            if(Screen.primaryOrientation === Screen.orientation)
-        //                                            {
-        //                                                return Screen.primaryOrientation;
-        //                                            }
+        if(Maui.Handy.isMobile)
+        {
+            return Qt.PrimaryOrientation;
+        }
 
         switch(Cask.MauiMan.screen.orientation)
         {
@@ -170,17 +174,20 @@ WaylandOutput
             width: switch(control.orientation)
                    {
                    case Qt.LandscapeOrientation:
-                   case Qt.InvertedLandscapeOrientation: return win.width
+                   case Qt.InvertedLandscapeOrientation: return win.height
                    case Qt.InvertedPortraitOrientation:
                    case Qt.PortraitOrientation: return win.height
+                   default: return win.width
                    }
 
             height: switch(control.orientation)
                     {
                     case Qt.LandscapeOrientation:
-                    case Qt.InvertedLandscapeOrientation: return win.height
+                    case Qt.InvertedLandscapeOrientation: return win.width
                     case Qt.InvertedPortraitOrientation:
                     case Qt.PortraitOrientation: return win.width
+                    default: return win.height
+
                     }
 
             // Set this to false to disable the outer mouse cursor when running nested
