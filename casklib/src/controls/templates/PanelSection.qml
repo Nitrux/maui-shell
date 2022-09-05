@@ -67,8 +67,8 @@ T.Control
 
 //        yAxis.minimum: 0
 //        yAxis.maximum: popup.finalYPos + 10
-        xAxis.enabled :  screen.orientation === Qt.PortraitOrientation ||  screen.orientation === Qt.InvertedPortraitOrientation || screen.orientation === Qt.PrimaryOrientation
-        yAxis.enabled: screen.orientation === Qt.LandscapeOrientation ||  screen.orientation === Qt.InvertedLandscapeOrientation || screen.orientation === Qt.PrimaryOrientation
+        xAxis.enabled : false
+        yAxis.enabled: true
         grabPermissions: PointerHandler.CanTakeOverFromAnything
         onActiveChanged:
         {
@@ -78,8 +78,8 @@ T.Control
                 control.fillPopup()
             }
 
-            const scenePressPos = screen.orientation === Qt.PortraitOrientation ? handler.centroid.scenePressPosition.x : handler.centroid.scenePressPosition.y
-            const scenePos = screen.orientation === Qt.PortraitOrientation ? handler.centroid.scenePosition.x : handler.centroid.scenePosition.y
+            const scenePressPos = handler.centroid.scenePressPosition.y
+            const scenePos = handler.centroid.scenePosition.y
 
             if(!active && Math.abs(scenePressPos -scenePos) > 60)
             {
@@ -135,8 +135,6 @@ T.Control
             default: return 0;
             }
         }
-
-
     }
 
     data: WheelHandler

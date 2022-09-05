@@ -116,8 +116,8 @@ WaylandOutput
         contentOrientation: switch(control.orientation)
                             {
                             case Qt.PrimaryOrientation: return Qt.PrimaryOrientation
-                            case Qt.PortraitOrientation: return Qt.LandscapeOrientation
-                            case Qt.LandscapeOrientation: return Qt.PortraitOrientation
+                            case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? Qt.LandscapeOrientation : Qt.PortraitOrientation)
+                            case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? Qt.PortraitOrientation : Qt.LandscapeOrientation)
                             case Qt.InvertedPortraitOrientation: return Qt.InvertedLandscapeOrientation
                             case Qt.InvertedLandscapeOrientation: return Qt.InvertedPortraitOrientation
                             }
