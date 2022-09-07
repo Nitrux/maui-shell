@@ -9,6 +9,7 @@
 #include <QWaylandShellSurface>
 
 SurfacesModel::SurfacesModel(QObject *parent) :  QAbstractListModel(parent)
+  ,m_activeWindow(nullptr)
 {
 
 }
@@ -30,6 +31,14 @@ void SurfacesModel::addWindow(AbstractWindow *window)
         this->removeWindow(indexOf(window));
     }, Qt::UniqueConnection);
 
+    connect(window, &AbstractWindow::isActiveChanged, this, [this, window](bool value)
+    {
+        if(value)
+        {
+            this->setActiveWindow(window);
+        }
+    }, Qt::UniqueConnection);
+
     this->beginInsertRows(QModelIndex(), index, index);
     m_windows.append(window);
     this->endInsertRows();
@@ -42,9 +51,16 @@ AbstractWindow* SurfacesModel::popWindow(AbstractWindow *window)
     {
         auto index = indexOf(window);
         this->beginRemoveRows(QModelIndex(), index, index);
-        return m_windows.takeAt(index);
+        auto window =  m_windows.takeAt(index);
         this->endRemoveRows();
         emit this->countChanged();
+        window->disconnect();
+
+        if(window == m_activeWindow)
+        {
+            setActiveWindow(nullptr);
+        }
+        return window;
     }
 
     return nullptr;
@@ -54,11 +70,21 @@ void SurfacesModel::removeWindow(const int &index)
 {
     if(!indexIsValid(index))
         return;
+
 qDebug() << "REMOVING WINDOW FORM MODEL";
+
+if(count() > 1)
+{
+    activateNextWindow();
+}else
+{
+    setActiveWindow(nullptr);
+}
     this->beginRemoveRows(QModelIndex(), index, index);
     auto window = this->m_windows.takeAt(index); //it is autodeleted ?
     this->endRemoveRows();
     emit this->countChanged();
+    window->disconnect();
 }
 
 SurfacesModel::Windows SurfacesModel::windows() const
@@ -100,9 +126,70 @@ bool SurfacesModel::indexIsValid(const int &index) const
     return true;
 }
 
+void SurfacesModel::setActiveWindow(AbstractWindow *window)
+{    
+    if(m_activeWindow == window)
+    {
+        return;
+    }
+
+    m_activeWindow = window;
+    emit this->activeWindowChanged(m_activeWindow);
+
+    m_activeWindowIndex = indexOf(window);
+    emit this->activeWindowIndexChanged(m_activeWindowIndex);
+}
+
 int SurfacesModel::count() const
 {
     return m_windows.count();
+}
+
+AbstractWindow *SurfacesModel::activeWindow() const
+{
+    return m_activeWindow;
+}
+
+int SurfacesModel::activeWindowIndex() const
+{
+    return m_activeWindowIndex;
+}
+
+AbstractWindow *SurfacesModel::getWindow(int index) const
+{
+    if(index> -1 && index < m_windows.count())
+    {
+        return m_windows.at(index);
+    }
+
+    return nullptr;
+}
+
+void SurfacesModel::activateNextWindow()
+{
+    if(m_windows.isEmpty())
+        return;
+
+    if(!m_activeWindow)
+    {
+        m_windows.first()->unminimize();
+        return;
+    }
+
+    const auto index = indexOf(m_activeWindow);
+
+    if(index == -1)
+    {
+        return;
+    }
+
+    if(index == count()-1)
+    {
+        m_windows.first()->unminimize();
+    }else
+    {
+        getWindow(index+1)->unminimize();
+    }
 }
 
 int SurfacesModel::rowCount(const QModelIndex &parent) const

@@ -105,7 +105,6 @@ void XdgWindow::activate()
 
     states << QWaylandXdgToplevel::ActivatedState;
     m_toplevel->sendConfigure(QSize(0,0), states);
-
 }
 
 void XdgWindow::close()
@@ -151,6 +150,11 @@ void XdgWindow::setUpToplevelConnections()
         emit this->appIdChanged();
         emit this->appNameChanged();
         emit this->iconNameChanged();
+    });
+
+    connect(m_toplevel, &QWaylandXdgToplevel::activatedChanged, [this]()
+    {
+       this->setIsActive(m_toplevel->activated());
     });
 
     connect(m_toplevel, &QWaylandXdgToplevel::setMinimized, this, &AbstractWindow::setMinimized);

@@ -25,7 +25,7 @@ T.AbstractButton
 
     background: Rectangle
     {
-        color: control.pressed || control.down || control.checked ? Maui.Theme.highlightColor : (control.highlighted || control.hovered ? Maui.Theme.hoverColor : Maui.Theme.alternateBackgroundColor)
+        color: control.colorize ?  _imgColors.background  : control.pressed || control.down || control.checked ? Maui.Theme.highlightColor : (control.highlighted || control.hovered ? Maui.Theme.hoverColor : Maui.Theme.alternateBackgroundColor)
 
 
 //        opacity: control.checked? 1 : 0.7

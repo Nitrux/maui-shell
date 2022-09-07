@@ -10,6 +10,8 @@ class SurfacesModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged FINAL)
+    Q_PROPERTY(AbstractWindow* activeWindow READ activeWindow NOTIFY activeWindowChanged FINAL)
+    Q_PROPERTY(int activeWindowIndex READ activeWindowIndex NOTIFY activeWindowIndexChanged FINAL)
 
 public:
     typedef QVector<AbstractWindow*> Windows;
@@ -50,14 +52,6 @@ public:
     Windows windows() const;
 
     /**
-     * @brief indexOf
-     * Index of a window in the model
-     * @param window
-     * @return
-     */
-    int indexOf(AbstractWindow *window);
-
-    /**
      * @brief windowExists
      * Checks if a given window exists in the model
      * @param window
@@ -79,6 +73,10 @@ public:
      * @return
      */
     int count() const;
+    
+    AbstractWindow* activeWindow() const;
+
+    int activeWindowIndex() const;
 
 public slots:
     /**
@@ -88,12 +86,31 @@ public slots:
      */
     void removeWindow(const int &index);
 
+
+    /**
+     * @brief indexOf
+     * Index of a window in the model
+     * @param window
+     * @return
+     */
+    int indexOf(AbstractWindow *window);
+    AbstractWindow* getWindow(int index) const;
+
+    void activateNextWindow();
+
 private:
     Windows m_windows;
     bool indexIsValid(const int &index) const;
+    
+    AbstractWindow* m_activeWindow;
+    void setActiveWindow(AbstractWindow * window);
+    
+    int m_activeWindowIndex = -1;
 
 signals:
     void countChanged();
+    void activeWindowChanged(AbstractWindow* activeWindow);
+    void activeWindowIndexChanged(int activeWindowIndex);
 };
 
 #endif // SURFACESMODEL_H

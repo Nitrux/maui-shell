@@ -1,5 +1,16 @@
 #include "abstractwindow.h"
 
+void AbstractWindow::setIsActive(bool value)
+{
+    if(m_isActive == value)
+    {
+        return;
+    }
+
+    m_isActive = value;
+    emit this->isActiveChanged(m_isActive);
+}
+
 AbstractWindow::AbstractWindow() : QObject(nullptr)
 {
 
@@ -56,4 +67,9 @@ bool AbstractWindow::minimized() const
 QQuickItem *AbstractWindow::chrome() const
 {
     return m_chrome;
+}
+
+bool AbstractWindow::isActive() const
+{
+    return m_isActive;
 }

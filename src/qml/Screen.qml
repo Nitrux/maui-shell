@@ -116,7 +116,7 @@ WaylandOutput
         contentOrientation: switch(control.orientation)
                             {
                             case Qt.PrimaryOrientation: return Qt.PrimaryOrientation
-                            case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? Qt.LandscapeOrientation : Qt.PortraitOrientation)
+                            case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? control.orientation : Qt.LandscapeOrientation)
                             case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? Qt.PortraitOrientation : Qt.LandscapeOrientation)
                             case Qt.InvertedPortraitOrientation: return Qt.InvertedLandscapeOrientation
                             case Qt.InvertedLandscapeOrientation: return Qt.InvertedPortraitOrientation
@@ -221,26 +221,89 @@ WaylandOutput
                         id: _overlayNotificationContainer
                         width: Math.min(availableGeometry.width, 300)
                         y: _cask.topPanel.height
+                    },
+
+                    Control
+                    {
+                        id: _tabSwitcher
+                        visible: _switcherTimer.running
+
+                        readonly property int count : _zpaces.allSurfaces.count
+                        padding: Maui.Style.space.medium
+                        anchors.centerIn: parent
+
+                        height: implicitContentHeight + topPadding + bottomPadding
+                        width: implicitContentWidth + leftPadding+ rightPadding
+
+                        background: Rectangle
+                        {
+                            color: Maui.Theme.backgroundColor
+                            radius: Maui.Style.radiusV
+                        }
+
+                        Timer
+                        {
+                            id: _switcherTimer
+                            interval: 1000
+                            repeat: false
+                        }
+
+                        function next()
+                        {
+                            _switcherTimer.restart()
+                            _zpaces.allSurfaces.activateNextWindow()
+                        }
+
+                        contentItem: Row
+                        {
+                            spacing: Maui.Style.space.big
+
+                            Repeater
+                            {
+                                id: _repeater
+                                model:  _zpaces.allSurfaces
+
+                                delegate: DockItem
+                                {
+                                    id: _delegate
+height: 64
+width: 64
+
+                                    checked: xdgWindow.isActive
+                                    property ZP.XdgWindow xdgWindow : model.window
+
+                                        icon.name: _delegate.xdgWindow.iconName
+//                                        iconSizeHint: Maui.Style.iconSizes.huge
+                                        text: xdgWindow.appName || xdgWindow.title
+                                        icon.height: 32
+                                        icon.width: 32
+                                        colorize: true
+
+                                }
+                            }
+                        }
+
                     }
+
                 ]
 
                 Keys.enabled: true
-                Keys.onPressed: (event)=> {
-                                    if (event.key == Qt.Key_Left) {
-                                        console.log("move left");
-                                        dock.launcher.toggle()
+                Keys.onPressed: {
+                    if (event.key == Qt.Key_Left) {
+                        console.log("move left");
+                        dock.launcher.toggle()
 
-                                        event.accepted = true;
-                                    }
+                        event.accepted = true;
+                    }
 
-                                    if((event.key === Qt.Key_Meta))
-                                    {
-                                        console.log("move meta");
+                    if((event.key === Qt.Key_Meta))
+                    {
+                        console.log("move meta");
 
-                                        dock.launcher.toggle()
-                                        event.accepted = true
-                                    }
-                                }
+                        dock.launcher.toggle()
+                        event.accepted = true
+                    }
+                }
                 Shortcut
                 {
                     sequence: "Meta+A" // maybe not the best one... or maybe we don't need it at all
@@ -248,6 +311,16 @@ WaylandOutput
                     {
                         console.log("META AAAA")
                         dock.launcher.toggle()
+                    }
+                }
+
+                Shortcut
+                {
+                    sequence: "Alt+Q" // maybe not the best one... or maybe we don't need it at all
+                    onActivated:
+                    {
+                        console.log("TABBING")
+                        _tabSwitcher.next()
                     }
                 }
 

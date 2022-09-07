@@ -19,10 +19,15 @@ class AbstractWindow : public QObject
     Q_PROPERTY(bool fullscreen READ fullscreen NOTIFY fullscreenChanged)
 
     Q_PROPERTY(QQuickItem* chrome READ chrome WRITE setChrome NOTIFY chromeChanged)
+    
+    Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
+
 
 private:
     bool m_minimized = false;    
     QQuickItem* m_chrome;
+
+    bool m_isActive;
 
 public:
     explicit AbstractWindow();
@@ -39,6 +44,9 @@ public:
     virtual bool fullscreen() const = 0;
 
     QQuickItem* chrome() const;
+
+    bool isActive() const;
+    void setIsActive(bool value);
 
 public slots:
     virtual void close() = 0;
@@ -69,6 +77,7 @@ signals:
     void fullscreenChanged();
     void closed();
     void chromeChanged(QQuickItem* chrome);
+    void isActiveChanged(bool isActive);
 };
 
 #endif // ABSTRACTWINDOW_H

@@ -1,6 +1,6 @@
-import QtQuick 2.12
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.15
 
 import org.mauikit.controls 1.3 as Maui
 
@@ -32,6 +32,7 @@ T.Control
             easing.type: Easing.InOutQuad
         }
     }
+
 
     background: Rectangle
     {
@@ -88,6 +89,7 @@ T.Control
                     readonly property ZP.Task task : model.task
                     readonly property ZP.XdgWindow xdgWindow : task.window
                     colorize: task.window ? task.window.toplevel.activated : false
+
                     icon.height: 32
                     icon.width: 32
 
@@ -183,6 +185,21 @@ T.Control
                 onClicked: _zpaces.insertZpace(0)
             }
         }
+
+
+
+        WheelHandler
+            {
+                onWheel:
+                {
+                    console.log("WHell on dock")
+                   if(event.angleDelta.y > 0)
+                   {
+                       _zpaces.allSurfaces.activateNextWindow()
+                   }
+                }
+            }
+
     }
 
     DropArea

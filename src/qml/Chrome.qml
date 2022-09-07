@@ -33,6 +33,7 @@ Cask.StackableItem
     id: rootChrome
 
     readonly property bool intersects : toplevel ? (y+height > _zpaceContainer.height+20 || formFactor !== Cask.Env.Desktop) && activated : false
+    
     property alias shellSurface: surfaceItem.shellSurface
 
     property bool overviewMode : false
@@ -42,7 +43,6 @@ Cask.StackableItem
     property XdgToplevel toplevel: window.toplevel
     property WaylandSurface surface: xdgSurface.surface
     property WaylandSurface parentSurface: toplevel.parentToplevel.xdgSurface.surface
-
 
     readonly property string appId: window.appId
     readonly property string title: window.title
@@ -69,7 +69,8 @@ Cask.StackableItem
     property rect previousRect
 
     x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
-    y:  surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+    y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
 
@@ -223,6 +224,13 @@ Cask.StackableItem
         border.color: window.maximized ? "transparent" : (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
         color: Maui.Theme.backgroundColor
         visible: rootChrome.decorationVisible
+
+        MouseArea
+        {
+            anchors.fill: parent
+            propagateComposedEvents: false
+            preventStealing: true
+        }
 
         TapHandler
         {
@@ -738,23 +746,23 @@ Cask.StackableItem
 
 
 
-//    Rectangle
-//    {
-//        z: surfaceItem.z + 9999999999
-//        visible: true
-//        border.color: "white"
-//        color: "black"
-//        radius: Maui.Style.radiusV
-//        anchors.centerIn: parent
-//        width: height * 10
-//        height: moveGeometryText.implicitHeight * 1.5
-//        Text {
-//            id: moveGeometryText
-//            color: "white"
-//            anchors.centerIn: parent
-//            //                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
-//            text: rootChrome.y
-//        }
+    Rectangle
+    {
+        z: surfaceItem.z + 9999999999
+        visible: true
+        border.color: "white"
+        color: "black"
+        radius: Maui.Style.radiusV
+        anchors.centerIn: parent
+        width: height * 10
+        height: moveGeometryText.implicitHeight * 1.5
+        Text {
+            id: moveGeometryText
+            color: "white"
+            anchors.centerIn: parent
+            //                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
+            text: rootChrome.window.isActive
+        }
 
-//    }
+    }
 }
