@@ -22,7 +22,6 @@ class AbstractWindow : public QObject
     
     Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
 
-
 private:
     bool m_minimized = false;    
     QQuickItem* m_chrome;

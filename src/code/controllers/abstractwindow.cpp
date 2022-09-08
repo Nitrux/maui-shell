@@ -12,6 +12,7 @@ void AbstractWindow::setIsActive(bool value)
 }
 
 AbstractWindow::AbstractWindow() : QObject(nullptr)
+  ,m_chrome(nullptr)
 {
 
 }

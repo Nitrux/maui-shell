@@ -17,6 +17,8 @@
 #include "code/server/caskserver.h"
 #include "code/power/powermanager.h"
 
+#include <CaskServer/caskscreenshot.h>
+
 void CaskPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType(resolveFileUrl(QStringLiteral("templates/PanelItem.qml")), uri, 1, 0, "PanelItem");
@@ -58,6 +60,8 @@ void CaskPlugin::registerTypes(const char *uri)
         Q_UNUSED(scriptEngine)
         return new MauiManInterface;
     });
+
+    qmlRegisterUncreatableType<CaskScreenshot>(uri, 1, 0, "CaskScreenshot", "Expose CaskScreenshot enum");
 
     qmlRegisterSingletonType<CaskServer>(uri,1,0, "Server", [](QQmlEngine *, QJSEngine*)
     {

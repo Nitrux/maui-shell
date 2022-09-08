@@ -423,7 +423,7 @@ width: 64
             WorkZpaceSwitcher
             {
                 id: _zpaceSwitcher
-                visible: true
+                visible: Maui.Handy.isTouch
 
                 workzpace: _swipeView
                 height: visible ? 16 : 0
@@ -438,6 +438,11 @@ width: 64
                 visible: opened
             }
 
+            ScreenshotArea
+            {
+                anchors.fill: parent
+            }
+
             // Draws the mouse cursor for a given Wayland seat
             WaylandCursorItem {
                 //                inputEventsEnabled: false
@@ -449,7 +454,6 @@ width: 64
             }
         }
     }
-
 
     Component.onDestruction:
     {

@@ -16,39 +16,4 @@ ToggleTemplate
 
     }
 
-    Rectangle
-    {
-        id: _rec
-        visible: control.visible
-        parent: _cask.overlayTopPanel
-        color: "orange"
-        anchors.fill: parent
-        opacity: 0
-
-        PropertyAnimation
-        {
-            id: animation;
-            target: _rec;
-            property: "opacity";
-            to: 90;
-            duration: 500
-
-            onFinished:
-            {
-                _rec.opacity = 0
-                _statusSection.close()
-
-                _cask.grabToImage(function(result) {
-                    result.saveToFile("something-%1.png".arg(new Date().toLocaleTimeString()));
-                });
-            }
-        }
-    }
-
-
-    function grabScreen()
-    {
-        animation.start()
-    }
-
 }

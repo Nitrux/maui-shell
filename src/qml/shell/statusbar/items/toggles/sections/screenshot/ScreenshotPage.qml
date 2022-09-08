@@ -5,8 +5,6 @@ import QtQuick.Layouts 1.12
 import org.mauikit.controls 1.2 as Maui
 
 import org.maui.cask 1.0 as Cask
-import org.kde.bluezqt 1.0 as BluezQt
-import org.kde.plasma.private.bluetooth 1.0 as PlasmaBt
 
 import "../../../../../templates"
 
@@ -34,7 +32,7 @@ StackPage
             onClicked:
             {
                 console.log("take screenshot")
-                 grabScreen()
+                Cask.Server.screenshot.grabCurrentScreen();
             }
         }
 
@@ -46,6 +44,12 @@ StackPage
 
             Layout.fillHeight: true
             Layout.fillWidth: true
+
+            onClicked:
+            {
+                console.log("take screenshot")
+                Cask.Server.screenshot.grabCurrentWindow();
+            }
         }
 
         CardButton

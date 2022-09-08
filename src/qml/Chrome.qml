@@ -206,7 +206,7 @@ Cask.StackableItem
 
     Component.onCompleted:
     {
-        control.window.chrome = control
+        rootChrome.window.chrome = rootChrome
         surfaceItem.forceActiveFocus()
     }
 

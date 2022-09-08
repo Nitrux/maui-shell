@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>wallpapers/maui_shell_dev_bg.png</file>
         <file>mauikit-logo.png</file>
+        <file>sounds/camera-shutter.wav</file>
     </qresource>
 </RCC>
