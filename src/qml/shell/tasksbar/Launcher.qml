@@ -16,6 +16,7 @@ Maui.Page
     id: control
 
     opacity: (y/finalYPos)
+    property bool fullscreenLauncher: true // win.formFactor !== Cask.Env.Desktop
 
     readonly property int finalYPos :  0 - (control.height)
 
@@ -112,7 +113,7 @@ Maui.Page
 
     background: Rectangle
     {
-        visible: win.formFactor === Cask.Env.Desktop
+        visible: !control.fullscreenLauncher
         color: Maui.Theme.backgroundColor
 
         radius: Maui.Style.radiusV
@@ -126,7 +127,7 @@ Maui.Page
             }
         }
 
-        layer.enabled: win.formFactor === Cask.Env.Desktop
+        layer.enabled: !control.fullscreenLauncher
         layer.effect: DropShadow
         {
             horizontalOffset: 0
@@ -139,7 +140,8 @@ Maui.Page
     SwipeView
     {
         anchors.fill: parent
-        background:null
+        background: null
+        padding: Maui.Style.space.medium
 
         StackView
         {

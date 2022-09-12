@@ -1,0 +1,16 @@
+[Global]
+IconName=start-here
+Name=Cask
+
+Comment=Maui Shell Workspace
+DesktopEntry=org.maui.cask.desktop
+
+[Context/operations]
+Name=Workspace information
+
+[Event/fileOperation]
+Name=File Operation
+Comment=Performing a file operation
+Contexts=operations
+Action=Sound|Popup
+Urgency=Low

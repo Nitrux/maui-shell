@@ -37,18 +37,47 @@ T.Container
     background: null
     data: MouseArea
     {
-        id:_overlay
-        opacity:  control.opacity
+        id: _overlay
+        //        opacity:  control.opacity
 
         visible: control.visible
         anchors.fill: parent
-        parent: _cask.overlayTopPanel;
-        propagateComposedEvents: win.formFactor === Cask.Env.Desktop
-        preventStealing: win.formFactor !== Cask.Env.Desktop
-        onPressed:
+        parent: _cask.overlayTopPanel
+        propagateComposedEvents: false
+        preventStealing: true
+        onClicked:
         {
             control.overlayClicked()
-            mouse.accepted = win.formFactor !== Cask.Env.Desktop
+            mouse.accepted = true
+        }
+
+        Loader
+        {
+            active: Maui.Style.enableEffects
+            anchors.fill: parent
+
+            sourceComponent: Item
+            {
+                FastBlur
+                {
+                    anchors.fill: parent
+                    radius: 64
+                    source: _cask.superOverlay
+
+                    layer.enabled: true
+                    layer.effect: Desaturate
+                    {
+                        desaturation: -1.2
+                    }
+                }
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    color: Maui.Theme.backgroundColor
+                    opacity: 0.8
+                }
+            }
         }
 
         Item
@@ -64,14 +93,6 @@ T.Container
 
                 color: Maui.Theme.backgroundColor
 
-                Behavior on opacity
-                {
-                    NumberAnimation
-                    {
-                        duration: Maui.Style.units.longDuration
-                        easing.type: Easing.OutInQuad
-                    }
-                }
 
                 Behavior on color
                 {

@@ -8,7 +8,7 @@ import org.maui.cask 1.0 as Cask
 import Zpaces 1.0 as ZP
 
 import QtQuick.Templates 2.15 as T
-import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.15
 
 import "../templates"
 
@@ -33,12 +33,12 @@ T.Control
         }
     }
 
-
     background: Rectangle
     {
+        id: _bg
         color: Maui.Theme.backgroundColor
         opacity: _dropArea.containsDrag ? 1 : 0.8
-        radius: control.radius
+        radius: control.radius + control.padding
 
         Behavior on color
         {
@@ -49,7 +49,53 @@ T.Control
             }
         }
 
-        layer.enabled: win.formFactor === Cask.Env.Desktop
+        Loader
+        {
+            anchors.fill: parent
+            active: false
+//            active: Maui.Style.enableEffects
+            sourceComponent: Item
+            {
+
+                FastBlur
+                {
+                    anchors.fill: parent
+                    radius: 64
+                    source: ShaderEffectSource
+                    {
+                        live: true
+                        sourceItem: cask.container
+                        sourceRect: _bg.mapToItem(cask.container, Qt.rect(_bg.x, _bg.y, _bg.width, _bg.height))
+                    }
+
+                    layer.enabled: true
+                    layer.effect: Desaturate
+                    {
+                        desaturation: -1.2
+                    }
+                }
+
+                Rectangle
+                {
+                    color: _bg.color
+                    anchors.fill: parent
+                    opacity: 0.6
+                }
+
+                layer.enabled: true
+                layer.effect: OpacityMask
+                {
+                    maskSource: Rectangle
+                    {
+                        width: _bg.width
+                        height: _bg.height
+                        radius: _bg.radius
+                    }
+                }
+            }
+        }
+
+        layer.enabled: win.formFactor === Cask.Env.Desktop && Maui.Style.enableEffects
         layer.effect: DropShadow
         {
             horizontalOffset: 0
@@ -89,6 +135,7 @@ T.Control
                     readonly property ZP.Task task : model.task
                     readonly property ZP.XdgWindow xdgWindow : task.window
                     colorize: task.window ? task.window.toplevel.activated : false
+                    checked: task.window ? task.window.isActive : false
 
                     icon.height: 32
                     icon.width: 32
@@ -156,7 +203,6 @@ T.Control
                         }
                     }
 
-
                     Rectangle
                     {
                         width: task.window ? (task.window.toplevel.activated ? parent.width  : height) : 0
@@ -189,16 +235,16 @@ T.Control
 
 
         WheelHandler
+        {
+            onWheel:
             {
-                onWheel:
+                console.log("WHell on dock")
+                if(event.angleDelta.y > 0)
                 {
-                    console.log("WHell on dock")
-                   if(event.angleDelta.y > 0)
-                   {
-                       _zpaces.allSurfaces.activateNextWindow()
-                   }
+                    _zpaces.allSurfaces.activateNextWindow()
                 }
             }
+        }
 
     }
 

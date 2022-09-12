@@ -7,7 +7,7 @@ import QtWayland.Compositor 1.0
 import QtQuick.Layouts 1.3
 import org.maui.cask 1.0 as Cask
 
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 import Zpaces 1.0 as ZP
 
 Maui.Page
@@ -159,6 +159,13 @@ Maui.Page
                             iconSource: xdgWindow.iconName
                             iconSizeHint: Maui.Style.iconSizes.medium
                             label1.text: xdgWindow.appName
+
+
+
+                            Maui.CloseButton
+                            {
+                                onClicked: xdgWindow.close()
+                            }
                         }
 
                         Item
@@ -216,47 +223,17 @@ Maui.Page
                                 }
                             }
 
-                            Maui.Badge
+                            layer.enabled:true
+                            layer.effect: DropShadow
                             {
-                                parent: _thumbnail
-                                id: _closeButton
-                                color: hovered || pressed ? Maui.Theme.negativeTextColor : Maui.Theme.backgroundColor
-
-                                property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
-
-                                Maui.X
-                                {
-                                    height: Maui.Style.iconSizes.tiny
-                                    width: height
-                                    anchors.centerIn: parent
-                                    color: Maui.Theme.textColor
-                                }
-
-                                border.color: Maui.Theme.textColor
-
-                                anchors
-                                {
-                                    verticalCenter: parent.top
-                                    horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
-                                }
-
-                                z: _itemDelegate.z+999
-                                onClicked:  xdgWindow.close()
+                                transparentBorder: true
+                                horizontalOffset: 0
+                                verticalOffset: 0
+                                radius: 8.0
+                                samples: 17
+                                color: Qt.rgba(0,0,0,0.5)
                             }
-
                         }
-                    }
-
-                    DropShadow
-                    {
-                        transparentBorder: true
-                        anchors.fill: _thumbnail
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        radius: 8.0
-                        samples: 17
-                        color: Qt.rgba(0,0,0,0.5)
-                        source: _thumbnail
                     }
 
                     DragHandler

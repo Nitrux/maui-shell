@@ -6,10 +6,10 @@ import org.mauikit.controls 1.3 as Maui
 Maui.Page
 {
     id: control
-    headerColorSet: control.Maui.Theme.colorSet
     showTitle: true
     padding: 0
     margins: 0
+    headBar.padding: 0
     headBar.background: null
     headBar.farLeftContent: ToolButton
     {

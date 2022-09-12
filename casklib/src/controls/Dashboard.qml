@@ -10,6 +10,9 @@ Item
 {
     id: control
     default property alias content: _content.data
+    readonly property alias container: _content
+    readonly property alias overlayContainer : _overlayContent
+    readonly property alias superOverlay: _superOverlay
     property alias overlayContent : _overlayContent.data
 
     readonly property int avaliableHeight : _content.height - _topPanelContainer.height
@@ -21,8 +24,10 @@ Item
     readonly property alias surface : _content
 
     property alias background : _rec
+
     property alias overlayTopPanel : _overlayTopPanel
     property alias overlay : _overlay
+
     property alias underneathContent : _underneathContent.data
     property alias backgroundColor : _rec.color
     property alias backgroundImage: _img.source
@@ -49,28 +54,34 @@ Item
         }
     }
 
-    Item
-    {
-        id: _underneathContent
-        anchors.fill: parent
-    }
 
     Item
     {
-        id: _content
+        id: _superOverlay
         anchors.fill: parent
-    }
+        Item
+        {
+            id: _underneathContent
+            anchors.fill: parent
+        }
 
-    Item
-    {
-        id: _overlay
-        anchors.fill: parent
-    }
+        Item
+        {
+            id: _content
+            anchors.fill: parent
+        }
 
-    Item
-    {
-        id: _overlayContent
-        anchors.fill: parent
+        Item
+        {
+            id: _overlay
+            anchors.fill: parent
+        }
+
+        Item
+        {
+            id: _overlayContent
+            anchors.fill: parent
+        }
     }
 
     Item

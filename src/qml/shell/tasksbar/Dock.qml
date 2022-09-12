@@ -11,7 +11,6 @@ import QtGraphicalEffects 1.0
 
 Item
 {
-    //    color: "purple"
     id: control
 
     implicitHeight: 64+ topPadding+ bottomPadding
@@ -32,60 +31,50 @@ Item
         id: overlay
         visible: _launcher.visible
         parent: _cask.overlay
-        //        z: control.z+2
-        opacity: formFactor !== Cask.Env.Desktop ? 0.95 : 0.7
+//        opacity: formFactor !== Cask.Env.Desktop ? 0.95 : 0.7
 
         anchors.fill: parent
         color: _launcher.Maui.Theme.backgroundColor
 
-        //        Behavior on opacity
-        //        {
-        //            NumberAnimation
-        //            {
-        //                duration: Maui.Style.units.shortDuration
-        //                easing.type: Easing.OutInQuad
-        //            }
-        //        }
-
-
-        Image
+        Loader
         {
-            id: _img
-            visible: win.formFactor !== Cask.Env.Desktop
-
+            active: Maui.Style.enableEffects
             anchors.fill: parent
-            asynchronous: true
-            source: Cask.MauiMan.background.wallpaperSource
-            fillMode: Cask.MauiMan.background.fitWallpaper ? Image.PreserveAspectFit : Image.PreserveAspectCrop
-        }
 
-        FastBlur
-        {
-            id: fastBlur
-            visible: _img.visible
-            anchors.fill: parent
-            source: _img
-            radius: 64
-            transparentBorder: false
-            cached: true
-
-            Rectangle
+            sourceComponent: Item
             {
-                anchors.fill: parent
-                color: Maui.Theme.backgroundColor
-                opacity: 0.8
+                FastBlur
+                {
+                    anchors.fill: parent
+                    radius: 64
+                    source: _cask.container
+
+                    layer.enabled: true
+                    layer.effect: Desaturate
+                    {
+                        desaturation: -1.2
+                    }
+                }
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    color: overlay.color
+                    opacity: 0.8
+                }
             }
         }
 
         MouseArea
         {
             anchors.fill: parent
-            propagateComposedEvents: win.formFactor === Cask.Env.Desktop
-            preventStealing: win.formFactor !== Cask.Env.Desktop
-            onPressed:
+            propagateComposedEvents: false
+            preventStealing: true
+
+            onClicked:
             {
                 _launcher.close()
-                mouse.accepted = win.formFactor !== Cask.Env.Desktop
+                mouse.accepted = true
             }
         }
     }
@@ -128,8 +117,8 @@ Item
     {
         id: _launcher
         visible: handler2.active || opened
-        width: Math.min(800, parent.width)
-        height: win.formFactor !== Cask.Env.Desktop ? _cask.avaliableHeight- (control.height) : Math.min(_cask.avaliableHeight - (control.height) , 800)
+        width: Math.min(1200, parent.width)
+        height: fullscreenLauncher ? _cask.avaliableHeight- (control.height) : Math.min(_cask.avaliableHeight - (control.height) , 800)
 
         Binding on y
         {
@@ -147,14 +136,12 @@ Item
         anchors.fill: parent
         anchors.margins: control.padding
 
-
         TaskBar
         {
             id: _taskbar
             width: Math.min(implicitWidth, parent.width)
             height: parent.height
             x: parent.width/2 - width/2
-
 
             Behavior on y
             {

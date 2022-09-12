@@ -15,8 +15,7 @@ T.AbstractButton
     implicitHeight: 48
     implicitWidth: 48
 
-    leftPadding: 0
-    rightPadding: 0
+    padding: 0
 
     icon.height: 22
     icon.width: 22
@@ -25,11 +24,12 @@ T.AbstractButton
 
     background: Rectangle
     {
-        color: control.colorize ?  _imgColors.background  : control.pressed || control.down || control.checked ? Maui.Theme.highlightColor : (control.highlighted || control.hovered ? Maui.Theme.hoverColor : Maui.Theme.alternateBackgroundColor)
+        color: control.colorize ?  _imgColors.highlight  : control.pressed || control.down || control.checked ? Maui.Theme.highlightColor : (control.highlighted || control.hovered ? Maui.Theme.hoverColor : Maui.Theme.alternateBackgroundColor)
 
 
-//        opacity: control.checked? 1 : 0.7
+        opacity: control.checked && control.colorize ? 0.7: 1
         radius: 8
+
         Maui.ImageColors
         {
             id: _imgColors
