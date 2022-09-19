@@ -141,6 +141,7 @@ Cask.StackableItem
         {
             rootChrome.visible = false
             window.deactivate()
+            focusTopWindow(1)
         }
 
         function onUnsetMinimized()

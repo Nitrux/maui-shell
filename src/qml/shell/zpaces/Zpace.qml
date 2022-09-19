@@ -131,7 +131,7 @@ T.Pane
 
             onItemRemoved:
             {
-                _content.children[_content.children.length-2].window.activate()
+                control.focusTopWindow(1)
             }
 
             delegate: Chrome
@@ -217,5 +217,15 @@ T.Pane
                 onTriggered: win.about()
             }
         }
+    }
+
+    function focusWindow(index)
+    {
+         _content.children[index].window.activate()
+    }
+
+    function focusTopWindow(index = 0)
+    {
+        focusWindow(_content.children.length - 1 - index)
     }
 }
