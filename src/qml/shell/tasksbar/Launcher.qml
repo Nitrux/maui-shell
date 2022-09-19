@@ -14,6 +14,7 @@ import Qt.labs.platform 1.1 as Labs
 Maui.Page
 {
     id: control
+    objectName: "LauncherPage"
 
     opacity: (y/finalYPos)
     property bool fullscreenLauncher: true // win.formFactor !== Cask.Env.Desktop
@@ -162,6 +163,8 @@ Maui.Page
                 Maui.GridView
                 {
                     id: _categoriesGridView
+                    objectName: "LauncherGrid"
+
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
@@ -568,7 +571,8 @@ Maui.Page
     {
         _launcher.opened = false
         _launcher.y = control.parent.height
-        dock.forceActiveFocus()
+        workspaces.currentItem.forceActiveFocus()
+//        dock.forceActiveFocus()
     }
 
     function open()

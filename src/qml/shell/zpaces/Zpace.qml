@@ -11,18 +11,35 @@ import Zpaces 1.0 as ZP
 
 import QtGraphicalEffects 1.0
 
+import "../.."
+
 T.Pane
 {
     id: control
+
     property ZP.Zpace zpace
+//    focusPolicy: Qt.NoFocus
 
     default property alias content: _content.data
+    property alias container: _content
+
     property int radius: Maui.Style.radiusV
     property bool overviewMode : false
     property alias backgroundImage : _img.source
     property alias backgroundFillMode : _img.fillMode
     property alias backgroundVisible: _backgroundOverlay.visible
-    readonly property bool rise : _dropArea.containsDrag
+
+    topPadding: cask.topPanel.height
+    bottomPadding: formFactor === Cask.Env.Desktop ? dock.height : 0
+    leftPadding: 0
+    rightPadding: 0
+
+    clip: false
+
+    Component.onCompleted:
+    {
+        control.zpace.control = control.container
+    }
 
     Behavior on radius
     {
@@ -42,7 +59,7 @@ T.Pane
             enabled: !overviewMode
             acceptedButtons: Qt.RightButton
             anchors.fill: parent
-            propagateComposedEvents: true
+            propagateComposedEvents: false
             preventStealing: false
             onClicked:
             {
@@ -107,12 +124,40 @@ T.Pane
 
     contentItem : Item
     {
-        id: _container
+        data: Repeater
+        {
+            id: _repeater
+            model: zpace.windows
+
+            onItemRemoved:
+            {
+                _content.children[_content.children.length-2].window.activate()
+            }
+
+            delegate: Chrome
+            {
+                parent: _content
+                id: _chromeDelegate
+                overviewMode: control.overviewMode
+                shellSurface: model.window.shellSurface
+                window: model.window
+                scale: isMobile ? 1 : _swipeView.scale
+                moveItem: Item
+                {
+                    objectName: "moveItem"
+                    property bool moving: false
+                    parent: control
+                    height: _chromeDelegate.height
+                    width: _chromeDelegate.width
+                }
+            }
+        }
 
         Item
         {
             id: _content
             anchors.fill: parent
+            objectName: control.objectName
         }
 
         TapHandler
@@ -127,50 +172,50 @@ T.Pane
 
                 _swipeView.currentIndex = index
                 _swipeView.closeOverview()
-
             }
         }
-    }
 
-    Maui.ContextualMenu
-    {
-        id: _menu
-
-        MenuItem
+        Label
         {
-            text: i18n("Wallpaper")
-            icon.name: "insert-image"
-            onTriggered:  Cask.MauiMan.invokeManager("Background")
-        }
-
-        MenuItem
-        {
-            text: i18n("Widgets")
-            icon.name: "draw-cuboid"
-        }
-
-        MenuSeparator {}
-
-        MenuItem
-        {
-            text: i18n("About")
-            onTriggered: win.about()
-        }
-    }
-
-    DropArea
-    {
-        id: _dropArea
-
-        anchors.fill: parent
-        onDropped:
-        {
-            if(drop.urls)
+            anchors.centerIn: parent
+            color: "pink"
+            font.bold: true
+            text:
             {
-                control.zpace.wallpaper = drop.urls[0]
-                Cask.MauiMan.background.wallpaperSource = drop.urls[0]
+                var res = ""
+                for(var i = 0; i< _content.children.length; i++)
+                {
+                res+= _content.children[i]+ " / " + _content.children[i].objectName+"\n"
+                }
+
+                return res
+            }
+        }
+
+        Maui.ContextualMenu
+        {
+            id: _menu
+
+            MenuItem
+            {
+                text: i18n("Wallpaper")
+                icon.name: "insert-image"
+                onTriggered:  Cask.MauiMan.invokeManager("Background")
+            }
+
+            MenuItem
+            {
+                text: i18n("Widgets")
+                icon.name: "draw-cuboid"
+            }
+
+            MenuSeparator {}
+
+            MenuItem
+            {
+                text: i18n("About")
+                onTriggered: win.about()
             }
         }
     }
-
 }

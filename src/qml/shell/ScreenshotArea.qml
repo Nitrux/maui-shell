@@ -25,46 +25,47 @@ Item
         {
             id: _animation
 
-OpacityAnimator
-{
-    target: _color
-    from: 0.4
-    to:0
-}
-        SequentialAnimation
-        {
-
+            OpacityAnimator
+            {
+                target: _color
+                from: 0.4
+                to:0
+            }
             SequentialAnimation
             {
-                ScaleAnimator
-                {
-                    target: _color
-                    from: 1
-                    to: 0.95
-                    duration: 50
 
-                    easing.type :Easing.OutQuad
-                }
-
-                ScaleAnimator
+                SequentialAnimation
                 {
-                    target: _color
-                    from: 0.95
-                    to: 1
-                    duration: 50
-                    easing.type :Easing.InOutQuad
+                    ScaleAnimator
+                    {
+                        target: _color
+                        from: 1
+                        to: 0.95
+                        duration: 50
+
+                        easing.type :Easing.OutQuad
+                    }
+
+                    ScaleAnimator
+                    {
+                        target: _color
+                        from: 0.95
+                        to: 1
+                        duration: 50
+                        easing.type :Easing.InOutQuad
+                    }
                 }
             }
-        }
 
-        onFinished:
-        {
-            _color.opacity = 0.4
-        }
+            onFinished:
+            {
+                _color.opacity = 0.4
+            }
         }
     }
 
-    SoundEffect {
+    SoundEffect
+    {
         id: playSound
         source: "qrc:/sounds/camera-shutter.wav"
     }
@@ -93,6 +94,7 @@ OpacityAnimator
     function grabCurrentScreen(id : string)
     {
         _cask.grabToImage(function(result) {
+//            Cask.Server.screenshot.setScreenshotReady(result.url, id)
             result.saveToFile("something-%1.png".arg(new Date().toLocaleTimeString()));
         });
         control.animate()

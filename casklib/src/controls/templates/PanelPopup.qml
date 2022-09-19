@@ -27,6 +27,8 @@ T.Container
     property bool opened : false
     property int alignment: Qt.AlignCenter
 
+    property bool displayOverlay : win.formFactor !== Cask.Env.Desktop
+
     signal overlayClicked()
     //        signal opened()
     signal closed()
@@ -38,22 +40,33 @@ T.Container
     data: MouseArea
     {
         id: _overlay
-        //        opacity:  control.opacity
-
         visible: control.visible
+
         anchors.fill: parent
+
         parent: _cask.overlayTopPanel
-        propagateComposedEvents: false
-        preventStealing: true
+
+        propagateComposedEvents: !control.displayOverlay
+        preventStealing: control.displayOverlay
+
         onClicked:
         {
             control.overlayClicked()
             mouse.accepted = true
         }
 
+        onPressed:
+        {
+            if(!control.displayOverlay)
+            {
+                control.overlayClicked()
+                mouse.accepted = false
+            }
+        }
+
         Loader
         {
-            active: Maui.Style.enableEffects
+            active: Maui.Style.enableEffects && control.displayOverlay
             anchors.fill: parent
 
             sourceComponent: Item
@@ -70,40 +83,27 @@ T.Container
                         desaturation: -1.2
                     }
                 }
-
-                Rectangle
-                {
-                    anchors.fill: parent
-                    color: Maui.Theme.backgroundColor
-                    opacity: 0.8
-                }
             }
         }
 
-        Item
+        Rectangle
         {
-            visible: win.formFactor !== Cask.Env.Desktop
+            visible: control.displayOverlay
+            opacity: Math.min(0.7, (control.height/(availableGeometry.height* 0.7)))
+
             anchors.fill: parent
+            color: Maui.Theme.backgroundColor
 
-            Rectangle
+            Behavior on color
             {
-                opacity: Math.min(0.7, (control.height/(availableGeometry.height* 0.7)))
-
-                anchors.fill: parent
-
-                color: Maui.Theme.backgroundColor
-
-
-                Behavior on color
+                ColorAnimation
                 {
-                    ColorAnimation
-                    {
-                        easing.type: Easing.InQuad
-                        duration: Maui.Style.units.shortDuration
-                    }
+                    easing.type: Easing.InQuad
+                    duration: Maui.Style.units.shortDuration
                 }
             }
         }
+
     }
 
     contentItem: ListView

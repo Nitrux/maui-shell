@@ -14,6 +14,7 @@ ListView
 {
     id: control
     property real overviewScale : 1
+//    focusPolicy: Qt.NoFocus
 
     property bool overviewMode : false
     clip: false

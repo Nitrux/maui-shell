@@ -7,7 +7,8 @@
 #include <QDebug>
 
 Zpace::Zpace(ZpacesModel *parent) : QObject(nullptr)
-  , m_windowsModel( new SurfacesModel(this))
+  , m_windowsModel(new SurfacesModel(this))
+  , m_control(nullptr)
   , m_zpacesModelRoot(parent)
   , m_zpacesRoot(m_zpacesModelRoot->zpacesRoot())
 {
@@ -85,6 +86,15 @@ void Zpace::setLimit(int limit)
     emit limitChanged(m_limit);
 }
 
+void Zpace::setControl(QQuickItem *control)
+{
+    if (m_control == control)
+        return;
+
+    m_control = control;
+    emit controlChanged(m_control);
+}
+
 void Zpace::setConstrains()
 {
     switch(m_zpacesRoot->zmode())
@@ -95,8 +105,6 @@ void Zpace::setConstrains()
     case Zpaces::ZMode::TVMode: return setLimit(1);
     }
 }
-
-
 
 const QString &Zpace::wallpaper() const
 {
@@ -122,4 +130,9 @@ void Zpace::setTitle(const QString &newTitle)
         return;
     m_title = newTitle;
     emit titleChanged();
+}
+
+QQuickItem *Zpace::control() const
+{
+    return m_control;
 }

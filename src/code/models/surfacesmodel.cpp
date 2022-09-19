@@ -8,8 +8,18 @@
 
 #include <QWaylandShellSurface>
 
-SurfacesModel::SurfacesModel(QObject *parent) :  QAbstractListModel(parent)
+#include "code/controllers/zpace.h"
+
+SurfacesModel::SurfacesModel(Zpace *zpace) :  QAbstractListModel(zpace)
+  ,m_zpace(zpace)
   ,m_activeWindow(nullptr)
+{
+
+}
+
+SurfacesModel::SurfacesModel(QObject *parent) : QAbstractListModel(parent)
+,m_zpace(nullptr)
+,m_activeWindow(nullptr)
 {
 
 }
@@ -29,7 +39,7 @@ void SurfacesModel::addWindow(AbstractWindow *window)
     connect(window, &AbstractWindow::destroyed, this, [this, window]()
     {
         this->removeWindow(indexOf(window));
-    }, Qt::UniqueConnection);
+    });
 
     connect(window, &AbstractWindow::isActiveChanged, this, [this, window](bool value)
     {
@@ -37,7 +47,7 @@ void SurfacesModel::addWindow(AbstractWindow *window)
         {
             this->setActiveWindow(window);
         }
-    }, Qt::UniqueConnection);
+    });
 
     this->beginInsertRows(QModelIndex(), index, index);
     m_windows.append(window);
@@ -73,18 +83,29 @@ void SurfacesModel::removeWindow(const int &index)
 
 qDebug() << "REMOVING WINDOW FORM MODEL";
 
-if(count() > 1)
-{
-    activateNextWindow();
-}else
-{
-    setActiveWindow(nullptr);
-}
+//if(count() > 1)
+//{
+//    if(auto control = m_zpace->control())
+//    {
+//       auto chrome = control->childItems().at(control->childItems().count()-2);
+//       if(chrome)
+//       auto window = chrome->property("window").value<XdgWindow*>();
+//       window->activate();
+//    }
+
+
+//}else
+//{
+//    setActiveWindow(nullptr);
+//}
     this->beginRemoveRows(QModelIndex(), index, index);
     auto window = this->m_windows.takeAt(index); //it is autodeleted ?
     this->endRemoveRows();
-    emit this->countChanged();
-    window->disconnect();
+    Q_EMIT this->countChanged();
+//    window->disconnect();
+    window->deleteLater();
+    qDebug() << "REMOVING WINDOW FORM MODEL" << this->count();
+
 }
 
 SurfacesModel::Windows SurfacesModel::windows() const

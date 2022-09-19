@@ -113,6 +113,7 @@ WaylandOutput
     window: Window
     {
         id: win
+            onActiveFocusItemChanged: print("activeFocusItem", activeFocusItem)
         contentOrientation: switch(control.orientation)
                             {
                             case Qt.PrimaryOrientation: return Qt.PrimaryOrientation
@@ -223,68 +224,15 @@ WaylandOutput
                         y: _cask.topPanel.height
                     },
 
-                    Control
+                    OSDArea
                     {
-                        id: _tabSwitcher
-                        visible: _switcherTimer.running
-
-                        readonly property int count : _zpaces.allSurfaces.count
-                        padding: Maui.Style.space.medium
-                        anchors.centerIn: parent
-
-                        height: implicitContentHeight + topPadding + bottomPadding
-                        width: implicitContentWidth + leftPadding+ rightPadding
-
-                        background: Rectangle
-                        {
-                            color: Maui.Theme.backgroundColor
-                            radius: Maui.Style.radiusV
-                        }
-
-                        Timer
-                        {
-                            id: _switcherTimer
-                            interval: 1000
-                            repeat: false
-                        }
-
-                        function next()
-                        {
-                            _switcherTimer.restart()
-                            _zpaces.allSurfaces.activateNextWindow()
-                        }
-
-                        contentItem: Row
-                        {
-                            spacing: Maui.Style.space.big
-
-                            Repeater
-                            {
-                                id: _repeater
-                                model:  _zpaces.allSurfaces
-
-                                delegate: DockItem
-                                {
-                                    id: _delegate
-height: 64
-width: 64
-
-                                    checked: xdgWindow.isActive
-                                    property ZP.XdgWindow xdgWindow : model.window
-
-                                        icon.name: _delegate.xdgWindow.iconName
-//                                        iconSizeHint: Maui.Style.iconSizes.huge
-                                        text: xdgWindow.appName || xdgWindow.title
-                                        icon.height: 32
-                                        icon.width: 32
-                                        colorize: true
-
-                                }
-                            }
-                        }
-
+                        id: _osdArea
+                        anchors.topMargin: _cask.topPanel.height
+                        anchors.top: parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: 600
+                        height: implicitHeight
                     }
-
                 ]
 
                 Keys.enabled: true
@@ -304,6 +252,7 @@ width: 64
                         event.accepted = true
                     }
                 }
+
                 Shortcut
                 {
                     sequence: "Meta+A" // maybe not the best one... or maybe we don't need it at all
@@ -320,7 +269,7 @@ width: 64
                     onActivated:
                     {
                         console.log("TABBING")
-                        _tabSwitcher.next()
+                        _zpaces.allSurfaces.activateNextWindow()
                     }
                 }
 
@@ -334,58 +283,27 @@ width: 64
 
                     delegate: Zpace
                     {
-                        //                        scale: ListView.view.overviewScale
+                        id: _zpaceDelegate
+                        objectName: "Zpace-"+index
+
                         height: ListView.view.height
                         width: ListView.view.width
                         radius: ListView.view.overviewScale === 1 ? 0 : Maui.Style.radiusV
-                        clip: false
+
                         backgroundVisible: Cask.MauiMan.background.showWallpaper
                         backgroundImage: Cask.MauiMan.background.wallpaperSource
                         backgroundFillMode: Cask.MauiMan.background.fitWallpaper ? Image.PreserveAspectFit : Image.PreserveAspectCrop
-                        overviewMode: overView
+
+                        overviewMode: control.overView
+
                         zpace : model.Zpace
-                        topPadding: _cask.topPanel.height
-                        bottomPadding: formFactor === Cask.Env.Desktop ? _dock.height : 0
-                        leftPadding: 0
-                        rightPadding: 0
 
-                        Item
+                        function forceActiveFocus()
                         {
-                            id: _zpaceContainer
-                            anchors.fill: parent
-
-                            Repeater
-                            {
-                                model: zpace.windows
-
-                                delegate: Chrome
-                                {
-                                    id: _chromeDelegate
-                                    parent: control.viewsBySurface[model.window.shellSurface.parentSurface] || _zpaceContainer
-                                    overviewMode: overView
-                                    shellSurface: model.window.shellSurface
-                                    window: model.window
-                                    scale: isMobile ? 1 : _swipeView.scale
-                                    moveItem: Item
-                                    {
-                                        //                                        parent: control.surfaceArea
-                                        property bool moving: false
-                                        parent: _zpaceContainer
-
-                                        height: _chromeDelegate.surface.height
-                                        width: _chromeDelegate.surface.width
-                                    }
-
-                                    Component.onCompleted:
-                                    {
-                                        control.viewsBySurface[shellSurface.surface] = _chromeDelegate
-                                    }
-                                }
-                            }
+                            _zpaceDelegate.zpace.windows.currentWindow.activate()
                         }
                     }
                 }
-
 
                 Rectangle
                 {
@@ -407,7 +325,8 @@ width: 64
                         font.pointSize: Maui.Style.fontSizes.big
                         font.weight: Font.Bold
                         anchors.centerIn: parent
-                        text: control.orientation + " / " + control.primaryOrientation + " / " + Screen.orientation
+//                        text: control.orientation + " / " + control.primaryOrientation + " / " + Screen.orientation
+                        text: win.activeFocusItem.objectName
                     }
                 }
             }

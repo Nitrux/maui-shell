@@ -58,5 +58,6 @@
         <file>qml/shell/statusbar/items/toggles/sections/bluetooth/logic.js</file>
         <file>qml/shell/statusbar/items/player/PlayerPage.qml</file>
         <file>qml/shell/ScreenshotArea.qml</file>
+        <file>qml/OSDArea.qml</file>
     </qresource>
 </RCC>

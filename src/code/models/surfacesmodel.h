@@ -6,6 +6,7 @@
 
 class QQuickItem;
 class AbstractWindow;
+class Zpace;
 class SurfacesModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -22,6 +23,7 @@ public:
         Window
     };
 
+    explicit SurfacesModel(Zpace *zpace);
     explicit SurfacesModel(QObject *parent = nullptr);
     ~SurfacesModel();
 
@@ -99,6 +101,7 @@ public slots:
     void activateNextWindow();
 
 private:
+    Zpace *m_zpace;
     Windows m_windows;
     bool indexIsValid(const int &index) const;
     

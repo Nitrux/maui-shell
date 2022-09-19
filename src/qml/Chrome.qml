@@ -32,8 +32,9 @@ Cask.StackableItem
 {
     id: rootChrome
 
-    readonly property bool intersects : toplevel ? (y+height > _zpaceContainer.height+20 || formFactor !== Cask.Env.Desktop) && activated : false
-    
+    objectName: "Chrome"
+    readonly property bool intersects : toplevel ? (y+height > rootChrome.parent.height+20 || formFactor !== Cask.Env.Desktop) && activated : false
+
     property alias shellSurface: surfaceItem.shellSurface
 
     property bool overviewMode : false
@@ -56,7 +57,6 @@ Cask.StackableItem
     readonly property bool decorationVisible: win.formFactor === Cask.Env.Desktop && toplevel.decorationMode === XdgToplevel.ServerSideDecoration
 
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
-    property alias destroyAnimation : destroyAnimationImpl
 
     property int marginWidth : window.fullscreen ? 0 : (surfaceItem.isPopup ? 1 : 6)
     //    property int titlebarHeight : surfaceItem.isPopup || surfaceItem.isFullscreen ? 0 : 25
@@ -68,15 +68,26 @@ Cask.StackableItem
 
     property rect previousRect
 
-    x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
     y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+
+    x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
+
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
 
     visible: surfaceItem.valid && surfaceItem.paintEnabled
 
-
+    MouseArea
+    {
+        anchors.fill: parent
+        propagateComposedEvents: false
+        preventStealing: true
+        onPressed:
+        {
+            mouse.accepted = true
+        }
+    }
     //    Binding on y
     //    {
     //        when: toplevel.decorationMode !== XdgToplevel.ServerSideDecoration
@@ -107,7 +118,7 @@ Cask.StackableItem
     {
         if (type === Maui.CSDButton.Close)
         {
-            destroyAnimationImpl.start()
+            window.close()
 
         } else if (type === Maui.CSDButton.Maximize)
         {
@@ -151,7 +162,7 @@ Cask.StackableItem
             rootChrome.x = 0
             rootChrome.y = 0
 
-            toplevel.sendMaximized(Qt.size(_zpaceContainer.width, _zpaceContainer.height - titlebarHeight))
+            toplevel.sendMaximized(Qt.size(rootChrome.parent.width, rootChrome.parent.height - titlebarHeight))
 
 
             //            window.activate()
@@ -188,7 +199,9 @@ Cask.StackableItem
             console.log("ACTIVATED CHANGED", toplevel.activated)
             if (target.activated)
             {
-                receivedFocusAnimation.start();
+                 surfaceItem.forceActiveFocus()
+//                rootChrome.window.activate()
+//                receivedFocusAnimation.start();
             }
         }
 
@@ -218,24 +231,16 @@ Cask.StackableItem
 
         Maui.Theme.inherit: false
         Maui.Theme.colorSet: Maui.Theme.Header
+
         anchors.fill: parent
+
         border.width: 1
+
         radius: window.maximized ? 0 : Maui.Style.radiusV
         border.color: window.maximized ? "transparent" : (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
+
         color: Maui.Theme.backgroundColor
         visible: rootChrome.decorationVisible
-
-        MouseArea
-        {
-            anchors.fill: parent
-            propagateComposedEvents: false
-            preventStealing: true
-        }
-
-        TapHandler
-        {
-            onTapped: surfaceItem.forceActiveFocus()
-        }
 
         Item
         {
@@ -248,9 +253,21 @@ Cask.StackableItem
             height: titlebarHeight
             visible: !surfaceItem.isPopup
 
+            MouseArea
+            {
+                anchors.fill: parent
+                onPressed:
+                {
+                    rootChrome.window.activate()
+                    mouse.accepted= false
+                }
+            }
+
             DragHandler
             {
                 id: titlebarDrag
+//                enabled: rootChrome.activated
+                grabPermissions: PointerHandler.TakeOverForbidden
                 target: rootChrome
                 yAxis.maximum: rootChrome.parent.height
                 yAxis.minimum: 0
@@ -258,43 +275,34 @@ Cask.StackableItem
                 cursorShape: Qt.ClosedHandCursor
                 onActiveChanged:
                 {
-                    if(!active && toplevel.maximized)
+                    if(toplevel.maximized)
                     {
                         window.unmaximize()
                     }
+
+                    if(!rootChrome.activated)
+                    {
+                        rootChrome.window.activate()
+                    }
                 }
 
-                property var movingBinding: Binding
-                {
-                    target: surfaceItem.moveItem
-                    property: "moving"
-                    value: titlebarDrag.active
-                }
+//                property var movingBinding: Binding
+//                {
+//                    target: surfaceItem.moveItem
+//                    property: "moving"
+//                    value: titlebarDrag.active
+//                }
             }
 
             HoverHandler
             {
+                enabled: rootChrome.activated
                 cursorShape: Qt.OpenHandCursor
-            }
-
-            TapHandler
-            {
-                acceptedButtons: Qt.LeftButton
-                gesturePolicy: TapHandler.DragThreshold
-                onTapped: rootChrome.raise()
-            }
-
-            TapHandler
-            {
-                acceptedButtons: Qt.MiddleButton
-                gesturePolicy: TapHandler.DragThreshold
-                onTapped: rootChrome.lower()
             }
 
             RowLayout
             {
                 anchors.fill: parent
-
 
                 Item
                 {
@@ -320,6 +328,8 @@ Cask.StackableItem
                     sourceComponent: Maui.CSDControls
                     {
                         onButtonClicked: performActiveWindowAction(type)
+                        isActiveWindow: rootChrome.activated
+                        maximized: rootChrome.toplevel.maximized
                     }
                 }
             }
@@ -329,7 +339,8 @@ Cask.StackableItem
         // TODO write a ResizeHandler for this purpose? otherwise there are up to 8 components for edges and corners
         Item
         {
-            enabled: !window.maximized
+            enabled: !window.maximized  && rootChrome.activated
+
             focus: false
             id: rightEdgeResizeArea
             x: parent.width - resizeAreaWidth / 2;
@@ -345,12 +356,14 @@ Cask.StackableItem
                     toplevel.sendResizing(size)
                 }
 
-            DragHandler {
+            DragHandler
+            {
                 id: horzDragHandler
                 property size initialSize
                 onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
                 yAxis.enabled: false
             }
+
             HoverHandler {
                 id: rightEdgeHover
                 cursorShape: Qt.SizeHorCursor // problem: this so far only sets the EGLFS cursor, not WaylandCursorItem
@@ -359,7 +372,7 @@ Cask.StackableItem
 
         Item
         {
-            enabled: !window.maximized
+            enabled: !window.maximized && rootChrome.activated
 
             focus: false
             id: bottomEdgeResizeArea
@@ -385,7 +398,7 @@ Cask.StackableItem
 
         Item
         {
-            enabled: !window.maximized
+            enabled: !window.maximized  && rootChrome.activated
 
             focus: false
             id: bottomRightResizeArea
@@ -416,7 +429,7 @@ Cask.StackableItem
 
     Connections
     {
-        target: _zpaceContainer
+        target: rootChrome.parent
         ignoreUnknownSignals: true
         enabled: win.formFactor !== Cask.Env.Desktop
 
@@ -458,36 +471,6 @@ Cask.StackableItem
     }
 
 
-    SequentialAnimation {
-        id: destroyAnimationImpl
-        ParallelAnimation {
-            NumberAnimation { target: scaleTransform; property: "yScale"; to: 2/height; duration: 150 }
-            NumberAnimation { target: scaleTransform; property: "xScale"; to: 0.4; duration: 150 }
-        }
-        NumberAnimation { target: scaleTransform; property: "xScale"; to: 0; duration: 150 }
-        ScriptAction { script: { window.close()  } }
-    }
-
-    ParallelAnimation {
-        id: createAnimationImpl
-        NumberAnimation { target: scaleTransform; property: "yScale"; from: 0; to: 1; duration: 150 }
-        NumberAnimation { target: scaleTransform; property: "xScale"; from: 0; to: 1; duration: 150 }
-    }
-
-    SequentialAnimation {
-        id: receivedFocusAnimation
-        ParallelAnimation {
-            NumberAnimation { target: scaleTransform; property: "yScale"; to: 1.02; duration: 100; easing.type: Easing.OutQuad }
-            NumberAnimation { target: scaleTransform; property: "xScale"; to: 1.02; duration: 100; easing.type: Easing.OutQuad }
-        }
-        ParallelAnimation {
-            NumberAnimation { target: scaleTransform; property: "yScale"; to: 1; duration: 100; easing.type: Easing.InOutQuad }
-            NumberAnimation { target: scaleTransform; property: "xScale"; to: 1; duration: 100; easing.type: Easing.InOutQuad }
-        }
-
-        ScriptAction { script: { surfaceItem.forceActiveFocus()  } }
-
-    }
 
     transform: [
         Scale {
@@ -507,15 +490,14 @@ Cask.StackableItem
     //        cached: true
     //    }
 
-
-
-
     ShellSurfaceItem
     {
         id: surfaceItem
         property bool valid: false
         property bool isPopup: false
         property bool isTransient: false
+
+        objectName: "SurfaceItem-"+rootChrome.objectName
 
         y: titlebarHeight
         sizeFollowsSurface: false
@@ -601,10 +583,6 @@ Cask.StackableItem
             }
         }
 
-        onSurfaceDestroyed: {
-            destroyAnimationImpl.start();
-        }
-
         onWidthChanged: {
             valid =  !surface.cursorSurface && surface.size.width > 0 && surface.size.height > 0
         }
@@ -618,25 +596,7 @@ Cask.StackableItem
         //                        }
     }
 
-    layer.enabled: _borders.visible
-    layer.effect: OpacityMask
-    {
-        maskSource: Rectangle
-        {
-            width: Math.floor(rootChrome.width)
-            height: Math.floor(rootChrome.height)
-            radius: _borders.radius
-        }
 
-        layer.enabled: _borders.visible
-        layer.effect :  DropShadow
-        {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            color: Qt.rgba(0,0,0,0.2)
-        }
-    }
 
     Rectangle
     {
@@ -660,6 +620,27 @@ Cask.StackableItem
             border.color: Qt.lighter(Maui.Theme.backgroundColor, 2)
             opacity: 0.2
         }
+
+
+            layer.enabled: _borders.visible
+            layer.effect: OpacityMask
+            {
+                maskSource: Rectangle
+                {
+                    width: Math.floor(rootChrome.width)
+                    height: Math.floor(rootChrome.height)
+                    radius: _borders.radius
+                }
+
+                layer.enabled: _borders.visible
+                layer.effect :  DropShadow
+                {
+                    transparentBorder: true
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    color: Qt.rgba(0,0,0,0.2)
+                }
+            }
     }
 
     DragHandler {
@@ -761,8 +742,10 @@ Cask.StackableItem
             color: "white"
             anchors.centerIn: parent
             //                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
-            text: rootChrome.window.isActive
+//            text: rootChrome.parent.objectName
+            text: rootChrome.xdgSurface.windowGeometry.width + " / " + rootChrome.moveItem.width
         }
 
     }
+
 }

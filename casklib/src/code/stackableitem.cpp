@@ -2,9 +2,7 @@
 
 StackableItem::StackableItem()
 {
-
 }
-
 
 void StackableItem::lower()
 {

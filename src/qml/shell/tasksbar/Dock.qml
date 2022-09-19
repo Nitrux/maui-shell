@@ -14,11 +14,14 @@ Item
     id: control
 
     implicitHeight: 64+ topPadding+ bottomPadding
+
     property int padding: Maui.Style.space.medium
     property int topPadding: padding
     property int bottomPadding: padding
+
     property bool hidden : _taskbar.y === height
     property bool autohide: false
+
     property alias launcher : _launcher
 
     Cask.AppsDB
@@ -232,12 +235,7 @@ Item
                     }
                 }
             }
-
-
-
         }
-
-
     }
 
 
@@ -276,6 +274,6 @@ Item
     function show()
     {
         _taskbar.y = 0
-        _taskbar.forceActiveFocus()
+//        _taskbar.forceActiveFocus()
     }
 }

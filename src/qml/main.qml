@@ -18,7 +18,7 @@ import org.cask.polkit 1.0 as Polkit
 WaylandCompositor
 {
     id: comp
-        retainedSelection: true
+    retainedSelection: true
     //    useHardwareIntegrationExtension: true
 
     Screen
@@ -118,7 +118,7 @@ WaylandCompositor
         let window = screen.zpaces.createXdgWindow(shellSurface, toplevel)
 
         screen.workspaces.currentIndex = screen.zpaces.addWindow(window, screen.workspaces.currentIndex)
-                window.activate()
+        window.activate()
 
         if(screen.formFactor !== Cask.Env.Desktop)
         {
