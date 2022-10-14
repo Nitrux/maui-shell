@@ -200,9 +200,9 @@ Cask.StackableItem
             console.log("ACTIVATED CHANGED", toplevel.activated)
             if (target.activated)
             {
-                 surfaceItem.forceActiveFocus()
-//                rootChrome.window.activate()
-//                receivedFocusAnimation.start();
+                surfaceItem.forceActiveFocus()
+                //                rootChrome.window.activate()
+                //                receivedFocusAnimation.start();
             }
         }
 
@@ -226,207 +226,258 @@ Cask.StackableItem
 
     //    Component.onDestruction: intersects = false
 
+
+
     Rectangle
     {
         id: decoration
+
+        visible: rootChrome.decorationVisible || radiusValue > -1
+        property int radiusValue :  Cask.Server.chrome.blurFor(rootChrome.appId)
 
         Maui.Theme.inherit: false
         Maui.Theme.colorSet: Maui.Theme.Header
 
         anchors.fill: parent
 
-        border.width: 1
-
-        radius: window.maximized ? 0 : Maui.Style.radiusV
-        border.color: window.maximized ? "transparent" : (rightEdgeHover.hovered || bottomEdgeHover.hovered) ? "#ffc02020" :"#305070a0"
+        radius: window.maximized ? 0 : (rootChrome.decorationVisible ? Maui.Style.radiusV : radiusValue)
 
         color: Maui.Theme.backgroundColor
-        visible: rootChrome.decorationVisible
 
-        Item
+//        FastBlur
+//        {
+//            anchors.fill: parent
+//            radius: 64
+//            opacity: 0.4
+//            source: ShaderEffectSource
+//            {
+//                id: _shader
+//                property rect area : sourceItem.mapToItem(rootChrome, rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
+//                format: ShaderEffectSource.RGB
+//                sourceItem: surfaceArea
+//                recursive: false
+//                sourceRect: Qt.rect(rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
+
+//            }
+
+//            layer.enabled: true
+//            layer.effect: Desaturate
+//            {
+//                desaturation: -1.2
+//            }
+//        }
+
+        Loader
         {
-            id:  titleBar
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: Maui.Style.space.medium
-            anchors.rightMargin: Maui.Style.space.medium
-            height: titlebarHeight
-            visible: !surfaceItem.isPopup
-
-            MouseArea
+            asynchronous: true
+            active: rootChrome.decorationVisible
+            anchors.fill: parent
+            sourceComponent: Item
             {
-                anchors.fill: parent
-                onPressed:
+                Item
                 {
-                    rootChrome.window.activate()
-                    mouse.accepted= false
-                }
-            }
+                    id:  titleBar
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: Maui.Style.space.medium
+                    anchors.rightMargin: Maui.Style.space.medium
+                    height: titlebarHeight
+                    visible: !surfaceItem.isPopup
 
-            DragHandler
-            {
-                id: titlebarDrag
-//                enabled: rootChrome.activated
-                grabPermissions: PointerHandler.TakeOverForbidden
-                target: rootChrome
-                yAxis.maximum: rootChrome.parent.height
-                yAxis.minimum: 0
-                //                enabled: rootChrome.activated
-                cursorShape: Qt.ClosedHandCursor
-                onActiveChanged:
-                {
-                    if(toplevel.maximized)
+                    MouseArea
                     {
-                        window.unmaximize()
+                        anchors.fill: parent
+                        onPressed:
+                        {
+                            rootChrome.window.activate()
+                            mouse.accepted= false
+                        }
                     }
 
-                    if(!rootChrome.activated)
+                    DragHandler
                     {
-                        rootChrome.window.activate()
+                        id: titlebarDrag
+                        //                enabled: rootChrome.activated
+                        grabPermissions: PointerHandler.TakeOverForbidden
+                        target: rootChrome
+                        yAxis.maximum: rootChrome.parent.height
+                        yAxis.minimum: 0
+                        //                enabled: rootChrome.activated
+                        cursorShape: Qt.ClosedHandCursor
+                        onActiveChanged:
+                        {
+                            if(toplevel.maximized)
+                            {
+                                window.unmaximize()
+                            }
+
+                            if(!rootChrome.activated)
+                            {
+                                rootChrome.window.activate()
+                            }
+                        }
+
+                        //                property var movingBinding: Binding
+                        //                {
+                        //                    target: surfaceItem.moveItem
+                        //                    property: "moving"
+                        //                    value: titlebarDrag.active
+                        //                }
+                    }
+
+                    HoverHandler
+                    {
+                        enabled: rootChrome.activated
+                        cursorShape: Qt.OpenHandCursor
+                    }
+
+                    RowLayout
+                    {
+                        anchors.fill: parent
+
+                        Item
+                        {
+                            Layout.maximumWidth: _rightControlsLoader.implicitWidth
+                            Layout.minimumWidth: 0
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            text: rootChrome.title
+                            horizontalAlignment: Qt.AlignHCenter
+                            elide: Text.ElideMiddle
+                            wrapMode: Text.NoWrap
+                            color: Maui.Theme.textColor
+                        }
+
+                        Loader
+                        {
+                            id: _rightControlsLoader
+
+                            sourceComponent: Maui.CSDControls
+                            {
+                                onButtonClicked: performActiveWindowAction(type)
+                                isActiveWindow: rootChrome.activated
+                                maximized: rootChrome.toplevel.maximized
+                            }
+                        }
                     }
                 }
 
-//                property var movingBinding: Binding
-//                {
-//                    target: surfaceItem.moveItem
-//                    property: "moving"
-//                    value: titlebarDrag.active
-//                }
-            }
 
-            HoverHandler
-            {
-                enabled: rootChrome.activated
-                cursorShape: Qt.OpenHandCursor
-            }
+                // TODO write a ResizeHandler for this purpose? otherwise there are up to 8 components for edges and corners
+                Item
+                {
+                    enabled: !window.maximized  && rootChrome.activated
 
-            RowLayout
-            {
-                anchors.fill: parent
+                    focus: false
+                    id: rightEdgeResizeArea
+                    x: parent.width - resizeAreaWidth / 2;
+                    width: resizeAreaWidth; height: parent.height - resizeAreaWidth
+
+                    onXChanged:
+                        if (horzDragHandler.active)
+                        {
+                            var size = toplevel.sizeForResize(horzDragHandler.initialSize,
+                                                              Qt.point(horzDragHandler.translation.x,
+                                                                       horzDragHandler.translation.y),
+                                                              Qt.RightEdge);
+                            toplevel.sendResizing(size)
+                        }
+
+                    DragHandler
+                    {
+                        id: horzDragHandler
+                        property size initialSize
+                        onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
+                        yAxis.enabled: false
+                    }
+
+                    HoverHandler {
+                        id: rightEdgeHover
+                        cursorShape: Qt.SizeHorCursor // problem: this so far only sets the EGLFS cursor, not WaylandCursorItem
+                    }
+                }
 
                 Item
                 {
-                    Layout.maximumWidth: _rightControlsLoader.implicitWidth
-                    Layout.minimumWidth: 0
-                }
+                    enabled: !window.maximized && rootChrome.activated
 
-                Label
-                {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    text: rootChrome.title
-                    horizontalAlignment: Qt.AlignHCenter
-                    elide: Text.ElideMiddle
-                    wrapMode: Text.NoWrap
-                    color: Maui.Theme.textColor
-                }
-
-                Loader
-                {
-                    id: _rightControlsLoader
-
-                    sourceComponent: Maui.CSDControls
-                    {
-                        onButtonClicked: performActiveWindowAction(type)
-                        isActiveWindow: rootChrome.activated
-                        maximized: rootChrome.toplevel.maximized
+                    focus: false
+                    id: bottomEdgeResizeArea
+                    y: parent.height - resizeAreaWidth / 2; height: resizeAreaWidth; width: parent.width - resizeAreaWidth
+                    onYChanged:
+                        if (vertDragHandler.active) {
+                            var size = toplevel.sizeForResize(vertDragHandler.initialSize,
+                                                              Qt.point(vertDragHandler.translation.x, vertDragHandler.translation.y),
+                                                              Qt.BottomEdge);
+                            toplevel.sendResizing(size)
+                        }
+                    DragHandler {
+                        id: vertDragHandler
+                        property size initialSize
+                        onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
+                        xAxis.enabled: false
+                    }
+                    HoverHandler {
+                        id: bottomEdgeHover
+                        cursorShape: Qt.SizeVerCursor
                     }
                 }
-            }
-        }
 
-
-        // TODO write a ResizeHandler for this purpose? otherwise there are up to 8 components for edges and corners
-        Item
-        {
-            enabled: !window.maximized  && rootChrome.activated
-
-            focus: false
-            id: rightEdgeResizeArea
-            x: parent.width - resizeAreaWidth / 2;
-            width: resizeAreaWidth; height: parent.height - resizeAreaWidth
-
-            onXChanged:
-                if (horzDragHandler.active)
+                Item
                 {
-                    var size = toplevel.sizeForResize(horzDragHandler.initialSize,
-                                                      Qt.point(horzDragHandler.translation.x,
-                                                               horzDragHandler.translation.y),
-                                                      Qt.RightEdge);
-                    toplevel.sendResizing(size)
+                    enabled: !window.maximized  && rootChrome.activated
+
+                    focus: false
+                    id: bottomRightResizeArea
+                    x: parent.width - resizeAreaWidth / 2; y: parent.height - resizeAreaWidth / 2
+                    width: resizeAreaWidth; height: parent.height - resizeAreaWidth
+                    onXChanged: resize()
+                    onYChanged: resize()
+                    function resize() {
+                        if (bottomRightDragHandler.active) {
+                            var size = toplevel.sizeForResize(bottomRightDragHandler.initialSize,
+                                                              Qt.point(bottomRightDragHandler.translation.x, bottomRightDragHandler.translation.y),
+                                                              Qt.BottomEdge | Qt.RightEdge);
+                            toplevel.sendResizing(size)
+                        }
+                    }
+                    DragHandler {
+                        id: bottomRightDragHandler
+                        property size initialSize
+                        onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
+                    }
+                    HoverHandler {
+                        id: bottomRightHover
+                        cursorShape: Qt.SizeFDiagCursor
+                    }
                 }
+                // end of resizing components
 
-            DragHandler
-            {
-                id: horzDragHandler
-                property size initialSize
-                onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
-                yAxis.enabled: false
-            }
-
-            HoverHandler {
-                id: rightEdgeHover
-                cursorShape: Qt.SizeHorCursor // problem: this so far only sets the EGLFS cursor, not WaylandCursorItem
             }
         }
 
-        Item
+
+
+
+        layer.enabled: rootChrome.decorationVisible || radiusValue > -1
+        layer.effect:  DropShadow
         {
-            enabled: !window.maximized && rootChrome.activated
-
-            focus: false
-            id: bottomEdgeResizeArea
-            y: parent.height - resizeAreaWidth / 2; height: resizeAreaWidth; width: parent.width - resizeAreaWidth
-            onYChanged:
-                if (vertDragHandler.active) {
-                    var size = toplevel.sizeForResize(vertDragHandler.initialSize,
-                                                      Qt.point(vertDragHandler.translation.x, vertDragHandler.translation.y),
-                                                      Qt.BottomEdge);
-                    toplevel.sendResizing(size)
-                }
-            DragHandler {
-                id: vertDragHandler
-                property size initialSize
-                onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
-                xAxis.enabled: false
-            }
-            HoverHandler {
-                id: bottomEdgeHover
-                cursorShape: Qt.SizeVerCursor
-            }
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 3
+            radius: 12
+            samples: 17
+            color: "#000000"
         }
 
-        Item
-        {
-            enabled: !window.maximized  && rootChrome.activated
-
-            focus: false
-            id: bottomRightResizeArea
-            x: parent.width - resizeAreaWidth / 2; y: parent.height - resizeAreaWidth / 2
-            width: resizeAreaWidth; height: parent.height - resizeAreaWidth
-            onXChanged: resize()
-            onYChanged: resize()
-            function resize() {
-                if (bottomRightDragHandler.active) {
-                    var size = toplevel.sizeForResize(bottomRightDragHandler.initialSize,
-                                                      Qt.point(bottomRightDragHandler.translation.x, bottomRightDragHandler.translation.y),
-                                                      Qt.BottomEdge | Qt.RightEdge);
-                    toplevel.sendResizing(size)
-                }
-            }
-            DragHandler {
-                id: bottomRightDragHandler
-                property size initialSize
-                onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
-            }
-            HoverHandler {
-                id: bottomRightHover
-                cursorShape: Qt.SizeFDiagCursor
-            }
-        }
-        // end of resizing components
     }
+
+
 
     Connections
     {
@@ -595,64 +646,67 @@ Cask.StackableItem
         //                                createAnimationImpl.start()
         //                            }
         //                        }
-    }
 
-
-
-    Rectangle
-    {
-        id: _borders
-        anchors.fill: parent
-        visible: win.formFactor === Cask.Env.Desktop ? (rootChrome.decorationVisible && !window.maximized) : (rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active)
-        z: surfaceItem.z + 9999999999
-        //         anchors.margins: Maui.Style.space.small
-        radius: decoration.radius
-        color: "transparent"
-        border.color: Qt.darker(Maui.Theme.backgroundColor, 2.7)
-        opacity: 0.8
-        border.width: 1
-        Rectangle
+        layer.enabled: rootChrome.decorationVisible
+        layer.effect: OpacityMask
         {
-            anchors.fill: parent
-            anchors.margins: 1
-            color: "transparent"
-            radius: parent.radius - 0.5
-            border.width: 1
-            border.color: Qt.lighter(Maui.Theme.backgroundColor, 2)
-            opacity: 0.2
-        }
-
-
-            layer.enabled: _borders.visible
-            layer.effect: OpacityMask
+            maskSource: Maui.ShadowedRectangle
             {
-                maskSource: Rectangle
-                {
-                    width: Math.floor(rootChrome.width)
-                    height: Math.floor(rootChrome.height)
-                    radius: _borders.radius
-                }
+                width: Math.floor(rootChrome.width)
+                height: Math.floor(rootChrome.height)
 
-                layer.enabled: _borders.visible
-                layer.effect :  DropShadow
+                corners
                 {
-                    transparentBorder: true
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    color: Qt.rgba(0,0,0,0.2)
+                    topLeftRadius: 0
+                    topRightRadius: 0
+                    bottomLeftRadius: decoration.radius
+                    bottomRightRadius: decoration.radius
                 }
             }
+        }
     }
 
-    DragHandler {
-        id: pinch3
-        enabled: _borders.visible
-        objectName: "3-finger pinch"
-        minimumPointCount: 3
-        maximumPointCount: 3
-        grabPermissions: PointerHandler.CanTakeOverFromAnything
 
+    Loader
+    {
+        asynchronous: true
+        anchors.fill: parent
+        active: win.formFactor === Cask.Env.Desktop ? (rootChrome.decorationVisible && !window.maximized) : (rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active)
+        z: surfaceItem.z +9999999999
+
+        sourceComponent: Rectangle
+        {
+            id: _borders
+            radius: decoration.radius
+            color: "transparent"
+            border.color: Qt.darker(Maui.Theme.backgroundColor, 2.7)
+            opacity: 0.8
+            border.width: 1
+
+            Rectangle
+            {
+                anchors.fill: parent
+                anchors.margins: 1
+                color: "transparent"
+                radius: parent.radius - 0.5
+                border.width: 1
+                border.color: Qt.lighter(Maui.Theme.backgroundColor, 2)
+                opacity: 0.4
+            }
+
+            DragHandler {
+                id: pinch3
+                enabled: _borders.visible
+                objectName: "3-finger pinch"
+                minimumPointCount: 3
+                maximumPointCount: 3
+                grabPermissions: PointerHandler.CanTakeOverFromAnything
+
+            }
+
+        }
     }
+
 
     //    NumberAnimation on x{
     //    id: anim
@@ -743,10 +797,13 @@ Cask.StackableItem
             color: "white"
             anchors.centerIn: parent
             //                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
-//            text: rootChrome.parent.objectName
-            text: rootChrome.xdgSurface.windowGeometry.width + " / " + rootChrome.moveItem.width
+            //            text: rootChrome.parent.objectName
+            text:  rootChrome.appId + Cask.Server.chrome.blurFor(rootChrome.appId)
         }
-
     }
+
+
+
+
 
 }

@@ -10,7 +10,7 @@ ToggleTemplate
 {
     icon.name: "drive-removable-media-usb"
     text:  "Devices"
-    display: ToolButton.TextUnderIcon
+//    display: ToolButton.TextUnderIcon
 
     page: DevicesPage
     {

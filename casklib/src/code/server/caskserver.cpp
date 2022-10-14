@@ -2,13 +2,16 @@
 #include <QDebug>
 #include <CaskServer/caskpower.h>
 #include <CaskServer/caskscreenshot.h>
+#include <CaskServer/caskchrome.h>
 
 CaskServer::CaskServer(QObject *parent) : QObject(parent)
   ,m_power(nullptr)
   ,m_screenshot(nullptr)
+  ,m_chrome(nullptr)
 {
     qRegisterMetaType<CaskPower *>("const CaskPower*"); // this is needed for QML to know of
     qRegisterMetaType<CaskScreenshot *>("const CaskScreenshot*");
+    qRegisterMetaType<CaskChrome *>("const CaskChrome*");
 }
 
 CaskPower *CaskServer::power()
@@ -28,5 +31,15 @@ CaskScreenshot *CaskServer::screenshot()
     }
 
     return m_screenshot;
+}
+
+CaskChrome *CaskServer::chrome()
+{
+    if(!m_chrome)
+    {
+       m_chrome = new CaskChrome(this);
+    }
+
+    return m_chrome;
 }
 

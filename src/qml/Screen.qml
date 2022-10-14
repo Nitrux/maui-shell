@@ -198,7 +198,7 @@ WaylandOutput
             Cask.Dashboard
             {
                 id: _cask
-                clip: true
+//                clip: true
                 backgroundColor: Cask.MauiMan.background.solidColor
                 anchors.fill: parent
                 anchors.bottomMargin: _zpaceSwitcher.height

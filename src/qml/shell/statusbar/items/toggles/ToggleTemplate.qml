@@ -11,9 +11,9 @@ import "../../../templates"
 CardButton
 {
     id: control
-    implicitHeight: (isMobile ? 32 : 44) + topPadding + bottomPadding
-    implicitWidth: Math.max(_template.layout.implicitWidth, implicitHeight) + leftPadding + rightPadding
-    property alias template : _template
+//    implicitHeight: (isMobile ? 32 : 44) + topPadding + bottomPadding
+//    implicitWidth: Math.max(_template.layout.implicitWidth, implicitHeight) + leftPadding + rightPadding
+//    property alias template : _template
 
     display: ToolButton.IconOnly
 
@@ -28,19 +28,18 @@ CardButton
         }
     }
 
-    contentItem: Maui.ListItemTemplate
-    {
-        id: _template
+//    contentItem: Maui.ListItemTemplate
+//    {
+//        id: _template
 
-        spacing: control.spacing
-        labelsVisible: (label1.text.length || label2.text.length) && control.display === ToolButton.TextBesideIcon
-        label1.text: control.text
-        label1.wrapMode: Text.Wrap
-        iconSource: control.icon.name
-        isMask: true
-        isCurrentItem: control.checked
-        iconVisible: true
-        iconSizeHint: Maui.Style.iconSize
-//        headerSizeHint: control.implicitHeight
-    }
+//        spacing: control.spacing
+//        labelsVisible: (label1.text.length || label2.text.length) && control.display === ToolButton.TextBesideIcon
+//        label1.text: control.text
+//        label1.wrapMode: Text.Wrap
+//        iconSource: control.icon.name
+//        isMask: true
+//        isCurrentItem: control.checked
+//        iconVisible: true
+//        iconSizeHint: Maui.Style.iconSize
+//    }
 }

@@ -34,7 +34,7 @@ T.Pane
     leftPadding: 0
     rightPadding: 0
 
-    clip: false
+//    clip: false
 
     Component.onCompleted:
     {

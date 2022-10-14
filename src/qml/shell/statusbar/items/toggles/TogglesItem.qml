@@ -56,13 +56,8 @@ Cask.PanelItem
             clip: true
             padding: 0
 
-            initialItem: Item
-            {
-                implicitHeight: 140
-                GridLayout
+            initialItem: GridLayout
                 {
-                    width: parent.width
-                    height: 140
                     id:_tooglesGrid
                     rows: 3
                     columns: 5
@@ -75,6 +70,7 @@ Cask.PanelItem
                         onClicked: _togglesStack.push(page)
                         Layout.fillWidth: true
                         Layout.columnSpan: 2
+                        Layout.rowSpan: 2
                         Layout.fillHeight: true
                     }
 
@@ -86,6 +82,7 @@ Cask.PanelItem
                         Layout.columnSpan: 2
                         Layout.rowSpan: 2
                         Layout.fillHeight: true
+
                         //                    display: ToolButton.TextUnderIcon
                     }
 
@@ -96,20 +93,17 @@ Cask.PanelItem
                         checked: !_slidersItem.micItem.muted
                         onClicked: _slidersItem.micItem.toggleMute()
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
 
                     AirplaneModeToggle
                     {
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
 
                     ScreenshotToggle
                     {
                         id: _screenshotToggle
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                         onClicked:
                         {
                             _togglesStack.push(page)
@@ -120,7 +114,6 @@ Cask.PanelItem
                     {
                         onClicked: _togglesStack.push(page)
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
 
                     ToggleTemplate
@@ -131,7 +124,6 @@ Cask.PanelItem
                         checked: Maui.Style.styleType === Maui.Style.Dark
                         onClicked: Maui.Style.styleType = (Maui.Style.styleType === Maui.Style.Dark ? Maui.Style.Light : Maui.Style.Dark)
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
 
                     ToggleTemplate
@@ -140,7 +132,6 @@ Cask.PanelItem
                         text: i18n("Settings")
                         onClicked: Cask.MauiMan.invokeManager()
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
 
                     ToggleTemplate
@@ -153,10 +144,9 @@ Cask.PanelItem
                         }
 
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
                 }
-            }
+
         }
     }
 }

@@ -2,6 +2,7 @@
 
 StackableItem::StackableItem()
 {
+    this->setClip(false);
 }
 
 void StackableItem::lower()
