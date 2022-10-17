@@ -77,6 +77,7 @@ AppDir:
     - qml-module-qt-labs-calendar
     - qml-module-qt-labs-platform
     - qml-module-qtwayland-compositor
+    - qml-module-qtmultimedia
 
     # Other
     - libappimage1.0
