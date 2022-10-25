@@ -8,7 +8,7 @@ import org.maui.cask 1.0 as Cask
 
 import "../../../templates" as Templates
 
-import org.maui.calendar 1.0 as Cal
+import org.mauikit.calendar 1.0 as Cal
 
 Cask.PanelItem
 {
@@ -73,64 +73,29 @@ Cask.PanelItem
             width: parent.width
             height: currentItem.implicitHeight
 
-            initialItem: Column
-            {
-                spacing: _card.spacing
-                Maui.ListItemTemplate
-                {
-                    width: parent.width
-                    label1.text: control.text
-                    label1.font.bold: true
-                    label1.font.weight: Font.Black
-                    label1.font.pointSize: Maui.Style.fontSizes.big
-                    label2.text: Qt.formatDate(new Date(), "ddd MMMM yyyy")
-                    ToolButton
-                    {
-                        icon.name: "go-next"
-                        onClicked: _stack.push(_tasksPageComponent)
-                    }
-                }
-
-                Cal.MonthView
+            initialItem: Cal.DaysGrid
                 {
                     id: _monthGrid
 
                     width: parent.width
-                    height: 320
-                    headBar.visible: false
+                    implicitHeight: 260
 
-                    background: null
-//                    month: new Date().getMonth()
-//                    year: new Date().getFullYear()
-//                    locale: Qt.locale("en_US")
-
-//                    delegate: T.ItemDelegate
-//                    {
-//                        id: _delegate
-//                        implicitWidth: implicitContentWidth + rightPadding + leftPadding
-
-//                        implicitHeight: implicitContentHeight + topPadding +bottomPadding
-
-//                        background: Rectangle
-//                        {
-//                            radius: Maui.Style.radiusV
-//                            color: model.today || _delegate.hovered || _delegate.down ? Maui.Theme.highlightColor : "transparent"
-//                        }
-
-//                        contentItem: Label
-//                        {
-//                            horizontalAlignment: Text.AlignHCenter
-//                            verticalAlignment: Text.AlignVCenter
-//                            opacity: model.month === _monthGrid.month ? 1 : 0.4
-//                            text: String(model.day)
-//                            font: _monthGrid.font
-//                            color: model.today || _delegate.hovered ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
-//                        }
-
-//                        onClicked: _stack.push(_tasksPageComponent, {'date': model.date})
-//                    }
+                    header: Maui.ListItemTemplate
+                    {
+                        width: parent.width
+                        label1.text: control.text
+                        label1.font.bold: true
+                        label1.font.weight: Font.Black
+                        label1.font.pointSize: Maui.Style.fontSizes.big
+                        label2.text: Qt.formatDate(new Date(), "ddd MMMM yyyy")
+                        ToolButton
+                        {
+                            icon.name: "go-next"
+                            onClicked: _stack.push(_tasksPageComponent)
+                        }
+                    }
                 }
-            }
+
         }
     }
 
