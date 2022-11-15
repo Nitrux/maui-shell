@@ -123,6 +123,7 @@ target_link_libraries(${PROJECT_NAME}
     MauiCore::Notifications
     MauiKit
     MauiKit::FileBrowsing
+    KF5::I18n
     KF5::Service
     KF5::ConfigCore
     KF5::KIOCore
