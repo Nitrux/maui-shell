@@ -367,6 +367,9 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
+    engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
+
+
     engine.load(url);
 
     qunsetenv("QT_SCALE_FACTOR");

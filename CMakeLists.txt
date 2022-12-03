@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(CASK_VERSION 0.5.6)
+set(CASK_VERSION 0.6.0)
 project(cask VERSION ${CASK_VERSION})
 
 set(REQUIRED_QT_VERSION 5.14.0)
