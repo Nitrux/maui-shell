@@ -43,3 +43,42 @@ CaskChrome *CaskServer::chrome()
     return m_chrome;
 }
 
+
+DropShadowHelper::DropShadowHelper(QObject *parent) : QObject(parent)
+  ,m_chrome(new CaskChrome(this))
+{
+     connect(m_chrome, &CaskChrome::dropShadowChanged, [this](int radius, QString id)
+     {
+         qDebug() << "DROP SHADOW CHANGED FOR" << id << radius << m_id;
+        if(id == m_id)
+        {
+         m_radius = radius;
+         Q_EMIT radiusChanged(m_radius);
+        }
+     });
+
+     connect(this, &DropShadowHelper::idChanged, [this](QString id)
+     {
+        m_radius = m_chrome->shadowFor(id);
+        Q_EMIT radiusChanged(m_radius);
+     });
+}
+
+QString DropShadowHelper::id() const
+{
+    return m_id;
+}
+
+int DropShadowHelper::radius() const
+{
+    return m_radius;
+}
+
+void DropShadowHelper::setId(QString id)
+{
+    if (m_id == id)
+        return;
+
+    m_id = id;
+    emit idChanged(m_id);
+}

@@ -61,7 +61,11 @@ void CaskPlugin::registerTypes(const char *uri)
         return new MauiManInterface;
     });
 
+
+    //server stuff
     qmlRegisterUncreatableType<CaskScreenshot>(uri, 1, 0, "CaskScreenshot", "Expose CaskScreenshot enum");
+
+    qmlRegisterType<DropShadowHelper>(uri, 1, 0, "DropShadowHelper");
 
     qmlRegisterSingletonType<CaskServer>(uri,1,0, "Server", [](QQmlEngine *, QJSEngine*)
     {

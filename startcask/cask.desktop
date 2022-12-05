@@ -7,3 +7,4 @@ OnlyShowIn=Cask;
 X-KDE-autostart-phase=0
 NoDisplay=true
 X-systemd-skip=true
+DesktopNames=Cask

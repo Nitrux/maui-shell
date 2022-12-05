@@ -69,9 +69,7 @@ Cask.StackableItem
     property rect previousRect
 
     y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
-
     x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
-
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
@@ -224,16 +222,18 @@ Cask.StackableItem
         surfaceItem.forceActiveFocus()
     }
 
-    //    Component.onDestruction: intersects = false
-
-
+    Cask.DropShadowHelper
+    {
+        id: _dropShadowHelper
+        appId: rootChrome.appId
+    }
 
     Rectangle
     {
         id: decoration
 
         visible: rootChrome.decorationVisible || radiusValue > -1
-        property int radiusValue :  Cask.Server.chrome.blurFor(rootChrome.appId)
+        readonly property alias radiusValue :  _dropShadowHelper.radius
 
         Maui.Theme.inherit: false
         Maui.Theme.colorSet: Maui.Theme.Header
@@ -244,28 +244,28 @@ Cask.StackableItem
 
         color: Maui.Theme.backgroundColor
 
-//        FastBlur
-//        {
-//            anchors.fill: parent
-//            radius: 64
-//            opacity: 0.4
-//            source: ShaderEffectSource
-//            {
-//                id: _shader
-//                property rect area : sourceItem.mapToItem(rootChrome, rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
-//                format: ShaderEffectSource.RGB
-//                sourceItem: surfaceArea
-//                recursive: false
-//                sourceRect: Qt.rect(rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
+        //        FastBlur
+        //        {
+        //            anchors.fill: parent
+        //            radius: 64
+        //            opacity: 0.4
+        //            source: ShaderEffectSource
+        //            {
+        //                id: _shader
+        //                property rect area : sourceItem.mapToItem(rootChrome, rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
+        //                format: ShaderEffectSource.RGB
+        //                sourceItem: surfaceArea
+        //                recursive: false
+        //                sourceRect: Qt.rect(rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
 
-//            }
+        //            }
 
-//            layer.enabled: true
-//            layer.effect: Desaturate
-//            {
-//                desaturation: -1.2
-//            }
-//        }
+        //            layer.enabled: true
+        //            layer.effect: Desaturate
+        //            {
+        //                desaturation: -1.2
+        //            }
+        //        }
 
         Loader
         {
@@ -461,22 +461,17 @@ Cask.StackableItem
             }
         }
 
-
-
-
         layer.enabled: rootChrome.decorationVisible || radiusValue > -1
-        layer.effect:  DropShadow
+        layer.effect: DropShadow
         {
             transparentBorder: true
             horizontalOffset: 0
-            verticalOffset: 3
+            verticalOffset: 0
             radius: 12
             samples: 17
             color: "#000000"
         }
-
     }
-
 
 
     Connections
@@ -798,7 +793,7 @@ Cask.StackableItem
             anchors.centerIn: parent
             //                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
             //            text: rootChrome.parent.objectName
-            text:  rootChrome.appId + Cask.Server.chrome.blurFor(rootChrome.appId)
+            text:  rootChrome.appId + _dropShadowHelper.radius
         }
     }
 
