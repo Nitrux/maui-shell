@@ -8,7 +8,7 @@ void AbstractWindow::setIsActive(bool value)
     }
 
     m_isActive = value;
-    emit this->isActiveChanged(m_isActive);
+    emit this->activatedChanged(m_isActive);
 }
 
 AbstractWindow::AbstractWindow() : QObject(nullptr)

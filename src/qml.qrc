@@ -3,7 +3,6 @@
         <file>qml/main.qml</file>
         <file>qml/Keyboard.qml</file>
         <file>qml/Screen.qml</file>
-        <file>qml/Chrome.qml</file>
         <file>qml/shell/statusbar/StatusBar.qml</file>
         <file>qml/shell/tasksbar/TaskBar.qml</file>
         <file>qml/shell/AppsOverview.qml</file>
@@ -59,5 +58,10 @@
         <file>qml/shell/statusbar/items/player/PlayerPage.qml</file>
         <file>qml/shell/ScreenshotArea.qml</file>
         <file>qml/OSDArea.qml</file>
+        <file>qml/chrome/Chrome.qml</file>
+        <file>qml/chrome/TitleBar.qml</file>
+        <file>qml/chrome/Decoration.qml</file>
+        <file>qml/chrome/Border.qml</file>
+        <file>qml/chrome/PinchArea.qml</file>
     </qresource>
 </RCC>

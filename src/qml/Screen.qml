@@ -34,6 +34,7 @@ import "shell"
 import "shell/statusbar"
 import "shell/tasksbar"
 import "shell/zpaces"
+import "chrome"
 
 import "shell/statusbar/items/notifications"
 

@@ -20,7 +20,7 @@ class AbstractWindow : public QObject
 
     Q_PROPERTY(QQuickItem* chrome READ chrome WRITE setChrome NOTIFY chromeChanged)
     
-    Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
+    Q_PROPERTY(bool isActive READ isActive NOTIFY activatedChanged FINAL)
 
 private:
     bool m_minimized = false;    
@@ -76,7 +76,7 @@ signals:
     void fullscreenChanged();
     void closed();
     void chromeChanged(QQuickItem* chrome);
-    void isActiveChanged(bool isActive);
+    void activatedChanged(bool activated);
 };
 
 #endif // ABSTRACTWINDOW_H

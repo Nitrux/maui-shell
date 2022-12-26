@@ -41,7 +41,7 @@ void SurfacesModel::addWindow(AbstractWindow *window)
         this->removeWindow(indexOf(window));
     });
 
-    connect(window, &AbstractWindow::isActiveChanged, this, [this, window](bool value)
+    connect(window, &AbstractWindow::activatedChanged, this, [this, window](bool value)
     {
         if(value)
         {

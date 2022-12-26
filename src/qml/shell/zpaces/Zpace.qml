@@ -12,13 +12,14 @@ import Zpaces 1.0 as ZP
 import QtGraphicalEffects 1.0
 
 import "../.."
+import "../../chrome"
 
 T.Pane
 {
     id: control
 
     property ZP.Zpace zpace
-//    focusPolicy: Qt.NoFocus
+    //    focusPolicy: Qt.NoFocus
 
     default property alias content: _content.data
     property alias container: _content
@@ -34,7 +35,7 @@ T.Pane
     leftPadding: 0
     rightPadding: 0
 
-//    clip: false
+    //    clip: false
 
     Component.onCompleted:
     {
@@ -185,7 +186,7 @@ T.Pane
                 var res = ""
                 for(var i = 0; i< _content.children.length; i++)
                 {
-                res+= _content.children[i]+ " / " + _content.children[i].objectName+"\n"
+                    res+= _content.children[i]+ " / " + _content.children[i].objectName+"\n"
                 }
 
                 return res
@@ -221,7 +222,7 @@ T.Pane
 
     function focusWindow(index)
     {
-         _content.children[index].window.activate()
+        _content.children[index].window.activate()
     }
 
     function focusTopWindow(index = 0)

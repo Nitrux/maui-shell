@@ -161,6 +161,8 @@ void XdgWindow::setUpToplevelConnections()
     connect(m_toplevel, &QWaylandXdgToplevel::setMaximized, this, &AbstractWindow::setMaximized);
     connect(m_toplevel, &QWaylandXdgToplevel::unsetMaximized, this, &AbstractWindow::unsetMaximized);
     connect(m_toplevel, &QWaylandXdgToplevel::unsetFullscreen, this, &AbstractWindow::unsetFullscreen);
+    connect(m_toplevel, &QWaylandXdgToplevel::setFullscreen, this, &AbstractWindow::setFullscreen);
+
 
     connect(m_toplevel, &QWaylandXdgToplevel::maximizedChanged, this, &AbstractWindow::maximizedChanged);
     connect(m_toplevel, &QWaylandXdgToplevel::fullscreenChanged, this, &AbstractWindow::fullscreenChanged);
