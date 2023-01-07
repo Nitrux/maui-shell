@@ -223,7 +223,7 @@ WaylandOutput
                         id: _overlayNotificationContainer
                         width: Math.min(availableGeometry.width, 300)
                         y: _cask.topPanel.height
-                    },
+                    }/*,
 
                     OSDArea
                     {
@@ -233,7 +233,7 @@ WaylandOutput
                         anchors.horizontalCenter: parent.horizontalCenter
                         width: 600
                         height: implicitHeight
-                    }
+                    }*/
                 ]
 
                 Keys.enabled: true
@@ -306,30 +306,30 @@ WaylandOutput
                     }
                 }
 
-                Rectangle
-                {
-                    color: "orange"
-                    height: 64
-                    width: 100
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: height
+//                Rectangle
+//                {
+//                    color: "orange"
+//                    height: 64
+//                    width: 100
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    anchors.bottom: parent.bottom
+//                    anchors.bottomMargin: height
 
-                    radius: Maui.Style.radiusV
+//                    radius: Maui.Style.radiusV
 
-                    Label
-                    {
-                        color: "#333"
-                        width: parent.width
-                        horizontalAlignment: Qt.AlignHCenter
-                        font.bold: true
-                        font.pointSize: Maui.Style.fontSizes.big
-                        font.weight: Font.Bold
-                        anchors.centerIn: parent
-//                        text: control.orientation + " / " + control.primaryOrientation + " / " + Screen.orientation
-                        text: win.activeFocusItem.objectName
-                    }
-                }
+//                    Label
+//                    {
+//                        color: "#333"
+//                        width: parent.width
+//                        horizontalAlignment: Qt.AlignHCenter
+//                        font.bold: true
+//                        font.pointSize: Maui.Style.fontSizes.big
+//                        font.weight: Font.Bold
+//                        anchors.centerIn: parent
+////                        text: control.orientation + " / " + control.primaryOrientation + " / " + Screen.orientation
+//                        text: win.activeFocusItem.objectName
+//                    }
+//                }
             }
 
             // Virtual Keyboard

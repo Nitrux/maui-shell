@@ -176,22 +176,22 @@ T.Pane
             }
         }
 
-        Label
-        {
-            anchors.centerIn: parent
-            color: "pink"
-            font.bold: true
-            text:
-            {
-                var res = ""
-                for(var i = 0; i< _content.children.length; i++)
-                {
-                    res+= _content.children[i]+ " / " + _content.children[i].objectName+"\n"
-                }
+//        Label
+//        {
+//            anchors.centerIn: parent
+//            color: "pink"
+//            font.bold: true
+//            text:
+//            {
+//                var res = ""
+//                for(var i = 0; i< _content.children.length; i++)
+//                {
+//                    res+= _content.children[i]+ " / " + _content.children[i].objectName+"\n"
+//                }
 
-                return res
-            }
-        }
+//                return res
+//            }
+//        }
 
         Maui.ContextualMenu
         {
