@@ -31,7 +31,7 @@ T.Pane
     property alias backgroundVisible: _backgroundOverlay.visible
 
     topPadding: cask.topPanel.height
-    bottomPadding: formFactor === Cask.Env.Desktop ? dock.height : 0
+    bottomPadding: formFactor === Cask.MauiMan.Desktop ? dock.height : 0
     leftPadding: 0
     rightPadding: 0
 

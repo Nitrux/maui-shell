@@ -123,7 +123,7 @@ T.Control
             value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
         }
 
-        x: handler.active && win.formFactor === Cask.Env.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
+        x: handler.active && win.formFactor === Cask.MauiMan.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
 
         function setXAlignment(alignment)
         {

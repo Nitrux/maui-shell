@@ -95,7 +95,7 @@ T.Control
             }
         }
 
-        layer.enabled: win.formFactor === Cask.Env.Desktop && Maui.Style.enableEffects
+        layer.enabled: win.formFactor === Cask.MauiMan.Desktop && Maui.Style.enableEffects
         layer.effect: DropShadow
         {
             horizontalOffset: 0

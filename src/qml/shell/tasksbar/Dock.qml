@@ -34,7 +34,7 @@ Item
         id: overlay
         visible: _launcher.visible
         parent: _cask.overlay
-//        opacity: formFactor !== Cask.Env.Desktop ? 0.95 : 0.7
+//        opacity: formFactor !== Cask.MauiMan.Desktop ? 0.95 : 0.7
 
         anchors.fill: parent
         color: _launcher.Maui.Theme.backgroundColor
@@ -129,7 +129,7 @@ Item
             restoreMode: Binding.RestoreBindingOrValue
         }
 
-        x: handler2.active && win.formFactor === Cask.Env.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((control.width/2 ) - (_launcher.width/2));
+        x: handler2.active && win.formFactor === Cask.MauiMan.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((control.width/2 ) - (_launcher.width/2));
 
     }
 

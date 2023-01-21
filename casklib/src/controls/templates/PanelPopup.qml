@@ -27,7 +27,7 @@ T.Container
     property bool opened : false
     property int alignment: Qt.AlignCenter
 
-    property bool displayOverlay : win.formFactor !== Cask.Env.Desktop
+    property bool displayOverlay : win.formFactor !== Cask.MauiMan.Desktop
 
     signal overlayClicked()
     //        signal opened()

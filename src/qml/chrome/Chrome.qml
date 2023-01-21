@@ -35,7 +35,7 @@ Cask.StackableItem
     objectName: "Chrome"
 
     //Check if an activated surface overlaps the dock
-    readonly property bool intersects : toplevel ? (y+height > rootChrome.parent.height+20 || formFactor !== Cask.Env.Desktop) && activated : false
+    readonly property bool intersects : toplevel ? (y+height > rootChrome.parent.height+20 || formFactor !== Cask.MauiMan.Desktop) && activated : false
 
     property alias shellSurface: surfaceItem.shellSurface
 
@@ -57,7 +57,7 @@ Cask.StackableItem
 
     property alias moveItem: surfaceItem.moveItem
 
-    readonly property bool decorationVisible: win.formFactor === Cask.Env.Desktop && toplevel.decorationMode === XdgToplevel.ServerSideDecoration
+    readonly property bool decorationVisible: win.formFactor === Cask.MauiMan.Desktop && toplevel.decorationMode === XdgToplevel.ServerSideDecoration
 
     property bool moving: surfaceItem.moveItem ? surfaceItem.moveItem.moving : false
 
@@ -199,7 +199,7 @@ Cask.StackableItem
     {
         asynchronous: true
         anchors.fill: parent
-        active: win.formFactor === Cask.Env.Desktop ? (rootChrome.decorationVisible && !window.maximized && !rootChrome.fullscreen) : (rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active)
+        active: win.formFactor === Cask.MauiMan.Desktop ? (rootChrome.decorationVisible && !window.maximized && !rootChrome.fullscreen) : (rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active)
         z: surfaceItem.z +9999999999
 
         sourceComponent: Border {}
@@ -210,11 +210,11 @@ Cask.StackableItem
     {
         target: rootChrome.parent
         ignoreUnknownSignals: true
-        enabled: win.formFactor !== Cask.Env.Desktop
+        enabled: win.formFactor !== Cask.MauiMan.Desktop
 
         function onWidthChanged()
         {
-            if(formFactor !== Cask.Env.Desktop)
+            if(formFactor !== Cask.MauiMan.Desktop)
             {
                 window.maximize()
             }
@@ -222,7 +222,7 @@ Cask.StackableItem
 
         function onHeightChanged()
         {
-            if(formFactor !== Cask.Env.Desktop)
+            if(formFactor !== Cask.MauiMan.Desktop)
             {
                 window.maximize()
             }
@@ -235,7 +235,7 @@ Cask.StackableItem
         ignoreUnknownSignals: true
         function onFormFactorChanged()
         {
-            if(win.formFactor === Cask.Env.Desktop)
+            if(win.formFactor === Cask.MauiMan.Desktop)
             {
                 rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(previousRect.width, previousRect.height), [3,4])
                 rootChrome.x = previousRect.x

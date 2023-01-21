@@ -17,7 +17,7 @@ Maui.Page
     objectName: "LauncherPage"
 
     opacity: (y/finalYPos)
-    property bool fullscreenLauncher: true // win.formFactor !== Cask.Env.Desktop
+    property bool fullscreenLauncher: true // win.formFactor !== Cask.MauiMan.Desktop
 
     readonly property int finalYPos :  0 - (control.height)
 

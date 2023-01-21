@@ -6,15 +6,7 @@
 class Enviroment : public QObject
 {
     Q_OBJECT
-public:
-
-    enum FormFactor : uint8_t
-    {
-        Phone,
-        Tablet,
-        Desktop
-    }; Q_ENUM(FormFactor)
-
+public:   
     explicit Enviroment(QObject *parent = nullptr);
 
 public slots:

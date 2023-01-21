@@ -124,15 +124,7 @@ WaylandOutput
                             case Qt.InvertedLandscapeOrientation: return Qt.InvertedPortraitOrientation
                             }
 
-        readonly property int formFactor :
-        {
-            if(width > 1500)
-                return Cask.Env.Desktop
-            else if(width > 500)
-                return Cask.Env.Tablet
-            else
-                return Cask.Env.Phone
-        }
+        readonly property int formFactor : Cask.MauiMan.formFactor.preferredMode
 
         WaylandMouseTracker
         {

@@ -120,7 +120,7 @@ WaylandCompositor
         screen.workspaces.currentIndex = screen.zpaces.addWindow(window, screen.workspaces.currentIndex)
         window.activate()
 
-        if(screen.formFactor !== Cask.Env.Desktop)
+        if(screen.formFactor !== Cask.MauiMan.Desktop)
         {
             window.maximize()
         }

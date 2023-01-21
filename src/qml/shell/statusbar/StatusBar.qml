@@ -21,12 +21,12 @@ T.Control
     id: control
 
     property rect availableGeometry
-    readonly property bool floating : win.formFactor === Cask.Env.Desktop
+    readonly property bool floating : win.formFactor === Cask.MauiMan.Desktop
     readonly property bool cardsOverlapping : (_notificationsSection.popup.width + _statusSection.popup.width) > availableGeometry.width
 
     property bool hidden : contentItem.y === 0- control.height
     property bool autohide: false
-    property bool labelsVisible: win.formFactor === Cask.Env.Desktop
+    property bool labelsVisible: win.formFactor === Cask.MauiMan.Desktop
 
     Layout.fillWidth: true
     //    Layout.margins: floating ? Maui.Style.space.tiny : 0
