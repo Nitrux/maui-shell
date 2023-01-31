@@ -160,7 +160,7 @@ Maui.Page
                 spacing: Maui.Style.space.medium
                 property alias atYBeginning : _categoriesGridView.flickable.atYBeginning
 
-                Maui.GridView
+                Maui.GridBrowser
                 {
                     id: _categoriesGridView
                     objectName: "LauncherGrid"
@@ -281,7 +281,7 @@ Maui.Page
                         }
                     }
 
-                    flickable.header: Maui.SettingsSection
+                    flickable.header: Maui.SectionGroup
                     {
                         width: parent.width
                         height: visible ? implicitHeight : 0
@@ -332,7 +332,7 @@ Maui.Page
             {
                 id: _appsListComponent
 
-                Maui.GridView
+                Maui.GridBrowser
                 {
                     id: _gridView
                     property bool atYBeginning : _gridView.flickable.atYBeginning
