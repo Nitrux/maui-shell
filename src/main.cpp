@@ -32,6 +32,7 @@
 #include <QQuickItem>
 #include <QQuickStyle>
 #include <QSessionManager>
+#include <QIcon>
 
 #include <errno.h>
 #include <signal.h>
@@ -60,6 +61,8 @@
 #include "../cask_version.h"
 
 #include <MauiMan/screenmanager.h>
+#include <MauiMan/thememanager.h>
+#include <MauiMan/mauimanutils.h>
 
 #define ZPACES_URI "Zpaces"
 #define CASK_URI "org.maui.cask"
@@ -256,6 +259,13 @@ int main(int argc, char *argv[])
     about.setProgramLogo(app.windowIcon());
 
     KAboutData::setApplicationData(about);
+
+ if(MauiManUtils::isMauiSession())
+    {
+auto themeSettings =  std::make_unique<MauiMan::ThemeManager>();      
+
+        QIcon::setThemeName(themeSettings->iconTheme());
+    }
 
     signal(SIGINT, sigintHandler);
     signal(SIGTSTP, sigintHandler);

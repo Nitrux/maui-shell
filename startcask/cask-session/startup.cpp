@@ -83,9 +83,9 @@ public:
     void start() override
     {
         qCDebug(CASK_SESSION) << "Phase 0";
-        addSubjob(new AutoStartAppsJob(m_autostart, 0));
+   //     addSubjob(new AutoStartAppsJob(m_autostart, 0));
 //        addSubjob(new KCMInitJob());
-        addSubjob(new SleepJob());
+     //   addSubjob(new SleepJob());
     }
 };
 
@@ -100,7 +100,7 @@ public:
     void start() override
     {
         qCDebug(CASK_SESSION) << "Phase 1";
-        addSubjob(new AutoStartAppsJob(m_autostart, 1));
+ //       addSubjob(new AutoStartAppsJob(m_autostart, 1));
     }
 };
 

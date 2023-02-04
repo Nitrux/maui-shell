@@ -201,7 +201,7 @@ T.Pane
             {
                 text: i18n("Wallpaper")
                 icon.name: "insert-image"
-                onTriggered:  Cask.MauiMan.invokeManager("Background")
+                onTriggered:  Cask.MauiMan.invokeManager("background")
             }
 
             MenuItem
@@ -215,7 +215,8 @@ T.Pane
             MenuItem
             {
                 text: i18n("About")
-                onTriggered: win.about()
+icon.name: "documentinfo"
+                onTriggered: Cask.MauiMan.invokeManager("about")
             }
         }
     }
