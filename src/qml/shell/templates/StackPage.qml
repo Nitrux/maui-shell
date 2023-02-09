@@ -6,9 +6,9 @@ import org.mauikit.controls 1.3 as Maui
 Maui.Page
 {
     id: control
-    showTitle: true
+    showTitle: false
     padding: 0
-    margins: 0
+    topMargin: Maui.Style.contentMargins
     headBar.padding: 0
     headBar.background: null
     headBar.farLeftContent: ToolButton

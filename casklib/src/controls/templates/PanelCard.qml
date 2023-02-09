@@ -11,12 +11,13 @@ T.Pane
 {
     id: control
     default property alias content: _layout.data
-
-    padding: Maui.Style.space.medium
     clip: false
-    spacing: padding
+
+    padding: Maui.Style.contentMargins
+    spacing: Maui.Style.defaultSpacing
+
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
-    //    visible:
+
     readonly property bool isOpen: parent !== null && visible
     readonly property int index : ObjectModel.index
 

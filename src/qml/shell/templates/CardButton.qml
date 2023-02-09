@@ -12,8 +12,8 @@ Maui.BasicToolButton
     id: control
     property string tooltipText : text
 
-    padding: Maui.Style.space.small
-    spacing: padding
+    padding: Maui.Style.defaultPadding
+    spacing: Maui.Style.deafultSpacing
 
     icon.width: Maui.Style.iconSize
     icon.height: Maui.Style.iconSize

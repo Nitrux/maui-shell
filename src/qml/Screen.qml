@@ -352,6 +352,7 @@ WaylandOutput
 
             ScreenshotArea
             {
+                id: _screenshotArea
                 anchors.fill: parent
             }
 

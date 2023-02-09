@@ -11,7 +11,7 @@ Item
 
     id: control
 
-
+    property bool running : false
 
     Rectangle
     {
@@ -55,11 +55,13 @@ Item
                         easing.type :Easing.InOutQuad
                     }
                 }
+
             }
 
             onFinished:
             {
                 _color.opacity = 0.4
+                control.running = false
             }
         }
     }
@@ -93,12 +95,19 @@ Item
 
     function grabCurrentScreen(id : string)
     {
+        control.running = true
         _cask.grabToImage(function(result) {
-//            Cask.Server.screenshot.setScreenshotReady(result.url, id)
-            result.saveToFile("something-%1.png".arg(new Date().toLocaleTimeString()));
+            let where = Cask.Server.screenshot.saveDir +String("/screenshot-%1.png").arg(new Date().toLocaleTimeString())
+            result.saveToFile(where);
+            if(ok)
+            {
+                        Cask.Server.screenshot.setScreenshotReady(where, id)
+            }
+
+            console.log("SCREENSHOT REULT ", result.url, where)
+
         });
         control.animate()
-
     }
 
     function grabAllScreens(id: string)
@@ -116,12 +125,15 @@ Item
         }
         console.log(window.id, window.appName)
 
+        control.running = true
         const chrome = window.chrome;
 
         console.log("Chrome:" , chrome)
 
         chrome.grabToImage(function(result) {
-            result.saveToFile("something-%1.png".arg(new Date().toLocaleTimeString()));
+            let where = Cask.Server.screenshot.saveDir +String("/screenshot-%1.png").arg(new Date().toLocaleTimeString())
+
+            result.saveToFile(where);
         });
         control.animate()
 

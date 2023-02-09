@@ -195,6 +195,26 @@ Cask.StackableItem
         }
     }
 
+    Rectangle
+    {
+        id: _shield
+        radius:  _decoration.radius
+        visible: Cask.Server.screenshot.blacklisted.indexOf(rootChrome.appId) >= 0 && _screenshotArea.running
+        color: Maui.Theme.backgroundColor
+        anchors.fill: parent
+        z: surfaceItem.z +1
+
+        Maui.Holder
+        {
+        anchors.fill: parent
+        emoji: "dialog-warning-symbolic"
+        visible: true
+        title: i18n("Protected")
+        body: i18n("This app has requested to not be shown in screenshots.")
+        }
+
+    }
+
     Loader
     {
         asynchronous: true
@@ -290,7 +310,6 @@ Cask.StackableItem
             rootChrome.y = 0
 
             toplevel.sendMaximized(Qt.size(rootChrome.parent.width, rootChrome.parent.height - titlebarHeight))
-
         }
 
         function onUnsetMaximized()
