@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import org.maui.cask 1.0 as Cask
 
@@ -20,6 +20,7 @@ StackPage
     Column
     {
         id: _layout
+        enabled: !_timer.running
 
         spacing: Maui.Style.defaultSpacing
         width: control.width
@@ -40,7 +41,7 @@ StackPage
                 onClicked:
                 {
                     console.log("take screenshot")
-                    Cask.Server.screenshot.grabCurrentScreen();
+                    control.startScreenshot("screen")
                 }
             }
 
@@ -56,7 +57,7 @@ StackPage
                 onClicked:
                 {
                     console.log("take screenshot")
-                    Cask.Server.screenshot.grabCurrentWindow();
+                    control.startScreenshot("window")
                 }
             }
 
@@ -68,22 +69,95 @@ StackPage
 
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+
+                onClicked:
+                {
+                    console.log("take screenshot")
+                    control.startScreenshot("area")
+                }
             }
         }
 
         Maui.SectionItem
         {
             width: parent.width
-          label1.text: "Timer"
-          label2.text: i18n("Seconds")
-flat: false
-          SpinBox
-          {
-              from: 0
-              to : 100
-//              value: 0
-          }
+            label1.text: "Timer"
+            label2.text: i18n("Seconds")
+            flat: false
+            SpinBox
+            {
+                id: _secondsSpinBox
+                from: 0
+                to : 100
+                //              value: 0
+            }
         }
 
+        Maui.Chip
+        {
+            id: _counterChip
+            visible: _timer.running
+            width: parent.width
+            property int count  : _secondsSpinBox.value
+            text: count + " seconds."
+
+            color: Maui.Theme.positiveTextColor
+
+            Timer
+            {
+                id: _counter
+                interval: 1000
+                repeat: true
+                //            running: _timer.running
+                onTriggered:
+                {
+                    _counterChip.count--;
+                    if(_counterChip.count === 0)
+                    {
+                        stop()
+                        _counterChip.reset()
+                    }
+                }
+            }
+
+            function reset()
+            {
+                _counterChip.count = Qt.binding(function () {return _secondsSpinBox.value})
+            }
+        }
+
+
+    }
+
+    Timer
+    {
+        id: _timer
+        property string type
+        interval: _secondsSpinBox.value * 1000
+        repeat: false
+        onTriggered:
+        {
+            takeScreenshot(type)
+        }
+    }
+
+    function startScreenshot(type)
+    {
+        _timer.type = type
+        _timer.restart()
+        _counter.restart()
+    }
+
+    function takeScreenshot(type)
+    {
+        switch(type)
+        {
+        case "screen":  Cask.Server.screenshot.grabCurrentScreen();
+            break;
+        case "window":  Cask.Server.screenshot.grabCurrentWindow();
+            break;
+        case "area": break
+        default: break;
+        }
     }
 }
