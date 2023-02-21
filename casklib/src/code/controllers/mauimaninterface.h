@@ -8,8 +8,8 @@ namespace MauiMan
     class BackgroundManager;
     class ThemeManager;
     class ScreenManager;
-    class FormFactorManager;
 }
+
 class MauiManInterface : public QObject
 {
     Q_OBJECT
@@ -19,7 +19,13 @@ class MauiManInterface : public QObject
     Q_PROPERTY(MauiMan::FormFactorManager* formFactor READ formFactor)
 
 public:
-    Q_ENUM(MauiMan::FormFactorManager::Mode)
+    enum Mode
+    {
+        Desktop = 0,
+        Tablet,
+        Phone
+    };
+    Q_ENUM(Mode)
 
     explicit MauiManInterface(QObject *parent = nullptr);
 

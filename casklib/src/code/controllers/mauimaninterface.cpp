@@ -19,6 +19,7 @@ MauiManInterface::MauiManInterface(QObject *parent) : QObject(parent)
     qRegisterMetaType<MauiMan::ThemeManager*>("const MauiMan::ThemeManager*"); // this is needed for QML to know of ThemeManager
     qRegisterMetaType<MauiMan::ScreenManager*>("const MauiMan::ScreenManager*"); // this is needed for QML to know of ScreenManager
     qRegisterMetaType<MauiMan::FormFactorManager*>("const MauiMan::FormFactorManager*"); // this is needed for QML to know of FormFactorManager
+    qRegisterMetaType<MauiMan::FormFactorInfo*>("const MauiMan::FormFactorInfo*"); // this is needed for QML to know of FormFactorManager
 }
 
 MauiMan::BackgroundManager *MauiManInterface::background()

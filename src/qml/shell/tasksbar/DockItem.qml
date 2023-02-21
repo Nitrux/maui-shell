@@ -20,12 +20,13 @@ T.AbstractButton
     icon.height: 22
     icon.width: 22
 
+    property bool flat: Cask.MauiMan.formFactor.preferredMode === Cask.MauiMan.Desktop
+
     property bool colorize: false
 
     background: Rectangle
     {
-        color: control.colorize ?  _imgColors.highlight  : control.pressed || control.down || control.checked ? Maui.Theme.highlightColor : (control.highlighted || control.hovered ? Maui.Theme.hoverColor : Maui.Theme.alternateBackgroundColor)
-
+        color: control.colorize ?  _imgColors.highlight  : control.pressed || control.down || control.checked ? Maui.Theme.highlightColor : (control.highlighted || control.hovered ? Maui.Theme.hoverColor : (control.flat ? "transparent" : Maui.Theme.alternateBackgroundColor) )
 
         opacity: control.checked && control.colorize ? 0.7: 1
         radius: 8
@@ -38,6 +39,7 @@ T.AbstractButton
 
         Behavior on color
         {
+            enabled: !control.flat
             ColorAnimation
             {
                 easing.type: Easing.InQuad
