@@ -43,7 +43,7 @@ cmake \
 	-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON \
 	-DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" \
 	-DCMAKE_VERBOSE_MAKEFILE=ON \
-	-DCMAKE_PREFIX_PATH="/usr/lib/x86_64-linux-gnu/cmake/MauiMan;/usr/lib/x86_64-linux-gnu/cmake/MauiKit;/usr/lib/x86_64-linux-gnu/cmake/MauiKitFileBrowsing;/usr/lib/x86_64-linux-gnu/cmake/MauiKitCalendar;/usr/lib/x86_64-linux-gnu/cmake/MauiCore;/usr/lib/x86_64-linux-gnu/cmake/MauiCoreAudio;/usr/lib/x86_64-linux-gnu/cmake/MauiCoreNotifications;/usr/lib/x86_64-linux-gnu/cmake/MauiCorePower;/usr/lib/x86_64-linux-gnu/cmake/MauiCore;/usr/lib/x86_64-linux-gnu/cmake/CaskServer" ../maui-shell/
+	-DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ../maui-shell/
 
 make -j$(nproc)
 
