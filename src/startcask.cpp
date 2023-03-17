@@ -162,6 +162,8 @@ qputenv("QT_QPA_ENABLE_TERMINAL_KEYBOARD", "1");
   //style releated
 //  qputenv("QT_QPA_PLATFORMTHEME", "breeze"); //breaks icons
   qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+  qputenv("QT_QPA_PLATFORMTHEME", "maui");
+
   qputenv("XCURSOR_THEME", "breeze_cursors");
   qputenv("XCURSOR_SIZE", "24");
 

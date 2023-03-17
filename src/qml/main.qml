@@ -94,8 +94,8 @@ WaylandCompositor
     defaultSeat.keymap
     {
         layout: keymapSettings.layout
-        variant: keymapSettings.variant
-        options: keymapSettings.options
+        variant: ""
+        options: ""
         rules: keymapSettings.rules
         model: keymapSettings.model
     }
@@ -106,7 +106,8 @@ WaylandCompositor
         category: "keymap"
         property string layout: "us"
         property string variant: "intl"
-        property string options: "grp:shifts_toggle,compose:ralt,ctrl:nocaps"
+        property string options: ""
+//        property string options: "grp:shifts_toggle,compose:ralt,ctrl:nocaps"
         property string rules: ""
         property string model: ""
     }

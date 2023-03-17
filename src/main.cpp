@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
 //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
 
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
-        qputenv("QT_QPA_PLATFORMTHEME", "generic");
+        qputenv("QT_QPA_PLATFORMTHEME", "maui");
 
     //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
     //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
@@ -260,12 +260,12 @@ int main(int argc, char *argv[])
 
     KAboutData::setApplicationData(about);
 
- if(MauiManUtils::isMauiSession())
-    {
-auto themeSettings =  std::make_unique<MauiMan::ThemeManager>();      
+// if(MauiManUtils::isMauiSession())
+//    {
+//auto themeSettings =  std::make_unique<MauiMan::ThemeManager>();
 
-        QIcon::setThemeName(themeSettings->iconTheme());
-    }
+//        QIcon::setThemeName(themeSettings->iconTheme());
+//    }
 
     signal(SIGINT, sigintHandler);
     signal(SIGTSTP, sigintHandler);
