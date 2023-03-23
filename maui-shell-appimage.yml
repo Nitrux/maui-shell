@@ -37,10 +37,10 @@ AppDir:
     - amd64
     allow_unauthenticated: true
     sources:
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
-    - sourceline: deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
-    - sourceline: deb http://archive.neon.kde.org/user focal main
+    - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse
+    - sourceline: deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+    - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse
+    - sourceline: deb http://archive.neon.kde.org/user jammy main
       key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D'
 
     include:
