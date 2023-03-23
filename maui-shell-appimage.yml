@@ -48,50 +48,65 @@ AppDir:
     - bash
 
     # KF5 DEPENDENCIES
+    - libkf5activities5
+    - libkf5activitiesstats5
+    - libkf5akonadicalendar5
+    - libkf5archive5
+    - libkf5declarative5
+    - libkf5doctools5
+    - libkf5idletime5
+    - libkf5kiofilewidgets5
     - libkf5kirigami2-5
     - libkf5notifications5
-    - libkf5kiofilewidgets5
-    - libkf5solid5
-    - libkf5idletime5
+    - libkf5notifyconfig5
+    - libkf5package5
+    - libkf5people5
+    - libkf5runner5
     - libkf5service5
-    - libkf5akonadicalendar5
+    - libkf5solid5
+    - libkf5su5
+    - libkf5unitconversion5
+    - libkf5wallet5
+    - libkf5wayland5
     - libqt5sql5-sqlite
-    - qdbus-qt5
 
     # Other
+    - bluedevil
     - kded5
+    - kinit5
+    - libcanberra-pulse
+    - libfontconfig1
+    - libkf5bluezqt6
+    - libphonon4qt5-4
     - libpolkit-agent-1-0
     - libpolkit-qt5-1-1
-    - libfontconfig1
-    - libphonon4qt5-4
-    - bluedevil
-    - libkf5bluezqt6
-    - plasma-pa
-    - plasma-nm
     - libpulse0
+    - plasma-nm
+    - plasma-pa
+    - qdbus-qt5
 
     # QML modules
-    - qml-module-qtquick-shapes
     - qml-module-org-kde-bluezqt
     - qml-module-org-kde-kirigami2
     - qml-module-qt-labs-calendar
     - qml-module-qt-labs-platform
-    - qml-module-qtwayland-compositor
     - qml-module-qtmultimedia
+    - qml-module-qtquick-shapes
+    - qml-module-qtwayland-compositor
 
     # Other
     - libappimage1.0
 
     exclude:
-    - "*dbgsym*"
     - "*-dev"
+    - "*dbgsym*"
+    - gnupg
+    - libstdc++6
+    - perl
+    - perl-*
     - sound-theme-freedesktop
     - systemd
     - systemd-*
-    - perl
-    - perl-*
-    - gnupg
-    - libstdc++6
 
   files:
     include:

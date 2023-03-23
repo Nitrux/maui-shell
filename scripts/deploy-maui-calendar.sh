@@ -4,7 +4,7 @@ MAUI_CALENDAR_VERSION=$([ -z $BRANCH_MAUI_CALENDAR ] && echo "main" || echo $BRA
 
 echo "Cloning Maui Calendar from branch $MAUI_CALENDAR_VERSION"
 
-git clone https://github.com/Nitrux/maui-calendar.git --depth=1 -b $MAUI_CALENDAR_VERSION
+git clone https://invent.kde.org/maui/mauikit-calendar.git --depth=1 -b $MAUI_CALENDAR_VERSION
 
 cd maui-calendar
 cmake -DCMAKE_BUILD_TYPE="Release" \

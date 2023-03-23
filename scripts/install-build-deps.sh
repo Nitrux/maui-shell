@@ -24,6 +24,7 @@ $APT_COMMAND install -qy --no-install-recommends \
     gtk-update-icon-cache \
     kded5-dev \
     kinit-dev \
+    libcanberra-pulse \
     libfontconfig-dev \
     libfontconfig1-dev \
     libkf5activities-dev \
