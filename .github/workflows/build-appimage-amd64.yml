@@ -24,7 +24,8 @@ jobs:
 
     steps:
       - name: Install basic packages
-        run: apt-get update -q && apt-get -qy install sudo && apt-get -qy install curl wget gnupg python3-pip patchelf
+        run: apt update -q
+        run: apt install -yy --no-install-recommends sudo curl wget gnupg python3-pip patchelf
 
       - name: Add required repo list
         run: |
@@ -46,7 +47,7 @@ jobs:
           rm /opt/appimagetool
           
       - name: Install AppImage Builder
-        run: sudo pip3 install appimage-builder==0.9.2
+        run: sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
 
       - uses: actions/checkout@v2
       - name: Build AppImage
