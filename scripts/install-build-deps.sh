@@ -89,6 +89,7 @@ $APT_COMMAND install -qy --no-install-recommends \
     qtmultimedia5-dev \
     qtpositioning5-dev \
     qtquickcontrols2-5-dev \
+    qtsystems5-dev \
     qtwayland5 \
     qtwayland5-dev-tools \
     qtwayland5-private-dev

@@ -7,10 +7,10 @@ on:
 jobs:
   build-appimage:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     container:
-      image: ubuntu:focal
+      image: ubuntu:jammy
       env:
         DEBIAN_FRONTEND: noninteractive
 
@@ -29,7 +29,7 @@ jobs:
       - name: Add required repo list
         run: |
           sudo touch /etc/apt/sources.list.d/neon.list
-          echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
+          echo "deb http://archive.neon.kde.org/user jammy main" | sudo tee -a /etc/apt/sources.list.d/neon.list
           curl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D' | sudo apt-key add -
           
           sudo apt-get update -q
