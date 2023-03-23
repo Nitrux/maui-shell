@@ -18,7 +18,7 @@ jobs:
           BRANCH_MAUIMAN: master
           BRANCH_MAUIKIT: master
           BRANCH_MAUIKIT_FILEBROWSING: master
-          BRANCH_MAUI_CALENDAR: master
+          BRANCH_MAUIKIT_CALENDAR: master
           BRANCH_MAUICORE: main
           BRANCH_CASK_SERVER: main
 

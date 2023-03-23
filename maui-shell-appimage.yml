@@ -11,8 +11,8 @@ script:
   - ../scripts/deploy-mauiman.sh
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
+  - ../scripts/deploy-mauikit-calendar.sh
   - ../scripts/deploy-cask-server.sh
-  - ../scripts/deploy-maui-calendar.sh
   - ../scripts/deploy-maui-shell.sh
   - ../scripts/install-icon-theme.sh
 
