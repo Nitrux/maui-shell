@@ -37,12 +37,12 @@ AppDir:
     - amd64
     allow_unauthenticated: true
     sources:
-      key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
-      key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D'
     - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse
     - sourceline: deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+      key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
     - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse
     - sourceline: deb http://archive.neon.kde.org/user jammy main
+      key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D'
 
     include:
     # CORE DEPENDENCIES
