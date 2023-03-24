@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-MAUIKIT_CALENDAR_VERSION=$([ -z $BRANCH_MAUIKIT_CALENDAR ] && echo "main" || echo $BRANCH_MAUIKIT_CALENDAR)
+MAUIKIT_CALENDAR_VERSION=$([ -z $BRANCH_MAUIKIT_CALENDAR ] && echo "master" || echo $BRANCH_MAUIKIT_CALENDAR)
 
 echo "Cloning Maui Calendar from branch $MAUIKIT_CALENDAR_VERSION"
 

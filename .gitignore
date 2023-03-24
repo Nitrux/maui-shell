@@ -80,4 +80,6 @@ CMakeLists.txt.user*
 # Appimage build folders & appimage
 AppDir
 appimage-builder-cache
+appimage-build
 *.AppImage
+*.AppImage.zsync

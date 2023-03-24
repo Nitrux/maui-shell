@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Install basic packages
-        run: apt update -q && apt install -yy --no-install-recommends sudo curl wget gnupg python3-pip patchelf git
+        run: apt update -q && apt install -yy --no-install-recommends sudo curl wget gnupg python3-pip patchelf git squashfs-tools zsync
 
       - name: Add required repo list
         run: |

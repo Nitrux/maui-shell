@@ -71,6 +71,8 @@ AppDir:
     - libkf5waylandclient5
     - libkf5waylandserver5
     - libqt5sql5-sqlite
+    - libqt5systeminfo5
+    - libkf5eventviews5
 
     # Other
     - bluedevil
