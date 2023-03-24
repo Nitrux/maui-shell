@@ -21,7 +21,7 @@ AppDir:
   app_info:
     id: maui-shell
     name: maui-shell
-    icon: utilities-terminal
+    icon: start-here
     version: latest
     exec: usr/bin/cask
     exec_args: $@
@@ -30,7 +30,7 @@ AppDir:
       PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
-    - cd $APPDIR/bin/ && ln -sf bash sh
+    - ln -svf $APPDIR/bin/bash $APPDIR/bin/sh
     # - cp -n $APPDIR/opt/libc/lib/x86_64-linux-gnu/libnsl* $APPDIR/lib/x86_64-linux-gnu/
   apt:
     arch:
