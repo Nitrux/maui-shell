@@ -31,7 +31,7 @@ AppDir:
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
-    - cp -n $APPDIR/opt/libc/lib/x86_64-linux-gnu/libnsl* $APPDIR/lib/x86_64-linux-gnu/
+    # - cp -n $APPDIR/opt/libc/lib/x86_64-linux-gnu/libnsl* $APPDIR/lib/x86_64-linux-gnu/
   apt:
     arch:
     - amd64
