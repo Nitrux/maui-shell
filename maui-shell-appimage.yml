@@ -68,13 +68,14 @@ AppDir:
     - libkf5su5
     - libkf5unitconversion5
     - libkf5wallet5
-    - libkf5wayland5
+    - libkf5waylandclient5
+    - libkf5waylandserver5
     - libqt5sql5-sqlite
 
     # Other
     - bluedevil
     - kded5
-    - kinit5
+    - kinit
     - libcanberra-pulse
     - libfontconfig1
     - libkf5bluezqt6
