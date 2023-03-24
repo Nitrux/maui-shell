@@ -50,7 +50,7 @@ AppDir:
 
     # KF5 DEPENDENCIES
     - libkf5activities5
-    - libkf5activitiesstats5
+    - libkf5activitiesstats1
     - libkf5akonadicalendar5
     - libkf5archive5
     - libkf5declarative5
