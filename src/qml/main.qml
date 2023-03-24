@@ -2,9 +2,6 @@ import QtQuick 2.15
 
 import QtWayland.Compositor 1.3
 
-import Qt.labs.settings 1.0
-import Qt.labs.platform 1.1 as Labs
-
 import org.mauikit.controls 1.3 as Maui
 
 import Zpaces 1.0 as ZP
@@ -19,15 +16,16 @@ WaylandCompositor
 {
     id: comp
     retainedSelection: true
-    //    useHardwareIntegrationExtension: true
+    useHardwareIntegrationExtension: true
 
     Screen
     {
         id: screen
         compositor: comp
         targetScreen: modelData
-        Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
         position: Qt.point(virtualX, virtualY)
+
+        Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
     }
 
     Nof.Notifications
@@ -93,23 +91,26 @@ WaylandCompositor
 
     defaultSeat.keymap
     {
-        layout: keymapSettings.layout
-        variant: ""
-        options: ""
-        rules: keymapSettings.rules
-        model: keymapSettings.model
+        layout: Cask.MauiMan.inputDevices.keyboardLayout
+        variant: Cask.MauiMan.inputDevices.keyboardVariant
+        options:  Cask.MauiMan.inputDevices.keyboardOptions
+        rules:  Cask.MauiMan.inputDevices.keyboardRules
+        model:  Cask.MauiMan.inputDevices.keyboardModel
     }
 
-    Settings
+    Connections
     {
-        id: keymapSettings
-        category: "keymap"
-        property string layout: "us"
-        property string variant: "intl"
-        property string options: ""
-//        property string options: "grp:shifts_toggle,compose:ralt,ctrl:nocaps"
-        property string rules: ""
-        property string model: ""
+        target: defaultSeat
+        onCursorSurfaceRequest: console.log("CURSOR SURFACE REQUEST", hotspotX, hotspotY, surface.cursorSurface, surface.hasContent, surface.inhibitsIdle)
+        onKeyboardFocusChanged:console.log("KEYBOARD FOCUS REQUEST")
+        onMouseFocusChanged:  console.log("MOUSE FOCUS REQUEST")
+    }
+
+    Connections
+    {
+        target: comp.drag
+        onDragStarted: console.log("DRAG STARTED")
+        onIconChanged: console.log("DRAG ICON CHANGED")
     }
 
     function handleShellSurfaceCreated(shellSurface, toplevel)

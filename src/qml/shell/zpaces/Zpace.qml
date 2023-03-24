@@ -137,19 +137,37 @@ T.Pane
 
             delegate: Chrome
             {
-                parent: _content
                 id: _chromeDelegate
+                parent: _content
+
                 overviewMode: control.overviewMode
                 shellSurface: model.window.shellSurface
                 window: model.window
                 scale: isMobile ? 1 : _swipeView.scale
+
+
                 moveItem: Item
                 {
                     objectName: "moveItem"
                     property bool moving: false
-                    parent: control
+                    parent:  control
+                    x: 0
+                    y: 0
                     height: _chromeDelegate.height
                     width: _chromeDelegate.width
+
+        //                Binding on x
+        //                {
+        //                    value: rootChrome.x
+        //                    restoreMode: Binding.RestoreBindingOrValue
+        //                }
+
+        //                Binding on y
+        //                {
+
+        //                    value: rootChrome.y
+        //                    restoreMode: Binding.RestoreBindingOrValue
+        //                }
                 }
             }
         }

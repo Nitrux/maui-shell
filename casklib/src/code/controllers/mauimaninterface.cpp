@@ -4,22 +4,24 @@
 #include <MauiMan/settingsstore.h>
 #include <MauiMan/mauimanutils.h>
 
-
 #include <MauiMan/backgroundmanager.h>
 #include <MauiMan/thememanager.h>
 #include <MauiMan/screenmanager.h>
+#include <MauiMan/inputdevicesmanager.h>
 
 MauiManInterface::MauiManInterface(QObject *parent) : QObject(parent)
   ,m_background(nullptr)
   ,m_theme(nullptr)
   ,m_screen(nullptr)
   ,m_formFactor(nullptr)
+  ,m_inputDevices(nullptr)
 {
     qRegisterMetaType<MauiMan::BackgroundManager*>("const MauiMan::BackgroundManager*"); // this is needed for QML to know of BackgroundManager
     qRegisterMetaType<MauiMan::ThemeManager*>("const MauiMan::ThemeManager*"); // this is needed for QML to know of ThemeManager
     qRegisterMetaType<MauiMan::ScreenManager*>("const MauiMan::ScreenManager*"); // this is needed for QML to know of ScreenManager
     qRegisterMetaType<MauiMan::FormFactorManager*>("const MauiMan::FormFactorManager*"); // this is needed for QML to know of FormFactorManager
-    qRegisterMetaType<MauiMan::FormFactorInfo*>("const MauiMan::FormFactorInfo*"); // this is needed for QML to know of FormFactorManager
+    qRegisterMetaType<MauiMan::FormFactorInfo*>("const MauiMan::FormFactorInfo*"); // this is needed for QML to know of FormFactorInfo
+    qRegisterMetaType<MauiMan::InputDevicesManager*>("const MauiMan::InputDevicesManager*"); // this is needed for QML to know of InputDevices
 }
 
 MauiMan::BackgroundManager *MauiManInterface::background()
@@ -60,6 +62,20 @@ MauiMan::FormFactorManager *MauiManInterface::formFactor()
     }
 
     return m_formFactor;
+}
+
+MauiMan::InputDevicesManager *MauiManInterface::inputDevices()
+{
+    if(!m_inputDevices)
+    {
+        m_inputDevices = new MauiMan::InputDevicesManager(this);
+        connect(m_inputDevices, &MauiMan::InputDevicesManager::keyboardLayoutChanged, [this](const QString &layout)
+        {
+            qputenv("XKB_DEFAULT_LAYOUT", layout.toUtf8());
+        });
+    }
+
+    return m_inputDevices;
 }
 
 void MauiManInterface::invokeManager(const QString &module)

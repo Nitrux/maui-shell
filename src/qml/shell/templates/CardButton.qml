@@ -7,7 +7,7 @@ import org.mauikit.controls 1.3 as Maui
 
 import QtQuick.Templates 2.15 as T
 
-Maui.BasicToolButton
+ToolButton
 {
     id: control
     property string tooltipText : text
@@ -41,14 +41,4 @@ Maui.BasicToolButton
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.tooltipText
-
-    //    contentItem: Maui.GridItemTemplate
-    //    {
-    //        hovered: control.hovered
-    //        iconVisible: true
-    //        iconSource: control.icon.name
-    //        label1.text: control.text
-    //        iconSizeHint: control.icon.width
-    //        labelSizeHint: 32
-    //    }
 }

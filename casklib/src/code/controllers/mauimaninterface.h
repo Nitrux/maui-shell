@@ -5,9 +5,10 @@
 
 namespace MauiMan
 {
-    class BackgroundManager;
-    class ThemeManager;
-    class ScreenManager;
+class BackgroundManager;
+class ThemeManager;
+class ScreenManager;
+class InputDevicesManager;
 }
 
 class MauiManInterface : public QObject
@@ -17,6 +18,7 @@ class MauiManInterface : public QObject
     Q_PROPERTY(MauiMan::ThemeManager* theme READ theme)
     Q_PROPERTY(MauiMan::ScreenManager* screen READ screen)
     Q_PROPERTY(MauiMan::FormFactorManager* formFactor READ formFactor)
+    Q_PROPERTY(MauiMan::InputDevicesManager* inputDevices READ inputDevices)
 
 public:
     enum Mode
@@ -33,18 +35,19 @@ public:
     MauiMan::ThemeManager *theme();
     MauiMan::ScreenManager* screen();
     MauiMan::FormFactorManager *formFactor();
+    MauiMan::InputDevicesManager *inputDevices();
 
-public slots:
+public Q_SLOTS:
     void invokeManager(const QString &module);
 
 private:
-
     MauiMan::BackgroundManager* m_background;
-    MauiMan::ThemeManager *m_theme;    
+    MauiMan::ThemeManager *m_theme;
     MauiMan::ScreenManager* m_screen;
     MauiMan::FormFactorManager* m_formFactor;
+    MauiMan::InputDevicesManager* m_inputDevices;
 
-signals:
+Q_SIGNALS:
 
 };
 

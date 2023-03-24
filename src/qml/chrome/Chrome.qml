@@ -67,8 +67,22 @@ Cask.StackableItem
     property rect previousRect
     property rect oldPos : Qt.rect(0, 0, rootChrome.width * 0.6, rootChrome.height*0.6)
 
-    y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
     x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
+    y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+
+    //        Binding on x
+    //        {
+    //            when: rootChrome.moveItem
+    //            value: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
+    //            restoreMode: Binding.RestoreBinding
+    //        }
+
+    //        Binding on y
+    //        {
+    //            when: rootChrome.moveItem
+    //            value: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+    //            restoreMode: Binding.RestoreBinding
+    //        }
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
@@ -97,7 +111,7 @@ Cask.StackableItem
     {
         id: _decoration
         anchors.fill: parent
-        
+
         showTitleBar: rootChrome.decorationVisible && !rootChrome.fullscreen
         showResizeHandlers: rootChrome.decorationVisible && !rootChrome.fullscreen
         showDropShadow: !window.maximized && !rootChrome.fullscreen
@@ -130,6 +144,7 @@ Cask.StackableItem
 
         focusOnClick:  !altDragHandler.active && !rootChrome.overviewMode
         autoCreatePopupItems: true
+
 
         onActiveFocusChanged:
         {
@@ -206,11 +221,11 @@ Cask.StackableItem
 
         Maui.Holder
         {
-        anchors.fill: parent
-        emoji: "dialog-warning-symbolic"
-        visible: true
-        title: i18n("Protected")
-        body: i18n("This app has requested to not be shown in screenshots.")
+            anchors.fill: parent
+            emoji: "dialog-warning-symbolic"
+            visible: true
+            title: i18n("Protected")
+            body: i18n("This app has requested to not be shown in screenshots.")
         }
 
     }
@@ -301,15 +316,18 @@ Cask.StackableItem
         {
             console.log("SET MAX", toplevel.maximized, oldPos)
 
-            oldPos.x = rootChrome.x
-            oldPos.y = rootChrome.y
+            oldPos.x = rootChrome.moveItem.x
+            oldPos.y = rootChrome.moveItem.y
             oldPos.width = rootChrome.width
             oldPos.height = rootChrome.height
 
             rootChrome.x = 0
             rootChrome.y = 0
 
-            toplevel.sendMaximized(Qt.size(rootChrome.parent.width, rootChrome.parent.height - titlebarHeight))
+            rootChrome.moveItem.x =  rootChrome.x
+            rootChrome.moveItem.y =  rootChrome.y
+
+            toplevel.sendMaximized(Qt.size(rootChrome.parent.width, rootChrome.parent.height - rootChrome.titlebarHeight))
         }
 
         function onUnsetMaximized()
@@ -322,34 +340,41 @@ Cask.StackableItem
 
             rootChrome.x = oldPos.x
             rootChrome.y = oldPos.y
+
+            rootChrome.moveItem.x =  rootChrome.x
+            rootChrome.moveItem.y =  rootChrome.y
+
+            rootChrome.x = Qt.binding(()=> {return rootChrome.moveItem.x})
+            rootChrome.y = Qt.binding(()=> {return rootChrome.moveItem.y})
+
             toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
 
         }
 
-        function onSetFullscreen()
-        {
-            console.log("FUCK MY LIFE")
+        //        function onSetFullscreen()
+        //        {
+        //            console.log("FUCK MY LIFE")
 
-            oldPos.x = rootChrome.x
-            oldPos.y = rootChrome.y
-            oldPos.width = rootChrome.width
-            oldPos.height = rootChrome.height
+        //            oldPos.x = rootChrome.x
+        //            oldPos.y = rootChrome.y
+        //            oldPos.width = rootChrome.width
+        //            oldPos.height = rootChrome.height
 
-            rootChrome.x = 0
-            rootChrome.y = 0
+        //            rootChrome.x = 0
+        //            rootChrome.y = 0
 
-            toplevel.sendFullscreen(Qt.size(container.width, container.height))
-        }
+        //            toplevel.sendFullscreen(Qt.size(container.width, container.height))
+        //        }
 
 
-        function onUnsetFullscreen()
-        {
-            console.log("FUCK MY LIFE")
+        //        function onUnsetFullscreen()
+        //        {
+        //            console.log("FUCK MY LIFE")
 
-            rootChrome.x = oldPos.x
-            rootChrome.y = oldPos.y
-            toplevel.sendConfigure(Qt.size(oldPos.width, oldPos.height), [3,4])
-        }
+        //            rootChrome.x = oldPos.x
+        //            rootChrome.y = oldPos.y
+        //            toplevel.sendConfigure(Qt.size(oldPos.width, oldPos.height), [3,4])
+        //        }
     }
 
     PinchArea
@@ -376,23 +401,25 @@ Cask.StackableItem
         surfaceItem.forceActiveFocus()
     }
 
-//    Rectangle
-//    {
-//        z: surfaceItem.z + 9999999999
-//        visible: true
-//        border.color: "white"
-//        color: "black"
-//        radius: Maui.Style.radiusV
-//        anchors.centerIn: parent
-//        width: height * 10
-//        height: moveGeometryText.implicitHeight * 1.5
-//        Text {
-//            id: moveGeometryText
-//            color: "white"
-//            anchors.centerIn: parent
-//            //                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
-//            //            text: rootChrome.parent.objectName
-//            text:  rootChrome.appId + " / " + toplevel.maximized
-//        }
-//    }
+    Rectangle
+    {
+        z: surfaceItem.z + 9999999999
+        visible: true
+        border.color: "white"
+        color: "black"
+        radius: Maui.Style.radiusV
+        anchors.centerIn: parent
+        width: height * 10
+        height: moveGeometryText.implicitHeight * 1.5
+        Text {
+            id: moveGeometryText
+            color: "white"
+            anchors.centerIn: parent
+            //                text: Math.round(rootChrome.x) + "," + Math.round(rootChrome.y) + " on " + rootChrome.screenName + "\n" + Math.round(surfaceItem.output.geometry.height) + "," + Math.round(rootChrome.height) + " ," + rootChrome.scale + " / " + pinch4.activeScale
+            //            text: rootChrome.parent.objectName
+            //                text:  rootChrome.appId + " / " + toplevel.maximized
+            text:  rootChrome.moveItem.x + " / " + rootChrome.moveItem.y + " - " + rootChrome.x + " / " + rootChrome.y
+
+        }
+    }
 }

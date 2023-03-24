@@ -357,8 +357,9 @@ WaylandOutput
             }
 
             // Draws the mouse cursor for a given Wayland seat
-            WaylandCursorItem {
-                //                inputEventsEnabled: false
+            WaylandCursorItem
+            {
+                                inputEventsEnabled: false
                 id: cursor
                 x: mouseTracker.mouseX
                 y: mouseTracker.mouseY
