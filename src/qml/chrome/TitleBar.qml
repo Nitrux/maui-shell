@@ -14,7 +14,7 @@ Control
 
     implicitHeight: _content.implicitHeight + topPadding + bottomPadding
 
-    padding: Maui.Style.space.medium
+    padding: 0
     background: null
 
     //    font.bold: true
