@@ -102,7 +102,5 @@ T.Pane
     {
         console.log("DESTROY PANEL CARD")
     }
-
-
 }
 

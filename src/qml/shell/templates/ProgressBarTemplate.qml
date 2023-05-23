@@ -9,6 +9,10 @@ import org.maui.cask 1.0 as Cask
 T.ProgressBar
 {
     id: control
+
+    Maui.Theme.colorSet: Maui.Theme.Button
+    Maui.Theme.inherit: false
+
     implicitHeight: 16 + topPadding + bottomPadding
     opacity: enabled ? 1 : 0.7
 
@@ -27,8 +31,7 @@ T.ProgressBar
     background: Rectangle
     {
         radius: height/2
-        color: control.enabled ? Qt.darker(Maui.Theme.backgroundColor, 1.2) : "transparent"
-        border.color: control.enabled ? "transparent" : Maui.Theme.textColor
+        color: Qt.darker(Maui.Theme.backgroundColor, 1.2)
 
         Behavior on color
         {

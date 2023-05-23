@@ -12,20 +12,11 @@ ToolButton
     id: control
     property string tooltipText : text
 
-    padding: Maui.Style.defaultPadding
-    spacing: Maui.Style.deafultSpacing
-
-    icon.width: Maui.Style.iconSize
-    icon.height: Maui.Style.iconSize
-
     background: Rectangle
     {
-        color: control.enabled ? (control.hovered ? Maui.Theme.hoverColor :( control.checked ||  control.containsPress ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor)) :"transparent"
-
-        border.color: control.enabled ? "transparent" : (control.checked ||  control.containsPress ? control.Maui.Theme.highlightColor : Maui.Theme.alternateBackgroundColor)
+        color: control.enabled ? (control.hovered ? Maui.Theme.hoverColor :( control.checked ||  control.containsPress ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor)) : "transparent"
 
         radius: Maui.Style.radiusV
-        opacity: control.checked? 1 : 0.7
 
         Behavior on color
         {

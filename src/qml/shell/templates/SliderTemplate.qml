@@ -11,6 +11,10 @@ import QtGraphicalEffects 1.15
 T.Slider
 {
     id: control
+
+    Maui.Theme.colorSet: Maui.Theme.Button
+    Maui.Theme.inherit: false
+
     implicitHeight: 16 + topPadding + bottomPadding
     opacity: enabled ? 1 : 0.7
 
@@ -29,8 +33,7 @@ T.Slider
     background: Rectangle
     {
         radius: height/2
-        color: control.enabled ? Qt.darker(Maui.Theme.backgroundColor, 1.2) : "transparent"
-        border.color: control.enabled ? "transparent" : Maui.Theme.textColor
+        color: Qt.darker(Maui.Theme.backgroundColor, 1.2)
 
         Rectangle
         {
@@ -97,8 +100,10 @@ T.Slider
     {
         x: Math.max(0,(control.visualPosition * parent.availableWidth) - width)
         y: control.topPadding + control.availableHeight / 2 - height / 2
+
         implicitWidth: control.height
         implicitHeight: control.height
+
         color: control.enabled ? Maui.Theme.highlightColor : "transparent"
         radius: height/2
 

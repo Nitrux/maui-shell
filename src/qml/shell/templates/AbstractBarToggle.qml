@@ -18,13 +18,13 @@ T.Pane
     Maui.Theme.inherit: false
 
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
-    spacing: Maui.Style.space.medium
+
+     padding: Maui.Style.defaultPadding
+    spacing: Maui.Style.space.small
 
     property alias label : _label
     property alias label2 : _label2
     property alias icon : _icon
-
-    padding: Maui.Style.space.medium
 
     signal clicked()
     signal wheel(var wheel)
@@ -32,7 +32,6 @@ T.Pane
     background: Rectangle
     {
         color: Maui.Theme.backgroundColor
-        opacity: 0.7
 
         radius: Maui.Style.radiusV
 
