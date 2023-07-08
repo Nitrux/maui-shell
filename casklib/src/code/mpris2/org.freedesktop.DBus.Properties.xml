@@ -18,9 +18,9 @@
     </method>
     <signal name="PropertiesChanged">
       <arg type="s" name="interface_name"/>
-      <arg type="a{sv}" name="changed_properties"/>
+      <arg type="a{sv}" name="changed_properties" direction="out"/>
       <arg type="as" name="invalidated_properties"/>
-      <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QVariantMap"/>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.Out1" value="QVariantMap"/>
     </signal>
   </interface>
 </node>

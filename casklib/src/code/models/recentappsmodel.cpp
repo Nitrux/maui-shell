@@ -1,6 +1,8 @@
 #include "recentappsmodel.h"
 #include "code/controllers/appsdb.h"
 
+#include <QVariant>
+
 RecentAppsModel::RecentAppsModel(AppsDB * parent) : QAbstractListModel(parent)
   ,m_db(parent)
 {
@@ -12,7 +14,7 @@ void RecentAppsModel::setList(const QVariantList &list)
     beginResetModel();
     for(const auto &item : list)
     {
-        m_list << AppsDB::appInfo(item.toMap().value("name").toString());
+        m_list << AppsDB::appInfo(item.toMap().value(QStringLiteral("name")).toString());
     }
 
     endResetModel();
@@ -44,11 +46,11 @@ QVariant RecentAppsModel::data(const QModelIndex &index, int role) const
 
     switch(role)
     {
-    case Roles::Name: return map.value("name");
-    case Roles::Icon: return map.value("icon");
-    case Roles::Executable: return map.value("executable");
-    case Roles::Comment: return map.value("comment");
-    case Roles::Path: return map.value("path");
+    case Roles::Name: return map.value(QStringLiteral("name"));
+    case Roles::Icon: return map.value(QStringLiteral("icon"));
+    case Roles::Executable: return map.value(QStringLiteral("executable"));
+    case Roles::Comment: return map.value(QStringLiteral("comment"));
+    case Roles::Path: return map.value(QStringLiteral("path"));
     }
 
     return QVariant();

@@ -33,7 +33,7 @@ DB::DB(QObject *parent)
 {
     QDir collectionDBPath_dir(TAG::TaggingPath);
     if (!collectionDBPath_dir.exists())
-        collectionDBPath_dir.mkpath(".");
+        collectionDBPath_dir.mkpath(QStringLiteral("."));
 
     this->name = QUuid::createUuid().toString();
     if (!FMH::fileExists(QUrl::fromLocalFile(TAG::TaggingPath + TAG::DBName))) {
@@ -61,7 +61,7 @@ void DB::openDB(const QString &name)
         if (!this->m_db.open())
             qDebug() << "ERROR OPENING DB" << this->m_db.lastError().text() << m_db.connectionName();
     }
-    auto query = this->getQuery("PRAGMA synchronous=OFF");
+    auto query = this->getQuery(QStringLiteral("PRAGMA synchronous=OFF"));
     query.exec();
 }
 
@@ -69,7 +69,7 @@ void DB::prepareCollectionDB() const
 {
     QSqlQuery query(this->m_db);
 
-    QFile file(":/db/code/controllers/script.sql");
+    QFile file(QStringLiteral(":/db/code/controllers/script.sql"));
 
     if (!file.exists()) {
         QString log = QStringLiteral("Fatal error on build database. The file '");
@@ -91,20 +91,20 @@ void DB::prepareCollectionDB() const
 
     while (!file.atEnd()) {
         hasText = false;
-        line = "";
-        readLine = "";
-        cleanedLine = "";
+        line = QStringLiteral("");
+        readLine = QByteArrayLiteral("");
+        cleanedLine = QStringLiteral("");
         strings.clear();
         while (!hasText) {
             readLine = file.readLine();
-            cleanedLine = readLine.trimmed();
-            strings = cleanedLine.split("--");
+            cleanedLine = QString::fromStdString(readLine.trimmed().toStdString());
+            strings = cleanedLine.split(QStringLiteral("--"));
             cleanedLine = strings.at(0);
-            if (!cleanedLine.startsWith("--") && !cleanedLine.startsWith("DROP") && !cleanedLine.isEmpty())
+            if (!cleanedLine.startsWith(QStringLiteral("--")) && !cleanedLine.startsWith(QStringLiteral("DROP")) && !cleanedLine.isEmpty())
                 line += cleanedLine;
-            if (cleanedLine.endsWith(";"))
+            if (cleanedLine.endsWith(QStringLiteral(";")))
                 break;
-            if (cleanedLine.startsWith("COMMIT"))
+            if (cleanedLine.startsWith(QStringLiteral("COMMIT")))
                 hasText = true;
         }
         if (!line.isEmpty()) {
@@ -120,7 +120,7 @@ void DB::prepareCollectionDB() const
 
 bool DB::checkExistance(const QString &tableName, const QString &searchId, const QString &search) const
 {
-    const auto queryStr = QString("SELECT %1 FROM %2 WHERE %3 = \"%4\"").arg(searchId, tableName, searchId, search);
+    const auto queryStr = QString(QStringLiteral("SELECT %1 FROM %2 WHERE %3 = \"%4\"")).arg(searchId, tableName, searchId, search);
     return this->checkExistance(queryStr);
 }
 
@@ -166,14 +166,14 @@ bool DB::insert(const QString &tableName, const QVariantMap &insertData) const
     QVariantList values = insertData.values();
     int totalFields = fields.size();
     for (int i = 0; i < totalFields; ++i)
-        strValues.append("?");
+        strValues.append(QStringLiteral("?"));
 
-    QString sqlQueryString = "INSERT INTO " + tableName + " (" + QString(fields.join(",")) + ") VALUES(" + QString(strValues.join(",")) + ")";
+    QString sqlQueryString = QStringLiteral("INSERT INTO ") + tableName + QStringLiteral(" (") + QString(fields.join(QStringLiteral(","))) + QStringLiteral(") VALUES(") + QString(strValues.join(QStringLiteral(","))) + QStringLiteral(")");
     QSqlQuery query(this->m_db);
     query.prepare(sqlQueryString);
 
     int k = 0;
-    foreach (const QVariant &value, values)
+    for (const QVariant &value : values)
         query.bindValue(k++, value);
 
     return query.exec();
@@ -193,17 +193,17 @@ bool DB::update(const QString &tableName, const FMH::MODEL &updateData, const QV
     const auto updateKeys = updateData.keys();
     for (const auto &key : updateKeys)
     {
-        set.append(FMH::MODEL_NAME[key] + " = '" + updateData[key] + "'");
+        set.append(FMH::MODEL_NAME[key] + QStringLiteral(" = '") + updateData[key] + QStringLiteral("'"));
     }
 
     QStringList condition;
     const auto whereKeys = where.keys();
     for (const auto &key : whereKeys)
     {
-         condition.append(key + " = '" + where[key].toString() + "'");
+         condition.append(key + QStringLiteral(" = '") + where[key].toString() + QStringLiteral("'"));
     }
 
-    QString sqlQueryString = "UPDATE " + tableName + " SET " + QString(set.join(",")) + " WHERE " + QString(condition.join(","));
+    QString sqlQueryString = QStringLiteral("UPDATE ") + tableName + QStringLiteral(" SET ") + QString(set.join(QStringLiteral(",")) + QStringLiteral(" WHERE ") + QString(condition.join(QStringLiteral(","))));
     auto query = this->getQuery(sqlQueryString);
     qDebug() << sqlQueryString;
     return query.exec();
@@ -211,7 +211,7 @@ bool DB::update(const QString &tableName, const FMH::MODEL &updateData, const QV
 
 bool DB::update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id) const
 {
-    auto queryStr = QString("UPDATE %1 SET %2 = \"%3\" WHERE %4 = \"%5\"").arg(table, column, newValue.toString().replace("\"", "\"\""), op.toString(), id);
+    auto queryStr = QString(QStringLiteral("UPDATE %1 SET %2 = \"%3\" WHERE %4 = \"%5\"")).arg(table, column, newValue.toString().replace(QStringLiteral("\""), QStringLiteral("\"\"")), op.toString(), id);
     auto query = this->getQuery(queryStr);
     return query.exec();
 }
@@ -231,16 +231,16 @@ bool DB::remove(const QString &tableName, const FMH::MODEL &removeData) const
     auto i = 0;
     const auto keys = removeData.keys();
     for (const auto &key : keys) {
-        strValues.append(QString("%1 = \"%2\"").arg(FMH::MODEL_NAME[key], removeData[key]));
+        strValues.append(QString(QStringLiteral("%1 = \"%2\"")).arg(FMH::MODEL_NAME[key], removeData[key]));
         i++;
 
         if (removeData.size() > 1 && i < removeData.size())
         {
-            strValues.append(" AND ");
+            strValues.append(QStringLiteral(" AND "));
         }
     }
 
-    QString sqlQueryString = "DELETE FROM " + tableName + " WHERE " + strValues;
+    QString sqlQueryString = QStringLiteral("DELETE FROM ") + tableName + QStringLiteral(" WHERE ") + strValues;
     qDebug() << sqlQueryString;
 
     return this->getQuery(sqlQueryString).exec();

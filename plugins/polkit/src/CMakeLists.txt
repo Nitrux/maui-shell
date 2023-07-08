@@ -1,59 +1,48 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/code
-    )
+    ${CMAKE_CURRENT_SOURCE_DIR}/code)
+
+ecm_add_qml_module(${PROJECT_NAME} URI "org.cask.polkit" VERSION 1.0 CLASSNAME CaskPolkitPlugin)
 
 set(caskpolkit_SRCS
     code/polkitagentlistener.cpp
     code/dialog.cpp
     code/agent.cpp
-    code/caskpolkitplugin.cpp
-)
+    code/caskpolkitplugin.cpp)
 
-set(
-    pluginData
-    controls/qmldir
-    )
+ecm_target_qml_sources(${PROJECT_NAME} SOURCES
+    controls/PolkitDialog.qml)
 
-if(QUICK_COMPILER)
-    qtquick_compiler_add_resources(caskpolkit_QML_QRC resources.qrc)
-else()
-    qt5_add_resources(caskpolkit_QML_QRC resources.qrc)
-endif()
+target_sources(${PROJECT_NAME}
+    PRIVATE
+    ${caskpolkit_SRCS})
 
+generate_export_header(${PROJECT_NAME} BASE_NAME CaskPolkit)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
+    EXPORT_NAME "CaskPolkit")
 
-ecm_generate_qmltypes(org.cask.polkit ${PROJECT_VERSION} DESTINATION ${KDE_INSTALL_QMLDIR}/org/cask/polkit)
-
-add_library(CaskPolkit SHARED ${caskpolkit_SRCS} ${caskpolkit_QML_QRC})
-
-generate_export_header(CaskPolkit BASE_NAME CaskPolkit)
-
-target_include_directories(CaskPolkit
+target_include_directories(${PROJECT_NAME}
     INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/Cask/Polkit>")
 
-target_include_directories(CaskPolkit PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};>")
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};>")
 
-if(QUICK_COMPILER)
-    add_definitions(-DQUICK_COMPILER)
-    target_compile_definitions(CaskPolkit PUBLIC QUICK_COMPILER)
-endif()
-
-target_link_libraries(CaskPolkit
-    Qt5::Core
-    Qt5::Qml
-    KF5::I18n
-    Qt::DBus
-
+target_link_libraries(${PROJECT_NAME}
+    Qt6::Core
+    Qt6::Qml
+    Qt6::DBus
+    KF6::I18n
 
     ${POLKITQT-1_CORE_LIBRARY}
     ${POLKITQT-1_AGENT_LIBRARY}
-    ${POLKIT_AGENT_LDFLAGS}
-)
+    ${POLKIT_AGENT_LDFLAGS})
 
+ecm_finalize_qml_module(${PROJECT_NAME} DESTINATION ${KDE_INSTALL_QMLDIR})
+ecm_generate_qmltypes(org.cask.polkit 1.0 DESTINATION ${KDE_INSTALL_QMLDIR}/org/cask/polkit)
 
-install(TARGETS CaskPolkit EXPORT CaskPolkitTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
+install(TARGETS ${PROJECT_NAME} EXPORT CaskPolkitTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     ${headers}
@@ -61,28 +50,5 @@ install(FILES
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/Cask/Polkit
     COMPONENT Devel)
 
-if (BUILD_SHARED_LIBS)
-    add_custom_target(copy_polkit_to_bin ALL
-        COMMAND ${CMAKE_COMMAND} -E
-        make_directory ${CMAKE_BINARY_DIR}/bin/org/cask/polkit/
-        COMMAND ${CMAKE_COMMAND} -E
-        copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/controls ${CMAKE_BINARY_DIR}/bin/org/cask/polkit/
-        COMMAND ${CMAKE_COMMAND} -E
-        copy $<TARGET_FILE:CaskPolkit> ${CMAKE_BINARY_DIR}/bin/org/cask/polkit/
-        )
 
-    if(QUICK_COMPILER)
-        install(FILES controls/qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/cask/polkit)
-    else()
-        install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/cask/polkit)
-    endif()
-
-    #include(ECMGeneratePriFile)
-    #ecm_generate_pri_file(BASE_NAME KQuickImageEditor LIB_NAME KQuickImageEditor DEPS "core qml quick svg" FILENAME_VAR PRI_FILENAME )
-    #install(FILES ${PRI_FILENAME}
-    #DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
-
-endif()
-
-install(TARGETS CaskPolkit DESTINATION ${KDE_INSTALL_QMLDIR}/org/cask/polkit )
 

@@ -13,19 +13,19 @@ static const auto autostartScriptKey = QStringLiteral("X-KDE-AutostartScript");
 
 QDir AutostartScriptDesktopFile::autostartLocation()
 {
-    return QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation)).filePath("autostart"));
+    return QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation)).filePath(QStringLiteral("autostart")));
 }
 
 AutostartScriptDesktopFile::AutostartScriptDesktopFile(const QString &name, const QString &execPath)
     : KDesktopFile(autostartLocation().absoluteFilePath(name + QStringLiteral(".desktop")))
 {
     KConfigGroup kcg = desktopGroup();
-    kcg.writeEntry("Type", "Application");
-    kcg.writeEntry("Name", name);
-    kcg.writeEntry("Exec", execPath);
-    kcg.writeEntry("Icon", "dialog-scripts");
+    kcg.writeEntry(QStringLiteral("Type"), "Application");
+    kcg.writeEntry(QStringLiteral("Name"), name);
+    kcg.writeEntry(QStringLiteral("Exec"), execPath);
+    kcg.writeEntry(QStringLiteral("Icon"), "dialog-scripts");
     kcg.writeEntry(autostartScriptKey, "true");
-    kcg.writeEntry("Path", "");
+    kcg.writeEntry(QStringLiteral("Path"), "");
 }
 
 bool AutostartScriptDesktopFile::isAutostartScript(const KDesktopFile &file)

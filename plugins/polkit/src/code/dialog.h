@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DIALOG_H
-#define DIALOG_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -52,7 +51,7 @@ public:
 
     PolkitQt1::Agent::AsyncResult *result() { return m_result; }
 
-signals:
+Q_SIGNALS:
     // This signal is never emitted at the moment, as we don't change the
     // properties of this window dynamically for now
     void changed();
@@ -70,5 +69,3 @@ private:
     PolkitQt1::Agent::AsyncResult *m_result;
 
 };
-
-#endif // DIALOG_H

@@ -1,13 +1,17 @@
 #include "tasksmodel.h"
-#include "code/controllers/zpaces.h"
+
 #include <QtWaylandCompositor/QWaylandSurface>
+
 #include <QDebug>
+#include <QFile>
+#include <QSettings>
+
 #include <KService>
 #include <KDesktopFile>
-#include <QSettings>
 
 #include "code/controllers/abstractwindow.h"
 #include "code/controllers/task.h"
+#include "code/controllers/zpaces.h"
 
 TasksModel::TasksModel(Zpaces *parent) : QAbstractListModel(parent)
   ,m_zpaces(parent)
@@ -99,7 +103,7 @@ void TasksModel::removeTask(const int &index)
     this->beginRemoveRows(QModelIndex(), index, index);
     m_tasks.remove(index);
     this->endRemoveRows();
-    emit this->countChanged();
+    Q_EMIT this->countChanged();
 }
 
 QStringList TasksModel::pinnedTasks()
@@ -159,7 +163,7 @@ void TasksModel::addTask(Task *task)
     m_tasks.append(task);
     this->endInsertRows();
 
-    emit this->countChanged();
+    Q_EMIT this->countChanged();
 
     connect(task, &Task::closed, this, [this, task]()
     {
@@ -174,9 +178,9 @@ Task *TasksModel::findTask(const QString &id)
     if(!id.isEmpty())
     {
         QString suffix;
-        if(!id.endsWith(".desktop"))
+        if(!id.endsWith(QStringLiteral(".desktop")))
         {
-            suffix = ".desktop";
+            suffix = QStringLiteral(".desktop");
         }
         KDesktopFile file(id+suffix);
         KService service(&file);

@@ -1,5 +1,4 @@
-#ifndef ABSTRACTWINDOW_H
-#define ABSTRACTWINDOW_H
+#pragma once
 
 #include <QObject>
 #include <QtWaylandCompositor/QWaylandShellSurface>
@@ -47,7 +46,7 @@ public:
     bool isActive() const;
     void setIsActive(bool value);
 
-public slots:
+public Q_SLOTS:
     virtual void close() = 0;
     virtual void minimize();
     virtual void unminimize();
@@ -58,7 +57,7 @@ public slots:
 
     void setChrome(QQuickItem* chrome);
 
-signals:
+Q_SIGNALS:
     void titleChanged();
     void appIdChanged();
     void iconNameChanged();
@@ -79,4 +78,3 @@ signals:
     void activatedChanged(bool activated);
 };
 
-#endif // ABSTRACTWINDOW_H

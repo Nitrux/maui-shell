@@ -8,7 +8,7 @@ import org.maui.cask 1.0 as Cask
 
 import "../../../templates" as Templates
 
-import org.mauikit.calendar 1.0 as Cal
+// import org.mauikit.calendar 1.0 as Cal
 
 Cask.PanelItem
 {
@@ -72,7 +72,7 @@ Cask.PanelItem
 
             width: parent.width
             height: currentItem.implicitHeight
-
+/*
             initialItem: Cal.DaysGrid
                 {
                     id: _monthGrid
@@ -94,7 +94,7 @@ Cask.PanelItem
                             onClicked: _stack.push(_tasksPageComponent)
                         }
                     }
-                }
+                }*/
 
         }
     }

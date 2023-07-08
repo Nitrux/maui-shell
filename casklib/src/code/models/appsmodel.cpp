@@ -3,16 +3,18 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMimeTypeTrader>
+#include <KApplicationTrader>
 #include <KService>
 #include <KServiceGroup>
-#include <KToolInvocation>
+//#include <KToolInvocation>
 #include <QColor>
 #include <QDebug>
 #include <QFileInfo>
 #include <QModelIndex>
 #include <QVariantList>
 
+
+#include<KLocalizedString>
 
 AppsModel::AppsModel(QObject *parent) : MauiList(parent)
 {
@@ -53,7 +55,7 @@ static FMH::MODEL_LIST getApps()
 
 static FMH::MODEL_LIST getApps(const QString &groupStr, const int &limit)
 {
-    const auto grp = QString(groupStr).replace("/", "") + "/";
+    const QString grp = QString(groupStr).replace(QStringLiteral("/"), QStringLiteral("")) + QStringLiteral("/");
     qDebug() << "APP GROUDP" << groupStr << grp;
 
     int i = 0;
@@ -81,10 +83,10 @@ static FMH::MODEL_LIST getApps(const QString &groupStr, const int &limit)
 
 void AppsModel::setList()
 {
-    emit preListChanged();
+    Q_EMIT preListChanged();
     m_data.clear();
 
-    if(m_group.isEmpty() || m_group == "All")
+    if(m_group.isEmpty() || m_group == QStringLiteral("All"))
     {
         const auto apps = getApps();
         for(const auto &item : std::as_const(apps))
@@ -99,8 +101,8 @@ void AppsModel::setList()
         m_data << apps;
     }
 
-    emit postListChanged();
-    emit this->countChanged();
+    Q_EMIT postListChanged();
+    Q_EMIT this->countChanged();
 }
 
 
@@ -119,7 +121,7 @@ QString AppsModel::group() const
 QVariantList AppsModel::groups() const
 {
     FMH::MODEL_LIST res;
-    res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, "All Apps"}, {FMH::MODEL_KEY::ICON, "Love"}, {FMH::MODEL_KEY::LABEL, "All"}, {FMH::MODEL_KEY::PATH, ""}};
+    res << FMH::MODEL {{FMH::MODEL_KEY::COMMENT, i18n("All Apps")}, {FMH::MODEL_KEY::ICON, QStringLiteral("love")}, {FMH::MODEL_KEY::LABEL, i18n("All")}, {FMH::MODEL_KEY::PATH, QStringLiteral("")}};
 
     res << getApps();
     return FMH::toMapList(res);
@@ -136,7 +138,7 @@ void AppsModel::setGroup(QString group)
         return;
 
     m_group = group;
-    emit groupChanged();
+    Q_EMIT groupChanged();
 }
 
 void AppsModel::setLimit(int limit)
@@ -145,5 +147,5 @@ void AppsModel::setLimit(int limit)
         return;
 
     m_limit = limit;
-    emit limitChanged();
+    Q_EMIT limitChanged();
 }

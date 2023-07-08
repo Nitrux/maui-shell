@@ -12,7 +12,8 @@ public:
     ~WaylandProcessLauncher();
     Q_INVOKABLE void launch(const QString &program);
     Q_INVOKABLE void launchApp(const QString &program);
-protected slots:
+
+protected Q_SLOTS:
     void onError(QProcess::ProcessError error);
     void onStateChanged(QProcess::ProcessState state);
 };

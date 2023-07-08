@@ -1,13 +1,8 @@
 #include "mauimaninterface.h"
 #include <QDBusInterface>
 
-#include <MauiMan/settingsstore.h>
-#include <MauiMan/mauimanutils.h>
-
-#include <MauiMan/backgroundmanager.h>
-#include <MauiMan/thememanager.h>
-#include <MauiMan/screenmanager.h>
-#include <MauiMan/inputdevicesmanager.h>
+#include <MauiMan4/settingsstore.h>
+#include <MauiMan4/mauimanutils.h>
 
 MauiManInterface::MauiManInterface(QObject *parent) : QObject(parent)
   ,m_background(nullptr)
@@ -16,12 +11,12 @@ MauiManInterface::MauiManInterface(QObject *parent) : QObject(parent)
   ,m_formFactor(nullptr)
   ,m_inputDevices(nullptr)
 {
-    qRegisterMetaType<MauiMan::BackgroundManager*>("const MauiMan::BackgroundManager*"); // this is needed for QML to know of BackgroundManager
-    qRegisterMetaType<MauiMan::ThemeManager*>("const MauiMan::ThemeManager*"); // this is needed for QML to know of ThemeManager
-    qRegisterMetaType<MauiMan::ScreenManager*>("const MauiMan::ScreenManager*"); // this is needed for QML to know of ScreenManager
-    qRegisterMetaType<MauiMan::FormFactorManager*>("const MauiMan::FormFactorManager*"); // this is needed for QML to know of FormFactorManager
-    qRegisterMetaType<MauiMan::FormFactorInfo*>("const MauiMan::FormFactorInfo*"); // this is needed for QML to know of FormFactorInfo
-    qRegisterMetaType<MauiMan::InputDevicesManager*>("const MauiMan::InputDevicesManager*"); // this is needed for QML to know of InputDevices
+//    qRegisterMetaType<MauiMan::BackgroundManager*>("const MauiMan::BackgroundManager*"); // this is needed for QML to know of BackgroundManager
+//    qRegisterMetaType<MauiMan::ThemeManager*>("const MauiMan::ThemeManager*"); // this is needed for QML to know of ThemeManager
+//    qRegisterMetaType<MauiMan::ScreenManager*>("const MauiMan::ScreenManager*"); // this is needed for QML to know of ScreenManager
+//    qRegisterMetaType<MauiMan::FormFactorManager*>("const MauiMan::FormFactorManager*"); // this is needed for QML to know of FormFactorManager
+//    qRegisterMetaType<MauiMan::FormFactorInfo*>("const MauiMan::FormFactorInfo*"); // this is needed for QML to know of FormFactorInfo
+//    qRegisterMetaType<MauiMan::InputDevicesManager*>("const MauiMan::InputDevicesManager*"); // this is needed for QML to know of InputDevices
 }
 
 MauiMan::BackgroundManager *MauiManInterface::background()

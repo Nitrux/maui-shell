@@ -1,7 +1,7 @@
 #include "zpace.h"
+
 #include "code/controllers/abstractwindow.h"
 #include "code/controllers/xdgwindow.h"
-#include "code/models/surfacesmodel.h"
 #include "code/controllers/zpaces.h"
 
 #include <QDebug>
@@ -15,10 +15,10 @@ Zpace::Zpace(ZpacesModel *parent) : QObject(nullptr)
     connect(m_windowsModel, &SurfacesModel::countChanged, [this]()
     {
         qDebug() << "SHOUDL IT REMOVE THE ZPACE TOO?";
-            if(m_windowsModel->count() == 0 && m_zpacesModelRoot->count() > 1)
-            {
-                emit this->closed();
-            }
+        if(m_windowsModel->count() == 0 && m_zpacesModelRoot->count() > 1)
+        {
+            Q_EMIT this->closed();
+        }
 
     });
 
@@ -83,7 +83,7 @@ void Zpace::setLimit(int limit)
         return;
 
     m_limit = limit;
-    emit limitChanged(m_limit);
+    Q_EMIT limitChanged(m_limit);
 }
 
 void Zpace::setControl(QQuickItem *control)
@@ -92,7 +92,7 @@ void Zpace::setControl(QQuickItem *control)
         return;
 
     m_control = control;
-    emit controlChanged(m_control);
+    Q_EMIT controlChanged(m_control);
 }
 
 void Zpace::setConstrains()
@@ -116,7 +116,7 @@ void Zpace::setWallpaper(const QString &newWallpaper)
     if (m_wallpaper == newWallpaper)
         return;
     m_wallpaper = newWallpaper;
-    emit wallpaperChanged();
+    Q_EMIT wallpaperChanged();
 }
 
 const QString &Zpace::title() const
@@ -129,7 +129,7 @@ void Zpace::setTitle(const QString &newTitle)
     if (m_title == newTitle)
         return;
     m_title = newTitle;
-    emit titleChanged();
+    Q_EMIT titleChanged();
 }
 
 QQuickItem *Zpace::control() const

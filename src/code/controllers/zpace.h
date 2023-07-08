@@ -1,10 +1,10 @@
-#ifndef ZPACE_H
-#define ZPACE_H
-
+#pragma once
 #include <QObject>
 #include <QQuickItem>
 
-class SurfacesModel;
+#include "code/models/surfacesmodel.h"
+
+
 class AbstractWindow;
 class ZpacesModel;
 class Zpaces;
@@ -55,7 +55,7 @@ public:
 
     QQuickItem* control() const;
 
-public slots:
+public Q_SLOTS:
     void setLimit(int limit);
 
     void setControl(QQuickItem* control);
@@ -68,13 +68,13 @@ private:
 
     void setConstrains();
 
-    QString m_wallpaper = "qrc:/wallpapers/maui_shell_dev_bg.png";
+    QString m_wallpaper = QStringLiteral("qrc:/wallpapers/maui_shell_dev_bg.png");
 
     QString m_title;
 
     QQuickItem* m_control;
 
-signals:
+Q_SIGNALS:
     void limitChanged(int limit);
     void closed();
     void wallpaperChanged();
@@ -82,4 +82,3 @@ signals:
     void controlChanged(QQuickItem* control);
 };
 
-#endif // ZPACE_H

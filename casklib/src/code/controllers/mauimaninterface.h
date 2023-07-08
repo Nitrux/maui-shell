@@ -1,24 +1,21 @@
 #pragma once
 
 #include <QObject>
-#include <MauiMan/formfactormanager.h>
 
-namespace MauiMan
-{
-class BackgroundManager;
-class ThemeManager;
-class ScreenManager;
-class InputDevicesManager;
-}
+#include <MauiMan4/formfactormanager.h>
+#include <MauiMan4/backgroundmanager.h>
+#include <MauiMan4/thememanager.h>
+#include <MauiMan4/screenmanager.h>
+#include <MauiMan4/inputdevicesmanager.h>
 
 class MauiManInterface : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(MauiMan::BackgroundManager* background READ background)
-    Q_PROPERTY(MauiMan::ThemeManager* theme READ theme)
-    Q_PROPERTY(MauiMan::ScreenManager* screen READ screen)
-    Q_PROPERTY(MauiMan::FormFactorManager* formFactor READ formFactor)
-    Q_PROPERTY(MauiMan::InputDevicesManager* inputDevices READ inputDevices)
+    Q_PROPERTY(MauiMan::BackgroundManager* background READ background CONSTANT)
+    Q_PROPERTY(MauiMan::ThemeManager* theme READ theme CONSTANT)
+    Q_PROPERTY(MauiMan::ScreenManager* screen READ screen CONSTANT)
+    Q_PROPERTY(MauiMan::FormFactorManager* formFactor READ formFactor CONSTANT)
+    Q_PROPERTY(MauiMan::InputDevicesManager* inputDevices READ inputDevices CONSTANT)
 
 public:
     enum Mode
@@ -46,8 +43,5 @@ private:
     MauiMan::ScreenManager* m_screen;
     MauiMan::FormFactorManager* m_formFactor;
     MauiMan::InputDevicesManager* m_inputDevices;
-
-Q_SIGNALS:
-
 };
 

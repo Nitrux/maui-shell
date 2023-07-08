@@ -79,15 +79,15 @@ void UpdateLaunchEnvJob::start()
         }
         const QString value = d->environment.value(varName);
 
-//        // KLauncher; remove this in KF6 (by then KInit will be gone)
-//        org::kde::KLauncher klauncher(QStringLiteral("org.kde.klauncher5"), QStringLiteral("/KLauncher"), QDBusConnection::sessionBus());
-//        auto klauncherReply = klauncher.setLaunchEnv(varName, value);
-//        d->monitorReply(klauncherReply);
+        //        // KLauncher; remove this in KF6 (by then KInit will be gone)
+        //        org::kde::KLauncher klauncher(QStringLiteral("org.kde.klauncher5"), QStringLiteral("/KLauncher"), QDBusConnection::sessionBus());
+        //        auto klauncherReply = klauncher.setLaunchEnv(varName, value);
+        //        d->monitorReply(klauncherReply);
 
-//        // plasma-session
-//        org::kde::Startup startup(QStringLiteral("org.kde.Startup"), QStringLiteral("/Startup"), QDBusConnection::sessionBus());
-//        auto startupReply = startup.updateLaunchEnv(varName, value);
-//        d->monitorReply(startupReply);
+        //        // plasma-session
+        //        org::kde::Startup startup(QStringLiteral("org.kde.Startup"), QStringLiteral("/Startup"), QDBusConnection::sessionBus());
+        //        auto startupReply = startup.updateLaunchEnv(varName, value);
+        //        d->monitorReply(startupReply);
 
         // DBus-activation environment
         dbusActivationEnv.insert(varName, value);
@@ -133,15 +133,16 @@ bool UpdateLaunchEnvJob::Private::isPosixName(const QString &name)
     // Ensure systemd compat by only allowing alphanumerics and _ in names.
     bool first = true;
     for (const QChar c : name) {
-        if (first && !c.isLetter() && c != QChar('_')) {
+        if (first && !c.isLetter() && c != QLatin1Char('_')) {
             return false;
         } else if (first) {
             first = false;
-        } else if (!c.isLetterOrNumber() && c != QChar('_')) {
+        } else if (!c.isLetterOrNumber() && c != QLatin1Char('_')) {
             return false;
         }
     }
     return !first;
+
 }
 
 bool UpdateLaunchEnvJob::Private::isSystemdApprovedValue(const QString &value)

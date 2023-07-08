@@ -1,12 +1,13 @@
-#ifndef SURFACESMODEL_H
-#define SURFACESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QObject>
 
+#include "code/controllers/abstractwindow.h"
+
 class QQuickItem;
-class AbstractWindow;
 class Zpace;
+
 class SurfacesModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -80,7 +81,7 @@ public:
 
     int activeWindowIndex() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * @brief removeWindow
      * Removes a window form the model and deletes it
@@ -110,10 +111,8 @@ private:
     
     int m_activeWindowIndex = -1;
 
-signals:
+Q_SIGNALS:
     void countChanged();
     void activeWindowChanged(AbstractWindow* activeWindow);
     void activeWindowIndexChanged(int activeWindowIndex);
 };
-
-#endif // SURFACESMODEL_H

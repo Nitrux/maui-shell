@@ -26,7 +26,8 @@ target_include_directories(cask_session PRIVATE ${CMAKE_SOURCE_DIR}/startcask ${
 target_link_libraries(cask_session
     CaskAutostart
     startcask
-    KF5::KIOCore
+    KF6::KIOCore
+    KF6::Service
 )
 
 install(TARGETS cask_session ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

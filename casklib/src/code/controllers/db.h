@@ -26,14 +26,14 @@
 #include <QVariantMap>
 #include <QSqlDatabase>
 
-#include <MauiKit/Core/fmh.h>
+#include <MauiKit4/Core/fmh.h>
 
 #include "fmstatic.h"
 
 namespace TAG
 {   
-    static const QString TaggingPath = FMStatic::DataPath + "/maui/cask/";
-    static const QString DBName = "apps-v1.db";
+    static const QString TaggingPath = FMStatic::DataPath + QStringLiteral("/maui/cask/");
+    static const QString DBName = QStringLiteral("apps-v1.db");
 }
 
 /**

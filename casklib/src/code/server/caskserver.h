@@ -1,10 +1,12 @@
 #pragma once
+
 #include <QObject>
+
 #include "casklib_export.h"
 
-class CaskPower;
-class CaskScreenshot;
-class CaskChrome;
+#include <CaskServer/caskpower.h>
+#include <CaskServer/caskscreenshot.h>
+#include <CaskServer/caskchrome.h>
 
 class DropShadowHelper : public QObject
 {
@@ -63,8 +65,5 @@ private:
     CaskPower *m_power;
     CaskScreenshot *m_screenshot;
     CaskChrome *m_chrome;
-
-signals:
-
 };
 

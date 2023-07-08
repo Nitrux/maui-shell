@@ -1,6 +1,3 @@
-#ifndef TASK_H
-#define TASK_H
-
 #include <QObject>
 
 class AbstractWindow;
@@ -39,7 +36,7 @@ public:
 
     QString path() const;
 
-public slots:
+public Q_SLOTS:
     void setIsPinned(bool isPinned);
 
 private:
@@ -68,7 +65,7 @@ private:
 
     QString m_path;
 
-signals:
+Q_SIGNALS:
     void windowChanged();
     void idChanged();
     void nameChanged(QString name);
@@ -79,5 +76,3 @@ signals:
     void closed();
     void pathChanged(QString path);
 };
-
-#endif // TASK_H

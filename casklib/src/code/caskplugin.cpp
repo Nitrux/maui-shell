@@ -21,19 +21,19 @@
 
 void CaskPlugin::registerTypes(const char *uri)
 {
-    qmlRegisterType(resolveFileUrl(QStringLiteral("templates/PanelItem.qml")), uri, 1, 0, "PanelItem");
+    qmlRegisterType(componentUrl(QStringLiteral("templates/PanelItem.qml")), uri, 1, 0, "PanelItem");
 
-    qmlRegisterType(resolveFileUrl(QStringLiteral("templates/Panel.qml")), uri, 1, 0, "Panel");
+    qmlRegisterType(componentUrl(QStringLiteral("templates/Panel.qml")), uri, 1, 0, "Panel");
 
-    qmlRegisterType(resolveFileUrl(QStringLiteral("templates/PanelPopup.qml")), uri, 1, 0, "PanelPopup");
+    qmlRegisterType(componentUrl(QStringLiteral("templates/PanelPopup.qml")), uri, 1, 0, "PanelPopup");
 
-    qmlRegisterType(resolveFileUrl(QStringLiteral("templates/PanelCard.qml")), uri, 1, 0, "PanelCard");
+    qmlRegisterType(componentUrl(QStringLiteral("templates/PanelCard.qml")), uri, 1, 0, "PanelCard");
 
-    qmlRegisterType(resolveFileUrl(QStringLiteral("templates/PanelSection.qml")), uri, 1, 0, "PanelSection");
+    qmlRegisterType(componentUrl(QStringLiteral("templates/PanelSection.qml")), uri, 1, 0, "PanelSection");
 
-    qmlRegisterType(resolveFileUrl(QStringLiteral("templates/IconLabel.qml")), uri, 1, 0, "IconLabel");
+    qmlRegisterType(componentUrl(QStringLiteral("templates/IconLabel.qml")), uri, 1, 0, "IconLabel");
 
-    qmlRegisterType(resolveFileUrl(QStringLiteral("Dashboard.qml")), uri, 1, 0, "Dashboard");
+    qmlRegisterType(componentUrl(QStringLiteral("Dashboard.qml")), uri, 1, 0, "Dashboard");
 
     //controllers
     qmlRegisterType<StackableItem>(uri, 1, 0, "StackableItem");
@@ -63,14 +63,14 @@ void CaskPlugin::registerTypes(const char *uri)
 
 
     //server stuff
-    qmlRegisterUncreatableType<CaskScreenshot>(uri, 1, 0, "CaskScreenshot", "Expose CaskScreenshot enum");
+    qmlRegisterUncreatableType<CaskScreenshot>(uri, 1, 0, "CaskScreenshot", QStringLiteral("Expose CaskScreenshot enum"));
 
     qmlRegisterType<DropShadowHelper>(uri, 1, 0, "DropShadowHelper");
 
     qmlRegisterSingletonType<CaskServer>(uri,1,0, "Server", [](QQmlEngine *, QJSEngine*)
     {
         return CaskServer::instance();
-    });    
+    });
 
 
     qmlRegisterSingletonType<PowerManager>(uri,1,0, "Power", [](QQmlEngine *, QJSEngine*)
@@ -78,6 +78,11 @@ void CaskPlugin::registerTypes(const char *uri)
         return PowerManager::instance();
     });
 
+}
+
+QUrl CaskPlugin::componentUrl(const QString &fileName) const
+{
+    return QUrl(resolveFileUrl(fileName));
 }
 
 void CaskPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

@@ -1,11 +1,11 @@
 #include "zpaces.h"
 #include "code/controllers/zpace.h"
-#include "code/models/surfacesmodel.h"
 #include <QDebug>
 #include <QWaylandOutput>
 #include <QScreen>
 #include <QWindow>
-#include <QTouchDevice>
+
+//#include <QTouchDevice>
 #include <QQuickItem>
 
 #include <QtWaylandCompositor/QWaylandShellSurface>
@@ -185,7 +185,7 @@ void Zpaces::setOutput(QWaylandOutput *output)
         return;
 
     m_output = output;
-    emit outputChanged();
+    Q_EMIT outputChanged();
 }
 
 void Zpaces::setGeometryConnections()
@@ -226,7 +226,7 @@ void Zpaces::setZpacesMode()
         m_zmode = ZMode::PhoneMode;
     }
 
-    emit this->zmodeChanged(m_zmode);
+    Q_EMIT this->zmodeChanged(m_zmode);
 }
 
 Zpaces::ZMode Zpaces::zmode() const

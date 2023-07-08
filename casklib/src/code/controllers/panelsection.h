@@ -1,6 +1,4 @@
-#ifndef PANELSECTION_H
-#define PANELSECTION_H
-
+#pragma once
 #include <QQuickItem>
 #include <QQmlEngine>
 #include <QObject>
@@ -22,12 +20,13 @@ class PanelSectionAttached : public QObject
 
 public:
     explicit PanelSectionAttached(QObject *parent = nullptr);
-      ~PanelSectionAttached();
+    ~PanelSectionAttached();
     PanelSection *section() const;
 
 private:
     Q_DISABLE_COPY(PanelSectionAttached)
-signals:
+
+Q_SIGNALS:
 
     void sectionChanged();
 
@@ -35,5 +34,3 @@ signals:
 
 QML_DECLARE_TYPE(PanelSection)
 QML_DECLARE_TYPEINFO(PanelSection, QML_HAS_ATTACHED_PROPERTIES)
-
-#endif // PANELSECTION_H

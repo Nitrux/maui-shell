@@ -69,8 +69,8 @@ Zpace *ZpacesModel::addZpace()
     m_zpacesList.append(newZpace);
     this->endInsertRows();
 
-    emit this->countChanged();
-    emit this->zpaceAdded(index);
+    Q_EMIT this->countChanged();
+    Q_EMIT this->zpaceAdded(index);
 
     qDebug() << "trying to add a new zpace" << rowCount(QModelIndex());
 
@@ -91,8 +91,8 @@ Zpace *ZpacesModel::insertZpace(const int &index)
     this->beginInsertRows(QModelIndex(), index, index);
     m_zpacesList.insert(index, newZpace);
     this->endInsertRows();
-    emit this->countChanged();
-    emit this->zpaceAdded(index);
+    Q_EMIT this->countChanged();
+    Q_EMIT this->zpaceAdded(index);
 
     return newZpace;
 }
@@ -106,7 +106,7 @@ void ZpacesModel::removeZpace(const int &index)
     this->beginRemoveRows(QModelIndex(), index, index);
     m_zpacesList.remove(index);
     this->endRemoveRows();
-    emit this->countChanged();
+    Q_EMIT this->countChanged();
 }
 
 void ZpacesModel::moveZpace(const int &from, const int &to)

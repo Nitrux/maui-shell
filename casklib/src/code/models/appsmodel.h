@@ -1,8 +1,7 @@
-#ifndef APPSMODEL_H
-#define APPSMODEL_H
+#pragma once
 
 #include <QObject>
-#include <MauiKit/Core/mauilist.h>
+#include <MauiKit4/Core/mauilist.h>
 
 class AppsModel : public MauiList
 {
@@ -22,12 +21,12 @@ public:
 
     int limit() const;
 
-public slots:
+public Q_SLOTS:
     void setGroup( QString group);
 
     void setLimit(int limit);
 
-signals:
+Q_SIGNALS:
     void groupChanged( );
 
     void limitChanged();
@@ -40,5 +39,3 @@ private:
     int m_limit = 99999;
     QString m_group;
 };
-
-#endif // APPSMODEL_H
