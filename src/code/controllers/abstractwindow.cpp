@@ -8,7 +8,7 @@ void AbstractWindow::setIsActive(bool value)
     }
 
     m_isActive = value;
-    emit this->activatedChanged(m_isActive);
+    Q_EMIT this->activatedChanged(m_isActive);
 }
 
 AbstractWindow::AbstractWindow() : QObject(nullptr)
@@ -20,35 +20,35 @@ AbstractWindow::AbstractWindow() : QObject(nullptr)
 void AbstractWindow::minimize()
 {
     m_minimized = true;
-    emit minimizedChanged();
-    emit setMinimized();
+    Q_EMIT minimizedChanged();
+    Q_EMIT setMinimized();
 }
 
 void AbstractWindow::unminimize()
 {
     m_minimized = false;
-    emit minimizedChanged();
-    emit unsetMinimized();
+    Q_EMIT minimizedChanged();
+    Q_EMIT unsetMinimized();
 }
 
 void AbstractWindow::maximize()
 {
-    emit setMaximized();
+    Q_EMIT setMaximized();
 }
 
 void AbstractWindow::unmaximize()
 {
-    emit unsetMaximized();
+    Q_EMIT unsetMaximized();
 }
 
 void AbstractWindow::sendFullscreen()
 {
-    emit setFullscreen();
+    Q_EMIT setFullscreen();
 }
 
 void AbstractWindow::unfullscreen()
 {
-    emit unsetFullscreen();
+    Q_EMIT unsetFullscreen();
 }
 
 void AbstractWindow::setChrome(QQuickItem *chrome)
@@ -57,7 +57,7 @@ void AbstractWindow::setChrome(QQuickItem *chrome)
         return;
 
     m_chrome = chrome;
-    emit chromeChanged(m_chrome);
+    Q_EMIT chromeChanged(m_chrome);
 }
 
 bool AbstractWindow::minimized() const

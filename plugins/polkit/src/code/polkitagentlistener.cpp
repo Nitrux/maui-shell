@@ -81,7 +81,7 @@ void PolKitAgentListener::request(const QString &request, bool echo)
         }
     });
 
-    emit this->authenticationRequest(m_dialog);
+    Q_EMIT this->authenticationRequest(m_dialog);
 }
 
 void PolKitAgentListener::completed(bool gainedAuthorization)

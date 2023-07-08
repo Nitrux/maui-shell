@@ -1,13 +1,12 @@
 #include "xdgwindow.h"
 #include <QDebug>
+
 #include <KDesktopFile>
-#include <QtWaylandCompositor/QWaylandShellSurface>
-#include <QtWaylandCompositor/QWaylandXdgShell>
-#include <QtWaylandCompositor/QWaylandSurface>
-#include <QtWaylandCompositor/QWaylandXdgSurface>
-#include <QtWaylandCompositor/QWaylandXdgToplevel>
-#include <QtWaylandCompositor/QWaylandClient>
-#include <QtWaylandCompositor/QWaylandCompositor>
+
+#include <QWaylandSurface>
+
+#include <QWaylandClient>
+#include <QWaylandCompositor>
 
 
 XdgWindow::XdgWindow(QWaylandShellSurface * shellSurface, QWaylandXdgToplevel * toplevel) : AbstractWindow()
@@ -22,7 +21,7 @@ XdgWindow::XdgWindow(QWaylandShellSurface * shellSurface, QWaylandXdgToplevel * 
 
     connect(m_shellSurface, &QWaylandXdgToplevel::destroyed, [this]()
     {
-        emit this->closed();
+        Q_EMIT this->closed();
         this->deleteLater();
     });
 }
@@ -52,19 +51,19 @@ void XdgWindow::setShellSurface(QWaylandShellSurface *shellSurface)
     m_shellSurface = shellSurface;
 
     m_xdgSurface = qobject_cast<QWaylandXdgSurface*>(shellSurface);
-    emit this->xdgSurfaceChanged();
+    Q_EMIT this->xdgSurfaceChanged();
 
     m_waylandSurface = m_xdgSurface->surface();
-    emit this->waylandSurfaceChanged();
+    Q_EMIT this->waylandSurfaceChanged();
 
     m_client = m_waylandSurface->client();
-    emit this->clientChanged();
+    Q_EMIT this->clientChanged();
 
     m_compositor = m_waylandSurface->compositor();
     qDebug() << "CLIENT <<<" << m_client->processId();
-    emit this->compositorChanged();
+    Q_EMIT this->compositorChanged();
 
-    emit shellSurfaceChanged(m_shellSurface);
+    Q_EMIT shellSurfaceChanged(m_shellSurface);
 }
 
 void XdgWindow::setToplevel(QWaylandXdgToplevel *toplevel)
@@ -78,7 +77,7 @@ void XdgWindow::setToplevel(QWaylandXdgToplevel *toplevel)
     m_toplevel = toplevel;
     qDebug() << "SETTIGN WINDOW TOPLEVEL" << toplevel << m_toplevel;
 
-    emit toplevelChanged(m_toplevel);
+    Q_EMIT toplevelChanged(m_toplevel);
 }
 
 void XdgWindow::deactivate()
@@ -147,9 +146,9 @@ void XdgWindow::setUpToplevelConnections()
     connect(m_toplevel, &QWaylandXdgToplevel::appIdChanged, [this]()
     {
         qDebug() << "tolevel appid changed" << this->appId();
-        emit this->appIdChanged();
-        emit this->appNameChanged();
-        emit this->iconNameChanged();
+        Q_EMIT this->appIdChanged();
+        Q_EMIT this->appNameChanged();
+        Q_EMIT this->iconNameChanged();
     });
 
     connect(m_toplevel, &QWaylandXdgToplevel::activatedChanged, [this]()
@@ -189,7 +188,7 @@ QString XdgWindow::iconName() const
     if(!m_toplevel)
         return QString();
 
-    KDesktopFile file(this->appId()+".desktop");
+    KDesktopFile file(this->appId() + QStringLiteral(".desktop"));
     return file.readIcon();
 }
 
@@ -198,7 +197,7 @@ QString XdgWindow::appName() const
     if(!m_toplevel)
         return QString();
 
-    KDesktopFile file(this->appId()+".desktop");
+    KDesktopFile file(this->appId() + QStringLiteral(".desktop"));
     return file.readName();
 }
 

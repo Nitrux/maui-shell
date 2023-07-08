@@ -47,6 +47,6 @@ void Dialog::setConfirmationResult(const QString &passwd)
 {
     m_password = passwd;
 
-    emit finished(this);
+    Q_EMIT finished(this);
 }
 

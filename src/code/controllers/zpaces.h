@@ -1,9 +1,10 @@
-#ifndef ZPACES_H
-#define ZPACES_H
+#pragma once
 
 #include <QObject>
+
 #include "code/models/zpacesmodel.h"
 #include "code/models/tasksmodel.h"
+#include "code/models/surfacesmodel.h"
 
 class AbstractWindow;
 class Zpace;
@@ -11,7 +12,7 @@ class QWaylandOutput;
 class QWaylandXdgToplevel;
 class XdgWindow;
 class QWaylandShellSurface;
-class SurfacesModel;
+
 class QQuickItem;
 
 class Zpaces : public QObject
@@ -46,7 +47,7 @@ public:
 
     SurfacesModel * allSurfaces() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * @brief addSurface
      * Adds a window to the right Zpace. To add a new window, a fitting Zpace has to be found first, that's an existing one or a new one.
@@ -135,10 +136,7 @@ private:
     void setZpacesMode();
 
 
-signals:
-
+Q_SIGNALS:
     void outputChanged();
     void zmodeChanged(ZMode mode);
 };
-
-#endif // ZPACES_H

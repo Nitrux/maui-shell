@@ -1,6 +1,4 @@
-#ifndef TASKSMODEL_H
-#define TASKSMODEL_H
-
+#pragma once
 #include <QAbstractListModel>
 #include <QObject>
 #include <QtWaylandCompositor/QWaylandShellSurface>
@@ -43,7 +41,7 @@ public:
      */
     int indexOf(Task *task);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * @brief addTask
@@ -69,7 +67,7 @@ public slots:
 
     QStringList pinnedTasks();
 
-signals:
+Q_SIGNALS:
     void countChanged();
 
 private:
@@ -82,5 +80,3 @@ private:
     void setPinnedTasks();
     void addTask(Task *task);
 };
-
-#endif // TASKSMODEL_H

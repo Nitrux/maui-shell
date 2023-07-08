@@ -10,15 +10,14 @@ class CaskPlugin : public QQmlExtensionPlugin
 
 public:
     void registerTypes(const char *uri) override;
+
 private:
+    QUrl componentUrl(const QString &fileName) const;
+
     void initializeEngine(QQmlEngine *engine, const char *uri) override;
 
     QString resolveFileUrl(const QString &filePath) const
     {
-#ifdef QUICK_COMPILER
-        return QStringLiteral("qrc:/maui/cask/") + filePath;
-#else
         return baseUrl().toString() + QLatin1Char('/') + filePath;
-#endif
     }
 };

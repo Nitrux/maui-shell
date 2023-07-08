@@ -17,13 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POLKITAGENTLISTENER_H
-#define POLKITAGENTLISTENER_H
+#pragma once
 
 #include <QObject>
 #include <QString>
+#include <QHash>
 
 #include <PolkitQt1/Identity>
+#include <PolkitQt1/Agent/Session>
 #include <PolkitQt1/Details>
 #include <PolkitQt1/Agent/Listener>
 #include <PolkitQt1/Agent/Session>
@@ -36,7 +37,7 @@ class PolKitAgentListener : public PolkitQt1::Agent::Listener
 public:
     explicit PolKitAgentListener(QObject *parent = nullptr);
 
-public slots:
+public Q_SLOTS:
     void initiateAuthentication(const QString &actionId,
                                 const QString &message,
                                 const QString &iconName,
@@ -55,8 +56,7 @@ private:
     QHash<PolkitQt1::Agent::Session *,PolkitQt1::Identity> m_sessionIdentity;
     Dialog *m_dialog;
 
-signals:
+Q_SIGNALS:
     void authenticationRequest(Dialog *dialog);
 };
 
-#endif // POLKITAGENTLISTENER_H

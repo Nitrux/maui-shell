@@ -26,12 +26,12 @@ RecentAppsModel *AppsDB::recentApps() const
 
 QVariantList AppsDB::recentAppsList()
 {
-    return get("select * from RECENT_APPS order by count DESC");
+    return get(QStringLiteral("select * from RECENT_APPS order by count DESC"));
 }
 
 void AppsDB::addRecentApp(const QString &desktopFile)
 {
-    if(m_db->insert("RECENT_APPS", {{"name", desktopFile}, {"adddate", QDateTime::currentDateTime().toString()}, {"count", 0}}))
+    if(m_db->insert(QStringLiteral("RECENT_APPS"), {{QStringLiteral("name"), desktopFile}, {QStringLiteral("adddate"), QDateTime::currentDateTime().toString()}, {QStringLiteral("count"), 0}}))
     {
         m_recentApps->insert(desktopFile, 0);
     }else
@@ -43,15 +43,15 @@ void AppsDB::addRecentApp(const QString &desktopFile)
 void AppsDB::launchApp(const QString &desktopFile)
 {
     auto info = AppsDB::appInfo(desktopFile);
-    m_launcher->launch(info.value("executable").toString());
+    m_launcher->launch(info.value(QStringLiteral("executable")).toString());
     this->addRecentApp(desktopFile);
 }
 
 void AppsDB::countUpApp(const QString &desktopFile)
 {
     auto query = m_db->getQuery();
-    query.prepare("UPDATE RECENT_APPS SET count = count + 1 WHERE name = :name");
-    query.bindValue(":name", desktopFile);
+    query.prepare(QStringLiteral("UPDATE RECENT_APPS SET count = count + 1 WHERE name = :name"));
+    query.bindValue(QStringLiteral(":name"), desktopFile);
     query.exec();
 }
 
@@ -108,11 +108,11 @@ QVariantMap AppsDB::appInfo(const QString &desktopFile)
     KDesktopFile file(desktopFile);
     KService service(&file);
 
-    res.insert("name", service.name());
-    res.insert("executable", service.exec());
-    res.insert("path", service.entryPath());
-    res.insert("comment", service.comment());
-    res.insert("icon", service.icon());
+    res.insert(QStringLiteral("name"), service.name());
+    res.insert(QStringLiteral("executable"), service.exec());
+    res.insert(QStringLiteral("path"), service.entryPath());
+    res.insert(QStringLiteral("comment"), service.comment());
+    res.insert(QStringLiteral("icon"), service.icon());
 
     return res;
 }

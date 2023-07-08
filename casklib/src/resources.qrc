@@ -1,13 +1,4 @@
 <RCC>
-    <qresource prefix="/maui/cask">
-        <file alias="templates/PanelItem.qml">controls/templates/PanelItem.qml</file>
-        <file alias="templates/Panel.qml">controls/templates/Panel.qml</file>
-        <file alias="templates/PanelPopup.qml">controls/templates/PanelPopup.qml</file>
-        <file alias="templates/PanelCard.qml">controls/templates/PanelCard.qml</file>
-        <file alias="templates/PanelSection.qml">controls/templates/PanelSection.qml</file>
-        <file alias="Dashboard.qml">controls/Dashboard.qml</file>
-        <file alias="templates/IconLabel.qml">controls/IconLabel.qml</file>
-    </qresource>
     <qresource prefix="/db">
         <file>code/controllers/script.sql</file>
     </qresource>

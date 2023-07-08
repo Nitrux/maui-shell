@@ -42,7 +42,7 @@ void Task::setWindow(AbstractWindow *window)
     }
 
     m_window = window;
-    emit windowChanged();
+    Q_EMIT windowChanged();
 }
 
 void Task::setId(const QString &id)
@@ -53,7 +53,7 @@ void Task::setId(const QString &id)
     }
 
     m_id = id;
-    emit idChanged();
+    Q_EMIT idChanged();
 }
 
 QString Task::name() const
@@ -84,7 +84,7 @@ void Task::setName(const QString &name)
     }
 
     m_name = name;
-    emit nameChanged(m_name);
+    Q_EMIT nameChanged(m_name);
 }
 
 void Task::setIconName(const QString &name)
@@ -95,7 +95,7 @@ void Task::setIconName(const QString &name)
     }
 
     m_iconName = name;
-    emit this->iconNameChanged(m_iconName);
+    Q_EMIT this->iconNameChanged(m_iconName);
 }
 
 void Task::setPath(const QString &path)
@@ -106,7 +106,7 @@ void Task::setPath(const QString &path)
     }
 
     m_path = path;
-    emit this->pathChanged(m_path);
+    Q_EMIT this->pathChanged(m_path);
 }
 
 QString Task::executable() const
@@ -130,7 +130,7 @@ void Task::setIsPinned(bool isPinned)
         return;
 
     m_isPinned = isPinned;
-    emit isPinnedChanged(m_isPinned);
+    Q_EMIT isPinnedChanged(m_isPinned);
 }
 
 void Task::setWindowConnections()
@@ -143,10 +143,10 @@ void Task::setWindowConnections()
         if(m_isPinned)
         {
             m_window = nullptr;
-            emit windowChanged();
+            Q_EMIT windowChanged();
         }else
         {
-            emit this->closed();
+            Q_EMIT this->closed();
         }
 
     }, Qt::QueuedConnection);
@@ -165,9 +165,9 @@ void Task::setData()
         return;
     }
     QString suffix;
-    if(!m_id.endsWith(".desktop"))
+    if(!m_id.endsWith(QStringLiteral(".desktop")))
     {
-        suffix = ".desktop";
+        suffix = QStringLiteral(".desktop");
     }
     KDesktopFile file(m_id+suffix);
     this->setIconName(file.readIcon());
@@ -186,7 +186,7 @@ void Task::setFileName(const QString &name)
     }
 
     m_fileName= name;
-    emit this->fileNameChanged();
+    Q_EMIT this->fileNameChanged();
 }
 
 void Task::setExecutable(const QString &exec)
@@ -197,7 +197,7 @@ void Task::setExecutable(const QString &exec)
     }
 
     m_executable = exec;
-    emit this->executableChanged(m_executable);
+    Q_EMIT this->executableChanged(m_executable);
 }
 
 void Task::pinTask()
@@ -234,6 +234,6 @@ void Task::unPinTask()
     //now chekc if it has a window, if it has then leave it there, otherwise remove it
     if(m_window == nullptr)
     {
-        emit this->closed();
+        Q_EMIT this->closed();
     }
 }

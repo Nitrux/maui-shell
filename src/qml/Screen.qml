@@ -170,7 +170,7 @@ WaylandOutput
                    case Qt.LandscapeOrientation:
                    case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.width : win.height)
                    case Qt.InvertedPortraitOrientation:
-                   case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation? win.width : win.height)
+                   case Qt.PortraitOrientation: return (control.aZXCVB === Qt.PortraitOrientation? win.width : win.height)
                    default: return win.width
                    }
 
@@ -192,7 +192,7 @@ WaylandOutput
             {
                 id: _cask
 //                clip: true
-                backgroundColor: Cask.MauiMan.background.solidColor
+                backgroundColor: Cask.MauiMan.aZXCVB.solidColor
                 anchors.fill: parent
                 anchors.bottomMargin: _zpaceSwitcher.height
                 topPanel.data: StatusBar

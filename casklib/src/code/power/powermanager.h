@@ -42,7 +42,7 @@ public:
     bool canSuspend();
     bool canHibernate();
 
-public slots:
+public Q_SLOTS:
     void shutdown();
     void reboot();
     void suspend();
@@ -64,7 +64,7 @@ private:
 
     uint m_pendingJobs = 0;
 
-signals:
+Q_SIGNALS:
     void canShutdownChanged();
     void canRebootChanged();
     void canSuspendChanged();

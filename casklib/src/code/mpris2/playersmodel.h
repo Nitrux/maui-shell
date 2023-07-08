@@ -1,6 +1,4 @@
-﻿#ifndef PLAYERSMODEL_H
-#define PLAYERSMODEL_H
-
+﻿#pragma once
 #include <QAbstractListModel>
 class Mpris2Player;
 class PlayersModel : public QAbstractListModel
@@ -42,9 +40,7 @@ private:
     bool indexIsValid(const int &index) const;
 
 
-signals:
+Q_SIGNALS:
     void countChanged();
 
 };
-
-#endif // PLAYERSMODEL_H

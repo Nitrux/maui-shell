@@ -1,17 +1,15 @@
 #include "caskserver.h"
 #include <QDebug>
-#include <CaskServer/caskpower.h>
-#include <CaskServer/caskscreenshot.h>
-#include <CaskServer/caskchrome.h>
+
 
 CaskServer::CaskServer(QObject *parent) : QObject(parent)
   ,m_power(nullptr)
   ,m_screenshot(nullptr)
   ,m_chrome(nullptr)
 {
-    qRegisterMetaType<CaskPower *>("const CaskPower*"); // this is needed for QML to know of
-    qRegisterMetaType<CaskScreenshot *>("const CaskScreenshot*");
-    qRegisterMetaType<CaskChrome *>("const CaskChrome*");
+//    qRegisterMetaType<CaskPower *>("const CaskPower*"); // this is needed for QML to know of
+//    qRegisterMetaType<CaskScreenshot *>("const CaskScreenshot*");
+//    qRegisterMetaType<CaskChrome *>("const CaskChrome*");
 }
 
 CaskPower *CaskServer::power()
@@ -80,5 +78,5 @@ void DropShadowHelper::setId(QString id)
         return;
 
     m_id = id;
-    emit idChanged(m_id);
+    Q_EMIT idChanged(m_id);
 }

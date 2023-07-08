@@ -267,7 +267,7 @@ void Mpris2Player::setPosition(qlonglong position)
 
 void Mpris2Player::updatePosition()
 {
-    QDBusPendingCall async = m_propsInterface->Get(OrgMprisMediaPlayer2PlayerInterface::staticInterfaceName(), QStringLiteral("Position"));
+    QDBusPendingCall async = m_propsInterface->Get(QLatin1String(OrgMprisMediaPlayer2PlayerInterface::staticInterfaceName()), QStringLiteral("Position"));
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(async, this);
     connect(watcher, &QDBusPendingCallWatcher::finished, this, &Mpris2Player::getPositionFinished);
 }
@@ -375,7 +375,7 @@ void Mpris2Player::updateFromMap(const QVariantMap &map)
                 qDebug() << "CAN IT PLAY?" << (m_capabilities & Capability::CanPlay) << m_capabilities;
 
             } else {
-                const char *gotTypeCh = QDBusMetaType::typeToSignature(i.value().userType());
+                const char *gotTypeCh = QDBusMetaType::typeToSignature(static_cast<QMetaType>(i.value().userType()));
                 QString gotType = gotTypeCh ? QString::fromUtf8(gotTypeCh) : QStringLiteral("<unknown>");
 
                 qCWarning(MPRIS2_PLAYER) << m_serviceName << "exports" << i.key()
@@ -433,9 +433,9 @@ void Mpris2Player::copyProperty(const QString &name, const QVariant &value,
         }
     }
     if (tmp.type() != expectedType) {
-        const char * gotTypeCh = QDBusMetaType::typeToSignature(tmp.userType());
+        const char * gotTypeCh = QDBusMetaType::typeToSignature(static_cast<QMetaType>(tmp.userType()));
         QString gotType = gotTypeCh ? QString::fromUtf8(gotTypeCh) : QStringLiteral("<unknown>");
-        const char * expTypeCh = QDBusMetaType::typeToSignature(expectedType);
+        const char * expTypeCh = QDBusMetaType::typeToSignature(static_cast<QMetaType>(expectedType));
         QString expType = expTypeCh ? QString::fromUtf8(expTypeCh) : QStringLiteral("<unknown>");
 
         qCWarning(MPRIS2_PLAYER) << m_serviceName << "exports" << name
@@ -516,7 +516,7 @@ void Mpris2Player::copyProperty(const QString &name, const QVariant &value,
             Q_EMIT identityChanged();
         }
     } else if (name == QStringLiteral("DesktopEntry")) {
-        KDesktopFile file(value.toString() +".desktop");
+        KDesktopFile file(value.toString() + QStringLiteral(".desktop"));
         QString iconName = file.readIcon();
         if (!iconName.isEmpty()) {
             m_iconName = iconName;

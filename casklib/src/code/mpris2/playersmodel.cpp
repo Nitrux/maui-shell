@@ -56,7 +56,7 @@ void PlayersModel::append(Mpris2Player *player)
     this->beginInsertRows(QModelIndex(), index, index);
     m_players << player;
     this->endInsertRows();
-    emit this->countChanged();
+    Q_EMIT this->countChanged();
 }
 
 void PlayersModel::remove(Mpris2Player *player)
@@ -74,7 +74,7 @@ void PlayersModel::remove(const int &index)
     this->beginRemoveRows(QModelIndex(), index, index);
     m_players.remove(index);
     this->endRemoveRows();
-    emit this->countChanged();
+    Q_EMIT this->countChanged();
 }
 
 Mpris2Player *PlayersModel::player(const int &index)

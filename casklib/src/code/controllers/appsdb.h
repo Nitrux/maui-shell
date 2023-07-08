@@ -24,7 +24,7 @@ public:
 
     WaylandProcessLauncher* processLauncher() const;
 
-public slots:
+public Q_SLOTS:
     void addRecentApp(const QString &desktopFile);
     void launchApp(const QString &desktopFile);
     void countUpApp(const QString &desktopFile);
@@ -38,8 +38,5 @@ private:
     WaylandProcessLauncher *m_launcher;
 
     const QVariantList get(const QString &queryTxt, std::function<bool(QVariantMap &item)> modifier = nullptr);
-
-signals:
-
 };
 

@@ -45,4 +45,4 @@ OrgFreedesktopLogin1ManagerInterface::~OrgFreedesktopLogin1ManagerInterface()
 {
 }
 
-#include "login1_manager_interface.moc"
+//#include "login1_manager_interface.moc"

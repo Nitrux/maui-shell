@@ -1,5 +1,4 @@
-#ifndef ZPACESMODEL_H
-#define ZPACESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QObject>
@@ -10,7 +9,6 @@ class ZpacesModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged FINAL)
-
 
 public:
 
@@ -107,7 +105,7 @@ public:
      */
     Zpaces * zpacesRoot() const;
 
-signals:
+Q_SIGNALS:
     void countChanged();
     void zpaceAdded(int index);
 
@@ -117,5 +115,3 @@ private:
     bool indexIsValid(const int &index) const;
     Zpace * createZpace();
 };
-
-#endif // ZPACESMODEL_H

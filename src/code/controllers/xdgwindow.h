@@ -1,13 +1,17 @@
-#ifndef XDGWINDOW_H
-#define XDGWINDOW_H
+#pragma once
 
 #include <QObject>
 #include "abstractwindow.h"
 
-class QWaylandXdgToplevel;
-class QWaylandXdgSurface;
+#include <QWaylandShellSurface>
+#include <QWaylandXdgShell>
+
+#include <QWaylandXdgSurface>
+#include <QWaylandXdgToplevel>
+
 class QWaylandSurface;
 class QWaylandClient;
+
 class XdgWindow : public AbstractWindow
 {
     Q_OBJECT
@@ -30,7 +34,7 @@ public:
     bool maximized() const override final;
     bool fullscreen() const override final;
 
-public slots:
+public Q_SLOTS:
     void setShellSurface(QWaylandShellSurface * shellSurface);
     void setToplevel(QWaylandXdgToplevel *toplevel);
 
@@ -42,7 +46,7 @@ private:
     void setUpToplevelConnections();
     void setUpClientConnections();
 
-signals:
+Q_SIGNALS:
     void shellSurfaceChanged(QWaylandShellSurface * shellSurface);
     void toplevelChanged(QWaylandXdgToplevel *toplevel);
 
@@ -59,4 +63,3 @@ public:
     QWaylandXdgSurface *xdgSurface() const;
 };
 
-#endif // XDGWINDOW_H

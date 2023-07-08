@@ -1,9 +1,8 @@
-#ifndef AGENT_H
-#define AGENT_H
+#pragma once
 
 #include <QObject>
+#include "polkitagentlistener.h"
 
-class PolKitAgentListener;
 class Agent : public QObject
 {
     Q_OBJECT
@@ -17,9 +16,6 @@ public:
 private:
     PolKitAgentListener *m_listener;
 
-signals:
+Q_SIGNALS:
     void error();
-
 };
-
-#endif // AGENT_H

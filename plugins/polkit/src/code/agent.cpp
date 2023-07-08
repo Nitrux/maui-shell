@@ -1,5 +1,4 @@
 #include "agent.h"
-#include "polkitagentlistener.h"
 #include <PolkitQt1/Subject>
 
 Agent::Agent(QObject *parent) : QObject(parent)
@@ -8,7 +7,7 @@ Agent::Agent(QObject *parent) : QObject(parent)
     PolkitQt1::UnixSessionSubject session(getpid());
 
     if (!m_listener->registerListener(session, QStringLiteral("/com/cask/PolicyKit1/AuthenticationAgent")))
-        emit error();
+        Q_EMIT error();
 }
 
 PolKitAgentListener *Agent::listener() const

@@ -140,8 +140,8 @@ bool isSessionVariable(const QByteArray &name)
 
 void setEnvironmentVariable(const QByteArray &name, const QByteArray &value)
 {
-    if (qgetenv(name) != value) {
-        qputenv(name, value);
+    if (qgetenv(name.constData()) != value.constData()) {
+        qputenv(name.constData(), value.constData());
     }
 }
 
@@ -352,7 +352,7 @@ void setupCaskEnvironment()
 {
     // Manually disable auto scaling because we are scaling above
     // otherwise apps that manually opt in for high DPI get auto scaled by the developer AND manually scaled by us
-//    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
+    //    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
 
     //    qputenv("KDE_FULL_SESSION", "true");
     qputenv("CASK_FULL_SESSION", "true");
@@ -369,7 +369,7 @@ void setupCaskEnvironment()
     }
     const QString extraConfigDir = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/caskdefaults");
     QDir().mkpath(extraConfigDir);
-    qputenv("XDG_CONFIG_DIRS", QFile::encodeName(extraConfigDir) + ':' + currentConfigDirs);
+    qputenv("XDG_CONFIG_DIRS", QByteArray( QFile::encodeName(extraConfigDir) + QByteArray(QByteArrayLiteral(":")) + currentConfigDirs));
 }
 
 void cleanupPlasmaEnvironment(const std::optional<QProcessEnvironment> &oldSystemdEnvironment)
@@ -415,7 +415,7 @@ static void dropSessionVarsFromSystemdEnvironment()
     for (auto &nameStr : environment.value().keys()) {
         // If it's set in this process, it'll be overwritten by the following UpdateLaunchEnvJob
         const auto name = nameStr.toLocal8Bit();
-        if (!qEnvironmentVariableIsSet(name) && isSessionVariable(name)) {
+        if (!qEnvironmentVariableIsSet(name.constData()) && isSessionVariable(name)) {
             varsToDrop.append(nameStr);
         }
     }
@@ -540,28 +540,28 @@ bool startCaskSession()
     bool rc = true;
     QEventLoop e;
 
-//    QDBusServiceWatcher serviceWatcher;
-//    serviceWatcher.setConnection(QDBusConnection::sessionBus());
+    //    QDBusServiceWatcher serviceWatcher;
+    //    serviceWatcher.setConnection(QDBusConnection::sessionBus());
 
     // We want to exit when both ksmserver and plasma-session-shutdown have finished
     // This also closes if ksmserver crashes unexpectedly, as in those cases plasma-shutdown is not running
     //    serviceWatcher.addWatchedService(QStringLiteral("org.kde.KWinWrapper"));
-//        serviceWatcher.addWatchedService(QStringLiteral("org.cask.Server"));
-//        serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
+    //        serviceWatcher.addWatchedService(QStringLiteral("org.cask.Server"));
+    //        serviceWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
 
-//    QObject::connect(&serviceWatcher, &QDBusServiceWatcher::serviceUnregistered, [&]()
-//    {
-//        const QStringList watchedServices = serviceWatcher.watchedServices();
+    //    QObject::connect(&serviceWatcher, &QDBusServiceWatcher::serviceUnregistered, [&]()
+    //    {
+    //        const QStringList watchedServices = serviceWatcher.watchedServices();
 
-//        bool plasmaSessionRunning = std::any_of(watchedServices.constBegin(), watchedServices.constEnd(), [](const QString &service) {
-//            return QDBusConnection::sessionBus().interface()->isServiceRegistered(service);
-//        });
+    //        bool plasmaSessionRunning = std::any_of(watchedServices.constBegin(), watchedServices.constEnd(), [](const QString &service) {
+    //            return QDBusConnection::sessionBus().interface()->isServiceRegistered(service);
+    //        });
 
-//        if (!plasmaSessionRunning)
-//        {
-//            e.quit();
-//        }
-//    });
+    //        if (!plasmaSessionRunning)
+    //        {
+    //            e.quit();
+    //        }
+    //    });
 
 
     QScopedPointer<QProcess> startCaskSession;
@@ -597,7 +597,7 @@ bool startCaskSession()
 
     });
 
-    startCaskSession->start("cask_session", caskSessionOptions);
+    startCaskSession->start(QStringLiteral("cask_session"), caskSessionOptions);
 
     if (rc)
     {
@@ -614,10 +614,10 @@ void waitForKonqi()
 {
     const KConfig cfg(QStringLiteral("startkderc"));
     const KConfigGroup grp = cfg.group("WaitForDrKonqi");
-    bool wait_drkonqi = grp.readEntry("Enabled", true);
+    bool wait_drkonqi = grp.readEntry(QStringLiteral("Enabled"), true);
     if (wait_drkonqi) {
         // wait for remaining drkonqi instances with timeout (in seconds)
-        const int wait_drkonqi_timeout = grp.readEntry("Timeout", 900) * 1000;
+        const int wait_drkonqi_timeout = grp.readEntry(QStringLiteral("Timeout"), 900) * 1000;
         QElapsedTimer wait_drkonqi_counter;
         wait_drkonqi_counter.start();
         QStringList services = allServices(QLatin1String("org.kde.drkonqi-"));
@@ -637,8 +637,8 @@ void waitForKonqi()
 }
 
 void playStartupSound(QObject *parent)
-{
-    KNotifyConfig notifyConfig(QStringLiteral("plasma_workspace"), QList<QPair<QString, QString>>(), QStringLiteral("startkde"));
+{    
+    KNotifyConfig notifyConfig(QStringLiteral("plasma_workspace"), QStringLiteral("startkde"));
     const QString action = notifyConfig.readEntry(QStringLiteral("Action"));
     if (action.isEmpty() || !action.split(QLatin1Char('|')).contains(QLatin1String("Sound"))) {
         // no startup sound configured

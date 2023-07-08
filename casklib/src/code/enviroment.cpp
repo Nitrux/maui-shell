@@ -19,7 +19,7 @@ void Enviroment::setIsMobile(const bool &value)
 
 QString Enviroment::appIconName(const QString &appId)
 {
-    KDesktopFile file(appId+".desktop");
+    KDesktopFile file(appId + QStringLiteral(".desktop"));
     qDebug() << "AppIcon name" << file.readIcon() << appId << file.fileName() ;
     return file.readIcon();
 }

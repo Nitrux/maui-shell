@@ -15,7 +15,20 @@
 AutoStart::AutoStart()
     : m_phase(-1)
     , m_phasedone(false)
-    ,m_blackListed({"org.kde.plasmashell.desktop", "baloo_file.desktop", "org.kde.discover.notifier.desktop", "gnome-shell-overrides-migration.desktop", "org.gnome.Evolution-alarm-notify.desktop", "org.kde.kdeconnect.daemon.desktop", "dde-calendar-service.desktop", "nm-applet.desktop", "touchegg.desktop", "pamac-tray.desktop", "zeitgeist-datahub.desktop", "msm_kde_notifier.desktop", "pam_kwallet_init.desktop", "pulseaudio.desktop"})
+    ,m_blackListed({QStringLiteral("org.kde.plasmashell.desktop"),
+                   QStringLiteral("baloo_file.desktop"),
+                   QStringLiteral("org.kde.discover.notifier.desktop"),
+                   QStringLiteral("gnome-shell-overrides-migration.desktop"),
+                   QStringLiteral("org.gnome.Evolution-alarm-notify.desktop"),
+                   QStringLiteral("org.kde.kdeconnect.daemon.desktop"),
+                   QStringLiteral("dde-calendar-service.desktop"),
+                   QStringLiteral("nm-applet.desktop"),
+                   QStringLiteral("touchegg.desktop"),
+                   QStringLiteral("pamac-tray.desktop"),
+                   QStringLiteral("zeitgeist-datahub.desktop"),
+                   QStringLiteral("msm_kde_notifier.desktop"),
+                   QStringLiteral("pam_kwallet_init.desktop"),
+                   QStringLiteral("pulseaudio.desktop")})
 {
     loadAutoStartList();
 }

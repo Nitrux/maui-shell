@@ -1,13 +1,12 @@
 #include "surfacesmodel.h"
-#include "code/controllers/abstractwindow.h"
+
 #include <QDebug>
 #include <QQuickItem>
 
-#include <QtWaylandCompositor/QWaylandXdgSurface>
-#include "code/controllers/xdgwindow.h"
-
 #include <QWaylandShellSurface>
+#include <QtWaylandCompositor/QWaylandXdgSurface>
 
+#include "code/controllers/xdgwindow.h"
 #include "code/controllers/zpace.h"
 
 SurfacesModel::SurfacesModel(Zpace *zpace) :  QAbstractListModel(zpace)
@@ -52,7 +51,7 @@ void SurfacesModel::addWindow(AbstractWindow *window)
     this->beginInsertRows(QModelIndex(), index, index);
     m_windows.append(window);
     this->endInsertRows();
-    emit this->countChanged();
+    Q_EMIT this->countChanged();
 }
 
 AbstractWindow* SurfacesModel::popWindow(AbstractWindow *window)
@@ -63,7 +62,7 @@ AbstractWindow* SurfacesModel::popWindow(AbstractWindow *window)
         this->beginRemoveRows(QModelIndex(), index, index);
         auto window =  m_windows.takeAt(index);
         this->endRemoveRows();
-        emit this->countChanged();
+        Q_EMIT this->countChanged();
         window->disconnect();
 
         if(window == m_activeWindow)
@@ -155,10 +154,10 @@ void SurfacesModel::setActiveWindow(AbstractWindow *window)
     }
 
     m_activeWindow = window;
-    emit this->activeWindowChanged(m_activeWindow);
+    Q_EMIT this->activeWindowChanged(m_activeWindow);
 
     m_activeWindowIndex = indexOf(window);
-    emit this->activeWindowIndexChanged(m_activeWindowIndex);
+    Q_EMIT this->activeWindowIndexChanged(m_activeWindowIndex);
 }
 
 int SurfacesModel::count() const

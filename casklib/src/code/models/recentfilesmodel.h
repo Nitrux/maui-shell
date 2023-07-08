@@ -1,7 +1,6 @@
-#ifndef RECENTFILESMODEL_H
-#define RECENTFILESMODEL_H
+#pragma once
 
-#include <MauiKit/Core/mauilist.h>
+#include <MauiKit4/Core/mauilist.h>
 
 #include <QObject>
 
@@ -33,14 +32,14 @@ public:
 
     int limit() const;
 
-public slots:
+public Q_SLOTS:
     void setUrl(QUrl url);
 
     void setFilters(QStringList filters);
 
     void setLimit(int limit);
 
-signals:
+Q_SIGNALS:
     void urlChanged(QUrl url);
 
     void filtersChanged(QStringList filters);
@@ -60,5 +59,3 @@ private:
     QStringList m_urls;
     int m_limit = 6;
 };
-
-#endif // RECENTFILESMODEL_H

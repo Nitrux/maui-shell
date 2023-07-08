@@ -19,9 +19,11 @@
 #include "processlauncher.h"
 #include <QDebug>
 #include <KService>
-#include <KRun>
+//#include <KRun>
 #include <KIO/ApplicationLauncherJob>
 #include <QStringList>
+
+#include <QRegularExpression>
 
 WaylandProcessLauncher::WaylandProcessLauncher(QObject *parent)
     : QObject(parent)
@@ -35,9 +37,9 @@ WaylandProcessLauncher::~WaylandProcessLauncher()
 void WaylandProcessLauncher::launchApp(const QString &app)
 {
     KService::Ptr service(new KService(app));
-       if (!service->isValid())
-           return;
-QProcessEnvironment::systemEnvironment().remove("QT_IM_MODULE");
+    if (!service->isValid())
+        return;
+    QProcessEnvironment::systemEnvironment().remove(QStringLiteral("QT_IM_MODULE"));
     auto job = KIO::ApplicationLauncherJob(service);
     job.start();
 }
@@ -50,10 +52,10 @@ void WaylandProcessLauncher::launch(const QString &program)
     QProcess *process = new QProcess(this);
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.remove("QT_IM_MODULE");
+    env.remove(QStringLiteral("QT_IM_MODULE"));
     process->setProcessEnvironment(env);
     process->setStandardInputFile(QProcess::nullDevice());
-        process->setProcessChannelMode(QProcess::ForwardedChannels);
+    process->setProcessChannelMode(QProcess::ForwardedChannels);
     connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             process, &QProcess::deleteLater);
     connect(process, &QProcess::errorOccurred, &QProcess::deleteLater);
@@ -61,11 +63,11 @@ void WaylandProcessLauncher::launch(const QString &program)
     connect(process, &QProcess::stateChanged, this, &WaylandProcessLauncher::onStateChanged);
 
     QStringList arguments;
-//    arguments << "--platform" << "wayland";
+    //    arguments << "--platform" << "wayland";
 
-    auto execList = program.split(" ");
+    auto execList = program.split(QStringLiteral(" "));
     auto exec = execList.first();
-            exec.remove("\"").remove(QRegExp(" %."));
+    exec.remove(QStringLiteral("\"")).remove(QRegularExpression(QStringLiteral(" %.")));
     process->startDetached(exec, arguments);
 
 }

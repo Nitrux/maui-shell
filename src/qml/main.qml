@@ -8,7 +8,7 @@ import Zpaces 1.0 as ZP
 
 import org.maui.cask 1.0 as Cask
 import org.mauicore.notifications 1.0 as Nof
-import org.cask.polkit 1.0 as Polkit
+//import org.cask.polkit 1.0 as Polkit
 
 //import Liri.XWayland 1.0 as LXW
 
@@ -33,27 +33,27 @@ WaylandCompositor
         id: _notifications
     }
 
-    Component
-    {
-        id: _polkitDialogComponent
-        Polkit.PolkitDialog {}
-    }
+//    Component
+//    {
+//        id: _polkitDialogComponent
+//        Polkit.PolkitDialog {}
+//    }
 
-    Connections
-    {
-        target: _polkit.listener
+//    Connections
+//    {
+//        target: _polkit.listener
 
-        function onAuthenticationRequest(dialog)
-        {
-            var popup2 = _polkitDialogComponent.createObject(comp.defaultOutput.window, {"parent" : comp.defaultOutput.window, "dialog": dialog});
-            popup2.open()
-        }
-    }
+//        function onAuthenticationRequest(dialog)
+//        {
+//            var popup2 = _polkitDialogComponent.createObject(comp.defaultOutput.window, {"parent" : comp.defaultOutput.window, "dialog": dialog});
+//            popup2.open()
+//        }
+//    }
 
-    Polkit.Agent
-    {
-        id: _polkit
-    }
+//    Polkit.Agent
+//    {
+//        id: _polkit
+//    }
 
     QtWindowManager
     {

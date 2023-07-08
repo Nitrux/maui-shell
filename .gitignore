@@ -1,4 +1,6 @@
 build/
+build.5/
+build.6/
 demo/3rdparty/
 demo/mauikit/
 

@@ -171,10 +171,10 @@ Startup::Startup(QObject *parent)
 //        new StartServiceJob(QStringLiteral("kded5"), {}, QStringLiteral("org.kde.kded5"), {}),
 //        new StartServiceJob(QStringLiteral("/usr/lib/org_kde_powerdevil"), {},"", {}),
 
-        new StartServiceJob(QStringLiteral("CaskServer"), QStringList(), "org.cask.Server"),
-        new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), "org.mauiman.Manager"),
+        new StartServiceJob(QStringLiteral("CaskServer"), QStringList(), QStringLiteral("org.cask.Server")),
+        new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), QStringLiteral("org.mauiman.Manager")),
 
-        new StartServiceJob(QStringLiteral("cask"), QStringList(), ""),
+        new StartServiceJob(QStringLiteral("cask"), QStringList(), QStringLiteral("")),
 
 //        new StartupPhase0(autostart, this),
 //        phase1 = new StartupPhase1(autostart, this),

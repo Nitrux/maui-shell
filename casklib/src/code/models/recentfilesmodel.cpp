@@ -1,7 +1,7 @@
 #include "recentfilesmodel.h"
 
-#include <MauiKit/FileBrowsing/fileloader.h>
-#include <MauiKit/FileBrowsing/fmstatic.h>
+#include <MauiKit4/FileBrowsing/fileloader.h>
+#include <MauiKit4/FileBrowsing/fmstatic.h>
 
 #include <QFileSystemWatcher>
 #include <QDebug>
@@ -13,9 +13,9 @@ RecentFilesModel::RecentFilesModel(QObject *parent) :
 {
 //  connect(m_loader, &FMH::FileLoader::itemsReady, [&](FMH::MODEL_LIST items)
 //  {
-//    emit preItemsAppended(items.size());
+//    Q_EMIT preItemsAppended(items.size());
 //    this->m_list << items;
-//    emit postItemAppended();
+//    Q_EMIT postItemAppended();
 //  });
 
     connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &RecentFilesModel::setList);
@@ -43,7 +43,7 @@ void RecentFilesModel::setUrl(QUrl url)
       m_watcher->removePaths(m_watcher->directories());
   }
   m_watcher->addPath(m_url.toLocalFile());
-  emit urlChanged(m_url);
+  Q_EMIT urlChanged(m_url);
 }
 
 void RecentFilesModel::setFilters(QStringList filters)
@@ -52,7 +52,7 @@ void RecentFilesModel::setFilters(QStringList filters)
     return;
 
   m_filters = filters;
-  emit filtersChanged(m_filters);
+  Q_EMIT filtersChanged(m_filters);
 }
 
 void RecentFilesModel::setLimit(int limit)
@@ -61,7 +61,7 @@ void RecentFilesModel::setLimit(int limit)
         return;
 
     m_limit = limit;
-    emit limitChanged(m_limit);
+    Q_EMIT limitChanged(m_limit);
 }
 
 void RecentFilesModel::setList()
@@ -79,7 +79,7 @@ void RecentFilesModel::setList()
   int i = 0;
 
   this->m_list.clear();
-  emit this->preListChanged ();
+  Q_EMIT this->preListChanged ();
   const auto urls = dir.entryInfoList ();
   for(const auto &url : urls)
     {
@@ -90,8 +90,8 @@ void RecentFilesModel::setList()
       m_list << FMStatic::getFileInfoModel (QUrl::fromLocalFile (url.filePath ()));
       i++;
     }
-  emit postListChanged ();
-  emit urlsChanged();
+  Q_EMIT postListChanged ();
+  Q_EMIT urlsChanged();
 }
 
 

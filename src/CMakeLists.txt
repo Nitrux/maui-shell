@@ -12,21 +12,31 @@ set(cask_SRCS
     code/controllers/task.cpp
     code/controllers/abstractwindow.cpp
     code/controllers/xdgwindow.cpp
-    code/controllers/waylandcursorgrabber.cpp
-    )
+    code/controllers/waylandcursorgrabber.cpp)
 
 set(cask_ASSETS
     qml.qrc
-    assets/assets.qrc
-    )
+    assets/assets.qrc)
 
 add_executable(${PROJECT_NAME}
     ${cask_SRCS}
     ${cask_HDRS}
-    ${cask_ASSETS}
-    )
+    ${cask_ASSETS})
 
-target_link_libraries(${PROJECT_NAME} MauiKit MauiMan CaskLib CaskServer::CaskServerLib Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Svg KF5::Service Qt5::WaylandCompositor Qt5::DBus KF5::I18n KF5::ConfigCore)
+target_link_libraries(${PROJECT_NAME}
+    MauiKit4
+    MauiMan4
+    CaskLib
+    CaskServer::CaskServerLib
+    Qt6::Qml
+    Qt6::Quick
+    Qt6::QuickControls2
+    Qt6::Svg
+    KF6::Service
+    Qt6::WaylandCompositor
+    Qt6::DBus
+    KF6::I18n
+    KF6::ConfigCore)
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(DIRECTORY assets/wallpapers/ DESTINATION ${KDE_INSTALL_WALLPAPERDIR}/Cask)
