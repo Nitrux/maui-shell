@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 
 import org.mauikit.controls 1.3 as Maui
 import org.kde.plasma.networkmanagement 0.2 as PlasmaNM
-import org.kde.kcoreaddons 1.0 as KCoreAddons
+//import org.kde.kcoreaddons 1.0 as KCoreAddons
 
 Maui.ListBrowserDelegate
 {
@@ -107,9 +107,10 @@ Maui.ListBrowserDelegate
             return LastUsed
         } else if (ConnectionState == PlasmaNM.Enums.Activated) {
             if (showSpeed) {
+                var locale = Qt.locale()
                 return i18n("⬇ %1/s, ⬆ %2/s",
-                            KCoreAddons.Format.formatByteSize(rxBytes),
-                            KCoreAddons.Format.formatByteSize(txBytes))
+                            locale.formattedDataSize(rxBytes),
+                            locale.formattedDataSize(txBytes))
             } else {
                 return i18n("Connected")
             }

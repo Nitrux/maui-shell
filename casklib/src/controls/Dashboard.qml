@@ -1,10 +1,10 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
-import org.mauikit.controls 1.2 as Maui
-import org.maui.cask 1.0 as Cask
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
 
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 
 Item
 {

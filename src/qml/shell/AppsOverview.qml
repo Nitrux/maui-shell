@@ -1,14 +1,17 @@
-import QtQuick 2.14
-import QtQml 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Window 2.3
-import QtGraphicalEffects 1.0
-import QtWayland.Compositor 1.0
-import QtQuick.Layouts 1.3
-import org.maui.cask 1.0 as Cask
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Window
+import QtQuick.Layouts
 
-import org.mauikit.controls 1.3 as Maui
-import Zpaces 1.0 as ZP
+import Qt5Compat.GraphicalEffects
+
+import QtWayland.Compositor
+
+import org.maui.cask as Cask
+import org.mauikit.controls as Maui
+
+import Zpaces as ZP
 
 Maui.Page
 {
@@ -182,7 +185,7 @@ Maui.Page
                                 touchEventsEnabled: false
                                 focusOnClick: false
                                 enabled: false
-                                sizeFollowsSurface: false
+//                                sizeFollowsSurface: false
                                 smooth: true
                                 anchors.fill: parent
 

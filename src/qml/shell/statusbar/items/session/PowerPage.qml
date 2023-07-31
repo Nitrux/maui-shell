@@ -1,13 +1,13 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls as Maui
 
-import org.maui.cask 1.0 as Cask
-import org.mauicore.power 1.0 as CaskPower
+import org.maui.cask as Cask
+import org.mauicore.power as CaskPower
+
 import "../../../templates"
-import org.kde.plasma.private.volume 0.1 as PA
 
 StackPage
 {

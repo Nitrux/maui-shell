@@ -1,14 +1,16 @@
-import QtQuick 2.15
+import QtQuick
 
-import QtWayland.Compositor 1.3
+import QtWayland.Compositor
+import QtWayland.Compositor.XdgShell
+import QtWayland.Compositor.WlShell
 
-import org.mauikit.controls 1.3 as Maui
+import org.mauikit.controls as Maui
 
-import Zpaces 1.0 as ZP
+import Zpaces as ZP
 
-import org.maui.cask 1.0 as Cask
-import org.mauicore.notifications 1.0 as Nof
-//import org.cask.polkit 1.0 as Polkit
+import org.maui.cask as Cask
+import org.mauicore.notifications as Nof
+import org.cask.polkit as Polkit
 
 //import Liri.XWayland 1.0 as LXW
 
@@ -18,11 +20,11 @@ WaylandCompositor
     retainedSelection: true
     useHardwareIntegrationExtension: true
 
-    Screen
+    CaskScreen
     {
         id: screen
         compositor: comp
-        targetScreen: modelData
+//        targetScreen: modelData
         position: Qt.point(virtualX, virtualY)
 
         Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
@@ -33,27 +35,27 @@ WaylandCompositor
         id: _notifications
     }
 
-//    Component
-//    {
-//        id: _polkitDialogComponent
-//        Polkit.PolkitDialog {}
-//    }
+    Component
+    {
+        id: _polkitDialogComponent
+        Polkit.PolkitDialog {}
+    }
 
-//    Connections
-//    {
-//        target: _polkit.listener
+    Connections
+    {
+        target: _polkit.listener
 
-//        function onAuthenticationRequest(dialog)
-//        {
-//            var popup2 = _polkitDialogComponent.createObject(comp.defaultOutput.window, {"parent" : comp.defaultOutput.window, "dialog": dialog});
-//            popup2.open()
-//        }
-//    }
+        function onAuthenticationRequest(dialog)
+        {
+            var popup2 = _polkitDialogComponent.createObject(comp.defaultOutput.window, {"parent" : comp.defaultOutput.window, "dialog": dialog});
+            popup2.open()
+        }
+    }
 
-//    Polkit.Agent
-//    {
-//        id: _polkit
-//    }
+    Polkit.Agent
+    {
+        id: _polkit
+    }
 
     QtWindowManager
     {
@@ -101,17 +103,35 @@ WaylandCompositor
     Connections
     {
         target: defaultSeat
-        onCursorSurfaceRequest: console.log("CURSOR SURFACE REQUEST", hotspotX, hotspotY, surface.cursorSurface, surface.hasContent, surface.inhibitsIdle)
-        onKeyboardFocusChanged:console.log("KEYBOARD FOCUS REQUEST")
-        onMouseFocusChanged:  console.log("MOUSE FOCUS REQUEST")
+        function onCursorSurfaceRequest()
+        {
+            console.log("CURSOR SURFACE REQUEST", hotspotX, hotspotY, surface.cursorSurface, surface.hasContent, surface.inhibitsIdle)
+        }
+
+        function onKeyboardFocusChanged()
+        {
+            console.log("KEYBOARD FOCUS REQUEST")
+        }
+
+        function onMouseFocusChanged()
+        {
+            console.log("MOUSE FOCUS REQUEST")
+        }
     }
 
-    Connections
-    {
-        target: comp.drag
-        onDragStarted: console.log("DRAG STARTED")
-        onIconChanged: console.log("DRAG ICON CHANGED")
-    }
+//    Connections
+//    {
+//        target: comp.drag
+//        function onDragStarted()
+//        {
+//            console.log("DRAG STARTED")
+//        }
+
+//        function onIconChanged()
+//        {
+//            console.log("DRAG ICON CHANGED")
+//        }
+//    }
 
     function handleShellSurfaceCreated(shellSurface, toplevel)
     {

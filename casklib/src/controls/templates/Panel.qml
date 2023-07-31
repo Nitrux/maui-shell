@@ -1,4 +1,4 @@
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts
 
 RowLayout
 {

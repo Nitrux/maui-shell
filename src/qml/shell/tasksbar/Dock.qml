@@ -1,13 +1,12 @@
-import QtQuick 2.15
-import QtQml 2.14
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import org.mauikit.controls 1.2 as Maui
-import org.maui.cask 1.0 as Cask
-import QtQuick.Templates 2.15 as T
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
 
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 
 Item
 {
@@ -34,10 +33,10 @@ Item
         id: overlay
         visible: _launcher.visible
         parent: _cask.overlay
-//        opacity: formFactor !== Cask.MauiMan.Desktop ? 0.95 : 0.7
+        //        opacity: formFactor !== Cask.MauiMan.Desktop ? 0.95 : 0.7
 
         anchors.fill: parent
-        color: _launcher.Maui.Theme.backgroundColor
+//        color: _launcher.Maui.Theme.backgroundColor
 
         Loader
         {
@@ -274,6 +273,6 @@ Item
     function show()
     {
         _taskbar.y = 0
-//        _taskbar.forceActiveFocus()
+        //        _taskbar.forceActiveFocus()
     }
 }

@@ -1,10 +1,9 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Templates 2.15 as T
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import org.mauikit.controls 1.3 as Maui
-import org.maui.cask 1.0 as Cask
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
 
 import "../../../templates"
 
@@ -16,9 +15,15 @@ Cask.PanelItem
     Connections
     {
         target: Cask.Power
-        onShutdownRequested: control.shutdown()
+        function onShutdownRequested()
+        {
+            control.shutdown()
+        }
 //        onLogoutRequested: control.logout()
-        onRebootRequested: control.reboot()
+        function onRebootRequested()
+        {
+            control.reboot()
+        }
     }
 
     Row
@@ -65,7 +70,7 @@ Cask.PanelItem
                              case Cask.Power.Shutdown: return i18n("system-shutdown");
                              }
 
-        acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : _sessioDialog.title
+//        acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : _sessioDialog.title
 
         ListView
         {
@@ -128,7 +133,7 @@ Cask.PanelItem
         width: ListView.view.width
         onClosed: _stack.pop()
 
-        T.StackView
+        StackView
         {
             id: _stack
 

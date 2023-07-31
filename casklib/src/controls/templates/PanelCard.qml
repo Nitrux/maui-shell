@@ -1,13 +1,12 @@
-import QtQuick 2.12
-import QtGraphicalEffects 1.0
-import QtQml.Models 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.5
+import QtQuick
+import Qt5Compat.GraphicalEffects
+import QtQml.Models
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import org.mauikit.controls 1.2 as Maui
-import QtQuick.Templates 2.15 as T
+import org.mauikit.controls as Maui
 
-T.Pane
+Pane
 {
     id: control
     default property alias content: _layout.data

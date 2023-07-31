@@ -16,19 +16,19 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.15
-import QtQml 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QtQuick.Window 2.15
+import QtQuick.Window
 
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 
-import QtWayland.Compositor 1.3
+import QtWayland.Compositor
 
-import org.mauikit.controls 1.2 as Maui
-import org.maui.cask 1.0 as Cask
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
 
 import "shell"
 import "shell/statusbar"
@@ -38,7 +38,7 @@ import "chrome"
 
 import "shell/statusbar/items/notifications"
 
-import Zpaces 1.0 as ZP
+import Zpaces as ZP
 
 WaylandOutput
 {
@@ -170,7 +170,7 @@ WaylandOutput
                    case Qt.LandscapeOrientation:
                    case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.width : win.height)
                    case Qt.InvertedPortraitOrientation:
-                   case Qt.PortraitOrientation: return (control.aZXCVB === Qt.PortraitOrientation? win.width : win.height)
+                   case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation? win.width : win.height)
                    default: return win.width
                    }
 
@@ -192,7 +192,7 @@ WaylandOutput
             {
                 id: _cask
 //                clip: true
-                backgroundColor: Cask.MauiMan.aZXCVB.solidColor
+                backgroundColor: Cask.MauiMan.background.solidColor
                 anchors.fill: parent
                 anchors.bottomMargin: _zpaceSwitcher.height
                 topPanel.data: StatusBar
@@ -215,9 +215,9 @@ WaylandOutput
                         id: _overlayNotificationContainer
                         width: Math.min(availableGeometry.width, 300)
                         y: _cask.topPanel.height
-                    }/*,
+                    }
 
-                    OSDArea
+                   /* OSDArea
                     {
                         id: _osdArea
                         anchors.topMargin: _cask.topPanel.height

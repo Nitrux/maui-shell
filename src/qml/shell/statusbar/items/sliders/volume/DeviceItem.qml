@@ -1,17 +1,14 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts
 
-import org.mauikit.controls 1.3 as Maui
+import org.mauikit.controls as Maui
 
-import org.maui.cask 1.0 as Cask
-import QtQuick.Templates 2.15 as T
-
-import org.mauicore.audio 1.0 as MauiCore
+import org.maui.cask as Cask
+import org.mauicore.audio as MauiCore
 
 import ".."
-
 import "../../../../templates" as Template
 
 Template.SliderToggle

@@ -7,7 +7,7 @@ class AppsModel : public MauiList
 {
     Q_OBJECT
     Q_PROPERTY(QString group READ group WRITE setGroup NOTIFY groupChanged)
-    Q_PROPERTY(QVariantList groups READ groups)
+    Q_PROPERTY(QVariantList groups READ groups FINAL CONSTANT)
     Q_PROPERTY(int limit READ limit WRITE setLimit NOTIFY limitChanged)
 
 public:

@@ -1,9 +1,9 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls as Maui
 
-import org.maui.cask 1.0 as Cask
+import org.maui.cask as Cask
 import org.kde.bluezqt 1.0 as BluezQt
 
 

@@ -143,7 +143,7 @@ Mpris2Player::Mpris2Player(const QString &service, QObject *parent)
 
     // Receive properties changes
     connect(m_propsInterface, &OrgFreedesktopDBusPropertiesInterface::PropertiesChanged,
-            [=](const QString &interface, const QVariantMap &changedProperties, const QStringList &invalidatedProperties) {
+            [this](const QString &interface, const QVariantMap &changedProperties, const QStringList &invalidatedProperties) {
         Q_UNUSED(interface);
 
         updateFromMap(changedProperties);
@@ -151,7 +151,7 @@ Mpris2Player::Mpris2Player(const QString &service, QObject *parent)
         if (!invalidatedProperties.isEmpty())
             retrieveData();
     });
-    connect(m_playerInterface, &OrgMprisMediaPlayer2PlayerInterface::Seeked, [=](qlonglong offset) {
+    connect(m_playerInterface, &OrgMprisMediaPlayer2PlayerInterface::Seeked, [this](qlonglong offset) {
         m_position = offset;
         Q_EMIT positionChanged();
     });

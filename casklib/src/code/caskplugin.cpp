@@ -31,7 +31,7 @@ void CaskPlugin::registerTypes(const char *uri)
 
     qmlRegisterType(componentUrl(QStringLiteral("templates/PanelSection.qml")), uri, 1, 0, "PanelSection");
 
-    qmlRegisterType(componentUrl(QStringLiteral("templates/IconLabel.qml")), uri, 1, 0, "IconLabel");
+    qmlRegisterType(componentUrl(QStringLiteral("IconLabel.qml")), uri, 1, 0, "IconLabel");
 
     qmlRegisterType(componentUrl(QStringLiteral("Dashboard.qml")), uri, 1, 0, "Dashboard");
 

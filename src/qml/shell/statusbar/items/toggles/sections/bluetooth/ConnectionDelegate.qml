@@ -1,12 +1,12 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls as Maui
 
-import org.maui.cask 1.0 as Cask
+import org.maui.cask as Cask
 
-import org.kde.bluezqt 1.0 as BluezQt
-import org.kde.plasma.private.bluetooth 1.0 as PlasmaBt
+//import org.kde.bluezqt 1.0 as BluezQt
+//import org.kde.plasma.private.bluetooth as PlasmaBt
 
 Maui.ListBrowserDelegate
 {
@@ -28,68 +28,68 @@ Maui.ListBrowserDelegate
         running: connecting
     }
 
-    function infoText()
-    {
-        if (connecting) {
-            return Connected ? i18n("Disconnecting") : i18n("Connecting");
-        }
+//    function infoText()
+//    {
+//        if (connecting) {
+//            return Connected ? i18n("Disconnecting") : i18n("Connecting");
+//        }
 
-        var labels = [];
+//        var labels = [];
 
-        if (Connected) {
-            labels.push(i18n("Connected"));
-        }
+//        if (Connected) {
+//            labels.push(i18n("Connected"));
+//        }
 
-        switch (Type) {
-        case BluezQt.Device.Headset:
-        case BluezQt.Device.Headphones:
-        case BluezQt.Device.OtherAudio:
-            labels.push(i18n("Audio device"));
-            break;
+//        switch (Type) {
+//        case BluezQt.Device.Headset:
+//        case BluezQt.Device.Headphones:
+//        case BluezQt.Device.OtherAudio:
+//            labels.push(i18n("Audio device"));
+//            break;
 
-        case BluezQt.Device.Keyboard:
-        case BluezQt.Device.Mouse:
-        case BluezQt.Device.Joypad:
-        case BluezQt.Device.Tablet:
-            labels.push(i18n("Input device"));
-            break;
+//        case BluezQt.Device.Keyboard:
+//        case BluezQt.Device.Mouse:
+//        case BluezQt.Device.Joypad:
+//        case BluezQt.Device.Tablet:
+//            labels.push(i18n("Input device"));
+//            break;
 
-        case BluezQt.Device.Phone:
-            labels.push(i18n("Phone"));
-            break;
+//        case BluezQt.Device.Phone:
+//            labels.push(i18n("Phone"));
+//            break;
 
-        default:
-            var profiles = [];
+//        default:
+//            var profiles = [];
 
-            if (Uuids.indexOf(BluezQt.Services.ObexFileTransfer) !== -1) {
-                profiles.push(i18n("File transfer"));
-            }
-            if (Uuids.indexOf(BluezQt.Services.ObexObjectPush) !== -1) {
-                profiles.push(i18n("Send file"));
-            }
-            if (Uuids.indexOf(BluezQt.Services.HumanInterfaceDevice) !== -1) {
-                profiles.push(i18n("Input"));
-            }
-            if (Uuids.indexOf(BluezQt.Services.AdvancedAudioDistribution) !== -1) {
-                profiles.push(i18n("Audio"));
-            }
-            if (Uuids.indexOf(BluezQt.Services.Nap) !== -1) {
-                profiles.push(i18n("Network"));
-            }
+//            if (Uuids.indexOf(BluezQt.Services.ObexFileTransfer) !== -1) {
+//                profiles.push(i18n("File transfer"));
+//            }
+//            if (Uuids.indexOf(BluezQt.Services.ObexObjectPush) !== -1) {
+//                profiles.push(i18n("Send file"));
+//            }
+//            if (Uuids.indexOf(BluezQt.Services.HumanInterfaceDevice) !== -1) {
+//                profiles.push(i18n("Input"));
+//            }
+//            if (Uuids.indexOf(BluezQt.Services.AdvancedAudioDistribution) !== -1) {
+//                profiles.push(i18n("Audio"));
+//            }
+//            if (Uuids.indexOf(BluezQt.Services.Nap) !== -1) {
+//                profiles.push(i18n("Network"));
+//            }
 
-            if (!profiles.length) {
-                profiles.push(i18n("Other device"));
-            }
+//            if (!profiles.length) {
+//                profiles.push(i18n("Other device"));
+//            }
 
-            labels.push(profiles.join(", "));
-        }
+//            labels.push(profiles.join(", "));
+//        }
 
-        if (Battery) {
-            labels.push(i18n("%1% Battery", Battery.percentage));
-        }
+//        if (Battery) {
+//            labels.push(i18n("%1% Battery", Battery.percentage));
+//        }
 
-        return labels.join(" · ");
-    }
+//        return labels.join(" · ");
+//    }
 
     function boolToString(v)
        {
@@ -183,7 +183,7 @@ Maui.ListBrowserDelegate
                        return;
                    }
 
-                   PlasmaBt.Notify.connectionFailed(title, text);
+//                   PlasmaBt.Notify.connectionFailed(title, text);
                }
            });
        }
