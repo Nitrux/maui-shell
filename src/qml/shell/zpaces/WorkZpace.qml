@@ -1,14 +1,14 @@
-import QtQuick 2.15
-import QtQml 2.14
-import QtQuick.Controls 2.14
+import QtQuick
+import QtQml
+import QtQuick.Controls
 
-import QtWayland.Compositor 1.0
+import QtWayland.Compositor
 
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls as Maui
 
-import org.maui.cask 1.0 as Cask
+import org.maui.cask as Cask
 
-import Zpaces 1.0 as ZP
+import Zpaces as ZP
 
 ListView
 {

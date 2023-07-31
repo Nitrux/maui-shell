@@ -1,11 +1,9 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import org.mauikit.controls 1.2 as Maui
-import org.maui.cask 1.0 as Cask
-
-import QtQuick.Templates 2.15 as T
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
 
 Cask.PanelItem
 {
@@ -88,7 +86,7 @@ Cask.PanelItem
         width: ListView.view.width
         onClosed: _togglesStack.pop()
 
-        T.StackView
+        StackView
         {
             id : _togglesStack
             width: parent.width
@@ -98,7 +96,6 @@ Cask.PanelItem
 
             initialItem: ColumnLayout
             {
-
                 ListView
                 {
                     id: _playersList

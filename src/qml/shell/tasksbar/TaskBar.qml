@@ -1,18 +1,17 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import org.mauikit.controls 1.3 as Maui
+import org.mauikit.controls as Maui
 
-import org.maui.cask 1.0 as Cask
-import Zpaces 1.0 as ZP
+import org.maui.cask as Cask
+import Zpaces as ZP
 
-import QtQuick.Templates 2.15 as T
-import QtGraphicalEffects 1.15
+import Qt5Compat.GraphicalEffects
 
 import "../templates"
 
-T.Control
+Control
 {
     id: control
 
@@ -53,7 +52,7 @@ T.Control
         {
             anchors.fill: parent
             active: false
-//            active: Maui.Style.enableEffects
+            //            active: Maui.Style.enableEffects
             sourceComponent: Item
             {
 
@@ -231,8 +230,6 @@ T.Control
                 onClicked: _zpaces.insertZpace(0)
             }
         }
-
-
 
         WheelHandler
         {

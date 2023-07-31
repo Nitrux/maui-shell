@@ -1,5 +1,0 @@
-module org.cask.polkit
-plugin CaskPolkit
-classname CaskPolkitPlugin
-
-typeinfo plugins.qmltypes

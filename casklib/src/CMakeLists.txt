@@ -41,12 +41,15 @@ set(mpris2_SRCS
     code/mpris2/playersmodel.cpp)
 
 ecm_target_qml_sources(${PROJECT_NAME} SOURCES
-    controls/templates/Panel.qml
-    controls/templates/PanelItem.qml
-    controls/templates/PanelPopup.qml
-    controls/templates/PanelCard.qml
     controls/IconLabel.qml
     controls/Dashboard.qml)
+
+ecm_target_qml_sources(${PROJECT_NAME} PATH templates SOURCES
+    controls/templates/Panel.qml
+    controls/templates/PanelItem.qml
+    controls/templates/PanelSection.qml
+    controls/templates/PanelPopup.qml
+    controls/templates/PanelCard.qml)
 
 set_source_files_properties(code/mpris2/org.freedesktop.DBus.Properties.xml PROPERTIES NO_NAMESPACE true)
 qt_add_dbus_interface(mpris2_SRCS code/mpris2/org.freedesktop.DBus.Properties.xml properties_interface)

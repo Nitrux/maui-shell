@@ -1,10 +1,9 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.5
-import QtQuick.Templates 2.15 as T
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import org.mauikit.controls 1.2 as Maui
-import org.maui.cask 1.0 as Cask
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
 
 import "volume"
 import "brightness"
@@ -47,7 +46,7 @@ Cask.PanelItem
         width: ListView.view.width
         onClosed: _togglesStack.pop()
 
-        T.StackView
+        StackView
         {
             id : _togglesStack
             width: parent.width

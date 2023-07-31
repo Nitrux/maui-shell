@@ -72,7 +72,7 @@ void PolKitAgentListener::request(const QString &request, bool echo)
 
     PolkitQt1::Identity identity = m_sessionIdentity[session];
 
-    connect(m_dialog, &Dialog::finished, this, [=] {
+    connect(m_dialog, &Dialog::finished, this, [this, session] {
         if (m_dialog->identity() == m_sessionIdentity[session].toString()
                 && !m_dialog->password().isEmpty()) {
             session->setResponse(m_dialog->password());

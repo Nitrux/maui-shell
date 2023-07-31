@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
     QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
     QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);
 
-    QQuickStyle::setStyle(QStringLiteral("maui-style"));
+    QQuickStyle::setStyle(QStringLiteral("QtQuick.Controls.Maui"));
 
     caskExecutablePath = app.applicationFilePath().toLocal8Bit();
     caskPID = QCoreApplication::applicationPid();
@@ -380,7 +380,8 @@ int main(int argc, char *argv[])
     registerTypes();
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+    const QUrl url(u"qrc:/cask/qml/main.qml"_qs);
+
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

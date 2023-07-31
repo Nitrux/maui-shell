@@ -1,11 +1,10 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.5
+import QtQuick
+import QtQuick.Controls
 
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls as Maui
 
-import org.maui.cask 1.0 as Cask
+import org.maui.cask as Cask
 import "../../../../templates"
-import org.kde.plasma.private.volume 0.1 as PA
 
 //import org.cask.audio 1.0 as CaskAudio
 

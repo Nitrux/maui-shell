@@ -12,7 +12,6 @@ void CaskPolkitPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<PolKitAgentListener>(uri, 1, 0, "Listener", QStringLiteral("To be reference from the polkit agent controller."));
 
     qmlRegisterType(componentUrl(QStringLiteral("PolkitDialog.qml")), uri, 1, 0, "PolkitDialog");
-
 }
 
 QUrl CaskPolkitPlugin::componentUrl(const QString &fileName) const

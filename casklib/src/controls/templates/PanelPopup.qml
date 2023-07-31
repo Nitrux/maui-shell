@@ -1,15 +1,15 @@
-import QtQuick 2.15
-import QtQml 2.14
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.0
-import org.maui.cask 1.0 as Cask
+import QtQuick
+import QtQml
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import org.mauikit.controls 1.2 as Maui
-import QtQuick.Templates 2.15 as T
+import Qt5Compat.GraphicalEffects
 
-T.Container
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
+
+Container
 {
     id: control
     implicitHeight: _cardsList.contentHeight + topPadding + bottomPadding

@@ -16,17 +16,19 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
-import QtQml 2.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQml
 
-import QtWayland.Compositor 1.15
-import QtGraphicalEffects 1.15
+import QtWayland.Compositor
+import QtWayland.Compositor.XdgShell
 
-import org.mauikit.controls 1.3 as Maui
-import org.maui.cask 1.0 as Cask
-import Zpaces 1.0 as ZP
+import Qt5Compat.GraphicalEffects
+
+import org.mauikit.controls as Maui
+import org.maui.cask as Cask
+import Zpaces as ZP
 
 Cask.StackableItem
 {
@@ -123,7 +125,6 @@ Cask.StackableItem
         }
     }
 
-
     ShellSurfaceItem
     {
         id: surfaceItem
@@ -136,7 +137,7 @@ Cask.StackableItem
 
         y: titlebarHeight
 
-        sizeFollowsSurface: false
+//        sizeFollowsSurface: false
         opacity: moving || pinch4.activeScale <= 0.5 ? 0.5 : 1.0
 
         inputEventsEnabled: !rootChrome.overviewMode
@@ -144,7 +145,6 @@ Cask.StackableItem
 
         focusOnClick:  !altDragHandler.active && !rootChrome.overviewMode
         autoCreatePopupItems: true
-
 
         onActiveFocusChanged:
         {
