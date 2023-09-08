@@ -54,7 +54,7 @@ find_package(KF6 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS
     Service
     KIO)
 
-find_package(MauiKit REQUIRED COMPONENTS FileBrowsing4)
+find_package(MauiKit4 REQUIRED COMPONENTS FileBrowsing)
 
 add_subdirectory(src)
 
