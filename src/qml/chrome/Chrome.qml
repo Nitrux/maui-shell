@@ -404,7 +404,7 @@ Cask.StackableItem
     Rectangle
     {
         z: surfaceItem.z + 9999999999
-        visible: true
+        visible: false
         border.color: "white"
         color: "black"
         radius: Maui.Style.radiusV
