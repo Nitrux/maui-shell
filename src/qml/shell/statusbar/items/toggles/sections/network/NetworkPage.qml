@@ -94,7 +94,7 @@ StackPage
         onTriggered: handler.requestScan()
     }
 
-    Maui.NewDialog
+    Maui.InputDialog
     {
         id: _credentialsDialog
         property var connection : null

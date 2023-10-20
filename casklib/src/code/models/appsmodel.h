@@ -2,7 +2,7 @@
 #define APPSMODEL_H
 
 #include <QObject>
-#include <MauiKit/Core/mauilist.h>
+#include <MauiKit3/Core/mauilist.h>
 
 class AppsModel : public MauiList
 {

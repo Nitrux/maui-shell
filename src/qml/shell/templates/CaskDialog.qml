@@ -8,10 +8,9 @@ import org.mauikit.controls 1.3 as Maui
 import org.maui.cask 1.0 as Cask
 import QtQuick.Templates 2.15 as T
 
-Maui.Dialog
+Maui.PopupPage
 {
     id: control
-    page.margins: Maui.Style.space.big
     spacing: Maui.Style.space.medium
     page.headerColorSet: control.Maui.Theme.colorSet
     closeButtonVisible: false

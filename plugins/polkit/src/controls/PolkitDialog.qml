@@ -10,14 +10,10 @@ import org.cask.polkit 1.0 as Polkit
 
 import QtQuick.Templates 2.15 as T
 
-Maui.NewDialog
+Maui.InputDialog
 {
     id: control
     property Polkit.Dialog dialog
-
-    closeButtonVisible: false
-    maxWidth: 400
-    hint: 1
 
     template.iconSource: "unlock"
     title: i18n("Authenticate")

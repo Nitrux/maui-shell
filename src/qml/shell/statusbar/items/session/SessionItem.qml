@@ -9,7 +9,7 @@ import org.maui.cask 1.0 as Cask
 import "../../../templates"
 
 Cask.PanelItem
-{   
+{
     id: control
     display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
 
@@ -42,7 +42,7 @@ Cask.PanelItem
         }
     }
 
-    CaskDialog
+    Maui.InfoDialog
     {
         id: _sessioDialog
         property int operation
@@ -65,7 +65,7 @@ Cask.PanelItem
                              case Cask.Power.Shutdown: return i18n("system-shutdown");
                              }
 
-        acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : _sessioDialog.title
+        // acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : _sessioDialog.title
 
         ListView
         {

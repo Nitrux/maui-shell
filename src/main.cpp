@@ -42,7 +42,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include <MauiKit/Core/mauiapp.h>
+#include <MauiKit3/Core/mauiapp.h>
 #include <KI18n/KLocalizedString>
 
 
@@ -60,9 +60,9 @@
 
 #include "../cask_version.h"
 
-#include <MauiMan/screenmanager.h>
-#include <MauiMan/thememanager.h>
-#include <MauiMan/mauimanutils.h>
+#include <MauiMan3/screenmanager.h>
+#include <MauiMan3/thememanager.h>
+#include <MauiMan3/mauimanutils.h>
 
 #define ZPACES_URI "Zpaces"
 #define CASK_URI "org.maui.cask"

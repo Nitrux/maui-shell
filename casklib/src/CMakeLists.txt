@@ -117,12 +117,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    MauiMan::MauiMan
+    MauiMan3
     CaskServer::CaskServerLib
     MauiCore::Audio
     MauiCore::Notifications
-    MauiKit
-    MauiKit::FileBrowsing
+    MauiKit3
+    MauiKit3::FileBrowsing
     KF5::I18n
     KF5::Service
     KF5::ConfigCore

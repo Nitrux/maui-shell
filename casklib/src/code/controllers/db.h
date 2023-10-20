@@ -26,12 +26,12 @@
 #include <QVariantMap>
 #include <QSqlDatabase>
 
-#include <MauiKit/Core/fmh.h>
+#include <MauiKit3/Core/fmh.h>
 
 #include "fmstatic.h"
 
 namespace TAG
-{   
+{
     static const QString TaggingPath = FMStatic::DataPath + "/maui/cask/";
     static const QString DBName = "apps-v1.db";
 }
@@ -43,7 +43,7 @@ class DB : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(DB)
-    
+
 private:
     QString name;
     QSqlDatabase m_db;
@@ -125,7 +125,7 @@ public:
      * @return
      */
     bool remove(const QString &tableName, const FMH::MODEL &removeData) const;
-    
+
    const QSqlDatabase& db() const;
 };
 
