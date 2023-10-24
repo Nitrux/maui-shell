@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include <MauiMan/formfactormanager.h>
+#include <MauiMan3/formfactormanager.h>
 
 namespace MauiMan
 {

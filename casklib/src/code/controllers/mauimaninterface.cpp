@@ -1,13 +1,13 @@
 #include "mauimaninterface.h"
 #include <QDBusInterface>
 
-#include <MauiMan/settingsstore.h>
-#include <MauiMan/mauimanutils.h>
+#include <MauiMan3/settingsstore.h>
+#include <MauiMan3/mauimanutils.h>
 
-#include <MauiMan/backgroundmanager.h>
-#include <MauiMan/thememanager.h>
-#include <MauiMan/screenmanager.h>
-#include <MauiMan/inputdevicesmanager.h>
+#include <MauiMan3/backgroundmanager.h>
+#include <MauiMan3/thememanager.h>
+#include <MauiMan3/screenmanager.h>
+#include <MauiMan3/inputdevicesmanager.h>
 
 MauiManInterface::MauiManInterface(QObject *parent) : QObject(parent)
   ,m_background(nullptr)
