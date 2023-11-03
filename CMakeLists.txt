@@ -78,7 +78,7 @@ ecm_setup_version(${CASK_VERSION}
 
 add_subdirectory(casklib)
 add_subdirectory(plugins)
-#add_subdirectory(startcask)
+add_subdirectory(startcask)
 add_subdirectory(src)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -5,7 +5,7 @@ import org.mauikit.controls as Maui
 
 import org.maui.cask as Cask
 
-import org.kde.plasma.networkmanagement 0.2 as PlasmaNM
+import org.kde.plasma.networkmanagement as PlasmaNM
 
 import "../../../../../templates"
 

@@ -197,6 +197,4 @@ ItemDelegate
         }
         ScriptAction { script: { control.expired() } }
     }
-
-
 }

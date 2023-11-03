@@ -94,15 +94,15 @@ WaylandOutput
     availableGeometry : _cask.availableGeometry
 
     scaleFactor: Cask.MauiMan.screen.scaleFactor
-    transform: switch(control.orientation)
-               {
-               case Qt.PrimaryOrientation: return WaylandOutput.TransformNormal
-               case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? WaylandOutput.TransformNormal : WaylandOutput.Transform90)
-               case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? WaylandOutput.TransformNormal : WaylandOutput.Transform90)
-               case Qt.InvertedPortraitOrientation: return WaylandOutput.Transform270
-               case Qt.InvertedLandscapeOrientation: return WaylandOutput.TransformFlipped
-               default: return WaylandOutput.TransformNormal
-               }
+    //    transform: switch(control.orientation)
+    //               {
+    //               case Qt.PrimaryOrientation: return WaylandOutput.TransformNormal
+    //               case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? WaylandOutput.TransformNormal : WaylandOutput.Transform90)
+    //               case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? WaylandOutput.TransformNormal : WaylandOutput.Transform90)
+    //               case Qt.InvertedPortraitOrientation: return WaylandOutput.Transform270
+    //               case Qt.InvertedLandscapeOrientation: return WaylandOutput.TransformFlipped
+    //               default: return WaylandOutput.TransformNormal
+    //               }
 
 
     ZP.Zpaces
@@ -114,15 +114,15 @@ WaylandOutput
     window: Window
     {
         id: win
-            onActiveFocusItemChanged: print("activeFocusItem", activeFocusItem)
-        contentOrientation: switch(control.orientation)
-                            {
-                            case Qt.PrimaryOrientation: return Qt.PrimaryOrientation
-                            case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? control.orientation : Qt.LandscapeOrientation)
-                            case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? Qt.PortraitOrientation : Qt.LandscapeOrientation)
-                            case Qt.InvertedPortraitOrientation: return Qt.InvertedLandscapeOrientation
-                            case Qt.InvertedLandscapeOrientation: return Qt.InvertedPortraitOrientation
-                            }
+        onActiveFocusItemChanged: print("activeFocusItem", activeFocusItem)
+        //        contentOrientation: switch(control.orientation)
+        //                            {
+        //                            case Qt.PrimaryOrientation: return Qt.PrimaryOrientation
+        //                            case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? control.orientation : Qt.LandscapeOrientation)
+        //                            case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? Qt.PortraitOrientation : Qt.LandscapeOrientation)
+        //                            case Qt.InvertedPortraitOrientation: return Qt.InvertedLandscapeOrientation
+        //                            case Qt.InvertedLandscapeOrientation: return Qt.InvertedPortraitOrientation
+        //                            }
 
         readonly property int formFactor : Cask.MauiMan.formFactor.preferredMode
 
@@ -130,59 +130,60 @@ WaylandOutput
         {
             id: mouseTracker
             objectName: "wmt on " + Screen.name
-            transform: Rotation
-            {
-                angle: switch(control.orientation)
-                       {
-                       case Qt.PrimaryOrientation: return 0;
-                       case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? 0 : 90);
-                       case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? 0 : 90);
-                       case Qt.InvertedPortraitOrientation: return 270;
-                       case Qt.InvertedLandscapeOrientation: return 180;
-                       default: return 0;
-                       }
+            anchors.fill: parent
+            //            transform: Rotation
+            //            {
+            //                angle: switch(control.orientation)
+            //                       {
+            //                       case Qt.PrimaryOrientation: return 0;
+            //                       case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation ? 0 : 90);
+            //                       case Qt.LandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation ? 0 : 90);
+            //                       case Qt.InvertedPortraitOrientation: return 270;
+            //                       case Qt.InvertedLandscapeOrientation: return 180;
+            //                       default: return 0;
+            //                       }
 
-                origin.x: switch(control.orientation)
-                          {
-                          case Qt.PrimaryOrientation: return 0;
+            //                origin.x: switch(control.orientation)
+            //                          {
+            //                          case Qt.PrimaryOrientation: return 0;
 
-                          case Qt.PortraitOrientation:
-                          case Qt.LandscapeOrientation: return win.width / 2
+            //                          case Qt.PortraitOrientation:
+            //                          case Qt.LandscapeOrientation: return win.width / 2
 
-                          case Qt.InvertedPortraitOrientation:
-                          case Qt.InvertedLandscapeOrientation: return win.height/2
-                          }
+            //                          case Qt.InvertedPortraitOrientation:
+            //                          case Qt.InvertedLandscapeOrientation: return win.height/2
+            //                          }
 
-                origin.y: switch(control.orientation)
-                          {
-                          case Qt.PrimaryOrientation: return 0;
+            //                origin.y: switch(control.orientation)
+            //                          {
+            //                          case Qt.PrimaryOrientation: return 0;
 
-                          case Qt.PortraitOrientation:
-                          case Qt.LandscapeOrientation: return win.width / 2
+            //                          case Qt.PortraitOrientation:
+            //                          case Qt.LandscapeOrientation: return win.width / 2
 
-                          case Qt.InvertedPortraitOrientation:
-                          case Qt.InvertedLandscapeOrientation: return win.height/2
-                          }
-            }
+            //                          case Qt.InvertedPortraitOrientation:
+            //                          case Qt.InvertedLandscapeOrientation: return win.height/2
+            //                          }
+            //            }
 
-            width: switch(control.orientation)
-                   {
-                   case Qt.LandscapeOrientation:
-                   case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.width : win.height)
-                   case Qt.InvertedPortraitOrientation:
-                   case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation? win.width : win.height)
-                   default: return win.width
-                   }
+            //            width: switch(control.orientation)
+            //                   {
+            //                   case Qt.LandscapeOrientation:
+            //                   case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.width : win.height)
+            //                   case Qt.InvertedPortraitOrientation:
+            //                   case Qt.PortraitOrientation: return (control.primaryOrientation === Qt.PortraitOrientation? win.width : win.height)
+            //                   default: return win.width
+            //                   }
 
-            height: switch(control.orientation)
-                    {
-                    case Qt.LandscapeOrientation:
-                    case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.height : win.width)
-                    case Qt.InvertedPortraitOrientation:
-                    case Qt.PortraitOrientation:  return (control.primaryOrientation === Qt.PortraitOrientation? win.height : win.width)
-                    default: return win.height
+            //            height: switch(control.orientation)
+            //                    {
+            //                    case Qt.LandscapeOrientation:
+            //                    case Qt.InvertedLandscapeOrientation: return (control.primaryOrientation === Qt.LandscapeOrientation? win.height : win.width)
+            //                    case Qt.InvertedPortraitOrientation:
+            //                    case Qt.PortraitOrientation:  return (control.primaryOrientation === Qt.PortraitOrientation? win.height : win.width)
+            //                    default: return win.height
 
-                    }
+            //                    }
 
             // Set this to false to disable the outer mouse cursor when running nested
             // compositors. Otherwise you would see two mouse cursors, one for each compositor.
@@ -191,7 +192,7 @@ WaylandOutput
             Cask.Dashboard
             {
                 id: _cask
-//                clip: true
+                //                clip: true
                 backgroundColor: Cask.MauiMan.background.solidColor
                 anchors.fill: parent
                 anchors.bottomMargin: _zpaceSwitcher.height
@@ -217,7 +218,7 @@ WaylandOutput
                         y: _cask.topPanel.height
                     }
 
-                   /* OSDArea
+                    /* OSDArea
                     {
                         id: _osdArea
                         anchors.topMargin: _cask.topPanel.height
@@ -298,30 +299,30 @@ WaylandOutput
                     }
                 }
 
-//                Rectangle
-//                {
-//                    color: "orange"
-//                    height: 64
-//                    width: 100
-//                    anchors.horizontalCenter: parent.horizontalCenter
-//                    anchors.bottom: parent.bottom
-//                    anchors.bottomMargin: height
+                //                Rectangle
+                //                {
+                //                    color: "orange"
+                //                    height: 64
+                //                    width: 100
+                //                    anchors.horizontalCenter: parent.horizontalCenter
+                //                    anchors.bottom: parent.bottom
+                //                    anchors.bottomMargin: height
 
-//                    radius: Maui.Style.radiusV
+                //                    radius: Maui.Style.radiusV
 
-//                    Label
-//                    {
-//                        color: "#333"
-//                        width: parent.width
-//                        horizontalAlignment: Qt.AlignHCenter
-//                        font.bold: true
-//                        font.pointSize: Maui.Style.fontSizes.big
-//                        font.weight: Font.Bold
-//                        anchors.centerIn: parent
-////                        text: control.orientation + " / " + control.primaryOrientation + " / " + Screen.orientation
-//                        text: win.activeFocusItem.objectName
-//                    }
-//                }
+                //                    Label
+                //                    {
+                //                        color: "#333"
+                //                        width: parent.width
+                //                        horizontalAlignment: Qt.AlignHCenter
+                //                        font.bold: true
+                //                        font.pointSize: Maui.Style.fontSizes.big
+                //                        font.weight: Font.Bold
+                //                        anchors.centerIn: parent
+                ////                        text: control.orientation + " / " + control.primaryOrientation + " / " + Screen.orientation
+                //                        text: win.activeFocusItem.objectName
+                //                    }
+                //                }
             }
 
             // Virtual Keyboard
@@ -359,7 +360,7 @@ WaylandOutput
             // Draws the mouse cursor for a given Wayland seat
             WaylandCursorItem
             {
-                                inputEventsEnabled: false
+                inputEventsEnabled: false
                 id: cursor
                 x: mouseTracker.mouseX
                 y: mouseTracker.mouseY

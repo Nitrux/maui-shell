@@ -47,30 +47,33 @@ Cask.PanelItem
         }
     }
 
-    CaskDialog
+    Maui.PopupPage
     {
         id: _sessioDialog
         property int operation
         property int attemptsCount : 0
 
         title: switch(operation)
-               {
-               case Cask.Power.Logout: return i18n("Quit Session");
-               case Cask.Power.Reboot: return i18n("Reboot");
-               case Cask.Power.Shutdown: return i18n("Shutdown");
-               }
-
-        message: i18np("Are you sure you want to quit the session?", "Are you sure you want to quit the session and terminate runnig tasks?", _runningTasks.count+1);
+                           {
+                           case Cask.Power.Logout: return i18n("Quit Session");
+                           case Cask.Power.Reboot: return i18n("Reboot");
+                           case Cask.Power.Shutdown: return i18n("Shutdown");
+                           }
 
 
-        template.iconSource: switch(operation)
-                             {
-                             case Cask.Power.Logout: return i18n("system-log-out");
-                             case Cask.Power.Reboot: return i18n("system-reboot");
-                             case Cask.Power.Shutdown: return i18n("system-shutdown");
-                             }
 
-//        acceptButton.text: _runningTasks.count > 0 ? i18n("Terminate") : _sessioDialog.title
+        Maui.ListItemTemplate
+        {
+            label2.text: i18np("Are you sure you want to quit the session?", "Are you sure you want to quit the session and terminate runnig tasks?", _runningTasks.count+1);
+    label2.wrapMode: TextEdit.WordWrap
+
+            iconSource: switch(operation)
+                                 {
+                                 case Cask.Power.Logout: return i18n("system-log-out");
+                                 case Cask.Power.Reboot: return i18n("system-reboot");
+                                 case Cask.Power.Shutdown: return i18n("system-shutdown");
+                                 }
+        }
 
         ListView
         {
@@ -101,31 +104,41 @@ Cask.PanelItem
             }
         }
 
-        onAccepted:
-        {
-            _zpaces.clearAllSurfaces()
-            if(_zpaces.allSurfaces.count === 0)
+        actions: [
+        Action
             {
-                switch(_sessioDialog.operation)
+            text: _runningTasks.count > 0 ? i18n("Terminate") : _sessioDialog.title
+            onTriggered:
+            {
+                _zpaces.clearAllSurfaces()
+                if(_zpaces.allSurfaces.count === 0)
                 {
-                case Cask.Power.Logout: Cask.Power.logout(); break;
-                case Cask.Power.Reboot: Cask.Power.reboot(); break;
-                case Cask.Power.Shutdown: Cask.Power.shutdown(); break;
+                    switch(_sessioDialog.operation)
+                    {
+                    case Cask.Power.Logout: Cask.Power.logout(); break;
+                    case Cask.Power.Reboot: Cask.Power.reboot(); break;
+                    case Cask.Power.Shutdown: Cask.Power.shutdown(); break;
+                    }
+                }else
+                {
+                    if(_sessioDialog.attemptsCount > 0)
+                    {
+                        _sessioDialog.close()
+                    }
+                    _sessioDialog.attemptsCount++
                 }
-            }else
-            {
-                if(_sessioDialog.attemptsCount > 0)
+            }
+        },
+
+            Action
+                {
+                text: i18n("Cancel")
+                onTriggered:
                 {
                     _sessioDialog.close()
                 }
-                _sessioDialog.attemptsCount++
             }
-        }
-
-        onRejected:
-        {
-            _sessioDialog.close()
-        }
+        ]
     }
 
     card: Cask.PanelCard

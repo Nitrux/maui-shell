@@ -47,6 +47,10 @@ set_package_properties(Phonon4Qt6 PROPERTIES
     DESCRIPTION "Qt-based audio library"
     TYPE REQUIRED)
 
+add_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
+add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+
 add_subdirectory(caskautostart)
 #add_subdirectory(kcminit)
 #add_subdirectory(waitforname)
@@ -54,9 +58,6 @@ add_subdirectory(caskautostart)
 #if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 #    add_subdirectory(systemd)
 #endif()
-
-add_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
-add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
 
 #qt_add_dbus_interface(
 #startplasma_SRCS

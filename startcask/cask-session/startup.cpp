@@ -34,6 +34,7 @@
 #include <QProcess>
 #include <QStandardPaths>
 #include <QTimer>
+#include <QUrl>
 
 #include "sessiontrack.h"
 //#include "startupadaptor.h"
@@ -233,7 +234,7 @@ void Startup::finishStartup()
 
 void Startup::updateLaunchEnv(const QString &key, const QString &value)
 {
-    qputenv(key.toLatin1(), value.toLatin1());
+    qputenv(key.toUtf8().constData(), value.toUtf8().constData());
 }
 
 bool Startup::startDetached(const QString &program, const QStringList &args)
@@ -255,6 +256,11 @@ bool Startup::startDetached(QProcess *process)
 }
 
 Startup *Startup::s_self = nullptr;
+
+RestoreSessionJob::RestoreSessionJob()
+{
+
+}
 
 void RestoreSessionJob::start()
 {

@@ -3,7 +3,7 @@ add_subdirectory(cask-autostart-list)
 set(cask_session_SRCS
     main.cpp
     autostart.cpp
-    startup.cpp
+    startup.cpp startup.h
     sessiontrack.cpp
     signalhandler.cpp
 )

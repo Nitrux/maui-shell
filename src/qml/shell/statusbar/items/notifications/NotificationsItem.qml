@@ -38,7 +38,7 @@ Cask.PanelItem
             section.delegate: Maui.LabelDelegate
             {
                 width: parent.width
-                label: section
+                text: section
                 isSection: true
             }
 

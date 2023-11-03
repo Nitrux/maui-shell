@@ -10,5 +10,4 @@ import org.maui.cask as Cask
 Maui.InfoDialog
 {
     id: control
-
 }
