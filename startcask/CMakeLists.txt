@@ -1,30 +1,30 @@
 include(ECMDeprecationSettings)
 
 find_package(KF6 ${REQUIRED_KF_VERSION} REQUIRED COMPONENTS
-    DocTools
-    Runner
+    # DocTools
+    # Runner
     Notifications
-    NotifyConfig
+    # NotifyConfig
     Su
-    Wallet
+    # Wallet
     IdleTime
     Declarative
     I18n
     Crash
     GlobalAccel
     DBusAddons
-    Wayland
+    # Wayland
     CoreAddons
     People
-    ActivitiesStats
-    Activities
+    # ActivitiesStats
+    # Activities
     KIO
-    Prison
+    # Prison
     Package
     Archive
-    IconThemes
-    UnitConversion
-    ItemModels
+    # IconThemes
+    # UnitConversion
+    # ItemModels
 #    Init
     #[[TextEditor]])
 
