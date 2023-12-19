@@ -2,7 +2,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR})
 
-ecm_add_qml_module(${PROJECT_NAME} URI "org.maui.cask" VERSION 1.0 CLASSNAME CaskPlugin)
+add_library(${PROJECT_NAME} SHARED)
+ecm_add_qml_module(${PROJECT_NAME} URI "org.maui.cask" VERSION 1.0 CLASS_NAME CaskPlugin)
 
 set(caskplugin_SRCS
     code/caskplugin.cpp
