@@ -5,15 +5,22 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+project(CaskPolkit LANGUAGES CXX VERSION 0.5.0)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(AUTOMOC_MOC_OPTIONS -Muri=org.cask.polkit)
+
+include(GenerateExportHeader)
+include(CMakePackageConfigHelpers)
 
 include(ECMGenerateQmlTypes)
 include(ECMGenerateHeaders)
 include(ECMFindQmlModule)
 include(ECMQmlModule)
 
-project(CaskPolkit LANGUAGES CXX VERSION 0.5.0)
+include(KDEClangFormat)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/CaskPolkit")
 
@@ -71,5 +78,4 @@ find_package(KF6 ${REQUIRED_KF_VERSION} REQUIRED COMPONENTS
 add_subdirectory(src)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
 

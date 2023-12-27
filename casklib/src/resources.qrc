@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/db">
-        <file>code/controllers/script.sql</file>
-    </qresource>
-</RCC>

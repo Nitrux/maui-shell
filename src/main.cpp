@@ -380,7 +380,7 @@ int main(int argc, char *argv[])
     registerTypes();
 
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/cask/qml/main.qml"_qs);
+    const QUrl url(u"qrc:qt/qml/org/cask/shell/qml/main.qml"_qs);
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

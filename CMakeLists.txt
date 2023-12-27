@@ -3,50 +3,19 @@ cmake_minimum_required(VERSION 3.16)
 set(CASK_VERSION 0.6.6)
 project(MauiShell VERSION ${CASK_VERSION})
 
+set(QT_MAJOR_VERSION 6)
+
 set(REQUIRED_QT_VERSION 6.4)
-set(REQUIRED_KF_VERSION 5.109.0)
+set(REQUIRED_KF_VERSION 5.240.0)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-find_package(ECM ${REQUIRED_KF_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${REQUIRED_KF_VERSION} NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
-include(KDEInstallDirs)
-include(KDECompilerSettings NO_POLICY_SCOPE)
-include(KDECMakeSettings)
-
-include(ECMInstallIcons)
-include(ECMAddAppIcon)
-include(ECMSetupVersion)
-include(ECMConfiguredInstall)
-include(ECMQtDeclareLoggingCategory)
 include(ECMSourceVersionControl)
-include(ECMGenerateHeaders)
-
-include(FeatureSummary)
-include(GenerateExportHeader)
-include(FeatureSummary)
-
-find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
-    Qml
-    Quick
-    Svg
-    QuickControls2
-    WaylandCompositor)
-
-find_package(KF6 ${REQUIRED_KF_VERSION} REQUIRED COMPONENTS
-    I18n
-    Config
-    Service)
-
-find_package(MauiKit4)
-find_package(MauiMan4)
-find_package(CaskServer)
-find_package(MauiCore REQUIRED COMPONENTS Audio Notifications Power)
+include(ECMSetupVersion)
 
 if(${ECM_SOURCE_UNDER_VERSION_CONTROL})
     execute_process(COMMAND git rev-parse --abbrev-ref HEAD
@@ -76,7 +45,7 @@ ecm_setup_version(${CASK_VERSION}
 
 #set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/plugins ${CMAKE_BINARY_DIR}/org CACHE STRING "" FORCE)
 
-add_subdirectory(casklib)
+add_subdirectory(caskcore) ##plugin and the public library
 add_subdirectory(plugins)
 add_subdirectory(startcask)
 add_subdirectory(src)

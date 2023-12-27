@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 
     {
         KConfig fonts(QStringLiteral("kcmfonts"));
-        KConfigGroup group = fonts.group("General");
+        KConfigGroup group = fonts.group(QStringLiteral("General"));
         auto dpiSetting = group.readEntry("forceFontDPIWayland", 96);
         auto dpi = dpiSetting == 0 ? 96 : dpiSetting;
         qputenv("QT_WAYLAND_FORCE_DPI", QByteArray::number(dpi));

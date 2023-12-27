@@ -1,4 +1,17 @@
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+include(KDEInstallDirs)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+include(KDECMakeSettings)
+
+include(FeatureSummary)
+include(GenerateExportHeader)
+
+include(ECMGenerateHeaders)
 include(ECMDeprecationSettings)
+include(ECMQtDeclareLoggingCategory)
 
 find_package(KF6 ${REQUIRED_KF_VERSION} REQUIRED COMPONENTS
     # DocTools

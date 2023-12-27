@@ -8,7 +8,7 @@ set(cask_session_SRCS
     signalhandler.cpp
 )
 
-ecm_qt_declare_logging_category(cask_session_SRCS  HEADER debug.h IDENTIFIER CASK_SESSION CATEGORY_NAME org.cask.session)
+ecm_qt_declare_logging_category(cask_session_SRCS HEADER debug.h IDENTIFIER CASK_SESSION CATEGORY_NAME org.cask.session)
 
 #qt_add_dbus_adaptor( plasma_session_SRCS org.kde.Startup.xml startup.h Startup)
 

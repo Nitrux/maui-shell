@@ -3,21 +3,18 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/code)
 
-add_library(${PROJECT_NAME} SHARED)    
+# add_library(${PROJECT_NAME} SHARED)    
 ecm_add_qml_module(${PROJECT_NAME} URI "org.cask.polkit" VERSION 1.0 CLASS_NAME CaskPolkitPlugin)
-
-set(caskpolkit_SRCS
-    code/polkitagentlistener.cpp
-    code/dialog.cpp
-    code/agent.cpp
-    code/caskpolkitplugin.cpp)
 
 ecm_target_qml_sources(${PROJECT_NAME} SOURCES
     controls/PolkitDialog.qml)
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-    ${caskpolkit_SRCS})
+      code/polkitagentlistener.cpp
+    code/dialog.cpp
+    code/agent.cpp
+    code/caskpolkitplugin.cpp)
 
 generate_export_header(${PROJECT_NAME} BASE_NAME CaskPolkit)
 set_target_properties(${PROJECT_NAME} PROPERTIES

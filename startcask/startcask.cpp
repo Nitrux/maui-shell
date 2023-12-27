@@ -190,7 +190,7 @@ void runStartupConfig()
     // export LC_* variables set by kcmshell5 formats into environment
     // so it can be picked up by QLocale and friends.
     KConfig config(QStringLiteral("plasma-localerc"));
-    KConfigGroup formatsConfig = KConfigGroup(&config, "Formats");
+    KConfigGroup formatsConfig = KConfigGroup(&config, QStringLiteral("Formats"));
 
     const auto lcValues = {"LANG", "LC_NUMERIC", "LC_TIME", "LC_MONETARY", "LC_MEASUREMENT", "LC_COLLATE", "LC_CTYPE"};
     for (auto lc : lcValues) {
@@ -200,7 +200,7 @@ void runStartupConfig()
         }
     }
 
-    KConfigGroup languageConfig = KConfigGroup(&config, "Translations");
+    KConfigGroup languageConfig = KConfigGroup(&config, QStringLiteral("Translations"));
     const QString value = languageConfig.readEntry("LANGUAGE", QString());
     if (!value.isEmpty()) {
         qputenv("LANGUAGE", value.toUtf8());
@@ -215,7 +215,7 @@ void runStartupConfig()
 void setupCursor()
 {
     const KConfig cfg(QStringLiteral("kcminputrc"));
-    const KConfigGroup inputCfg = cfg.group("Mouse");
+    const KConfigGroup inputCfg = cfg.group(QStringLiteral("Mouse"));
 
     const auto kcminputrc_mouse_cursorsize = inputCfg.readEntry("cursorSize", 24);
     const auto kcminputrc_mouse_cursortheme = inputCfg.readEntry("cursorTheme", QStringLiteral("breeze_cursors"));
@@ -613,7 +613,7 @@ bool startCaskSession()
 void waitForKonqi()
 {
     const KConfig cfg(QStringLiteral("startkderc"));
-    const KConfigGroup grp = cfg.group("WaitForDrKonqi");
+    const KConfigGroup grp = cfg.group(QStringLiteral("WaitForDrKonqi"));
     bool wait_drkonqi = grp.readEntry(QStringLiteral("Enabled"), true);
     if (wait_drkonqi) {
         // wait for remaining drkonqi instances with timeout (in seconds)

@@ -1,5 +1,34 @@
 project(cask VERSION ${CASK_VERSION})
 
+set(PROJECT_URI org.cask.shell)
+
+include(GenerateExportHeader)
+include(CMakePackageConfigHelpers)
+include(ECMGenerateHeaders)
+include(ECMFindQmlModule)
+include(ECMQmlModule)
+include(ECMGenerateQmlTypes)
+
+include(KDEClangFormat)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+
+find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+    Qml
+    Quick
+    Svg
+    QuickControls2
+    WaylandCompositor)
+
+find_package(KF6 ${REQUIRED_KF_VERSION} REQUIRED COMPONENTS
+    I18n
+    Config
+    Service)
+
+find_package(MauiKit4)
+find_package(MauiMan4)
+find_package(CaskServer)
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR})
@@ -26,7 +55,7 @@ qt_add_executable(${PROJECT_NAME}
     ${cask_ASSETS})
 
 qt_add_qml_module(${PROJECT_NAME}
-    URI ${PROJECT_NAME}
+    URI ${PROJECT_URI}
     VERSION 1.0
     QML_FILES
     qml/main.qml
@@ -97,7 +126,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     MauiKit4
     MauiMan4
-    CaskLib
+    # CaskLib
     CaskServer::CaskServerLib
     Qt6::Qml
     Qt6::Quick

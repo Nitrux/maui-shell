@@ -40,7 +40,7 @@
 //#include "startupadaptor.h"
 #include <signal.h>
 
-#include "../config-startcask.h"
+#include "config-startcask.h"
 #include "startcask.h"
 
 
