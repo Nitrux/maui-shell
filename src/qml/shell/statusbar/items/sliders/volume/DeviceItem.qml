@@ -5,7 +5,6 @@ import QtQuick.Layouts
 
 import org.mauikit.controls as Maui
 
-import org.maui.cask as Cask
 import org.mauicore.audio as MauiCore
 
 import ".."
@@ -14,25 +13,28 @@ import "../../../../templates" as Template
 Template.SliderToggle
 {
     id: control
+    
     property string /* "sink" | "sink-input" | "source" | "source-output" */ type
+   
     readonly property var currentPort: model.Ports[model.ActivePortIndex]
     readonly property bool muted: model.Muted
     readonly property int activePortIndex: model.ActivePortIndex
-readonly property int percent: (control.volume * 100) / MauiCore.PulseAudio.NormalVolume
+    readonly property int percent: (control.volume * 100) / MauiCore.PulseAudio.NormalVolume
     readonly property bool isPlayback: type.startsWith("sink")
-    slider.iconSource: "audio-volume-high"
 
-    property int volume: model.Volume
+    readonly property int volume: model.Volume
     property bool ignoreValueChange: true
 
     slider.from: MauiCore.PulseAudio.MinimalVolume
     slider.to: MauiCore.PulseAudio.MaximalVolume
     slider.stepSize: slider.to / (slider.to / MauiCore.PulseAudio.NormalVolume * 100.0)
+    slider.iconSource: "audio-volume-high"
+
+    slider.opacity: model.Muted ? 0.5 : 1
+    slider.animatedRec.width: (slider.handle.x * meter.volume) + Maui.Style.space.medium
+    
     visible: model.HasVolume
     enabled: model.VolumeWritable
-    slider.opacity: model.Muted ? 0.5 : 1
-    //slider.value: 0.5
-    slider.animatedRec.width: (slider.handle.x * meter.volume) + Maui.Style.space.medium
 
     data: [MauiCore.VolumeMonitor
     {

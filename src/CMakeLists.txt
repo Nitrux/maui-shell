@@ -25,9 +25,9 @@ find_package(KF6 ${REQUIRED_KF_VERSION} REQUIRED COMPONENTS
     Config
     Service)
 
-find_package(MauiKit4)
-find_package(MauiMan4)
-find_package(CaskServer)
+find_package(MauiKit4 REQUIRED COMPONENTS Calendar)
+find_package(MauiMan4 REQUIRED)
+find_package(CaskServer REQUIRED)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -125,6 +125,7 @@ qt_add_qml_module(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     MauiKit4
+    MauiKit4::Calendar
     MauiMan4
     # CaskLib
     CaskServer::CaskServerLib

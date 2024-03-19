@@ -93,7 +93,7 @@ WaylandOutput
     sizeFollowsWindow: true
     availableGeometry : _cask.availableGeometry
 
-    scaleFactor: Cask.MauiMan.screen.scaleFactor
+    // scaleFactor: Cask.MauiMan.screen.scaleFactor
     //    transform: switch(control.orientation)
     //               {
     //               case Qt.PrimaryOrientation: return WaylandOutput.TransformNormal

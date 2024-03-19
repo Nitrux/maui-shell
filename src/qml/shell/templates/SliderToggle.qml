@@ -5,7 +5,7 @@ import QtQuick.Layouts
 AbstractBarToggle
 {
     id: control
-    property alias slider : _slider
+    readonly property alias slider : _slider
 
     bar: SliderTemplate
     {

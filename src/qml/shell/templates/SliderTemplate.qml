@@ -3,8 +3,6 @@ import QtQuick.Controls
 
 import org.mauikit.controls as Maui
 
-import org.maui.cask as Cask
-
 import Qt5Compat.GraphicalEffects
 
 Slider

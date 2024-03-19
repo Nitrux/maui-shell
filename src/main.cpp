@@ -43,8 +43,9 @@
 #include <unistd.h>
 
 #include <MauiKit4/Core/mauiapp.h>
-#include <KLocalizedString>
+#include <MauiKit4/Calendar/moduleinfo.h>
 
+#include <KLocalizedString>
 
 //models and controllers by Cask
 #include "code/controllers/zpaces.h"
@@ -260,6 +261,9 @@ int main(int argc, char *argv[])
     about.setBugAddress("https://invent.kde.org/maui/vvave/-/issues");
     about.setOrganizationDomain(CASK_URI);
     about.setProgramLogo(app.windowIcon());
+
+    const auto FBData = MauiKitCalendar::aboutData();
+    about.addComponent(FBData.name(), MauiKitCalendar::buildVersion(), FBData.version(), FBData.webAddress());
 
     KAboutData::setApplicationData(about);
 
