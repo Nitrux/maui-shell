@@ -164,7 +164,7 @@ Zpace *ZpacesModel::createZpace()
     connect(newZpace, &Zpace::closed, this, [this, newZpace]
     {
        this->removeZpace(indexOf(newZpace));
-    }, Qt::UniqueConnection);
+    });
 
     return newZpace;
 }

@@ -31,14 +31,17 @@ find_package(CaskServer REQUIRED)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR})
+    ${CMAKE_CURRENT_SOURCE_DIR}/code)
 
 set(cask_SRCS
     main.cpp
     code/models/zpacesmodel.cpp
     code/models/surfacesmodel.cpp
     code/controllers/zpaces.cpp
+
     code/controllers/zpace.cpp
+    code/controllers/zpace.h
+
     code/models/tasksmodel.cpp
     code/controllers/task.cpp
     code/controllers/abstractwindow.cpp

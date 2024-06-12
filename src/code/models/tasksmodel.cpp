@@ -168,7 +168,7 @@ void TasksModel::addTask(Task *task)
     connect(task, &Task::closed, this, [this, task]()
     {
         this->removeTask(indexOf(task));
-    }, Qt::UniqueConnection);
+    });
 }
 
 Task *TasksModel::findTask(const QString &id)

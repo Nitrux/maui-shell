@@ -230,22 +230,23 @@ WaylandOutput
                 ]
 
                 Keys.enabled: true
-                Keys.onPressed: {
-                    if (event.key == Qt.Key_Left) {
-                        console.log("move left");
-                        dock.launcher.toggle()
+                Keys.onPressed: (event) =>
+                                {
+                                    if (event.key == Qt.Key_Left) {
+                                        console.log("move left");
+                                        dock.launcher.toggle()
 
-                        event.accepted = true;
-                    }
+                                        event.accepted = true;
+                                    }
 
-                    if((event.key === Qt.Key_Meta))
-                    {
-                        console.log("move meta");
+                                    if((event.key === Qt.Key_Meta))
+                                    {
+                                        console.log("move meta");
 
-                        dock.launcher.toggle()
-                        event.accepted = true
-                    }
-                }
+                                        dock.launcher.toggle()
+                                        event.accepted = true
+                                    }
+                                }
 
                 Shortcut
                 {
