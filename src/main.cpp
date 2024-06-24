@@ -47,19 +47,10 @@
 
 #include <KLocalizedString>
 
-//models and controllers by Cask
-#include "code/controllers/zpaces.h"
-#include "code/controllers/zpace.h"
-#include "code/models/zpacesmodel.h"
-#include "code/models/surfacesmodel.h"
-#include "code/models/tasksmodel.h"
-#include "code/controllers/task.h"
-#include "code/controllers/xdgwindow.h"
-#include "code/controllers/waylandcursorgrabber.h"
-
 #include <CaskServer/caskpower.h>
 
 #include "../cask_version.h"
+#include "caskapp.h"
 
 #include <MauiMan4/screenmanager.h>
 #include <MauiMan4/thememanager.h>
@@ -77,7 +68,7 @@ static QElapsedTimer sinceStartup;
 extern "C" void signalHandler(int signal)
 {
 #ifdef Q_WS_X11
-    // Kill window since it's frozen anyway.
+  // Kill window since it's frozen anyway.
     if (QX11Info::display())
         close(ConnectionNumber(QX11Info::display()));
 #endif
@@ -115,7 +106,7 @@ static void setupSignalHandler()
         return;
     }
 
-    // Install signal handler.
+           // Install signal handler.
     struct sigaction sa;
     if (sigemptyset(&sa.sa_mask) == -1) {
         qWarning("Warning: Failed to empty signal set (%s).", Q_FUNC_INFO);
@@ -172,7 +163,7 @@ void qtMsgLog(QtMsgType type, const QMessageLogContext &context, const QString &
         abort();
 }
 
-static qreal highestDPR(QList<QScreen *> &screens)
+static qreal highestDPR(QList<QScreen *> screens)
 {
     qreal ret = 0;
     for (const QScreen *scr : screens) {
@@ -189,56 +180,45 @@ void sigintHandler(int signalNumber)
     qDebug() << "terminating cask session" << signalNumber;
 }
 
-
-static void registerTypes()
+static void setupEnviroment()
 {
-    qmlRegisterUncreatableType<Zpace>(ZPACES_URI, 1, 0, "Zpace", QStringLiteral("Use it from a reference from Zpaces object"));
-    qmlRegisterUncreatableType<Task>(ZPACES_URI, 1, 0, "Task", QStringLiteral("Use it from Zpaces::TasksModel.task object"));
-    qmlRegisterAnonymousType<ZpacesModel>(ZPACES_URI, 1);
-    qmlRegisterAnonymousType<TasksModel>(ZPACES_URI, 1);
-    qmlRegisterAnonymousType<SurfacesModel>(ZPACES_URI, 1);
-    qmlRegisterAnonymousType<AbstractWindow>(ZPACES_URI, 1);
-    qmlRegisterType<Zpaces>(ZPACES_URI, 1, 0, "Zpaces");
-    qmlRegisterUncreatableType<XdgWindow>(ZPACES_URI, 1, 0, "XdgWindow", QStringLiteral("Create it from Zpaces::createXdgWIndow"));
-    //    qmlRegisterType<WaylandCursorGrabber>(ZPACES_URI, 1, 0, "WaylandCursorGrabber");
+    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
+        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
+
+           //    if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
+           //        qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
+
+    if (!qEnvironmentVariableIsSet("QT_LABS_CONTROLS_STYLE"))
+        qputenv("QT_LABS_CONTROLS_STYLE", "Universal");
+
+           //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
+           //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
+
+    if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
+        qputenv("QT_QPA_PLATFORMTHEME", "maui");
+
+           //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
+           //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
+    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
+
+           //    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+    {
+        MauiMan::ScreenManager screenManager;
+        qputenv("QT_SCALE_FACTOR", QByteArray::number(screenManager.scaleFactor()));
+    }
+
+
 }
 
 int main(int argc, char *argv[])
 {
     sinceStartup.start();
 
-    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
-        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl"); // use xcomposite-glx if no EGL
-
-    //    if (!qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_WINDOWDECORATION"))
-    //        qputenv("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1");
-
-    if (!qEnvironmentVariableIsSet("QT_LABS_CONTROLS_STYLE"))
-        qputenv("QT_LABS_CONTROLS_STYLE", "Universal");
-
-    //    if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_STYLE"))
-    //        qputenv("QT_QUICK_CONTROLS_STYLE", "maui-style");
-
-    if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME"))
-        qputenv("QT_QPA_PLATFORMTHEME", "maui");
-
-    //        if (!qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE"))
-    //    qputenv("QT_QUICK_CONTROLS_MOBILE", "1");
-
-
+    setupEnviroment();
     // ShareOpenGLContexts is needed for using the threaded renderer
     // on NVIDIA EGLStreams and multi output compositors in general
     // (see QTBUG-63039 and QTBUG-87597)
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-
-
-    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
-
-    //    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-    {
-        MauiMan::ScreenManager screenManager;
-        qputenv("QT_SCALE_FACTOR", QByteArray::number(screenManager.scaleFactor()));
-    }
 
     QGuiApplication app(argc, argv);
     app.setOrganizationName(QStringLiteral("Maui"));
@@ -252,13 +232,13 @@ int main(int argc, char *argv[])
                      QStringLiteral(CASK_VERSION_STRING),
                      i18n("Convergent shell for desktop and mobile computers."),
                      KAboutLicense::LGPL_V3,
-                     i18n("© 2021-%1 Maui Development Team", QString::number(QDate::currentDate().year())),
+                     QStringLiteral("© 2021-2024 Maui Development Team"),
                      QString(QStringLiteral(GIT_BRANCH) + QStringLiteral("/") + QStringLiteral(GIT_COMMIT_HASH)));
 
-    about.addAuthor(i18n("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
+    about.addAuthor(QStringLiteral("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
     about.setHomepage(QStringLiteral("https://mauikit.org"));
     about.setProductName("maui/cask");
-    about.setBugAddress("https://invent.kde.org/maui/vvave/-/issues");
+    about.setBugAddress("https://github.com/Nitrux/maui-shell/issues/new/choose");
     about.setOrganizationDomain(CASK_URI);
     about.setProgramLogo(app.windowIcon());
 
@@ -267,44 +247,31 @@ int main(int argc, char *argv[])
 
     KAboutData::setApplicationData(about);
 
-    // if(MauiManUtils::isMauiSession())
-    //    {
-    //auto themeSettings =  std::make_unique<MauiMan::ThemeManager>();
-
-    //        QIcon::setThemeName(themeSettings->iconTheme());
-    //    }
+    if(MauiManUtils::isMauiSession())
+    {
+        MauiMan::ThemeManager themeSettings;
+        QIcon::setThemeName(themeSettings.iconTheme());
+    }
 
     signal(SIGINT, sigintHandler);
     signal(SIGTSTP, sigintHandler);
 
     app.setQuitOnLastWindowClosed(false);
-    //    QGuiApplication::setFallbackSessionManagementEnabled(false);
-    auto disableSessionManagement = [](QSessionManager &sm) {
-        sm.setRestartHint(QSessionManager::RestartNever);
-    };
 
-    //    auto power = new CaskPower();
-    //    QObject::connect(power, &CaskPower::logoutRequested, [&app, power]()
-    //    {
-    //        power->deleteLater();
-    //        app.quit();
-    //    });
 
-    QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
-    QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);
+           //    auto power = new CaskPower();
+           //    QObject::connect(power, &CaskPower::logoutRequested, [&app, power]()
+           //    {
+           //        power->deleteLater();
+           //        app.quit();
+           //    });
+
 
     QQuickStyle::setStyle(QStringLiteral("QtQuick.Controls.Maui"));
 
     caskExecutablePath = app.applicationFilePath().toLocal8Bit();
     caskPID = QCoreApplication::applicationPid();
-    bool windowed = false;
 
-    QList<QScreen *> screens = QGuiApplication::screens();
-
-    for(const auto &screen : screens)
-    {
-        qWarning() << screen->devicePixelRatio() << screen->logicalDotsPerInch()<< screen->physicalDotsPerInch() << screen->availableGeometry() << screen->availableSize() <<screen->availableVirtualSize();
-    }
 
     QCommandLineParser parser;
     about.setupCommandLine(&parser);
@@ -343,37 +310,10 @@ int main(int argc, char *argv[])
         qInstallMessageHandler(qtMsgLog);
     }
 
-    if (parser.isSet(screenOption))
-    {
-        QStringList scrNames = parser.values(screenOption);
-        QList<QScreen *> keepers;
-        for (QScreen *scr : screens)
-        {
-            if (scrNames.contains(scr->name(), Qt::CaseInsensitive))
-            {
-                keepers << scr;
-            }
-        }
-
-        if (keepers.isEmpty())
-        {
-            qWarning() << "None of the screens" << scrNames << "exist; available screens:";
-            for (QScreen *scr : screens)
-            {
-                qWarning() << "   " << scr->name() << scr->geometry();
-            }
-            return -1;
-        }
-        screens = keepers;
-    }
-
-    if (parser.isSet(windowOption))
-        windowed = true;
-
-    qreal dpr = highestDPR(screens);
-
     if (!qEnvironmentVariableIsSet("XCURSOR_SIZE"))
     {
+        qreal dpr = highestDPR(QGuiApplication::screens());
+
         // QTBUG-67579: we can't have different cursor sizes on different screens
         // or different windows yet, but we can override globally
         int cursorSize = int(32 * dpr);
@@ -381,49 +321,22 @@ int main(int argc, char *argv[])
         qputenv("XCURSOR_SIZE", QByteArray::number(cursorSize));
     }
 
-    registerTypes();
+    auto shell = new CaskApp();
 
-    QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:qt/qml/org/cask/shell/qml/main.qml"_qs);
-
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-
-    engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
-
-
-    engine.load(url);
-
-    qunsetenv("QT_SCALE_FACTOR");
-    qputenv("QT_QPA_PLATFORM", "wayland"); // not for cask but for child processes
-    qputenv("GDK_BACKEND", "wayland"); // not for cask but for child processes
-    qputenv("MOZ_ENABLE_WAYLAND", "1");
-
-    QObject *root = engine.rootObjects().first();
-
-    QList<QWindow *> windows = root->findChildren<QWindow *>();
-    auto windowIter = windows.begin();
-    auto screenIter = screens.begin();
-    while (windowIter != windows.end() && screenIter != screens.end())
+    if (parser.isSet(screenOption))
     {
-        QWindow * window = *windowIter;
-        QScreen * screen = *screenIter;
-        window->setScreen(screen);
-
-        if (windowed)
-        {
-            window->showNormal();
-        } else
-        {
-            window->setGeometry(screen->geometry());
-            window->showFullScreen();
-        }
-        ++windowIter;
-        ++screenIter;
+        shell->setScreens(parser.values(screenOption));
     }
+
+    if (parser.isSet(windowOption))
+    {
+        shell->setWindowed("true");
+    }
+
+    const QUrl url(u"qrc:qt/qml/org/cask/shell/qml/main.qml"_qs);
+    shell->setUrl(url);
+
+    QCoreApplication::postEvent(shell, new StartupEvent());
 
     return app.exec();
 }

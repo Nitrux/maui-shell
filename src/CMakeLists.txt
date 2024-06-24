@@ -7,9 +7,7 @@ include(CMakePackageConfigHelpers)
 include(ECMGenerateHeaders)
 include(ECMFindQmlModule)
 include(ECMQmlModule)
-include(ECMGenerateQmlTypes)
 
-include(KDEClangFormat)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 
@@ -35,6 +33,7 @@ include_directories(
 
 set(cask_SRCS
     main.cpp
+    caskapp.cpp
     code/models/zpacesmodel.cpp
     code/models/surfacesmodel.cpp
     code/controllers/zpaces.cpp
