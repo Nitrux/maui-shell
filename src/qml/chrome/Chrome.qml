@@ -69,8 +69,8 @@ Cask.StackableItem
     property rect previousRect
     property rect oldPos : Qt.rect(0, 0, rootChrome.width * 0.6, rootChrome.height*0.6)
 
-    x: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
-    y: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
+    x: surfaceItem.moveItem.x
+    y: surfaceItem.moveItem.y
 
     //        Binding on x
     //        {
@@ -273,17 +273,16 @@ Cask.StackableItem
             if(win.formFactor === Cask.MauiMan.Desktop)
             {
                 rootChrome.shellSurface.toplevel.sendConfigure(Qt.size(previousRect.width, previousRect.height), [3,4])
-                rootChrome.x = previousRect.x
-                rootChrome.y = previousRect.y
+                rootChrome.moveItem.x = previousRect.x
+                rootChrome.moveItem.y = previousRect.y
             }else
             {
                 previousRect = Qt.rect(rootChrome.x, rootChrome.y, rootChrome.width, rootChrome.height)
-                rootChrome.x = 0
-                rootChrome.y = 0
+                rootChrome.moveItem.x = 0
+                rootChrome.moveItem.y = 0
             }
         }
     }
-
 
     Connections
     {
@@ -307,8 +306,8 @@ Cask.StackableItem
 
         function onUnsetMinimized()
         {
-            rootChrome.visible = true;
-            surfaceItem.forceActiveFocus();
+            rootChrome.visible = true
+            surfaceItem.forceActiveFocus()
             window.activate()
         }
 
@@ -321,11 +320,11 @@ Cask.StackableItem
             oldPos.width = rootChrome.width
             oldPos.height = rootChrome.height
 
-            rootChrome.x = 0
-            rootChrome.y = 0
+            // rootChrome.x = 0
+            // rootChrome.y = 0
 
-            rootChrome.moveItem.x =  rootChrome.x
-            rootChrome.moveItem.y =  rootChrome.y
+            // rootChrome.moveItem.x =  0
+            // rootChrome.moveItem.y =  0
 
             toplevel.sendMaximized(Qt.size(rootChrome.parent.width, rootChrome.parent.height - rootChrome.titlebarHeight))
         }
@@ -337,18 +336,13 @@ Cask.StackableItem
             {
                 oldPos = Qt.rect(0, 0, rootChrome.width * 0.6, rootChrome.height*0.6)
             }
-
-            rootChrome.x = oldPos.x
-            rootChrome.y = oldPos.y
-
-            rootChrome.moveItem.x =  rootChrome.x
-            rootChrome.moveItem.y =  rootChrome.y
+            toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
 
             rootChrome.x = Qt.binding(()=> {return rootChrome.moveItem.x})
             rootChrome.y = Qt.binding(()=> {return rootChrome.moveItem.y})
 
-            toplevel.sendUnmaximized(Qt.size(oldPos.width, oldPos.height))
-
+            rootChrome.moveItem.x =  oldPos.x
+            rootChrome.moveItem.y =  oldPos.y
         }
 
         //        function onSetFullscreen()
@@ -399,6 +393,7 @@ Cask.StackableItem
     {
         rootChrome.window.chrome = rootChrome
         surfaceItem.forceActiveFocus()
+        rootChrome.visible = true
     }
 
     Rectangle

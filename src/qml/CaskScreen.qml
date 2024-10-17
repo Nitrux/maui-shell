@@ -91,7 +91,7 @@ WaylandOutput
     property bool showDesktop : true
 
     sizeFollowsWindow: true
-    availableGeometry : _cask.availableGeometry
+    availableGeometry : _swipeView.currentItem.availableGeometry
 
     // scaleFactor: Cask.MauiMan.screen.scaleFactor
     //    transform: switch(control.orientation)

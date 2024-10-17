@@ -12,22 +12,42 @@ Control
 
     implicitHeight: _content.implicitHeight + topPadding + bottomPadding
 
-    padding: 0
+    padding: Maui.Style.space.small
     background: null
-
     //    font.bold: true
 
     hoverEnabled: !Maui.Handy.isMobile
 
-    contentItem: MouseArea
+    contentItem: Item
     {
         id: _content
-        implicitHeight: _layout.implicitHeight
+        implicitHeight: _layout.implicitHeight       
 
-        onPressed:
+        DragHandler
         {
-            rootChrome.window.activate()
-            mouse.accepted= false
+            id: titlebarDrag
+            grabPermissions: TapHandler.CanTakeOverFromAnything
+            target: rootChrome.moveItem
+            yAxis.maximum: rootChrome.parent.height
+            yAxis.minimum: 0
+            cursorShape: Qt.ClosedHandCursor
+            onActiveChanged:
+            {
+                if(toplevel.maximized)
+                {
+                   rootChrome. window.unmaximize()
+                }
+
+                if(!rootChrome.activated)
+                {
+                    rootChrome.window.activate()
+                }
+            }
+        }
+
+        TapHandler
+        {
+            onTapped: rootChrome.window.activate()
         }
 
         HoverHandler
@@ -44,7 +64,7 @@ Control
 
             Label
             {
-                opacity: control.hovered ? 1 : 0
+                // opacity: control.hovered ? 1 : 0
                 Layout.fillWidth: true
                 text: rootChrome.title
                 horizontalAlignment: Qt.AlignLeft
@@ -58,28 +78,6 @@ Control
                 onButtonClicked: performActiveWindowAction(type)
                 isActiveWindow: rootChrome.activated
                 maximized: rootChrome.toplevel.maximized
-            }
-        }
-
-        DragHandler
-        {
-            id: titlebarDrag
-            grabPermissions: PointerHandler.TakeOverForbidden
-            target: rootChrome
-            yAxis.maximum: rootChrome.parent.height
-            yAxis.minimum: 0
-            cursorShape: Qt.ClosedHandCursor
-            onActiveChanged:
-            {
-                if(toplevel.maximized)
-                {
-                    window.unmaximize()
-                }
-
-                if(!rootChrome.activated)
-                {
-                    rootChrome.window.activate()
-                }
             }
         }
     }

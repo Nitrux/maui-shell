@@ -34,6 +34,12 @@ public:
     bool maximized() const override final;
     bool fullscreen() const override final;
 
+    QString title() const override final;
+    QString appId() const override final;
+    QString iconName() const override final;
+    QString appName() const override final;
+    QWaylandXdgSurface *xdgSurface() const;
+
 public Q_SLOTS:
     void setShellSurface(QWaylandShellSurface * shellSurface);
     void setToplevel(QWaylandXdgToplevel *toplevel);
@@ -55,11 +61,5 @@ Q_SIGNALS:
     void waylandSurfaceChanged();
     void xdgSurfaceChanged();
     // AbstractWindow interface
-public:
-    QString title() const override final;
-    QString appId() const override final;
-    QString iconName() const override final;
-    QString appName() const override final;
-    QWaylandXdgSurface *xdgSurface() const;
 };
 

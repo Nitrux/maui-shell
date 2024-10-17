@@ -105,7 +105,7 @@ WaylandCompositor
         target: defaultSeat
         function onCursorSurfaceRequest()
         {
-            console.log("CURSOR SURFACE REQUEST", hotspotX, hotspotY, surface.cursorSurface, surface.hasContent, surface.inhibitsIdle)
+            console.log("CURSOR SURFACE REQUEST"/*,hotspotX, hotspotY, surface.cursorSurface, surface.hasContent, surface.inhibitsIdle*/)
         }
 
         function onKeyboardFocusChanged()

@@ -34,7 +34,6 @@ Item
 
     property alias topPanel: _topPanel
 
-
     Rectangle
     {
         id: _rec

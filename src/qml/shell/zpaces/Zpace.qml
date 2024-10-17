@@ -29,12 +29,12 @@ Pane
     property alias backgroundFillMode : _img.fillMode
     property alias backgroundVisible: _backgroundOverlay.visible
 
+    readonly property rect availableGeometry : Qt.rect(0, 0, width, height)
+
     topPadding: cask.topPanel.height
     bottomPadding: formFactor === Cask.MauiMan.Desktop ? dock.height : 0
     leftPadding: 0
     rightPadding: 0
-
-    //    clip: false
 
     Component.onCompleted:
     {
@@ -124,6 +124,7 @@ Pane
 
     contentItem : Item
     {
+        id: _container
         data: Repeater
         {
             id: _repeater
@@ -145,28 +146,24 @@ Pane
                 scale: isMobile ? 1 : _swipeView.scale
 
 
-                moveItem: Item
+                moveItem: Rectangle
                 {
+                    color: "pink"
+                    Text {
+                        anchors.bottom: parent.bottom
+
+                        text: parent.x + " - " + parent.y
+                        color: "white"
+                    }
+                    opacity: 0.2
                     objectName: "moveItem"
                     property bool moving: false
-                    parent:  control
+                    parent: _container
                     x: 0
                     y: 0
+
                     height: _chromeDelegate.height
                     width: _chromeDelegate.width
-
-        //                Binding on x
-        //                {
-        //                    value: rootChrome.x
-        //                    restoreMode: Binding.RestoreBindingOrValue
-        //                }
-
-        //                Binding on y
-        //                {
-
-        //                    value: rootChrome.y
-        //                    restoreMode: Binding.RestoreBindingOrValue
-        //                }
                 }
             }
         }
@@ -193,22 +190,22 @@ Pane
             }
         }
 
-//        Label
-//        {
-//            anchors.centerIn: parent
-//            color: "pink"
-//            font.bold: true
-//            text:
-//            {
-//                var res = ""
-//                for(var i = 0; i< _content.children.length; i++)
-//                {
-//                    res+= _content.children[i]+ " / " + _content.children[i].objectName+"\n"
-//                }
+        //        Label
+        //        {
+        //            anchors.centerIn: parent
+        //            color: "pink"
+        //            font.bold: true
+        //            text:
+        //            {
+        //                var res = ""
+        //                for(var i = 0; i< _content.children.length; i++)
+        //                {
+        //                    res+= _content.children[i]+ " / " + _content.children[i].objectName+"\n"
+        //                }
 
-//                return res
-//            }
-//        }
+        //                return res
+        //            }
+        //        }
 
         Maui.ContextualMenu
         {
@@ -232,7 +229,7 @@ Pane
             MenuItem
             {
                 text: i18n("About")
-icon.name: "documentinfo"
+                icon.name: "documentinfo"
                 onTriggered: Cask.MauiMan.invokeManager("about")
             }
         }
