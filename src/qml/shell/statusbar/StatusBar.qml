@@ -3,8 +3,6 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import Qt5Compat.GraphicalEffects
-
 import org.mauikit.controls as Maui
 import org.maui.cask as Cask
 
@@ -71,12 +69,11 @@ Control
         //        visible: !control.floating
         opacity:  _notificationsSection.popup.opened || _statusSection.popup.opened ? 1 : 0.8
 
-        LinearGradient
+        Rectangle
         {
             anchors.fill: parent
             opacity: 0.8
-            start: Qt.point(0, 0)
-            end: Qt.point(0, height)
+
             gradient: Gradient
             {
                 GradientStop { position: 0.0; color: "#333" }
@@ -97,9 +94,7 @@ Control
         {
             anchors.fill: parent
             color: !control.floating ? Maui.Theme.backgroundColor : "transparent"
-
         }
-
     }
 
     Rectangle

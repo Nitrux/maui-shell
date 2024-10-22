@@ -116,7 +116,7 @@ StackPage
 
     Component.onCompleted:
     {
-         control.player.updatePosition();
+        control.player.updatePosition();
     }
 
     Timer
@@ -169,7 +169,7 @@ StackPage
         {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            //            fillMode: Image.PreserveAspectCrop
+            fillMode: Image.PreserveAspectFit
             imageSource: control.albumArt
             iconSource: control.playerIcon
             //            iconSizeHint: 48

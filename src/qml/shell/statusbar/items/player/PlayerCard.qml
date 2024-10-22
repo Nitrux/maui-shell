@@ -5,8 +5,6 @@ import QtQuick.Layouts
 import org.mauikit.controls as Maui
 import org.maui.cask as Cask
 
-import Qt5Compat.GraphicalEffects
-
 ItemDelegate
 {
     id: control
@@ -71,11 +69,10 @@ ItemDelegate
             iconSource: control.playerIcon
             maskRadius: Maui.Style.radiusV
 
-            LinearGradient
+            Rectangle
             {
                 anchors.fill: parent
-                start: Qt.point(0, 0)
-                end: Qt.point(0, parent.height)
+
                 gradient: Gradient
                 {
                     GradientStop { position: 0.0; color: "transparent" }

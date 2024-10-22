@@ -23,8 +23,6 @@ import QtQuick.Layouts
 
 import QtQuick.Window
 
-import Qt5Compat.GraphicalEffects
-
 import QtWayland.Compositor
 
 import org.mauikit.controls as Maui

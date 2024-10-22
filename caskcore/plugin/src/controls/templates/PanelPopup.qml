@@ -3,8 +3,7 @@ import QtQml
 import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
-
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 import org.mauikit.controls as Maui
 import org.maui.cask as Cask
@@ -69,20 +68,15 @@ Container
             active: Maui.Style.enableEffects && control.displayOverlay
             anchors.fill: parent
 
-            sourceComponent: Item
+            sourceComponent: MultiEffect
             {
-                FastBlur
-                {
-                    anchors.fill: parent
-                    radius: 64
-                    source: _cask.superOverlay
-
-                    layer.enabled: true
-                    layer.effect: Desaturate
-                    {
-                        desaturation: -1.2
-                    }
-                }
+                // opacity: 0.2
+                blurEnabled: true
+                blurMax: 64
+                saturation: -0.5
+                blur: Math.min(0.7, (control.height/(availableGeometry.height* 0.7)))
+                autoPaddingEnabled: true
+                source:  _cask.superOverlay
             }
         }
 

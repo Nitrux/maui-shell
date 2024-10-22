@@ -4,8 +4,6 @@ import QtQuick.Controls
 import org.mauikit.controls as Maui
 import org.maui.cask as Cask
 
-import Qt5Compat.GraphicalEffects
-
 Item
 {
     id: control
@@ -53,11 +51,11 @@ Item
         }
     }
 
-
     Item
     {
         id: _superOverlay
         anchors.fill: parent
+
         Item
         {
             id: _underneathContent
@@ -111,6 +109,4 @@ Item
     {
         console.log("DESTROY DASHBOARD")
     }
-
-
 }

@@ -17,14 +17,14 @@
 ****************************************************************************/
 
 import QtQuick
+import QtQml
+
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQml
+import QtQuick.Effects
 
 import QtWayland.Compositor
 import QtWayland.Compositor.XdgShell
-
-import Qt5Compat.GraphicalEffects
 
 import org.mauikit.controls as Maui
 import org.maui.cask as Cask
@@ -56,7 +56,6 @@ Cask.StackableItem
     property bool resizing : toplevel.resizing
     readonly property bool fullscreen : toplevel.fullscreen
 
-
     property alias moveItem: surfaceItem.moveItem
 
     readonly property bool decorationVisible: win.formFactor === Cask.MauiMan.Desktop && toplevel.decorationMode === XdgToplevel.ServerSideDecoration
@@ -71,20 +70,6 @@ Cask.StackableItem
 
     x: surfaceItem.moveItem.x
     y: surfaceItem.moveItem.y
-
-    //        Binding on x
-    //        {
-    //            when: rootChrome.moveItem
-    //            value: surfaceItem.moveItem.x - surfaceItem.output.geometry.x
-    //            restoreMode: Binding.RestoreBinding
-    //        }
-
-    //        Binding on y
-    //        {
-    //            when: rootChrome.moveItem
-    //            value: surfaceItem.moveItem.y - surfaceItem.output.geometry.y
-    //            restoreMode: Binding.RestoreBinding
-    //        }
 
     height: surfaceItem.height + titlebarHeight
     width: surfaceItem.width
@@ -107,7 +92,6 @@ Cask.StackableItem
             origin.y: rootChrome.height / 2
         }
     ]
-
 
     Decoration
     {
@@ -137,7 +121,7 @@ Cask.StackableItem
 
         y: titlebarHeight
 
-//        sizeFollowsSurface: false
+        //        sizeFollowsSurface: false
         opacity: moving || pinch4.activeScale <= 0.5 ? 0.5 : 1.0
 
         inputEventsEnabled: !rootChrome.overviewMode
@@ -191,43 +175,54 @@ Cask.StackableItem
             valid =  !surface.cursorSurface && surface.size.width > 0 && surface.size.height > 0
         }
 
-        layer.enabled: rootChrome.decorationVisible
-        layer.effect: OpacityMask
-        {
-            maskSource: Maui.ShadowedRectangle
-            {
-                width: Math.floor(rootChrome.width)
-                height: Math.floor(rootChrome.height)
+        // layer.enabled: rootChrome.decorationVisible
+        // layer.effect: MultiEffect
+        // {
+        //     maskEnabled: true
+        //     maskThresholdMin: 0.5
+        //     maskSpreadAtMin: 1.0
+        //     maskSpreadAtMax: 0.0
+        //     maskThresholdMax: 1.0
+        //     maskSource: ShaderEffectSource
+        //     {
+        //         sourceItem: Maui.ShadowedRectangle
+        //         {
+        //             width: Math.floor(rootChrome.width)
+        //             height: Math.floor(rootChrome.height)
 
-                corners
-                {
-                    topLeftRadius: 0
-                    topRightRadius: 0
-                    bottomLeftRadius: _decoration.radius
-                    bottomRightRadius: _decoration.radius
-                }
-            }
-        }
+        //             corners
+        //             {
+        //                 topLeftRadius: 0
+        //                 topRightRadius: 0
+        //                 bottomLeftRadius: _decoration.radius
+        //                 bottomRightRadius: _decoration.radius
+        //             }
+        //         }
+        //     }
+        // }
     }
 
-    Rectangle
+    Loader
     {
-        id: _shield
-        radius:  _decoration.radius
-        visible: Cask.Server.screenshot.blacklisted.indexOf(rootChrome.appId) >= 0 && _screenshotArea.running
-        color: Maui.Theme.backgroundColor
+        id:  _shieldLoader
         anchors.fill: parent
         z: surfaceItem.z +1
 
-        Maui.Holder
+        sourceComponent: Rectangle
         {
-            anchors.fill: parent
-            emoji: "dialog-warning-symbolic"
-            visible: true
-            title: i18n("Protected")
-            body: i18n("This app has requested to not be shown in screenshots.")
-        }
+            radius:  _decoration.radius
+            visible: Cask.Server.screenshot.blacklisted.indexOf(rootChrome.appId) >= 0 && _screenshotArea.running
+            color: Maui.Theme.backgroundColor
 
+            Maui.Holder
+            {
+                anchors.fill: parent
+                emoji: "dialog-warning-symbolic"
+                visible: true
+                title: i18n("Protected")
+                body: i18n("This app has requested to not be shown in screenshots.")
+            }
+        }
     }
 
     Loader
@@ -235,11 +230,10 @@ Cask.StackableItem
         asynchronous: true
         anchors.fill: parent
         active: win.formFactor === Cask.MauiMan.Desktop ? (rootChrome.decorationVisible && !window.maximized && !rootChrome.fullscreen) : (rootChrome.height < availableGeometry.height || rootChrome.width < availableGeometry.width || pinch4.active)
-        z: surfaceItem.z +9999999999
+        z: surfaceItem.z + 9999999999
 
         sourceComponent: Border {}
     }
-
 
     Connections
     {

@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 import org.mauikit.controls as Maui
 
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 import org.maui.cask as Cask
 
@@ -132,11 +132,11 @@ ItemDelegate
             }
 
             layer.enabled: true
-            layer.effect: DropShadow
+            layer.effect: MultiEffect
             {
-                transparentBorder: true
-                horizontalOffset: 0
-                verticalOffset: 0
+                autoPaddingEnabled: true
+                shadowEnabled: true
+                shadowColor: "#000000"
             }
         }
     }

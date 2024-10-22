@@ -1,5 +1,5 @@
 import QtQuick
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 import QtQml.Models
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -81,12 +81,11 @@ Pane
         }
 
         layer.enabled: true
-        layer.effect: DropShadow
+        layer.effect: MultiEffect
         {
-            horizontalOffset: 0
-            verticalOffset: 0
-            samples: 10
-            color: Qt.rgba(0,0,0,0.5)
+            autoPaddingEnabled: true
+            shadowEnabled: true
+            shadowColor: "#000000"
         }
     }
 

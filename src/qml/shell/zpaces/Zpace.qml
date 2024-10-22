@@ -8,7 +8,7 @@ import org.maui.cask as Cask
 
 import Zpaces as ZP
 
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 import "../.."
 import "../../chrome"
@@ -89,37 +89,45 @@ Pane
             }
         }
 
-        ColorOverlay
-        {
+        // ColorOverlay
+        // {
+        //     anchors.fill: _bgContainer
+        //     source: _img
+        //     color:  ?  : "transparent"
+
+        //     layer.enabled: control.radius > 0 || control.rise
+        //     layer.effect: OpacityMask
+        //     {
+        //         maskSource: Rectangle
+        //         {
+        //             width: _img.width
+        //             height: _img.height
+        //             radius: control.radius
+        //         }
+        //     }
+        // }
+
+        MultiEffect {
             id: _backgroundOverlay
+
             anchors.fill: _bgContainer
             source: _img
-            color: Cask.MauiMan.background.dimWallpaper ? "#80800000" : "transparent"
+               colorization: Cask.MauiMan.background.dimWallpaper ? 1.0 : 0.0
+               colorizationColor: "#80800000"
+           }
 
-            layer.enabled: control.radius > 0 || control.rise
-            layer.effect: OpacityMask
-            {
-                maskSource: Rectangle
-                {
-                    width: _img.width
-                    height: _img.height
-                    radius: control.radius
-                }
-            }
-        }
-
-        DropShadow
-        {
-            //            visible: control.rise
-            transparentBorder: true
-            anchors.fill: _bgContainer
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 17
-            color: Qt.rgba(0,0,0,0.9)
-            source: _bgContainer
-        }
+        // DropShadow
+        // {
+        //     //            visible: control.rise
+        //     transparentBorder: true
+        //     anchors.fill: _bgContainer
+        //     horizontalOffset: 0
+        //     verticalOffset: 0
+        //     radius: 8.0
+        //     samples: 17
+        //     color: Qt.rgba(0,0,0,0.9)
+        //     source: _bgContainer
+        // }
     }
 
     contentItem : Item
@@ -146,19 +154,13 @@ Pane
                 scale: isMobile ? 1 : _swipeView.scale
 
 
-                moveItem: Rectangle
+                moveItem: Item
                 {
-                    color: "pink"
-                    Text {
-                        anchors.bottom: parent.bottom
-
-                        text: parent.x + " - " + parent.y
-                        color: "white"
-                    }
-                    opacity: 0.2
                     objectName: "moveItem"
                     property bool moving: false
+
                     parent: _container
+
                     x: 0
                     y: 0
 

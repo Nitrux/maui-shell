@@ -7,7 +7,7 @@ import org.mauikit.filebrowsing as FB
 
 import org.maui.cask as Cask
 
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 import Qt.labs.platform as Labs
 
@@ -129,12 +129,11 @@ Maui.Page
         }
 
         layer.enabled: !control.fullscreenLauncher
-        layer.effect: DropShadow
+        layer.effect: MultiEffect
         {
-            horizontalOffset: 0
-            verticalOffset: 0
-            samples: 10
-            color: Qt.rgba(0,0,0,0.5)
+            autoPaddingEnabled: true
+            shadowEnabled: true
+            shadowColor: "#000000"
         }
     }
 

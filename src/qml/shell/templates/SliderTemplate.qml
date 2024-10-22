@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 import org.mauikit.controls as Maui
 
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 Slider
 {
@@ -72,13 +72,21 @@ Slider
             }
 
             layer.enabled: _animatedRec.visible
-            layer.effect: OpacityMask
+            layer.effect: MultiEffect
             {
-                maskSource: Rectangle
+                maskEnabled: true
+                maskThresholdMin: 0.5
+                maskSpreadAtMin: 1.0
+                maskSpreadAtMax: 0.0
+                maskThresholdMax: 1.0
+                maskSource: ShaderEffectSource
                 {
-                    width: _bg.width
-                    height: _bg.height
-                    radius: _bg.radius
+                    sourceItem: Rectangle
+                    {
+                        width: _bg.width
+                        height: _bg.height
+                        radius: _bg.radius
+                    }
                 }
             }
         }

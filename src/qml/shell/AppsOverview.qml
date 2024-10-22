@@ -4,7 +4,7 @@ import QtQuick.Controls
 import QtQuick.Window
 import QtQuick.Layouts
 
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 import QtWayland.Compositor
 
@@ -24,13 +24,16 @@ Maui.Page
     property alias contentX : _flickable.contentX
     headBar.visible: false
 
-    background: FastBlur
+    background: MultiEffect
     {
-        id: fastBlur
-        source: _cask
-        radius: 64
-        transparentBorder: false
-        cached: true
+        // opacity: 0.2
+        blurEnabled: true
+        blurMax: 64
+        saturation: -0.5
+        blur: 1.0
+        autoPaddingEnabled: true
+        source:  _cask.superOverlay
+
 
         Rectangle
         {
@@ -190,17 +193,22 @@ Maui.Page
                                 anchors.fill: parent
 
                                 layer.enabled: true
-                                layer.effect: OpacityMask
+                                layer.effect: MultiEffect
                                 {
-                                    maskSource: Item
+                                    maskEnabled: true
+                                    maskThresholdMin: 0.5
+                                    maskSpreadAtMin: 1.0
+                                    maskSpreadAtMax: 0.0
+                                    maskThresholdMax: 1.0
+                                    maskSource: ShaderEffectSource
                                     {
-                                        width: _thumbnail.width
-                                        height: _thumbnail.height
-
-                                        Rectangle
+                                        sourceItem: Rectangle
                                         {
-                                            anchors.fill: parent
+                                            width: _thumbnail.width
+                                            height: _thumbnail.height
+
                                             radius: Maui.Style.radiusV
+
                                         }
                                     }
                                 }
@@ -227,14 +235,11 @@ Maui.Page
                             }
 
                             layer.enabled:true
-                            layer.effect: DropShadow
+                            layer.effect: MultiEffect
                             {
-                                transparentBorder: true
-                                horizontalOffset: 0
-                                verticalOffset: 0
-                                radius: 8.0
-                                samples: 17
-                                color: Qt.rgba(0,0,0,0.5)
+                                autoPaddingEnabled: true
+                                shadowEnabled: true
+                                shadowColor: "#000000"
                             }
                         }
                     }

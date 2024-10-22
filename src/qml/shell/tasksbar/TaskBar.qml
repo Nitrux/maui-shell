@@ -7,7 +7,7 @@ import org.mauikit.controls as Maui
 import org.maui.cask as Cask
 import Zpaces as ZP
 
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 import "../templates"
 
@@ -55,22 +55,19 @@ Control
             //            active: Maui.Style.enableEffects
             sourceComponent: Item
             {
-
-                FastBlur
+                MultiEffect
                 {
-                    anchors.fill: parent
-                    radius: 64
+                    // opacity: 0.2
+                    blurEnabled: true
+                    blurMax: 64
+                    saturation: -0.5
+                    blur: 1.0
+                    autoPaddingEnabled: true
                     source: ShaderEffectSource
                     {
                         live: true
                         sourceItem: cask.container
                         sourceRect: _bg.mapToItem(cask.container, Qt.rect(_bg.x, _bg.y, _bg.width, _bg.height))
-                    }
-
-                    layer.enabled: true
-                    layer.effect: Desaturate
-                    {
-                        desaturation: -1.2
                     }
                 }
 
@@ -81,26 +78,33 @@ Control
                     opacity: 0.6
                 }
 
-                layer.enabled: true
-                layer.effect: OpacityMask
-                {
-                    maskSource: Rectangle
-                    {
-                        width: _bg.width
-                        height: _bg.height
-                        radius: _bg.radius
-                    }
-                }
+                // layer.enabled: true
+                // layer.effect: MultiEffect
+                // {
+                //     maskEnabled: true
+                //     maskThresholdMin: 0.5
+                //     maskSpreadAtMin: 1.0
+                //     maskSpreadAtMax: 0.0
+                //     maskThresholdMax: 1.0
+                //     maskSource: ShaderEffectSource
+                //     {
+                //         sourceItem:  Rectangle
+                //         {
+                //             width: _bg.width
+                //             height: _bg.height
+                //             radius: _bg.radius
+                //         }
+                //     }
+                // }
             }
         }
 
         layer.enabled: win.formFactor === Cask.MauiMan.Desktop && Maui.Style.enableEffects
-        layer.effect: DropShadow
+        layer.effect: MultiEffect
         {
-            horizontalOffset: 0
-            verticalOffset: 0
-            samples: 10
-            color: Qt.rgba(0,0,0,0.5)
+            autoPaddingEnabled: true
+            shadowEnabled: true
+            shadowColor: "#000000"
         }
     }
 

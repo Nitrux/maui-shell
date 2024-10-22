@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 
 import QtWayland.Compositor
-import Qt5Compat.GraphicalEffects
 
 import org.mauikit.controls as Maui
 import org.maui.cask as Cask
@@ -214,14 +214,11 @@ Rectangle
     }
 
     layer.enabled: control.showDropShadow
-    layer.effect: DropShadow
+    layer.effect: MultiEffect
     {
-        transparentBorder: true
-        horizontalOffset: 0
-        verticalOffset: 0
-        radius: 12
-        samples: 17
-        color: "#000000"
+        autoPaddingEnabled: true
+        shadowEnabled: true
+        shadowColor: "#000000"
     }
 }
 

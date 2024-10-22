@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import org.mauikit.controls as Maui
 import org.maui.cask as Cask
 
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 Item
 {
@@ -43,20 +43,16 @@ Item
             active: Maui.Style.enableEffects
             anchors.fill: parent
 
-            sourceComponent: Item
+            sourceComponent: MultiEffect
             {
-                FastBlur
-                {
-                    anchors.fill: parent
-                    radius: 64
-                    source: _cask.container
+                // opacity: 0.2
+                blurEnabled: true
+                blurMax: 64
+                saturation: -0.5
+                blur: 1.0
+                autoPaddingEnabled: true
+                source: _cask.container
 
-                    layer.enabled: true
-                    layer.effect: Desaturate
-                    {
-                        desaturation: -1.2
-                    }
-                }
 
                 Rectangle
                 {
