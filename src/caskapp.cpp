@@ -246,7 +246,7 @@ void CaskApp::objectCreated(QObject *object, const QUrl &)
     } else {
         // Load the error screen in case of error
         m_failSafe = true;
-        m_appEngine->load(QUrl(QStringLiteral("qrc:/qt/qml/compositor/qml/error/ErrorCompositor.qml")));
+        m_appEngine->load(QUrl(u"qrc:qt/qml/org/cask/shell/qml/ErrorScreen.qml"_qs));
     }
 }
 

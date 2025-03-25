@@ -63,6 +63,7 @@ qt_add_qml_module(${PROJECT_NAME}
     qml/main.qml
     qml/Keyboard.qml
     qml/CaskScreen.qml
+    qml/ErrorScreen.qml
     qml/shell/statusbar/StatusBar.qml
     qml/shell/tasksbar/TaskBar.qml
     qml/shell/AppsOverview.qml

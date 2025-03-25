@@ -27,7 +27,11 @@ WaylandCompositor
 //        targetScreen: modelData
         position: Qt.point(virtualX, virtualY)
 
-        Component.onCompleted: if (!comp.defaultOutput) comp.defaultOutput = this
+        Component.onCompleted:
+        {
+            if (!comp.defaultOutput)
+                comp.defaultOutput = this
+        }
     }
 
     Nof.Notifications
