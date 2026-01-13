@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 mkdir -p maui-shell && cd maui-shell
 cmake -DCMAKE_BUILD_TYPE="Release" \

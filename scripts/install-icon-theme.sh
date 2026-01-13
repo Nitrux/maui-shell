@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 git clone https://github.com/Nitrux/luv-icon-theme.git --depth=1
 
