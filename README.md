@@ -1,4 +1,5 @@
-# Maui Shell 
+# Maui Shell
+
 ![](https://mauikit.org/wp-content/uploads/2018/12/maui_project_logo.png)
 
 [![Maui Shell AppImage](https://github.com/Nitrux/maui-shell/actions/workflows/build-appimage-amd64.yml/badge.svg)](https://github.com/Nitrux/maui-shell/actions/workflows/build-appimage-amd64.yml) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![Generic badge](https://img.shields.io/badge/OS-Linux-blue.svg)](https://shields.io/)
@@ -43,6 +44,7 @@ Eventually, Cask can run Weston and GTK3 apps.
 Cask does not include an embedded X server yet, but it might be possible.
 
 # Contributing
+
 If you'd like to contribute to this project, please make a PR. You can also ask for help at the [KDE Maui project Telegram](https://t.me/mauiproject) channel.
 
 # Issues
