@@ -46,6 +46,7 @@ Cask does not include an embedded X server yet, but it might be possible.
 If you'd like to contribute to this project, please make a PR. You can also ask for help at the [KDE Maui project Telegram](https://t.me/mauiproject) channel.
 
 # Issues
+
 If you find problems with the contents of this repository please create an issue.
 
 ©2022 Nitrux Latinoamericana S.C.
