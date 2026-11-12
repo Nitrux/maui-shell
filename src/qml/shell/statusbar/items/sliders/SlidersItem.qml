@@ -43,14 +43,14 @@ Cask.PanelItem
 
     card: Cask.PanelCard
     {
-        width: ListView.view.width
+        width: ListView.view ? ListView.view.width : 0
         onClosed: _togglesStack.pop()
 
         StackView
         {
             id : _togglesStack
-            width: parent.width
-            height: currentItem.implicitHeight
+            width: parent ? parent.width : 0
+            height: currentItem ? currentItem.implicitHeight : 0
             clip: true
             padding: 0
 
@@ -61,21 +61,21 @@ Cask.PanelItem
                 VolumeSlider
                 {
                     id: _audioSlider
-                    width: parent.width
+                    width: parent ? parent.width : 0
                     onClicked: _togglesStack.push(page)
                 }
 
                 MicSlider
                 {
                     id: _micSlider
-                    width: parent.width
+                    width: parent ? parent.width : 0
                     onClicked: _togglesStack.push(page)
                 }
 
                 BrightnessSlider
                 {
                     id: _brightnessSlider
-                    width: parent.width
+                    width: parent ? parent.width : 0
                     onClicked: _togglesStack.push(page)
                 }
             }

@@ -43,7 +43,6 @@ Template.SliderToggle
 
 //        function onMoved()
 //        {
-//            console.log(control.slider.value)
 //        }
 
         function onPressedChanged()

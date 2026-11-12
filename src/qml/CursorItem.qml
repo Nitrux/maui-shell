@@ -23,7 +23,6 @@ WaylandQuickItem
         target: seat
         function onCursorSurfaceRequest(surface, hotspotX, hotspotY)
         {
-            console.log("CURSOR SURFACE REQUESTED")
             cursorItem.surface = surface;
             cursorItem.hotspotX = hotspotX;
             cursorItem.hotspotY = hotspotY;
@@ -44,7 +43,6 @@ WaylandQuickItem
             target: dragIcon.surface
             function onOffsetForNextFrame(offset)
             {
-                console.log("OFFSET NEXT FRAME")
 
                 dragIcon.offset = offset;
             }

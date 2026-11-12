@@ -317,8 +317,10 @@ void Mpris2Player::setMetadata(const Metadata &map)
 
 void Mpris2Player::calculatePosition()
 {
-    qint64 diff = m_lastPosUpdate.msecsTo(QDateTime::currentDateTimeUtc()) * 1000;
-    m_position = m_position + static_cast<qint64>(diff - m_rate);
+    const auto now = QDateTime::currentDateTimeUtc();
+    const qint64 elapsed = m_lastPosUpdate.msecsTo(now) * 1000;
+    m_position += static_cast<qint64>(elapsed * m_rate);
+    m_lastPosUpdate = now;
     Q_EMIT positionChanged();
 }
 
@@ -467,7 +469,9 @@ void Mpris2Player::copyProperty(const QString &name, const QVariant &value,
             map.remove(QStringLiteral("mpris:length"));
         setMetadata(map);
     } else if (name == QStringLiteral("Position")) {
+        m_position = value.toLongLong();
         m_lastPosUpdate = QDateTime::currentDateTimeUtc();
+        Q_EMIT positionChanged();
     } else if (name == QStringLiteral("Rate")) {
         if (m_status == QStringLiteral("Playing"))
             calculatePosition();

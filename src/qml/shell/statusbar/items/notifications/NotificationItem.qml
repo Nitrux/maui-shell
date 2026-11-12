@@ -12,7 +12,7 @@ ItemDelegate
 {
     id: control
     implicitHeight: _layout.implicitHeight + topPadding + bottomPadding
-    opacity: (width-Math.abs(x))/width
+    opacity: width > 0 ? (width - Math.abs(x)) / width : 0
 
     leftPadding: 0
     rightPadding: 0
@@ -26,7 +26,17 @@ ItemDelegate
     property alias imageSource : _template.imageSource
     property alias timeout : _timer.interval
     property int urgency : -1
+    property int notificationId : 0
     property var actions : []
+
+    readonly property var actionButtons:
+    {
+        const buttons = []
+        const list = control.actions || []
+        for(let i = 0; i + 1 < list.length; i += 2)
+            buttons.push({actionId: list[i], text: list[i+1]})
+        return buttons
+    }
 
     signal dismissed()
     signal expired()
@@ -70,7 +80,7 @@ ItemDelegate
                    case 0: return Maui.Theme.positiveBackgroundColor;
                    case 1: return Maui.Theme.neutralBackgroundColor;
                    case 2: return Maui.Theme.negativeBackgroundColor
-
+                   default: return Maui.Theme.backgroundColor
                    }
         }
 
@@ -80,7 +90,7 @@ ItemDelegate
             spacing: 2
             Repeater
             {
-                model: control.actions
+                model: control.actionButtons
                 delegate: _flatButton
             }
         }
@@ -95,7 +105,13 @@ ItemDelegate
             id: _button
             Layout.fillWidth: true
             implicitHeight: 32
-            text: modelData
+            text: modelData.text
+
+            onClicked:
+            {
+                if(CaskShell.notifications)
+                    CaskShell.invokeNotificationAction(control.notificationId, modelData.actionId)
+            }
 
             background: Rectangle
             {
@@ -141,7 +157,6 @@ ItemDelegate
         }
     }
 
-    onClicked: console.log("NOF", control.x)
 
     DragHandler
     {

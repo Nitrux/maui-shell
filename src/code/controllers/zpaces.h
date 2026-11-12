@@ -61,6 +61,14 @@ public Q_SLOTS:
     int addWindow(AbstractWindow *window, const int &fromIndex = 0);
 
     /**
+     * @brief removeWindow
+     * Removes a window from all the models owned/coordinated by Zpaces.
+     * The window itself is deleted by its Wayland surface destruction path.
+     * @param window
+     */
+    void removeWindow(AbstractWindow *window);
+
+    /**
      * @brief moveSurface
      * Moves a window form a given Zpace to a new Zpace
      * @param window

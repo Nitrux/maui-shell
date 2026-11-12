@@ -92,9 +92,12 @@ public:
     void start() override;
 
 private:
+    void finish();
+
     QProcess *m_process;
     const QString m_serviceId;
     const QProcessEnvironment m_additionalEnv;
+    bool m_resultEmitted = false;
 };
 
 class RestoreSessionJob : public KJob

@@ -1,10 +1,10 @@
 #include "task.h"
 #include "code/controllers/abstractwindow.h"
+#include "code/controllers/desktoputils.h"
 #include "code/models/tasksmodel.h"
 
-#include <KDesktopFile>
-#include <KService>
 #include <QSettings>
+#include <QDebug>
 
 Task::Task(const QString &id, AbstractWindow *window, TasksModel *modelRoot) : QObject(nullptr)
   ,m_id(id)
@@ -58,7 +58,22 @@ void Task::setId(const QString &id)
 
 QString Task::name() const
 {
-    return QString();
+    if (!m_name.isEmpty()) {
+        return m_name;
+    }
+
+    if (m_window) {
+        const auto title = m_window->title();
+        if (!title.isEmpty()) {
+            return title;
+        }
+    }
+
+    if (!m_fileName.isEmpty()) {
+        return m_fileName;
+    }
+
+    return m_id;
 }
 
 QString Task::iconName() const
@@ -135,10 +150,16 @@ void Task::setIsPinned(bool isPinned)
 
 void Task::setWindowConnections()
 {
+    for(const auto &connection : m_windowConnections)
+    {
+        QObject::disconnect(connection);
+    }
+    m_windowConnections.clear();
+
     if(!m_window)
         return;
 
-    connect(m_window, &AbstractWindow::closed, this, [this]()
+    m_windowConnections.append(connect(m_window, &AbstractWindow::closed, this, [this]()
     {
         if(m_isPinned)
         {
@@ -149,13 +170,13 @@ void Task::setWindowConnections()
             Q_EMIT this->closed();
         }
 
-    }, Qt::QueuedConnection);
+    }, Qt::QueuedConnection));
 
 
-    connect(m_window, &AbstractWindow::appIdChanged, [this]()
+    m_windowConnections.append(connect(m_window, &AbstractWindow::appIdChanged, this, [this]()
     {
         this->setId(m_window->appId());
-    });
+    }));
 }
 
 void Task::setData()
@@ -164,18 +185,16 @@ void Task::setData()
     {
         return;
     }
-    QString suffix;
-    if(!m_id.endsWith(QStringLiteral(".desktop")))
-    {
-        suffix = QStringLiteral(".desktop");
-    }
-    KDesktopFile file(m_id+suffix);
-    this->setIconName(file.readIcon());
-    this->setName(file.readName());
-    this->setFileName(file.fileName());
-    KService service(&file);
-    this->setPath(service.entryPath());
-    this->setExecutable(service.exec());
+
+    const auto service = DesktopUtils::serviceForId(m_id);
+    if(!service)
+        return;
+
+    this->setIconName(service->icon());
+    this->setName(service->name());
+    this->setFileName(service->entryPath());
+    this->setPath(service->entryPath());
+    this->setExecutable(service->exec());
 }
 
 void Task::setFileName(const QString &name)

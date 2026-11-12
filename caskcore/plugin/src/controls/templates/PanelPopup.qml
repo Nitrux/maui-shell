@@ -13,8 +13,8 @@ Container
     id: control
     implicitHeight: _cardsList.contentHeight + topPadding + bottomPadding
 
-    clip: isMobile
-    padding: isMobile ? 0 : _cardsList.spacing
+    clip: CaskShell.isMobile
+    padding: CaskShell.isMobile ? 0 : _cardsList.spacing
     leftPadding: padding
     rightPadding: padding
     bottomPadding: padding
@@ -25,8 +25,9 @@ Container
     property int finalYPos : 0
     property bool opened : false
     property int alignment: Qt.AlignCenter
+    property rect availableGeometry
 
-    property bool displayOverlay : win.formFactor !== Cask.MauiMan.Desktop
+    property bool displayOverlay : CaskShell.formFactor !== Cask.MauiMan.Desktop
 
     signal overlayClicked()
     //        signal opened()
@@ -43,18 +44,18 @@ Container
 
         anchors.fill: parent
 
-        parent: _cask.overlayTopPanel
+        parent: CaskShell.cask ? CaskShell.cask.overlayTopPanel : null
 
         propagateComposedEvents: !control.displayOverlay
         preventStealing: control.displayOverlay
 
-        onClicked:
+        onClicked: (mouse) =>
         {
             control.overlayClicked()
             mouse.accepted = true
         }
 
-        onPressed:
+        onPressed: (mouse) =>
         {
             if(!control.displayOverlay)
             {
@@ -76,7 +77,7 @@ Container
                 saturation: -0.5
                 blur: Math.min(0.7, (control.height/(availableGeometry.height* 0.7)))
                 autoPaddingEnabled: true
-                source:  _cask.superOverlay
+                source:  CaskShell.cask ? CaskShell.cask.superOverlay : null
             }
         }
 

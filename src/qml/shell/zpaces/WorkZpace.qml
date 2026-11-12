@@ -39,11 +39,14 @@ ListView
     highlightFollowsCurrentItem: true
     highlightMoveDuration: Maui.Style.units.longDuration
     //    highlightResizeDuration: 0
-    cacheBuffer: width * count
+    // cacheBuffer: width * count
     //                    preferredHighlightEnd: width
     // 		highlight: Item {}
     //    highlightMoveVelocity: -1
     //    highlightResizeVelocity: -1
+    onWidthChanged: cacheBuffer = width * count
+    onCountChanged: cacheBuffer = width * count
+    Component.onCompleted: cacheBuffer = width * count
 
 
     property int lastPos: 0
@@ -59,7 +62,7 @@ ListView
 
     Connections
     {
-        target: _zpaces.zpacesModel
+        target: CaskShell.zpaces ? CaskShell.zpaces.zpacesModel : null
         ignoreUnknownSignals: true
         function onZpaceAdded(index)
         {

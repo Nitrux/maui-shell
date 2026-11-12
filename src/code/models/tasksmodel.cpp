@@ -3,13 +3,12 @@
 #include <QtWaylandCompositor/QWaylandSurface>
 
 #include <QDebug>
-#include <QFile>
 #include <QSettings>
 
 #include <KService>
-#include <KDesktopFile>
 
 #include "code/controllers/abstractwindow.h"
+#include "code/controllers/desktoputils.h"
 #include "code/controllers/task.h"
 #include "code/controllers/zpaces.h"
 
@@ -36,13 +35,15 @@ int TasksModel::rowCount(const QModelIndex &parent) const
 
 QVariant TasksModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || index.row() < 0 || index.row() >= m_tasks.count())
         return QVariant();
 
     auto task = m_tasks[index.row()];
+    if (!task)
+        return QVariant();
+
     auto window = task->window();
 
-    qDebug() << "Askign for taksbar mdoel data" << role;
     switch(role)
     {
     case Roles::SurfaceIndex: return QVariant( window ? m_zpaces->indexOfWindow(window) : -1);
@@ -64,17 +65,17 @@ QHash<int, QByteArray> TasksModel::roleNames() const
 
 void TasksModel::addTask(AbstractWindow *window)
 {
-    qDebug() << "trying to insert a task" << window << window->appId();
+    if(!window)
+        return;
+
 
     //here needs to find if the window appid belongs to an existing task.
     Task * task = nullptr;
     task = findTask(window->appId());
 
-    qDebug() << "Trying to deal with new window <<" << window->appId() << (task == nullptr);
 
     if(task && task->window() == nullptr)
     {
-        qDebug() << "Setting window to existing task" << task << (task->window() == nullptr);
         task->setWindow(window);
     }else
     {
@@ -101,9 +102,34 @@ void TasksModel::removeTask(const int &index)
         return;
 
     this->beginRemoveRows(QModelIndex(), index, index);
-    m_tasks.remove(index);
+    Task *task = m_tasks.takeAt(index);
     this->endRemoveRows();
+
+    if(task)
+        task->deleteLater();
+
     Q_EMIT this->countChanged();
+}
+
+void TasksModel::removeTaskForWindow(AbstractWindow *window)
+{
+    if(!window)
+        return;
+
+    for(int i = m_tasks.size() - 1; i >= 0; --i)
+    {
+        Task *task = m_tasks.at(i);
+        if(!task || task->window() != window)
+            continue;
+
+        if(task->isPinned())
+        {
+            task->setWindow(nullptr);
+        }else
+        {
+            this->removeTask(i);
+        }
+    }
 }
 
 QStringList TasksModel::pinnedTasks()
@@ -141,9 +167,7 @@ void TasksModel::setPinnedTasks()
 {
     for(const auto &taskId : pinnedTasks())
     {
-        KDesktopFile desktopfile(taskId);
-
-        if(QFile::exists(desktopfile.fileName()))
+        if(DesktopUtils::serviceForId(taskId))
         {
             this->addTask(taskId, true);
         }
@@ -155,6 +179,7 @@ void TasksModel::addTask(Task *task)
     if(!task)
     {
         qWarning() << "Task is nullptr and can not be added to the TaskModel";
+        return;
     }
 
     const auto index = m_tasks.size();
@@ -173,32 +198,24 @@ void TasksModel::addTask(Task *task)
 
 Task *TasksModel::findTask(const QString &id)
 {
-    qDebug() << "task Service exec" << id;
 
-    if(!id.isEmpty())
+    if(id.isEmpty())
+        return nullptr;
+
+    const auto service = DesktopUtils::serviceForId(id);
+    if(!service)
+        return nullptr;
+
+    const auto idExec = service->exec();
+
+    if(idExec.isEmpty())
+        return nullptr;
+
+    for(auto task : m_tasks)
     {
-        QString suffix;
-        if(!id.endsWith(QStringLiteral(".desktop")))
+        if(task && task->executable() == idExec)
         {
-            suffix = QStringLiteral(".desktop");
-        }
-        KDesktopFile file(id+suffix);
-        KService service(&file);
-        auto idExec = service.exec();
-
-        qDebug() << "task Service exec" << idExec;
-
-        if(idExec.isEmpty())
-        {
-            return nullptr;
-        }
-
-        for(auto task : m_tasks)
-        {
-            if(task->executable() == idExec)
-            {
-                return task;
-            }
+            return task;
         }
     }
 
@@ -207,9 +224,13 @@ Task *TasksModel::findTask(const QString &id)
 
 bool TasksModel::containsTask(const QString &id)
 {
+    const auto normalizedId = DesktopUtils::normalizeId(id);
+    if(normalizedId.isEmpty())
+        return false;
+
     for(auto task : m_tasks)
     {
-        if(task->id() == id)
+        if(task && DesktopUtils::normalizeId(task->id()) == normalizedId)
         {
             return true;
         }

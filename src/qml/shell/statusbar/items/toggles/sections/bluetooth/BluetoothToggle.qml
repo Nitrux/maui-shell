@@ -36,6 +36,9 @@ ToggleTemplate
     page: BluetoothPage
     {
         id: _bluetoothPage
+        btManager: control.btManager
+        toggleBluetooth: control.toggleBluetooth
+        action_addNewDevice: control.action_addNewDevice
     }
 
     PlasmaBt.DevicesProxyModel

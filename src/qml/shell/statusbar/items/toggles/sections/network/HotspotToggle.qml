@@ -31,18 +31,18 @@ ToggleTemplate
         target: handler
         function onHotspotCreated() {
             control.checked = true
-            tooltip.text = i18n("Disable Hotspot")
+            tooltipText = i18n("Disable Hotspot")
         }
 
         function onHotspotDisabled() {
             control.checked = false
-            tooltip.text = i18n("Create Hotspot")
+            tooltipText = i18n("Create Hotspot")
         }
     }
 
     Component.onCompleted: {
         checked = PlasmaNM.Configuration.hotspotConnectionPath
-        tooltip.text = PlasmaNM.Configuration.hotspotConnectionPath ? i18n("Disable Hotspot") : i18n("Create Hotspot")
+        tooltipText = PlasmaNM.Configuration.hotspotConnectionPath ? i18n("Disable Hotspot") : i18n("Create Hotspot")
     }
 
 

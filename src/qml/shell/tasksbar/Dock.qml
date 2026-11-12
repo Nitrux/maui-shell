@@ -23,16 +23,11 @@ Item
 
     property alias launcher : _launcher
 
-    Cask.AppsDB
-    {
-        id: _appsDB
-    }
-
     Rectangle
     {
         id: overlay
         visible: _launcher.visible
-        parent: _cask.overlay
+        parent: CaskShell.cask ? CaskShell.cask.overlay : null
         //        opacity: formFactor !== Cask.MauiMan.Desktop ? 0.95 : 0.7
 
         anchors.fill: parent
@@ -51,7 +46,7 @@ Item
                 saturation: -0.5
                 blur: 1.0
                 autoPaddingEnabled: true
-                source: _cask.container
+                source: CaskShell.cask ? CaskShell.cask.container : null
 
 
                 Rectangle
@@ -89,7 +84,6 @@ Item
         //        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
         onActiveChanged:
         {
-            console.log("WHEEL HANMDLER ACTIVE", rotation)
 
             if(!active)
             {
@@ -116,7 +110,7 @@ Item
         id: _launcher
         visible: handler2.active || opened
         width: Math.min(1200, parent.width)
-        height: fullscreenLauncher ? _cask.avaliableHeight- (control.height) : Math.min(_cask.avaliableHeight - (control.height) , 800)
+        height: !CaskShell.cask ? 0 : (fullscreenLauncher ? CaskShell.cask.avaliableHeight - control.height : Math.min(CaskShell.cask.avaliableHeight - control.height, 800))
 
         Binding on y
         {
@@ -124,7 +118,7 @@ Item
             restoreMode: Binding.RestoreBindingOrValue
         }
 
-        x: handler2.active && win.formFactor === Cask.MauiMan.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((control.width/2 ) - (_launcher.width/2));
+        x: handler2.active && CaskShell.formFactor === Cask.MauiMan.Desktop && !_launcher.opened ? (handler2.centroid.scenePressPosition.x - (width/2)) :  Math.round((control.width/2 ) - (_launcher.width/2));
 
     }
 
@@ -223,7 +217,7 @@ Item
                 {
                     id: _dockHoverHandler
                     enabled: !handler.active && control.hidden
-                    acceptedPointerTypes: PointerDevice.GenericPointer
+                    acceptedPointerTypes: PointerDevice.Generic
                     onHoveredChanged:
                     {
                         _dockRevealTimer.restart()

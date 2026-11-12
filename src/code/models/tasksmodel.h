@@ -65,6 +65,13 @@ public Q_SLOTS:
      */
     void removeTask(const int &index);
 
+    /**
+     * @brief removeTaskForWindow
+     * Removes (or unpins) the task associated with the given window.
+     * @param window
+     */
+    void removeTaskForWindow(AbstractWindow *window);
+
     QStringList pinnedTasks();
 
 Q_SIGNALS:

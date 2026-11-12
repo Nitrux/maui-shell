@@ -9,12 +9,13 @@ Cask.PanelItem
 {
     id: control
     property var mprisSourcesModel: []
-    readonly property bool isPlaying : _playersList.currentItem.item.isPlaying
+    property bool labelsVisible: true
+    readonly property bool isPlaying : _playersList.currentItem && _playersList.currentItem.item ? _playersList.currentItem.item.isPlaying : false
 
 
     Cask.IconLabel
     {
-        icon.source: isPlaying ? "media-playback-start" : "media-playback-pause"
+        icon.source: isPlaying ? "media-playback-pause" : "media-playback-start"
         height: control.iconSize
         icon.color: control.icon.color
     }
@@ -22,7 +23,7 @@ Cask.PanelItem
     Cask.IconLabel
     {
         visible: labelsVisible
-        text: _playersList.currentItem.item.track
+        text: _playersList.currentItem && _playersList.currentItem.item ? _playersList.currentItem.item.track : ""
         width: Math.min(implicitWidth, 200)
         icon.source: "headphones"
         height: control.iconSize
@@ -83,14 +84,14 @@ Cask.PanelItem
 
     card: Cask.PanelCard
     {
-        width: ListView.view.width
+        width: ListView.view ? ListView.view.width : 0
         onClosed: _togglesStack.pop()
 
         StackView
         {
             id : _togglesStack
-            width: parent.width
-            height: currentItem.implicitHeight
+            width: parent ? parent.width : 0
+            height: currentItem ? currentItem.implicitHeight : 0
             clip: true
             padding: 0
 
@@ -113,7 +114,7 @@ Cask.PanelItem
                         Action
                         {
                             text: "Vvave"
-                            onTriggered: dock.launchExec("vvave")
+                            onTriggered: { if(CaskShell.appsDB) CaskShell.appsDB.launchApp("vvave") }
                         }
                     }
 

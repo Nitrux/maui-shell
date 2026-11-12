@@ -13,7 +13,7 @@ class SessionTrack : public QObject
 {
     Q_OBJECT
 public:
-    SessionTrack(const QVector<QProcess *> &processes);
+    SessionTrack(const QVector<QProcess *> &processes, QProcess *mainProcess = nullptr);
     ~SessionTrack() override;
 
 private:

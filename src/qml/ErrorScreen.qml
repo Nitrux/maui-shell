@@ -70,7 +70,7 @@ WaylandOutput
                 {
                     anchors.fill: parent
                     title: i18n("Error")
-                    body: "The shell failed to be loaded"
+                    body: i18n("The shell failed to be loaded")
                     emoji: "dialog-error-symbolic"
                     Action
                     {
