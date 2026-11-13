@@ -27,16 +27,8 @@ ItemDelegate
     property alias timeout : _timer.interval
     property int urgency : -1
     property int notificationId : 0
+    property bool hasDefaultAction : false
     property var actions : []
-
-    readonly property var actionButtons:
-    {
-        const buttons = []
-        const list = control.actions || []
-        for(let i = 0; i + 1 < list.length; i += 2)
-            buttons.push({actionId: list[i], text: list[i+1]})
-        return buttons
-    }
 
     signal dismissed()
     signal expired()
@@ -84,50 +76,16 @@ ItemDelegate
                    }
         }
 
-        RowLayout
-        {
-            id: _actionsRow
-            spacing: 2
-            Repeater
-            {
-                model: control.actionButtons
-                delegate: _flatButton
-            }
-        }
     }
 
-    Component
+    // Maui Core's notification server only exposes the default action to QML
+    // (NotificationsModel.invokeDefaultAction), so clicking the notification
+    // triggers that one.
+    onClicked:
     {
-        id: _flatButton
-
-        Button
-        {
-            id: _button
-            Layout.fillWidth: true
-            implicitHeight: 32
-            text: modelData.text
-
-            onClicked:
-            {
-                if(CaskShell.notifications)
-                    CaskShell.invokeNotificationAction(control.notificationId, modelData.actionId)
-            }
-
-            background: Rectangle
-            {
-                color: _button.hovered || _button.down || _button.pressed ? Maui.Theme.highlightColor : Qt.lighter(Maui.Theme.backgroundColor)
-            }
-
-            contentItem: Label
-            {
-                text: _button.text
-                color:  _button.hovered || _button.down || _button.pressed ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-            }
-        }
+        if(control.hasDefaultAction && CaskShell.notifications)
+            CaskShell.notifications.notificationsModel.invokeDefaultAction(control.notificationId)
     }
-
 
     background: Item
     {

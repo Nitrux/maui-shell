@@ -391,13 +391,13 @@ WaylandOutput
         CaskShell.appsDB = _appsDB
         CaskShell.screen = control
         CaskShell.appsOverview = _appsOverview
-        CaskShell.availableGeometry = control.availableGeometry
         CaskShell.formFactor = win.formFactor
         CaskShell.isMobile = control.isMobile
     }
 
-    // These two are driven by a singleton with change notifications, so keep
+    // These change at runtime (form factor, output/workspace geometry), so keep
     // them as live bindings instead of one-shot assignments.
+    Binding { target: CaskShell; property: "availableGeometry"; value: control.availableGeometry }
     Binding { target: CaskShell; property: "formFactor"; value: Cask.MauiMan.formFactor.preferredMode }
     Binding { target: CaskShell; property: "isMobile"; value: Cask.MauiMan.formFactor.preferredMode === Cask.MauiMan.Phone }
 

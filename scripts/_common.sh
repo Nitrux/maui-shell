@@ -54,8 +54,9 @@ apply_patch() {
         git -C "$src" apply "$patch"
         echo "==> [$name] applied patch: $(basename "$patch")"
     else
-        echo "!!  [$name] WARNING: $(basename "$patch") does not apply cleanly to $src" >&2
-        echo "!!  (upstream may have changed, or you patched it already) - continuing without it" >&2
+        echo "!!  [$name] ERROR: $(basename "$patch") is neither applied nor applicable to $src" >&2
+        echo "!!  (upstream changed, or the checkout has conflicting local changes)" >&2
+        exit 1
     fi
 }
 

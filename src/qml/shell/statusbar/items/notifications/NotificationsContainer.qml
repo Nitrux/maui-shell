@@ -34,6 +34,7 @@ Pane
                 urgency: model.urgency
                 actions: model.actions
                 notificationId: model.notificationId
+                hasDefaultAction: model.hasDefaultAction
                 onDismissed: CaskShell.notifications.notificationsModel.close(model.notificationId)
                 onExpired: CaskShell.notifications.notificationsModel.expired(model.notificationId)
             }

@@ -1,23 +1,7 @@
 #include "shellstate.h"
 
-#include <QDBusConnection>
-#include <QDBusMessage>
-
 ShellState::ShellState(QObject *parent) : QObject(parent)
 {
-}
-
-void ShellState::invokeNotificationAction(uint notificationId, const QString &action)
-{
-    if (action.isEmpty())
-        return;
-
-    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.Notifications"),
-                                                          QStringLiteral("/org/freedesktop/Notifications"),
-                                                          QStringLiteral("org.freedesktop.Notifications"),
-                                                          QStringLiteral("InvokeAction"));
-    message << notificationId << action;
-    QDBusConnection::sessionBus().send(message);
 }
 
 QObject *ShellState::win() const
