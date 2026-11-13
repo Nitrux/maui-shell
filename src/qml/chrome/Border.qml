@@ -6,7 +6,10 @@ import org.mauikit.controls as Maui
 Rectangle
 {
     id: _borders
-    radius: _decoration.radius
+
+    property var decoration
+
+    radius: decoration ? decoration.radius : 0
     color: "transparent"
     border.color: Qt.darker(Maui.Theme.backgroundColor, 2.7)
     opacity: 0.8

@@ -9,7 +9,7 @@ import "../.."
 ToggleTemplate
 {
     icon.name: "drive-removable-media-usb"
-    text:  "Devices"
+    text: i18n("Devices")
 //    display: ToolButton.TextUnderIcon
 
     page: DevicesPage

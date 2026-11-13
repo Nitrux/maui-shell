@@ -32,7 +32,7 @@ Maui.Page
         saturation: -0.5
         blur: 1.0
         autoPaddingEnabled: true
-        source:  _cask.superOverlay
+        source:  CaskShell.cask ? CaskShell.cask.superOverlay : null
 
 
         Rectangle
@@ -51,7 +51,8 @@ Maui.Page
         onClicked:
         {
             control.close()
-            showDesktop = true
+            if(CaskShell.screen)
+                CaskShell.screen.showDesktop = true
         }
     }
 
@@ -66,7 +67,8 @@ Maui.Page
             text: qsTr("Clear all")
             onClicked:
             {
-                overView = false
+                if(CaskShell.screen)
+                    CaskShell.screen.overView = false
                 //                _listSurfaces.clear()
             }
         }
@@ -77,7 +79,8 @@ Maui.Page
             onClicked:
             {
                 control.close()
-                showDesktop = true
+                if(CaskShell.screen)
+                    CaskShell.screen.showDesktop = true
             }
         }
 
@@ -99,7 +102,7 @@ Maui.Page
         anchors.fill: parent
         contentWidth: availableWidth
         contentHeight: _overviewList.implicitHeight
-        contentX: _swipeView.contentX
+        contentX: CaskShell.workspaces ? CaskShell.workspaces.contentX : 0
         //        scale: control.initScale
         interactive: false
 
@@ -131,7 +134,7 @@ Maui.Page
             //        }
             Repeater
             {
-                model: _zpaces.allSurfaces
+                model: CaskShell.zpaces ? CaskShell.zpaces.allSurfaces : null
                 delegate: ItemDelegate
                 {
                     id: _itemDelegate
@@ -146,7 +149,8 @@ Maui.Page
                     onClicked:
                     {
                         control.close()
-                        _swipeView.currentIndex = _zpaces.indexOfZpace(xdgWindow)
+                        if(CaskShell.workspaces && CaskShell.zpaces)
+                            CaskShell.workspaces.currentIndex = CaskShell.zpaces.indexOfZpace(xdgWindow)
                         if(!xdgWindow.toplevel.activated)
                         {
                             xdgWindow.unminimize()//also activates it

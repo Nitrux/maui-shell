@@ -17,7 +17,7 @@ class DropShadowHelper : public QObject
 private:
     QString m_id;
 
-    int m_radius;
+    int m_radius = -1;
 
     CaskChrome *m_chrome;
 

@@ -18,6 +18,7 @@ ItemDelegate
 
     readonly property bool isPlaying : state === "Playing"
     property string state : player ? player.status : ""
+    readonly property string playerIcon: player ? player.iconName : ""
 
     readonly property var currentMetadata : player ? player.metadata : undefined
 
@@ -76,7 +77,7 @@ ItemDelegate
                 gradient: Gradient
                 {
                     GradientStop { position: 0.0; color: "transparent" }
-                    GradientStop { position: 1.2-Math.min(1, _labels.implicitHeight/height);  color: control.Maui.Theme.backgroundColor }
+                    GradientStop { position: 1.2-Math.min(1, _labels.implicitHeight/height);  color: Maui.Theme.backgroundColor }
                 }
             }
 
@@ -181,7 +182,6 @@ ItemDelegate
 
     Component.onDestruction:
     {
-        console.log("DESTROY PLAYER CARD")
     }
 
 }

@@ -1,4 +1,5 @@
 #include <QObject>
+#include <QVector>
 
 class AbstractWindow;
 class TasksModel;
@@ -53,7 +54,9 @@ private:
 
     QString m_executable;
 
-    bool m_isPinned;
+    bool m_isPinned = false;
+
+    QVector<QMetaObject::Connection> m_windowConnections;
 
     void setWindowConnections();
     void setData();

@@ -25,7 +25,7 @@ WaylandCompositor
         id: screen
         compositor: comp
 //        targetScreen: modelData
-        position: Qt.point(virtualX, virtualY)
+        position: Qt.point(0, 0)
 
         Component.onCompleted:
         {
@@ -39,6 +39,8 @@ WaylandCompositor
         id: _notifications
     }
 
+    Binding { target: CaskShell; property: "notifications"; value: _notifications }
+
     Component
     {
         id: _polkitDialogComponent
@@ -51,7 +53,7 @@ WaylandCompositor
 
         function onAuthenticationRequest(dialog)
         {
-            var popup2 = _polkitDialogComponent.createObject(comp.defaultOutput.window, {"parent" : comp.defaultOutput.window, "dialog": dialog});
+            var popup2 = _polkitDialogComponent.createObject(comp.defaultOutput.window.contentItem, {"parent" : comp.defaultOutput.window.contentItem, "dialog": dialog});
             popup2.open()
         }
     }
@@ -64,12 +66,10 @@ WaylandCompositor
     QtWindowManager
     {
         id: qtWindowManager
-        onShowIsFullScreenChanged: console.debug("Show is fullscreen hint for Qt applications:", showIsFullScreen)
         //        showIsFullScreen: false
         onOpenUrl:
         {
-            console.log("Ask to open url", url)
-            Session.Launcher.launchCommand("xdg-open %1".arg(url))
+            Qt.openUrlExternally(url)
         }
     }
 
@@ -85,7 +85,7 @@ WaylandCompositor
     XdgShell
     {
         // void toplevelCreated(QWaylandXdgToplevel *toplevel, QWaylandXdgSurface *xdgSurface);
-        onToplevelCreated: handleShellSurfaceCreated(xdgSurface, toplevel)
+        onToplevelCreated: (toplevel, xdgSurface) => handleShellSurfaceCreated(xdgSurface, toplevel)
     }
 
     XdgDecorationManagerV1
@@ -109,17 +109,14 @@ WaylandCompositor
         target: defaultSeat
         function onCursorSurfaceRequest()
         {
-            console.log("CURSOR SURFACE REQUEST"/*,hotspotX, hotspotY, surface.cursorSurface, surface.hasContent, surface.inhibitsIdle*/)
         }
 
         function onKeyboardFocusChanged()
         {
-            console.log("KEYBOARD FOCUS REQUEST")
         }
 
         function onMouseFocusChanged()
         {
-            console.log("MOUSE FOCUS REQUEST")
         }
     }
 
@@ -128,18 +125,15 @@ WaylandCompositor
 //        target: comp.drag
 //        function onDragStarted()
 //        {
-//            console.log("DRAG STARTED")
 //        }
 
 //        function onIconChanged()
 //        {
-//            console.log("DRAG ICON CHANGED")
 //        }
 //    }
 
     function handleShellSurfaceCreated(shellSurface, toplevel)
     {
-        console.log(shellSurface.windowType)
 
         let window = screen.zpaces.createXdgWindow(shellSurface, toplevel)
 

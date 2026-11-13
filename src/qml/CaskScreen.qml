@@ -44,7 +44,7 @@ WaylandOutput
 
     readonly property alias formFactor : win.formFactor
 
-    readonly property bool isMobile : formFactor === Cask.Env.Phone
+    readonly property bool isMobile : formFactor === Cask.MauiMan.Phone
 
     //Orientations values
     //Qt.PortraitOrientation => 1
@@ -88,8 +88,15 @@ WaylandOutput
     property bool isNestedCompositor: Qt.platform.pluginName.startsWith("wayland") || Qt.platform.pluginName === "xcb"
     property bool showDesktop : true
 
+    Cask.AppsDB
+    {
+        id: _appsDB
+    }
+
     sizeFollowsWindow: true
-    availableGeometry : _swipeView.currentItem.availableGeometry
+    availableGeometry : _swipeView.currentItem
+                         ? _swipeView.currentItem.availableGeometry
+                         : control.geometry
 
     // scaleFactor: Cask.MauiMan.screen.scaleFactor
     //    transform: switch(control.orientation)
@@ -231,7 +238,6 @@ WaylandOutput
                 Keys.onPressed: (event) =>
                                 {
                                     if (event.key == Qt.Key_Left) {
-                                        console.log("move left");
                                         dock.launcher.toggle()
 
                                         event.accepted = true;
@@ -239,7 +245,6 @@ WaylandOutput
 
                                     if((event.key === Qt.Key_Meta))
                                     {
-                                        console.log("move meta");
 
                                         dock.launcher.toggle()
                                         event.accepted = true
@@ -251,7 +256,6 @@ WaylandOutput
                     sequence: "Meta+A" // maybe not the best one... or maybe we don't need it at all
                     onActivated:
                     {
-                        console.log("META AAAA")
                         dock.launcher.toggle()
                     }
                 }
@@ -261,7 +265,6 @@ WaylandOutput
                     sequence: "Alt+Q" // maybe not the best one... or maybe we don't need it at all
                     onActivated:
                     {
-                        console.log("TABBING")
                         _zpaces.allSurfaces.activateNextWindow()
                     }
                 }
@@ -293,7 +296,11 @@ WaylandOutput
 
                         function forceActiveFocus()
                         {
-                            _zpaceDelegate.zpace.windows.currentWindow.activate()
+                          if (_zpaceDelegate.zpace &&
+                              _zpaceDelegate.zpace.windows &&
+                              _zpaceDelegate.zpace.windows.currentWindow) {
+                              _zpaceDelegate.zpace.windows.currentWindow.activate()
+                          }
                         }
                     }
                 }
@@ -369,9 +376,33 @@ WaylandOutput
         }
     }
 
+    // Shell-wide state shared with the components loaded from other QML files.
+    // The objects below are created as part of this component, so they can only
+    // be handed over once the whole component is complete. Binding elements
+    // evaluated earlier would capture null for these ids and never update.
+    Component.onCompleted:
+    {
+        CaskShell.win = win
+        CaskShell.zpaces = _zpaces
+        CaskShell.cask = _cask
+        CaskShell.dock = _dock
+        CaskShell.workspaces = _swipeView
+        CaskShell.screenshot = _screenshotArea
+        CaskShell.appsDB = _appsDB
+        CaskShell.screen = control
+        CaskShell.appsOverview = _appsOverview
+        CaskShell.formFactor = win.formFactor
+        CaskShell.isMobile = control.isMobile
+    }
+
+    // These change at runtime (form factor, output/workspace geometry), so keep
+    // them as live bindings instead of one-shot assignments.
+    Binding { target: CaskShell; property: "availableGeometry"; value: control.availableGeometry }
+    Binding { target: CaskShell; property: "formFactor"; value: Cask.MauiMan.formFactor.preferredMode }
+    Binding { target: CaskShell; property: "isMobile"; value: Cask.MauiMan.formFactor.preferredMode === Cask.MauiMan.Phone }
+
     Component.onDestruction:
     {
-        console.log("DESTROY SCREEN")
     }
 
 }

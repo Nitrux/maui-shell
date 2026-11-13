@@ -63,25 +63,25 @@ Cask.PanelItem
     card: Cask.PanelCard
     {
         id: _card
-        width: ListView.view.width
+        width: ListView.view ? ListView.view.width : 0
 
         StackView
         {
             id: _stack
 
-            width: parent.width
-            height: currentItem.implicitHeight
+            width: parent ? parent.width : 0
+            height: currentItem ? currentItem.implicitHeight : 0
 
             initialItem: Cal.DaysGrid
                 {
                     id: _monthGrid
 
-                    width: parent.width
+                    width: parent ? parent.width : 0
                     implicitHeight: 260
 
                     header: Maui.ListItemTemplate
                     {
-                        width: parent.width
+                        width: parent ? parent.width : 0
                         label1.text: control.text
                         label1.font.bold: true
                         label1.font.weight: Font.Black

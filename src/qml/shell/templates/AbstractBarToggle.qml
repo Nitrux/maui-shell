@@ -46,7 +46,7 @@ Pane
 
     property Item button : ToolButton
     {
-        Maui.Theme.colorSet: control.Maui.Theme.colorSet
+        Maui.Theme.colorSet: Maui.Theme.Button
         visible: control.page
         icon.name: "go-next"
         onClicked: control.clicked()

@@ -18,11 +18,11 @@ AbstractBarToggle
     {
         id: _bar
         Layout.fillWidth: true
-        color: control.batteryColor(control.battery.stateName)
+        color: control.batteryColor(control.battery ? control.battery.stateName : "")
 
-        from: 1
+        from: 0
         to : 100
-        value : control.battery.percent
+        value : control.battery ? control.battery.percent : 0
     }
 
     function batteryColor(state)
@@ -33,7 +33,7 @@ AbstractBarToggle
         case "Charging" : return Maui.Theme.positiveBackgroundColor;
         case "Discharging" : return Maui.Theme.neutralBackgroundColor;
         case "FullyCharged" : return Maui.Theme.highlightColor;
-
+        default: return Maui.Theme.textColor;
         }
     }
 }

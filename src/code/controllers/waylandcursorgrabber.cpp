@@ -52,19 +52,7 @@ void WaylandCursorGrabber::setSeat(QWaylandSeat *seat)
 
     connect(m_drag, &QWaylandDrag::dragStarted,[this]()
     {
-        qDebug() << "DRAG STARTED??????" << m_drag->origin()->client()->processId() << m_drag->visible();
     });
-
-//    connect(m_seat, &QWaylandSeat::mouseFocusChanged,[this](QWaylandView *newFocus, QWaylandView *oldFocus)
-//    {
-//        qDebug() << "FOCUS CHANGED" << newFocus << oldFocus << m_drag->visible();
-//        if(m_drag->visible())
-//        {
-//            m_drag->dragMove(newFocus->surface(), QPointF{0,0});
-//            m_drag->drop();
-//        }
-//    });
-
 
     connect(m_seat, &QWaylandSeat::cursorSurfaceRequest,
             this, &WaylandCursorGrabber::handleCursorSurfaceRequest);
@@ -102,13 +90,12 @@ void WaylandCursorGrabber::setGrab(bool value)
 void WaylandCursorGrabber::handleCursorSurfaceRequest(QWaylandSurface *cursorSurface, int hotspotX, int hotspotY)
 {
 
-    qDebug() << "CURSOR SURFACE REQUESTED";
     if (m_hotspotX != hotspotX) {
         m_hotspotX = hotspotX;
         Q_EMIT hotspotXChanged(hotspotX);
     }
 
-    if (m_hotspotY == hotspotY) {
+    if (m_hotspotY != hotspotY) {
         m_hotspotY = hotspotY;
         Q_EMIT hotspotYChanged(hotspotY);
     }
@@ -142,7 +129,6 @@ void WaylandCursorGrabber::handleCursorSurfaceRequest(QWaylandSurface *cursorSur
 
 void WaylandCursorGrabber::handleDragIconChanged()
 {
-    qDebug() << "HANDLE DRAG ICON CHANGED" << m_seat->drag()->visible();
     if (!m_seat->drag()->visible())
     {
 //        m_seat->drag()->drop();
@@ -180,12 +166,11 @@ void WaylandCursorGrabber::handleRedraw()
 
 void WaylandCursorGrabber::handleGrab(const QImage &image)
 {
-    qDebug() << "HANDLE DRAG IMAGE";
 
     if (m_grab) {
-        qDebug() << "HANDLE DRAG IMAGE" << m_grab;
 
-        QCursor cursor(QPixmap::fromImage(image), m_hotspotX, m_hotspotY);
+        const int scale = surface() ? surface()->bufferScale() : 1;
+        QCursor cursor(QPixmap::fromImage(image), m_hotspotX * scale, m_hotspotY * scale);
         output()->window()->setCursor(cursor);
     }
 

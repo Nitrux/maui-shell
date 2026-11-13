@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QString>
 #include <QHash>
+#include <QPointer>
 
 #include <PolkitQt1/Identity>
 #include <PolkitQt1/Agent/Session>
@@ -29,7 +30,8 @@
 #include <PolkitQt1/Agent/Listener>
 #include <PolkitQt1/Agent/Session>
 
-class Dialog;
+#include "dialog.h"
+
 class PolKitAgentListener : public PolkitQt1::Agent::Listener
 {
     Q_OBJECT
@@ -52,9 +54,13 @@ public Q_SLOTS:
     void request(const QString &request, bool echo);
     void completed(bool gainedAuthorization);
 
+private Q_SLOTS:
+    void dialogFinished();
+
 private:
     QHash<PolkitQt1::Agent::Session *,PolkitQt1::Identity> m_sessionIdentity;
-    Dialog *m_dialog;
+    QPointer<Dialog> m_dialog;
+    QPointer<PolkitQt1::Agent::Session> m_pendingSession;
 
 Q_SIGNALS:
     void authenticationRequest(Dialog *dialog);

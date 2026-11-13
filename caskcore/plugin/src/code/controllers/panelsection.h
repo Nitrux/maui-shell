@@ -26,6 +26,8 @@ public:
 private:
     Q_DISABLE_COPY(PanelSectionAttached)
 
+    PanelSection *m_section = nullptr;
+
 Q_SIGNALS:
 
     void sectionChanged();

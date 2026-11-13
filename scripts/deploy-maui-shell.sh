@@ -1,9 +1,3 @@
 #!/usr/bin/env bash
-
-mkdir -p maui-shell && cd maui-shell
-cmake -DCMAKE_BUILD_TYPE="Release" \
-    -DCMAKE_INSTALL_PREFIX="/usr" \
-    ../../
-
-make -j$(nproc)
-make install
+source "$(dirname "${BASH_SOURCE[0]}")/_common.sh"
+configure_build_install maui-shell "$REPO_ROOT"

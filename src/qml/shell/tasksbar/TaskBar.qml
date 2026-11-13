@@ -66,8 +66,8 @@ Control
                     source: ShaderEffectSource
                     {
                         live: true
-                        sourceItem: cask.container
-                        sourceRect: _bg.mapToItem(cask.container, Qt.rect(_bg.x, _bg.y, _bg.width, _bg.height))
+                        sourceItem: CaskShell.cask ? CaskShell.cask.container : null
+                        sourceRect: CaskShell.cask ? _bg.mapToItem(CaskShell.cask.container, Qt.rect(_bg.x, _bg.y, _bg.width, _bg.height)) : Qt.rect(0, 0, 0, 0)
                     }
                 }
 
@@ -99,7 +99,7 @@ Control
             }
         }
 
-        layer.enabled: win.formFactor === Cask.MauiMan.Desktop && Maui.Style.enableEffects
+        layer.enabled: CaskShell.formFactor === Cask.MauiMan.Desktop && Maui.Style.enableEffects
         layer.effect: MultiEffect
         {
             autoPaddingEnabled: true
@@ -123,14 +123,14 @@ Control
             DockItem
             {
                 id: _launcherItem
-                checked: _launcher.visible
+                checked: CaskShell.dock && CaskShell.dock.launcher ? CaskShell.dock.launcher.visible : false
                 icon.name: "view-list-icons"
-                onClicked: _launcher.toggle()
+                onClicked: { if(CaskShell.dock && CaskShell.dock.launcher) CaskShell.dock.launcher.toggle() }
             }
 
             Repeater
             {
-                model: _zpaces.tasksModel
+                model: CaskShell.zpaces ? CaskShell.zpaces.tasksModel : null
 
                 DockItem
                 {
@@ -183,9 +183,8 @@ Control
                     {
                         if(xdgWindow)
                         {
-                            _swipeView.currentIndex = model.zpaceIndex
+                            CaskShell.workspaces.currentIndex = model.zpaceIndex
 
-                            console.log("MINIMIZED?" , xdgWindow.minimized)
 
                             if(xdgWindow.toplevel.activated)
                             {
@@ -202,7 +201,7 @@ Control
                             }
                         }else
                         {
-                            _appsDB.launchApp(task.path)
+                            CaskShell.appsDB.launchApp(task.path)
                         }
                     }
 
@@ -222,16 +221,16 @@ Control
             DockItem
             {
                 icon.name: "view-file-columns"
-                checked: _appsOverview.opened
-                onClicked: _appsOverview.toggle()
+                checked: CaskShell.appsOverview ? CaskShell.appsOverview.opened : false
+                onClicked: { if(CaskShell.appsOverview) CaskShell.appsOverview.toggle() }
             }
 
             DockItem
             {
                 icon.name: "list-add"
 
-                visible: overView
-                onClicked: _zpaces.insertZpace(0)
+                visible: CaskShell.screen ? CaskShell.screen.overView : false
+                onClicked: CaskShell.zpaces.insertZpace(0)
             }
         }
 
@@ -239,10 +238,9 @@ Control
         {
             onWheel:
             {
-                console.log("WHell on dock")
                 if(event.angleDelta.y > 0)
                 {
-                    _zpaces.allSurfaces.activateNextWindow()
+                    CaskShell.zpaces.allSurfaces.activateNextWindow()
                 }
             }
         }
@@ -259,9 +257,9 @@ Control
             {
                 if(url.endsWith(".desktop"))
                 {
-                    console.log("Dropped things" , url)
-                    zpaces.tasksModel.addTask(url, true)
-                    launcher.close()
+                    CaskShell.zpaces.tasksModel.addTask(url, true)
+                    if(CaskShell.dock && CaskShell.dock.launcher)
+                        CaskShell.dock.launcher.close()
                 }
             }
         }

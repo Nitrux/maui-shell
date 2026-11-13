@@ -9,6 +9,8 @@
 
 QT_FORWARD_DECLARE_CLASS(QQmlApplicationEngine)
 
+class ShellState;
+
 class CaskApp : public QObject
 {
     Q_OBJECT
@@ -26,6 +28,7 @@ protected:
 private:
     QUrl m_url;
     QQmlApplicationEngine *m_appEngine;
+    ShellState *m_shellState;
 
     bool m_failSafe;
     bool m_started;

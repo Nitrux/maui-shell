@@ -24,10 +24,13 @@ int PlayersModel::rowCount(const QModelIndex &parent) const
 
 QVariant PlayersModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || index.row() < 0 || index.row() >= m_players.size())
         return QVariant();
 
-    auto player = m_players[index.row()];
+    auto player = m_players.at(index.row());
+    if(!player)
+        return QVariant();
+
     switch(role)
     {
     case Roles::Title: return QVariant(player->identity());
@@ -51,6 +54,9 @@ QHash<int, QByteArray> PlayersModel::roleNames() const
 
 void PlayersModel::append(Mpris2Player *player)
 {
+    if(!player || m_players.contains(player))
+        return;
+
     const auto index = m_players.size();
 
     this->beginInsertRows(QModelIndex(), index, index);
@@ -72,8 +78,12 @@ void PlayersModel::remove(const int &index)
     }
 
     this->beginRemoveRows(QModelIndex(), index, index);
-    m_players.remove(index);
+    Mpris2Player *player = m_players.takeAt(index);
     this->endRemoveRows();
+
+    if(player)
+        player->deleteLater();
+
     Q_EMIT this->countChanged();
 }
 
@@ -96,7 +106,8 @@ int PlayersModel::indexOf(const QString &serviceName) const
 {
     for(auto i = 0; i < m_players.size(); i++)
     {
-        if(m_players.at(i)->serviceName() == serviceName)
+        const auto player = m_players.at(i);
+        if(player && player->serviceName() == serviceName)
             return i;
     }
 

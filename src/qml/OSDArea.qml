@@ -19,7 +19,7 @@ Container
         spacing: control.spacing
         ToolButton
         {
-            text: "add"
+            text: i18n("Add")
             onClicked: control.pushOSD(_component)
 
         }
@@ -60,7 +60,7 @@ Container
             Maui.Theme.colorSet: Maui.Theme.Complementary
             padding: Maui.Style.space.medium
 
-            height: implicitContentHeight+topPadding+bottomPadding
+            height: (contentItem ? contentItem.implicitHeight : 0)+topPadding+bottomPadding
             width: 300
 
             hoverEnabled: true

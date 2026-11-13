@@ -8,8 +8,14 @@ StackableItem::StackableItem()
 void StackableItem::lower()
 {
     QQuickItem *parent = parentItem();
-    Q_ASSERT(parent);
-    QQuickItem *bottom = parent->childItems().first();
+    if (!parent)
+        return;
+
+    const auto items = parent->childItems();
+    if (items.isEmpty())
+        return;
+
+    QQuickItem *bottom = items.first();
     if (this != bottom)
         stackBefore(bottom);
 }
@@ -17,8 +23,14 @@ void StackableItem::lower()
 void StackableItem::raise()
 {
     QQuickItem *parent = parentItem();
-    Q_ASSERT(parent);
-    QQuickItem *top = parent->childItems().last();
+    if (!parent)
+        return;
+
+    const auto items = parent->childItems();
+    if (items.isEmpty())
+        return;
+
+    QQuickItem *top = items.last();
     if (this != top)
         stackAfter(top);
 }

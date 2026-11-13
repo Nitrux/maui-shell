@@ -31,8 +31,8 @@ Pane
 
     readonly property rect availableGeometry : Qt.rect(0, 0, width, height)
 
-    topPadding: cask.topPanel.height
-    bottomPadding: formFactor === Cask.MauiMan.Desktop ? dock.height : 0
+    topPadding: CaskShell.cask ? CaskShell.cask.topPanel.height : 0
+    bottomPadding: CaskShell.formFactor === Cask.MauiMan.Desktop && CaskShell.dock ? CaskShell.dock.height : 0
     leftPadding: 0
     rightPadding: 0
 
@@ -136,7 +136,7 @@ Pane
         data: Repeater
         {
             id: _repeater
-            model: zpace.windows
+            model: zpace ? zpace.windows : null
 
             onItemRemoved:
             {
@@ -151,7 +151,8 @@ Pane
                 overviewMode: control.overviewMode
                 shellSurface: model.window.shellSurface
                 window: model.window
-                scale: isMobile ? 1 : _swipeView.scale
+                zpaceItem: control
+                scale: CaskShell.isMobile ? 1 : CaskShell.workspaces.scale
 
 
                 moveItem: Item
@@ -187,8 +188,8 @@ Pane
             onTapped:
             {
 
-                _swipeView.currentIndex = index
-                _swipeView.closeOverview()
+                CaskShell.workspaces.currentIndex = index
+                CaskShell.workspaces.closeOverview()
             }
         }
 
@@ -239,7 +240,17 @@ Pane
 
     function focusWindow(index)
     {
-        _content.children[index].window.activate()
+        // Called after a window is removed, so the requested index can point
+        // past the end (or the child may not be a window yet). Bail out
+        // instead of dereferencing undefined.
+        if (index < 0 || index >= _content.children.length)
+            return
+
+        const item = _content.children[index]
+        if (!item || !item.window)
+            return
+
+        item.window.activate()
     }
 
     function focusTopWindow(index = 0)

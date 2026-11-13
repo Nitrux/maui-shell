@@ -155,7 +155,7 @@ void sourceFiles(const QStringList &files)
     if (filteredFiles.isEmpty())
         return;
 
-    filteredFiles.prepend(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR "/plasma-sourceenv.sh"));
+    filteredFiles.prepend(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR "/cask-sourceenv.sh"));
 
     QProcess p;
     p.start(QStringLiteral("/bin/sh"), filteredFiles);
@@ -565,8 +565,8 @@ bool startCaskSession()
 
 
     QScopedPointer<QProcess> startCaskSession;
-    auto power = std::make_unique<CaskPower*>(new CaskPower);
-    QObject::connect(*power, &CaskPower::logoutRequested, [&]()
+    auto power = std::make_unique<CaskPower>();
+    QObject::connect(power.get(), &CaskPower::logoutRequested, [&]()
     {
         qDebug() << "(1) REQUEST TO QUIT SESSION";
         startCaskSession.data()->terminate();
@@ -577,9 +577,21 @@ bool startCaskSession()
 
     QStringList caskSessionOptions;
 
-    caskSessionOptions << QStringLiteral("");
-
     startCaskSession->setProcessChannelMode(QProcess::ForwardedChannels);
+
+    QObject::connect(startCaskSession.data(), &QProcess::errorOccurred, &e, [&rc, &e](QProcess::ProcessError error) {
+
+        if (error == QProcess::FailedToStart)
+        {
+            messageBox(QStringLiteral("startcask: Could not start cask_session. Check your installation.\n"));
+            rc = false;
+
+            if(e.isRunning())
+            {
+                e.quit();
+            }
+        }
+    });
 
     QObject::connect(startCaskSession.data(), static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), &e, [&rc, &e](int exitCode, QProcess::ExitStatus) {
 
