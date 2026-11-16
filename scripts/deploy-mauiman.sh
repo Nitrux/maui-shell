@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/_common.sh"
+ensure_checkout mauiman https://invent.kde.org/maui/mauiman.git "${BRANCH_MAUIMAN:-master}"
+apply_patch mauiman "$REPO_ROOT/scripts/patches/mauiman-service-name.patch"
+configure_build_install mauiman "$WORKDIR/mauiman" -DBUNDLE_MAUI_STYLE=ON
 
-MAUIMAN_VERSION=$([ -z $BRANCH_MAUIMAN ] && echo "master" || echo $BRANCH_MAUIMAN)
-
-echo "Cloning Mauiman from branch $MAUIMAN_VERSION"
-
-git clone https://invent.kde.org/maui/mauiman.git --depth=1 -b $MAUIMAN_VERSION
-
-cd mauiman
-cmake -DCMAKE_BUILD_TYPE="Release" \
-    -DCMAKE_INSTALL_PREFIX="/usr" \
-    -DBUNDLE_MAUI_STYLE=ON \
-    .
-
-make -j$(nproc)
-DESTDIR=/ make install
-make install
+# Remove the old misnamed service file from previous installs.
+$SUDO rm -f "$PREFIX"/share/dbus-1/services/org.mauiman.Manager[0-9]*.service

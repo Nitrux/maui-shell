@@ -103,7 +103,7 @@ Maui.ListBrowserDelegate
        {
            var hci = devicesModel.adapterHciString(a.ubi);
            if (hci !== "") {
-               return "%1 (%2)".arg(a.name).arg(hci);
+               return `${a.name} (${hci})`;
            }
            return a.name;
        }
@@ -161,7 +161,7 @@ Maui.ListBrowserDelegate
                if (call.error) {
                    var text = "";
                    var device = call.userData;
-                   var title = "%1 (%2)".arg(device.name).arg(device.address);
+                   var title = `${device.name} (${device.address})`;
 
                    switch (call.error) {
                    case BluezQt.PendingCall.Failed:

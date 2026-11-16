@@ -44,15 +44,14 @@ Cask.PanelItem
 
     card: Cask.PanelCard
     {
-        width: parent.width
-
+        width: parent ? parent.width : implicitWidth
         onClosed: _togglesStack.pop()
 
         StackView
         {
             id : _togglesStack
-            width: parent.width
-            height: currentItem.implicitHeight
+            width: parent ? parent.width : 0
+            height: currentItem ? currentItem.implicitHeight : 0
             clip: true
             padding: 0
 
@@ -90,7 +89,7 @@ Cask.PanelItem
                 ToggleTemplate
                 {
                     icon.name: _slidersItem.micItem.slider.iconSource
-                    text: "Michrophone"
+                    text: i18n("Microphone")
                     checked: !_slidersItem.micItem.muted
                     onClicked: _slidersItem.micItem.toggleMute()
                     Layout.fillWidth: true

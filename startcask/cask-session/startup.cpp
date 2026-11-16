@@ -173,7 +173,7 @@ Startup::Startup(QObject *parent)
 //        new StartServiceJob(QStringLiteral("/usr/lib/org_kde_powerdevil"), {},"", {}),
 
         new StartServiceJob(QStringLiteral("CaskServer"), QStringList(), QStringLiteral("org.cask.Server")),
-        new StartServiceJob(QStringLiteral("MauiManServer"), QStringList(), QStringLiteral("org.mauiman.Manager")),
+        new StartServiceJob(QStringLiteral("MauiManServer4"), QStringList(), QStringLiteral("org.mauiman.Manager")),
 
         new StartServiceJob(QStringLiteral("cask"), QStringList(), QStringLiteral("")),
 
@@ -190,6 +190,12 @@ Startup::Startup(QObject *parent)
         if (!job) {
             continue;
         }
+
+        // KJob deletes itself by default once it finishes. SessionTrack keeps
+        // the QProcess objects owned by these jobs and terminates them on
+        // logout, so auto-deletion would leave dangling pointers.
+        job->setAutoDelete(false);
+
         if (last) {
             connect(last, &KJob::finished, job, &KJob::start);
         }
@@ -228,7 +234,20 @@ void Startup::finishStartup()
 
 
     playStartupSound(this);
-    new SessionTrack(m_processes);
+
+    // Track the actual cask process: when it exits the whole session must end.
+    QProcess *mainProcess = nullptr;
+    for (auto process : std::as_const(m_processes)) {
+        if (process->program() == QLatin1String("cask")) {
+            mainProcess = process;
+            break;
+        }
+    }
+    if (!mainProcess) {
+        qCWarning(CASK_SESSION) << "could not find the cask process to track";
+    }
+
+    new SessionTrack(m_processes, mainProcess);
     deleteLater();
 }
 
@@ -247,6 +266,9 @@ bool Startup::startDetached(const QString &program, const QStringList &args)
 
 bool Startup::startDetached(QProcess *process)
 {
+    // Without this the children's stdout/stderr stay buffered inside the
+    // QProcess and are lost, making a failed session impossible to diagnose.
+    process->setProcessChannelMode(QProcess::ForwardedChannels);
     process->start();
     const bool ret = process->waitForStarted();
     if (ret) {
@@ -311,7 +333,7 @@ void AutoStartAppsJob::start()
 
 StartServiceJob::StartServiceJob(const QString &process, const QStringList &args, const QString &serviceId, const QProcessEnvironment &additionalEnv)
     : KJob()
-    , m_process(new QProcess)
+    , m_process(new QProcess(this))
     , m_serviceId(serviceId)
     , m_additionalEnv(additionalEnv)
 {
@@ -319,7 +341,16 @@ StartServiceJob::StartServiceJob(const QString &process, const QStringList &args
     m_process->setArguments(args);
 
     auto watcher = new QDBusServiceWatcher(serviceId, QDBusConnection::sessionBus(), QDBusServiceWatcher::WatchForRegistration, this);
-    connect(watcher, &QDBusServiceWatcher::serviceRegistered, this, &StartServiceJob::emitResult);
+    connect(watcher, &QDBusServiceWatcher::serviceRegistered, this, &StartServiceJob::finish);
+}
+
+void StartServiceJob::finish()
+{
+    if (m_resultEmitted)
+        return;
+
+    m_resultEmitted = true;
+    emitResult();
 }
 
 void StartServiceJob::start()
@@ -331,7 +362,7 @@ void StartServiceJob::start()
     if (!m_serviceId.isEmpty() && QDBusConnection::sessionBus().interface()->isServiceRegistered(m_serviceId))
     {
         qCDebug(CASK_SESSION) << m_process << "already running";
-        emitResult();
+        finish();
         return;
     }
 
@@ -340,13 +371,27 @@ void StartServiceJob::start()
     if (!Startup::self()->startDetached(m_process))
     {
         qCWarning(CASK_SESSION) << "error starting process" << m_process->program() << m_process->arguments();
-        emitResult();
+        setError(KJob::UserDefinedError);
+        setErrorText(QStringLiteral("Could not start %1").arg(m_process->program()));
+        finish();
+        return;
     }
 
     if (m_serviceId.isEmpty())
     {
-        emitResult();
+        finish();
+        return;
     }
+
+    QTimer::singleShot(30000, this, [this]() {
+        if (m_resultEmitted)
+            return;
+
+        qCWarning(CASK_SESSION) << "timed out waiting for" << m_serviceId << "to register";
+        setError(KJob::UserDefinedError);
+        setErrorText(QStringLiteral("Timed out waiting for %1").arg(m_serviceId));
+        finish();
+    });
 }
 
 StartProcessJob::StartProcessJob(const QString &process, const QStringList &args, const QProcessEnvironment &additionalEnv)

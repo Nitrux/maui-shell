@@ -44,9 +44,9 @@ Maui.Page
         id: _appMenu
         property var app : ({})
 
-        title: app.label
-        subtitle: app.comment
-        titleIconSource: app.icon
+        title: app.label || ""
+         Maui.Controls.subtitle: app.comment || ""
+         Maui.Controls.iconName: app.icon || ""
 
         MenuItem
         {
@@ -81,7 +81,7 @@ Maui.Page
 
     headBar.visible: true
     headBar.background: null
-    headBar.forceCenterMiddleContent: !isMobile
+    headBar.forceCenterMiddleContent: !CaskShell.isMobile
     headBar.leftContent: ToolButton
     {
         icon.name: "go-previous"
@@ -295,7 +295,7 @@ Maui.Page
                             Layout.fillWidth: true
                             Layout.preferredHeight: 140
                             spacing: Maui.Style.space.medium
-                            model: _appsDB.recentApps
+                            model: CaskShell.appsDB ? CaskShell.appsDB.recentApps : null
 
                             delegate: Maui.GridBrowserDelegate
                             {
@@ -310,7 +310,7 @@ Maui.Page
 
                                 onClicked:
                                 {
-                                    _appsDB.launchApp(model.path)
+                                    CaskShell.appsDB.launchApp(model.path)
                                     control.close()
                                 }
                             }
@@ -357,12 +357,11 @@ Maui.Page
                         list: _allAppsModel
                     }
 
-                    onKeyPress:
+                    Keys.onPressed: (event) =>
                     {
-                        console.log("Key _pressed", event.key, _gridView.model.get(_gridView.currentIndex).executable)
                         if(event.key == Qt.Key_Return)
                         {
-                            _appsDB.launchApp(_gridView.model.get(_gridView.currentIndex).path)
+                            CaskShell.appsDB.launchApp(_gridView.model.get(_gridView.currentIndex).path)
                             control.close()
                         }
                     }
@@ -392,7 +391,7 @@ Maui.Page
                             onClicked:
                             {
                                 _gridView.currentIndex = index
-                                _appsDB.launchApp(model.path)
+                                CaskShell.appsDB.launchApp(model.path)
                                 control.close()
                             }
 
@@ -539,7 +538,7 @@ Maui.Page
         id: handler3
         target: control
         dragThreshold: 60
-        enabled: control.opened && _stackView.currentItem.atYBeginning
+        enabled: control.opened && _stackView.currentItem && _stackView.currentItem.atYBeginning
         yAxis.minimum: control.finalYPos
 
         xAxis.enabled : false
@@ -570,7 +569,8 @@ Maui.Page
     {
         _launcher.opened = false
         _launcher.y = control.parent.height
-        workspaces.currentItem.forceActiveFocus()
+        if (workspaces.currentItem)
+            workspaces.currentItem.forceActiveFocus()
 //        dock.forceActiveFocus()
     }
 

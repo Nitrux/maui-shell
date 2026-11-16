@@ -79,6 +79,7 @@ void RecentFilesModel::setList()
   int i = 0;
 
   this->m_list.clear();
+  m_urls.clear();
   Q_EMIT this->preListChanged ();
   const auto urls = dir.entryInfoList ();
   for(const auto &url : urls)

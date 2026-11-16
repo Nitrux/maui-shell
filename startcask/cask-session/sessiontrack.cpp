@@ -12,7 +12,7 @@
 #include <signal.h>
 #include <QDebug>
 
-SessionTrack::SessionTrack(const QVector<QProcess *> &processes)
+SessionTrack::SessionTrack(const QVector<QProcess *> &processes, QProcess *mainProcess)
     : m_processes(processes)
 {
     SignalHandler::self()->addSignal(SIGTERM);
@@ -28,6 +28,18 @@ SessionTrack::SessionTrack(const QVector<QProcess *> &processes)
     {
         connect(process,  static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, [this] {
             m_processes.removeAll(static_cast<QProcess *>(sender()));
+        });
+    }
+
+    // The session only makes sense while the main cask process is alive. If it
+    // exits (crash, quit, ...) end the session so the display manager gets the
+    // user back instead of leaving a black screen with an empty session.
+    if (mainProcess) {
+        connect(mainProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this,
+                [mainProcess](int exitCode, QProcess::ExitStatus exitStatus) {
+            qWarning() << "main session process" << mainProcess->program() << "exited, code" << exitCode
+                       << "status" << exitStatus << "- ending session";
+            QCoreApplication::quit();
         });
     }
 

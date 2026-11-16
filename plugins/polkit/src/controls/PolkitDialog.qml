@@ -1,30 +1,50 @@
 import QtQuick
 import QtQuick.Controls
-
-import org.mauikit.controls as Maui
+import QtQuick.Layouts
 
 import org.cask.polkit as Polkit
 
-Maui.InfoDialog
+Dialog
 {
     id: control
     property Polkit.Dialog dialog
 
-    template.iconSource: "unlock"
     title: i18n("Authenticate")
-    message: control.dialog.message
+    modal: true
+    closePolicy: Popup.CloseOnEscape
+    standardButtons: Dialog.Ok | Dialog.Cancel
 
-    onAccepted:
+    contentItem: ColumnLayout
     {
-        if(control.textEntry.text)
+        spacing: 8
+
+        Label
         {
-            control.dialog.setConfirmationResult(control.textEntry.text)
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: control.dialog ? control.dialog.message : ""
+        }
+
+        TextField
+        {
+            id: passwordField
+            Layout.fillWidth: true
+            placeholderText: i18n("Password")
+            echoMode: TextInput.Password
+            inputMethodHints: Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
+            focus: true
+            onAccepted: control.accept()
         }
     }
 
-    onRejected:
+    onAccepted: submit(passwordField.text)
+    onRejected: submit("")
+
+    function submit(password)
     {
-        control.dialog.setConfirmationResult("")
+        if (control.dialog)
+            control.dialog.setConfirmationResult(password)
+
         control.close()
     }
 }

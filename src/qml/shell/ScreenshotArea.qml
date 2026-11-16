@@ -77,7 +77,6 @@ Item
         target: Cask.Server.screenshot
         function onTakeScreenshot(type, id)
         {
-            console.log("GRAB SCREEN FROM THE SERVER REQUEDTED", id, type)
             switch(type)
             {
             case Cask.CaskScreenshot.CurrentScreen: control.grabCurrentScreen(id); return;
@@ -93,50 +92,71 @@ Item
         playSound.play()
     }
 
+    function screenshotPath()
+    {
+        const stamp = new Date().toLocaleTimeString().replace(/[^0-9A-Za-z.-]/g, "-")
+        return `${Cask.Server.screenshot.saveDir}/screenshot-${stamp}.png`
+    }
+
+    function saveGrab(result, id: string)
+    {
+        const where = screenshotPath()
+
+        if(!result || !result.saveToFile(where))
+        {
+            Cask.Server.screenshot.setScreenshotReady("", id)
+        }else
+        {
+            Cask.Server.screenshot.setScreenshotReady(where, id)
+        }
+
+        control.animate()
+    }
+
+    function grabItem(item, id: string)
+    {
+        if(!item)
+        {
+            Cask.Server.screenshot.setScreenshotReady("", id)
+            return
+        }
+
+        control.running = true
+        item.grabToImage(function(result) {
+            control.saveGrab(result, id)
+        })
+    }
+
     function grabCurrentScreen(id : string)
     {
-        control.running = true
-        _cask.grabToImage(function(result) {
-            let where = Cask.Server.screenshot.saveDir +String("/screenshot-%1.png").arg(new Date().toLocaleTimeString())
-            result.saveToFile(where);
-            if(ok)
-            {
-                        Cask.Server.screenshot.setScreenshotReady(where, id)
-            }
-
-            console.log("SCREENSHOT REULT ", result.url, where)
-
-        });
-        control.animate()
+        // The window content item contains the whole compositor output.
+        grabItem(CaskShell.win ? CaskShell.win.contentItem : null, id)
     }
 
     function grabAllScreens(id: string)
     {
-
+        // This shell currently creates one CaskScreen output, so the all-screens
+        // request is served by the single compositor window.
+        grabCurrentScreen(id)
     }
 
     function grabCurrentWindow(id : string)
     {
-        const window = _zpaces.allSurfaces.activeWindow
+        const window = CaskShell.zpaces ? CaskShell.zpaces.allSurfaces.activeWindow : null
 
         if(window == null)
         {
-            console.log("No window to grab screenshot")
+            Cask.Server.screenshot.setScreenshotReady("", id)
+            return
         }
-        console.log(window.id, window.appName)
 
-        control.running = true
-        const chrome = window.chrome;
+        if(!window.chrome)
+        {
+            Cask.Server.screenshot.setScreenshotReady("", id)
+            return
+        }
 
-        console.log("Chrome:" , chrome)
-
-        chrome.grabToImage(function(result) {
-            let where = Cask.Server.screenshot.saveDir +String("/screenshot-%1.png").arg(new Date().toLocaleTimeString())
-
-            result.saveToFile(where);
-        });
-        control.animate()
-
+        grabItem(window.chrome, id)
     }
 
     function grabCustomArea(rect, id: string)

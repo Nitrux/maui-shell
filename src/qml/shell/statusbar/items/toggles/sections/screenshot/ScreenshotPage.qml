@@ -40,7 +40,6 @@ StackPage
                 Layout.fillWidth: true
                 onClicked:
                 {
-                    console.log("take screenshot")
                     control.startScreenshot("screen")
                 }
             }
@@ -56,7 +55,6 @@ StackPage
 
                 onClicked:
                 {
-                    console.log("take screenshot")
                     control.startScreenshot("window")
                 }
             }
@@ -72,7 +70,6 @@ StackPage
 
                 onClicked:
                 {
-                    console.log("take screenshot")
                     control.startScreenshot("area")
                 }
             }
@@ -81,7 +78,7 @@ StackPage
         Maui.SectionItem
         {
             width: parent.width
-            label1.text: "Timer"
+            label1.text: i18n("Timer")
             label2.text: i18n("Seconds")
             flat: false
             SpinBox

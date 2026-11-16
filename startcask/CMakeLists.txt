@@ -41,7 +41,7 @@ find_package(KF6 ${REQUIRED_KF_VERSION} REQUIRED COMPONENTS
 #    Init
     #[[TextEditor]])
 
-find_package(KDED CONFIG REQUIRED)
+find_package(KF6KDED REQUIRED)
 find_package(CaskServer REQUIRED)
 
 find_package(Fontconfig)

@@ -17,7 +17,7 @@ StackPage
     Maui.Holder
     {
         anchors.fill: parent
-        visible: _listView.count === 0 && _appsList.count === 0
+        visible: _listView.count === 0
         title: i18n("Nothing here")
         body: i18n("No devices found.")
         emoji: "code-context"
