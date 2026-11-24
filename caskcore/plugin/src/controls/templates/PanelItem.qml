@@ -14,7 +14,7 @@ AbstractButton
 
     property Cask.PanelCard card : null
     property Cask.PanelSection section : control.parent.parent
-    property bool flat: win.formFactor !== Cask.MauiMan.Desktop
+    property bool flat: CaskShell.formFactor !== Cask.MauiMan.Desktop
 
     focus: true
     focusPolicy: Qt.StrongFocus
@@ -59,7 +59,7 @@ AbstractButton
     {
         visible: !control.flat
 
-        readonly property color finalColor: control.Maui.Theme.backgroundColor
+        readonly property color finalColor: Maui.Theme.backgroundColor
         color: finalColor
         radius: Maui.Style.radiusV
 //        opacity: control.checked ?  1 : 0.8
@@ -75,7 +75,7 @@ AbstractButton
                 id: _animation
                 easing.type: Easing.InExpo
                 running: false
-                from: control.Maui.Theme.highlightColor
+                from: Maui.Theme.highlightColor
                 to: "transparent"
                 duration: 1000
             }

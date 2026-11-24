@@ -12,7 +12,7 @@ ItemDelegate
 {
     id: control
     implicitHeight: _layout.implicitHeight + topPadding + bottomPadding
-    opacity: (width-Math.abs(x))/width
+    opacity: width > 0 ? (width - Math.abs(x)) / width : 0
 
     leftPadding: 0
     rightPadding: 0
@@ -26,6 +26,8 @@ ItemDelegate
     property alias imageSource : _template.imageSource
     property alias timeout : _timer.interval
     property int urgency : -1
+    property int notificationId : 0
+    property bool hasDefaultAction : false
     property var actions : []
 
     signal dismissed()
@@ -70,48 +72,20 @@ ItemDelegate
                    case 0: return Maui.Theme.positiveBackgroundColor;
                    case 1: return Maui.Theme.neutralBackgroundColor;
                    case 2: return Maui.Theme.negativeBackgroundColor
-
+                   default: return Maui.Theme.backgroundColor
                    }
         }
 
-        RowLayout
-        {
-            id: _actionsRow
-            spacing: 2
-            Repeater
-            {
-                model: control.actions
-                delegate: _flatButton
-            }
-        }
     }
 
-    Component
+    // Maui Core's notification server only exposes the default action to QML
+    // (NotificationsModel.invokeDefaultAction), so clicking the notification
+    // triggers that one.
+    onClicked:
     {
-        id: _flatButton
-
-        Button
-        {
-            id: _button
-            Layout.fillWidth: true
-            implicitHeight: 32
-            text: modelData
-
-            background: Rectangle
-            {
-                color: _button.hovered || _button.down || _button.pressed ? Maui.Theme.highlightColor : Qt.lighter(Maui.Theme.backgroundColor)
-            }
-
-            contentItem: Label
-            {
-                text: _button.text
-                color:  _button.hovered || _button.down || _button.pressed ?  Maui.Theme.highlightedTextColor : Maui.Theme.textColor
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-            }
-        }
+        if(control.hasDefaultAction && CaskShell.notifications)
+            CaskShell.notifications.notificationsModel.invokeDefaultAction(control.notificationId)
     }
-
 
     background: Item
     {
@@ -141,7 +115,6 @@ ItemDelegate
         }
     }
 
-    onClicked: console.log("NOF", control.x)
 
     DragHandler
     {

@@ -25,7 +25,7 @@ private:
     bool m_minimized = false;    
     QQuickItem* m_chrome;
 
-    bool m_isActive;
+    bool m_isActive = false;
 
 public:
     explicit AbstractWindow();

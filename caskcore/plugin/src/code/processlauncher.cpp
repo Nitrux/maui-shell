@@ -23,8 +23,6 @@
 #include <KIO/ApplicationLauncherJob>
 #include <QStringList>
 
-#include <QRegularExpression>
-
 WaylandProcessLauncher::WaylandProcessLauncher(QObject *parent)
     : QObject(parent)
 {
@@ -49,27 +47,20 @@ void WaylandProcessLauncher::launch(const QString &program)
     if(program.isEmpty())
         return;
 
-    QProcess *process = new QProcess(this);
+    const QStringList command = QProcess::splitCommand(program);
+    if(command.isEmpty())
+        return;
 
+    QProcess process;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.remove(QStringLiteral("QT_IM_MODULE"));
-    process->setProcessEnvironment(env);
-    process->setStandardInputFile(QProcess::nullDevice());
-    process->setProcessChannelMode(QProcess::ForwardedChannels);
-    connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            process, &QProcess::deleteLater);
-    connect(process, &QProcess::errorOccurred, &QProcess::deleteLater);
-    connect(process, &QProcess::errorOccurred, this, &WaylandProcessLauncher::onError);
-    connect(process, &QProcess::stateChanged, this, &WaylandProcessLauncher::onStateChanged);
+    process.setProcessEnvironment(env);
+    process.setProgram(command.first());
+    process.setArguments(command.mid(1));
+    process.setStandardInputFile(QProcess::nullDevice());
 
-    QStringList arguments;
-    //    arguments << "--platform" << "wayland";
-
-    auto execList = program.split(QStringLiteral(" "));
-    auto exec = execList.first();
-    exec.remove(QStringLiteral("\"")).remove(QRegularExpression(QStringLiteral(" %.")));
-    process->startDetached(exec, arguments);
-
+    if(!process.startDetached())
+        qWarning() << "Failed to launch" << program;
 }
 
 void WaylandProcessLauncher::onError(QProcess::ProcessError error)

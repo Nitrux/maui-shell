@@ -26,5 +26,3 @@ count INT,
 adddate DATE,
 PRIMARY KEY(name)
 );
-
-COMMIT;

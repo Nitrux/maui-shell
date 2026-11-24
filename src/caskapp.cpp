@@ -25,6 +25,7 @@
 #include "code/controllers/task.h"
 #include "code/controllers/xdgwindow.h"
 #include "code/controllers/waylandcursorgrabber.h"
+#include "code/controllers/shellstate.h"
 
 #define ZPACES_URI "Zpaces"
 
@@ -71,6 +72,7 @@ static void registerTypes()
 
 
 CaskApp::CaskApp(QObject *parent) : QObject(parent)
+    , m_shellState(new ShellState(this))
     , m_failSafe(false)
     , m_started(false)
     , m_windowed(false)
@@ -178,6 +180,7 @@ void CaskApp::startup()
            //                                                m_sessionManager);
 
     m_appEngine->rootContext()->setContextObject(new KLocalizedContext(m_appEngine));
+    m_appEngine->rootContext()->setContextProperty(QStringLiteral("CaskShell"), m_shellState);
 
 
     qunsetenv("QT_SCALE_FACTOR");
@@ -187,6 +190,8 @@ void CaskApp::startup()
     qputenv("MOZ_ENABLE_WAYLAND", "1");
 
            // Load the compositor
+   if (m_windowed && qEnvironmentVariableIsSet("WAYLAND_DISPLAY"))
+    qputenv("WAYLAND_DISPLAY", "wayland-cask");
     m_appEngine->load(m_url);
 
     m_started = true;

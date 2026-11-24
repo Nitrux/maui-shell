@@ -9,6 +9,7 @@ import "../.."
 
 ToggleTemplate
 {
+    id: control
     icon.name: connectionIconProvider.connectionIcon
     text: networkStatus.activeConnections.split(" ").pop()
     tooltipText: networkStatus.activeConnections
@@ -28,7 +29,7 @@ ToggleTemplate
 
     page: NetworkPage
     {
-
+        handler: control.handler
     }
 
     PlasmaNM.NetworkStatus

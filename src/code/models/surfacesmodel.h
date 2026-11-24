@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QHash>
 #include <QObject>
 
 #include "code/controllers/abstractwindow.h"
@@ -84,7 +85,7 @@ public:
 public Q_SLOTS:
     /**
      * @brief removeWindow
-     * Removes a window form the model and deletes it
+     * Removes a window from the model. The model does not own windows and never deletes them.
      * @param index
      */
     void removeWindow(const int &index);
@@ -104,7 +105,9 @@ public Q_SLOTS:
 private:
     Zpace *m_zpace;
     Windows m_windows;
+    QHash<AbstractWindow *, QVector<QMetaObject::Connection>> m_windowConnections;
     bool indexIsValid(const int &index) const;
+    void disconnectWindow(AbstractWindow *window);
     
     AbstractWindow* m_activeWindow;
     void setActiveWindow(AbstractWindow * window);

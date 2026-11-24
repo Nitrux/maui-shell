@@ -69,9 +69,9 @@ StackPage
 
     readonly property bool canSeek: (control.player && control.player.capabilities & Cask.MprisPlayer.CanSeek) || false
 
-    readonly property bool noPlayer: control.player
+    readonly property bool noPlayer: !control.player
 
-    readonly property string identity: !control.noPlayer ? player.identity || control.sourceName : ""
+    readonly property string identity: control.player ? (control.player.identity || control.sourceName) : ""
 
     readonly property bool canControl: (control.player && control.player.capabilities & Cask.MprisPlayer.CanControl) || false
 
@@ -110,13 +110,15 @@ StackPage
         // to a new track, we'll reset the value to zero and ask for the position again
         seekSlider.value = 0
         seekSlider.to = control.length
-        control.player.updatePosition()
+        if(control.player)
+            control.player.updatePosition()
         disablePositionUpdate = false
     }
 
     Component.onCompleted:
     {
-        control.player.updatePosition();
+        if(control.player)
+            control.player.updatePosition();
     }
 
     Timer

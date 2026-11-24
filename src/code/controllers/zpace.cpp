@@ -6,33 +6,34 @@
 
 #include <QDebug>
 
-Zpace::Zpace(ZpacesModel *parent) : QObject(nullptr)
+Zpace::Zpace(ZpacesModel *parent) : QObject(parent)
   , m_windowsModel(new SurfacesModel(this))
   , m_control(nullptr)
   , m_zpacesModelRoot(parent)
-  , m_zpacesRoot(m_zpacesModelRoot->zpacesRoot())
+  , m_zpacesRoot(m_zpacesModelRoot ? m_zpacesModelRoot->zpacesRoot() : nullptr)
 {
     connect(m_windowsModel, &SurfacesModel::countChanged, [this]()
     {
-        qDebug() << "SHOUDL IT REMOVE THE ZPACE TOO?";
-        if(m_windowsModel->count() == 0 && m_zpacesModelRoot->count() > 1)
+        if(m_windowsModel->count() == 0 && m_zpacesModelRoot && m_zpacesModelRoot->count() > 1)
         {
             Q_EMIT this->closed();
         }
 
     });
 
-    connect(m_zpacesRoot, &Zpaces::zmodeChanged, [this](Zpaces::ZMode)
+    if(m_zpacesRoot)
     {
-        this->setConstrains();
-    });
+        connect(m_zpacesRoot, &Zpaces::zmodeChanged, [this](Zpaces::ZMode)
+        {
+            this->setConstrains();
+        });
+    }
 
     this->setConstrains();
 }
 
 Zpace::~Zpace()
 {
-    qDebug() << "DELETIGN ZPACE";
 }
 
 SurfacesModel *Zpace::windows() const
@@ -97,6 +98,9 @@ void Zpace::setControl(QQuickItem *control)
 
 void Zpace::setConstrains()
 {
+    if(!m_zpacesRoot)
+        return;
+
     switch(m_zpacesRoot->zmode())
     {
     case Zpaces::ZMode::DesktopMode: return setLimit(20);

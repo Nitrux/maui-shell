@@ -23,7 +23,7 @@ Control
     property rect availableGeometry
     property int currentCard : -1
 
-    spacing: isMobile ? 0 : Maui.Style.space.medium
+    spacing: CaskShell.isMobile ? 0 : Maui.Style.space.medium
     hoverEnabled: true
 
     padding: 0
@@ -32,8 +32,8 @@ Control
     leftPadding: padding
     rightPadding: padding
 
-    implicitWidth: implicitContentWidth + leftPadding + rightPadding
-    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+    implicitWidth: (contentItem ? contentItem.implicitWidth : 0) + leftPadding + rightPadding
+    implicitHeight: (contentItem ? contentItem.implicitHeight : 0) + topPadding + bottomPadding
 
     Behavior on implicitWidth
     {
@@ -92,11 +92,19 @@ Control
     PanelPopup
     {
         id: popup
-        z: _content.z - 6
+
+        // The popup is painted below the status bar, i.e. outside this section's
+        // bounds. Qt Quick does not deliver input to children outside their
+        // parent's bounds, so keep the popup in the full-window overlay and
+        // position it there instead of inside the (small) panel section.
+        parent: CaskShell.cask ? CaskShell.cask.overlayTopPanel : null
+        z: 1
+
         finalYPos : availableGeometry.y
+        availableGeometry: control.availableGeometry
 
         height: Math.min (availableGeometry.height, popup.implicitHeight)
-        width: isMobile ? availableGeometry.width : Math.min(control.popWidth, availableGeometry.width)
+        width: CaskShell.isMobile ? availableGeometry.width : Math.min(control.popWidth, availableGeometry.width)
 
         //        Label
         //        {
@@ -118,18 +126,24 @@ Control
         {
             delayed: true
             restoreMode: Binding.RestoreBindingOrValue
-            value: handler.active ? (handler.centroid.position.y -popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
+            value: handler.active ? (handler.centroid.scenePosition.y - popup.height) : (popup.opened ? popup.finalYPos : availableGeometry.y)
         }
 
-        x: handler.active && win.formFactor === Cask.MauiMan.Desktop && !popup.opened ? (handler.centroid.pressPosition.x - (width/2)) : setXAlignment(popup.alignment)
+        x:
+        {
+            const baseX = parent ? control.mapToItem(parent, 0, 0).x : 0
+            if (handler.active && CaskShell.formFactor === Cask.MauiMan.Desktop && !popup.opened)
+                return handler.centroid.scenePosition.x - (width / 2)
+            return baseX + setXAlignment(popup.alignment)
+        }
 
         function setXAlignment(alignment)
         {
             switch(alignment)
             {
-            case Qt.AlignLeft: return isMobile ? 0 : 0;
+            case Qt.AlignLeft: return CaskShell.isMobile ? 0 : 0;
             case Qt.AlignCenter: return Math.round((control.width/2 ) - (popup.width/2));
-            case Qt.AlignRight: return  0-(width - control.width)+(isMobile ? 0 : 0);
+            case Qt.AlignRight: return  0-(width - control.width)+(CaskShell.isMobile ? 0 : 0);
             default: return 0;
             }
         }

@@ -32,14 +32,12 @@ Dialog::Dialog(const QString &action, const QString &message,
     , m_password(QString())
     , m_result(result)
 {
-    qDebug() << "Creating ConfirmationDialog";
 
 
 }
 
 Dialog::~Dialog()
 {
-    qDebug() << "Deleting ConfirmationDialog";
 
 }
 

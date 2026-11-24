@@ -13,6 +13,12 @@ StackPage
 {
     id: control
 
+    // These live in BluetoothToggle.qml. QML ids are file-local, so the page
+    // receives them explicitly instead of relying on the toggle's scope.
+    property var btManager
+    property var toggleBluetooth
+    property var action_addNewDevice
+
     implicitHeight: Math.max(400, Math.min(400, _listView.contentHeight + topPadding + bottomPadding + headerContainer.implicitHeight + footerContainer.implicitHeight + Maui.Style.space.big))
     title: i18n("Bluetooth")
 

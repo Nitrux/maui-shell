@@ -120,8 +120,17 @@ void DB::prepareCollectionDB() const
 
 bool DB::checkExistance(const QString &tableName, const QString &searchId, const QString &search) const
 {
-    const auto queryStr = QString(QStringLiteral("SELECT %1 FROM %2 WHERE %3 = \"%4\"")).arg(searchId, tableName, searchId, search);
-    return this->checkExistance(queryStr);
+    QSqlQuery query(this->m_db);
+    query.prepare(QStringLiteral("SELECT %1 FROM %2 WHERE %3 = ?").arg(searchId, tableName, searchId));
+    query.addBindValue(search);
+
+    if (query.exec() && query.next())
+        return true;
+
+    if (query.lastError().isValid())
+        qDebug() << query.lastError().text();
+
+    return false;
 }
 
 bool DB::checkExistance(const QString &queryStr) const
@@ -190,29 +199,42 @@ bool DB::update(const QString &tableName, const FMH::MODEL &updateData, const QV
     }
 
     QStringList set;
+    QVariantList values;
     const auto updateKeys = updateData.keys();
     for (const auto &key : updateKeys)
     {
-        set.append(FMH::MODEL_NAME[key] + QStringLiteral(" = '") + updateData[key] + QStringLiteral("'"));
+        set.append(FMH::MODEL_NAME[key] + QStringLiteral(" = ?"));
+        values << updateData[key];
     }
 
     QStringList condition;
     const auto whereKeys = where.keys();
     for (const auto &key : whereKeys)
     {
-         condition.append(key + QStringLiteral(" = '") + where[key].toString() + QStringLiteral("'"));
+         condition.append(key + QStringLiteral(" = ?"));
+         values << where[key];
     }
 
-    QString sqlQueryString = QStringLiteral("UPDATE ") + tableName + QStringLiteral(" SET ") + QString(set.join(QStringLiteral(",")) + QStringLiteral(" WHERE ") + QString(condition.join(QStringLiteral(","))));
-    auto query = this->getQuery(sqlQueryString);
-    qDebug() << sqlQueryString;
+    const QString sql = QStringLiteral("UPDATE ") + tableName
+            + QStringLiteral(" SET ") + set.join(QStringLiteral(","))
+            + QStringLiteral(" WHERE ") + condition.join(QStringLiteral(","));
+
+    QSqlQuery query(this->m_db);
+    query.prepare(sql);
+
+    int i = 0;
+    for (const auto &value : values)
+        query.bindValue(i++, value);
+
     return query.exec();
 }
 
 bool DB::update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id) const
 {
-    auto queryStr = QString(QStringLiteral("UPDATE %1 SET %2 = \"%3\" WHERE %4 = \"%5\"")).arg(table, column, newValue.toString().replace(QStringLiteral("\""), QStringLiteral("\"\"")), op.toString(), id);
-    auto query = this->getQuery(queryStr);
+    QSqlQuery query(this->m_db);
+    query.prepare(QStringLiteral("UPDATE %1 SET %2 = ? WHERE %3 = ?").arg(table, column, op.toString()));
+    query.addBindValue(newValue);
+    query.addBindValue(id);
     return query.exec();
 }
 
@@ -227,23 +249,22 @@ bool DB::remove(const QString &tableName, const FMH::MODEL &removeData) const
         return false;
     }
 
-    QString strValues;
-    auto i = 0;
+    QStringList conditions;
+    QVariantList values;
     const auto keys = removeData.keys();
     for (const auto &key : keys) {
-        strValues.append(QString(QStringLiteral("%1 = \"%2\"")).arg(FMH::MODEL_NAME[key], removeData[key]));
-        i++;
-
-        if (removeData.size() > 1 && i < removeData.size())
-        {
-            strValues.append(QStringLiteral(" AND "));
-        }
+        conditions.append(FMH::MODEL_NAME[key] + QStringLiteral(" = ?"));
+        values << removeData[key];
     }
 
-    QString sqlQueryString = QStringLiteral("DELETE FROM ") + tableName + QStringLiteral(" WHERE ") + strValues;
-    qDebug() << sqlQueryString;
+    QSqlQuery query(this->m_db);
+    query.prepare(QStringLiteral("DELETE FROM ") + tableName + QStringLiteral(" WHERE ") + QString(conditions.join(QStringLiteral(" AND "))));
 
-    return this->getQuery(sqlQueryString).exec();
+    int i = 0;
+    for (const auto &value : values)
+        query.bindValue(i++, value);
+
+    return query.exec();
 }
 
 const QSqlDatabase & DB::db() const

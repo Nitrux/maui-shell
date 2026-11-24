@@ -1,0 +1,96 @@
+diff --git a/libs/power/src/CMakeLists.txt b/libs/power/src/CMakeLists.txt
+index 0493913..208fc84 100644
+--- a/libs/power/src/CMakeLists.txt
++++ b/libs/power/src/CMakeLists.txt
+@@ -62,6 +62,8 @@ target_link_libraries(${PROJECT_NAME}plugin
+     Qt6::Core
+     Qt6::Qml
+     Qt6::Quick
++    KF6::Solid
++    Qt6::DBus
+     ${PROJECT_NAME})
+ 
+ ecm_finalize_qml_module(${PROJECT_NAME} DESTINATION ${KDE_INSTALL_QMLDIR})
+diff --git a/libs/power/src/code/batteryinfo.h b/libs/power/src/code/batteryinfo.h
+index 031043b..3b238b3 100644
+--- a/libs/power/src/code/batteryinfo.h
++++ b/libs/power/src/code/batteryinfo.h
+@@ -1,4 +1,5 @@
+ #pragma once
++#include "power_export.h"
+ 
+ #include <QObject>
+ #include <QAbstractListModel>
+@@ -7,7 +8,7 @@
+ 
+ #include <QDBusConnection>
+ 
+-class Battery : public QObject
++class POWER_EXPORT Battery : public QObject
+ {
+     Q_OBJECT
+ public:
+@@ -122,7 +123,7 @@ private:
+     qulonglong m_timeToFull;
+ };
+ 
+-class BatteryModel : public QAbstractListModel
++class POWER_EXPORT BatteryModel : public QAbstractListModel
+ {
+     Q_OBJECT
+     Q_PROPERTY(int count READ count NOTIFY countChanged)
+@@ -149,7 +150,7 @@ private:
+     QVector<Battery*>m_batteries;
+ };
+ 
+-class BatteryInfo : public QObject
++class POWER_EXPORT BatteryInfo : public QObject
+ {
+     Q_OBJECT
+     Q_PROPERTY(BatteryModel* batteries READ batteries NOTIFY batteriesChanged FINAL)
+@@ -192,4 +193,3 @@ Q_SIGNALS:
+     void primaryBatteryChanged();
+     void acPluggedInChanged(bool acPluggedIn);
+ };
+-
+diff --git a/libs/power/src/code/brightnesscontrol.h b/libs/power/src/code/brightnesscontrol.h
+index 0a87fc1..8529c55 100644
+--- a/libs/power/src/code/brightnesscontrol.h
++++ b/libs/power/src/code/brightnesscontrol.h
+@@ -1,7 +1,8 @@
+ #pragma once
++#include "power_export.h"
+ #include <QObject>
+ 
+-class BrightnessControl : public QObject
++class POWER_EXPORT BrightnessControl : public QObject
+ {
+     Q_OBJECT
+     Q_PROPERTY(int screenBrightness READ screenBrightness NOTIFY screenBrightnessChanged FINAL)
+@@ -69,4 +70,3 @@ private:
+     bool m_lidPresent = false;
+     bool m_triggersLidAction = false;
+ };
+-
+diff --git a/libs/power/src/code/powerprofile.h b/libs/power/src/code/powerprofile.h
+index a8f5a77..de0cdd0 100644
+--- a/libs/power/src/code/powerprofile.h
++++ b/libs/power/src/code/powerprofile.h
+@@ -1,10 +1,11 @@
+ #pragma once
++#include "power_export.h"
+ 
+ #include <QObject>
+ #include <QList>
+ #include <QVariantMap>
+ 
+-class PowerProfile : public QObject
++class POWER_EXPORT PowerProfile : public QObject
+ {
+     Q_OBJECT
+     Q_PROPERTY(QString currentProfile READ currentProfile NOTIFY currentProfileChanged)
+@@ -63,4 +64,3 @@ Q_SIGNALS:
+     void performanceDegradedReasonChanged(QString performanceDegradedReason);
+     void profileHoldsChanged(QList<QVariantMap> profileHolds);
+ };
+-

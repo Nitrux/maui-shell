@@ -26,7 +26,6 @@ PolKitAgentListener::PolKitAgentListener(QObject *parent)
     : PolkitQt1::Agent::Listener(parent)
     , m_dialog(nullptr)
 {
-    qDebug() << "POLKIT STARTED";
 
 }
 
@@ -38,21 +37,27 @@ void PolKitAgentListener::initiateAuthentication(const QString &actionId,
                                                  const PolkitQt1::Identity::List &identities,
                                                  PolkitQt1::Agent::AsyncResult *result)
 {
-   qDebug() << "POLKIT CALLED" << actionId << message;
     Q_UNUSED(iconName);
     Q_UNUSED(details);
+
+    if (identities.isEmpty()) {
+        qWarning() << "Polkit authentication requested without any identity";
+        if (result)
+            result->setCompleted();
+        return;
+    }
 
     if (m_dialog) {
         m_dialog->deleteLater();
         m_dialog = nullptr;
     }
+    m_pendingSession = nullptr;
 
     m_dialog = new Dialog(actionId, message, cookie, identities.first().toString(), result);
+    connect(m_dialog, &Dialog::finished, this, &PolKitAgentListener::dialogFinished);
 
     for (const PolkitQt1::Identity &i : identities) {
-        PolkitQt1::Agent::Session *session;
-        session = new PolkitQt1::Agent::Session(i, cookie, result);
-        Q_ASSERT(session);
+        auto *session = new PolkitQt1::Agent::Session(i, cookie, result);
         m_sessionIdentity[session] = i;
         connect(session, &PolkitQt1::Agent::Session::request, this, &PolKitAgentListener::request);
         connect(session, &PolkitQt1::Agent::Session::completed, this, &PolKitAgentListener::completed);
@@ -64,38 +69,67 @@ void PolKitAgentListener::request(const QString &request, bool echo)
 {
     Q_UNUSED(request);
     Q_UNUSED(echo);
-    qDebug() << "POLKIT CALLED" << 1;
 
-    PolkitQt1::Agent::Session *session = qobject_cast<PolkitQt1::Agent::Session *>(sender());
-    Q_ASSERT(session);
-    Q_ASSERT(m_dialog);
+    auto *session = qobject_cast<PolkitQt1::Agent::Session *>(sender());
+    if (!session)
+        return;
 
-    PolkitQt1::Identity identity = m_sessionIdentity[session];
+    if (!m_dialog) {
+        session->cancel();
+        return;
+    }
 
-    connect(m_dialog, &Dialog::finished, this, [this, session] {
-        if (m_dialog->identity() == m_sessionIdentity[session].toString()
-                && !m_dialog->password().isEmpty()) {
-            session->setResponse(m_dialog->password());
-        } else {
-            session->cancel();
-        }
-    });
+    const auto identity = m_sessionIdentity.value(session);
+    if (identity.toString() != m_dialog->identity()) {
+        session->cancel();
+        return;
+    }
 
+    m_pendingSession = session;
     Q_EMIT this->authenticationRequest(m_dialog);
+}
+
+void PolKitAgentListener::dialogFinished()
+{
+    auto *session = m_pendingSession.data();
+    m_pendingSession = nullptr;
+
+    QPointer<Dialog> dialog = m_dialog;
+    m_dialog = nullptr;
+
+    if (!dialog)
+        return;
+
+    if (session) {
+        const bool accepted = dialog->identity() == m_sessionIdentity.value(session).toString()
+                && !dialog->password().isEmpty();
+
+        if (accepted)
+            session->setResponse(dialog->password());
+        else
+            session->cancel();
+    }
+
+    dialog->deleteLater();
 }
 
 void PolKitAgentListener::completed(bool gainedAuthorization)
 {
     Q_UNUSED(gainedAuthorization);
-    qDebug() << "POLKIT CALLED" << 2;
 
-    PolkitQt1::Agent::Session *session = qobject_cast<PolkitQt1::Agent::Session *>(sender());
-    Q_ASSERT(session);
-    Q_ASSERT(m_dialog);
+    auto *session = qobject_cast<PolkitQt1::Agent::Session *>(sender());
+    if (!session)
+        return;
 
-    if (m_dialog->identity() == m_sessionIdentity[session].toString()) {
+    const auto identity = m_sessionIdentity.take(session);
+
+    if (session->result())
         session->result()->setCompleted();
 
+    if (m_pendingSession == session)
+        m_pendingSession = nullptr;
+
+    if (m_dialog && m_dialog->identity() == identity.toString()) {
         m_dialog->deleteLater();
         m_dialog = nullptr;
     }

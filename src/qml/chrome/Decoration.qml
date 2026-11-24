@@ -11,12 +11,15 @@ Rectangle
 {
     id: control
 
-    visible: rootChrome.decorationVisible || _dropShadowHelper.radius > -1
+    property var chrome
+    property var window
+
+    visible: (chrome ? chrome.decorationVisible : false) || _dropShadowHelper.radius > -1
 
     Maui.Theme.inherit: false
     Maui.Theme.colorSet: Maui.Theme.Header
 
-    radius: window.maximized ? 0 : (rootChrome.decorationVisible ? Maui.Style.radiusV :  _dropShadowHelper.radius)
+    radius: window && window.maximized ? 0 : ((chrome ? chrome.decorationVisible : false) ? Maui.Style.radiusV :  _dropShadowHelper.radius)
 
     color: Maui.Theme.backgroundColor
 
@@ -34,7 +37,7 @@ Rectangle
     Cask.DropShadowHelper
     {
         id: _dropShadowHelper
-        appId: rootChrome.appId
+        appId: chrome ? chrome.appId : ""
     }
 
     MouseArea
@@ -111,7 +114,7 @@ Rectangle
                 {
                     if (horzDragHandler.active)
                     {
-                        var size = toplevel.sizeForResize(horzDragHandler.initialSize,
+                        var size = chrome.toplevel.sizeForResize(horzDragHandler.initialSize,
                                                           Qt.point(horzDragHandler.translation.x,
                                                                    horzDragHandler.translation.y),
                                                           Qt.RightEdge);
@@ -123,7 +126,7 @@ Rectangle
                 {
                     id: horzDragHandler
                     property size initialSize
-                    onActiveChanged: if (active) initialSize = Qt.size(rootChrome.width, rootChrome.height)
+                    onActiveChanged: if (active) initialSize = Qt.size(chrome.width, chrome.height)
                     yAxis.enabled: false
                 }
 
@@ -148,7 +151,7 @@ Rectangle
                 {
                     if (vertDragHandler.active)
                     {
-                        var size = toplevel.sizeForResize(vertDragHandler.initialSize,
+                        var size = chrome.toplevel.sizeForResize(vertDragHandler.initialSize,
                                                           Qt.point(vertDragHandler.translation.x, vertDragHandler.translation.y),
                                                           Qt.BottomEdge);
                        control.requestResize(size)
@@ -189,7 +192,7 @@ Rectangle
                 function resize()
                 {
                     if (bottomRightDragHandler.active) {
-                        var size = toplevel.sizeForResize(bottomRightDragHandler.initialSize,
+                        var size = chrome.toplevel.sizeForResize(bottomRightDragHandler.initialSize,
                                                           Qt.point(bottomRightDragHandler.translation.x, bottomRightDragHandler.translation.y),
                                                           Qt.BottomEdge | Qt.RightEdge);
                         control.requestResize(size)

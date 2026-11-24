@@ -18,17 +18,17 @@ Control
     id: control
 
     property rect availableGeometry
-    readonly property bool floating : win.formFactor === Cask.MauiMan.Desktop
+    readonly property bool floating : CaskShell.formFactor === Cask.MauiMan.Desktop
     readonly property bool cardsOverlapping : (_notificationsSection.popup.width + _statusSection.popup.width) > availableGeometry.width
 
     property bool hidden : contentItem.y === 0- control.height
     property bool autohide: false
-    property bool labelsVisible: win.formFactor === Cask.MauiMan.Desktop
+    property bool labelsVisible: CaskShell.formFactor === Cask.MauiMan.Desktop
 
     Layout.fillWidth: true
     //    Layout.margins: floating ? Maui.Style.space.tiny : 0
 
-    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+    implicitHeight: (contentItem ? contentItem.implicitHeight : 0) + topPadding + bottomPadding
 
     spacing: padding
     padding: !floating ? 0 : Maui.Style.space.medium
@@ -130,7 +130,6 @@ Control
         //        triggeredOnStart: true
         onTriggered:
         {
-            console.log("_timer triggered")
             if(control.autohide && !control.hidden && !_handler.active && !(_notificationsSection.popup.opened || _statusSection.popup.opened) && !_statusSection.hovered)
             {
                 control.hide()
@@ -222,13 +221,14 @@ Control
             AudioPlayerItem
             {
                 id: _mediaController
-                visible: /*_revealer.checked || */isPlaying
+                labelsVisible: control.labelsVisible
+                visible: _mediaController.isPlaying
             }
 
             SessionItem
             {
                 id: _sessionItem
-                visible: !isMobile
+                visible: !CaskShell.isMobile
             }
         }
     }
@@ -247,4 +247,3 @@ Control
         control.contentItem.y = 0- control.height
     }
 }
-

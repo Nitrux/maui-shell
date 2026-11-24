@@ -38,6 +38,8 @@ include_directories(
 set(cask_SRCS
     main.cpp
     caskapp.cpp
+    code/controllers/shellstate.cpp
+    code/controllers/shellstate.h
     code/models/zpacesmodel.cpp
     code/models/surfacesmodel.cpp
     code/controllers/zpaces.cpp

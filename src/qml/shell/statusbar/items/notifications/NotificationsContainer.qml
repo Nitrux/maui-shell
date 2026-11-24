@@ -21,7 +21,7 @@ Pane
 
         Repeater
         {
-            model: _notifications.notificationsModel
+            model: CaskShell.notifications ? CaskShell.notifications.notificationsModel : null
             delegate: NotificationItem
             {
                 width: parent.width
@@ -33,8 +33,10 @@ Pane
                 timeout: model.timeout
                 urgency: model.urgency
                 actions: model.actions
-                onDismissed: _notifications.notificationsModel.close(model.notificationId)
-                onExpired: _notifications.notificationsModel.expired(model.notificationId)
+                notificationId: model.notificationId
+                hasDefaultAction: model.hasDefaultAction
+                onDismissed: CaskShell.notifications.notificationsModel.close(model.notificationId)
+                onExpired: CaskShell.notifications.notificationsModel.expired(model.notificationId)
             }
         }
     }

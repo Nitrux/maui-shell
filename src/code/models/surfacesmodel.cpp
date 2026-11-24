@@ -25,28 +25,36 @@ SurfacesModel::SurfacesModel(QObject *parent) : QAbstractListModel(parent)
 
 SurfacesModel::~SurfacesModel()
 {
-    // make sure to delete all the surfaces
-    qDebug() << "DELETING SURFACES MODEL" << m_windows.size();
 
-    qDeleteAll(m_windows);
+    // This model never owns the windows. Connections are context-bound to this
+    // object, so they are disconnected automatically; clear the bookkeeping.
+    m_windowConnections.clear();
 }
 
 void SurfacesModel::addWindow(AbstractWindow *window)
 {
+    if(!window || windowExists(window))
+        return;
+
     const auto index = m_windows.size();
 
-    connect(window, &AbstractWindow::destroyed, this, [this, window]()
+    QVector<QMetaObject::Connection> connections;
+    connections.append(connect(window, &AbstractWindow::destroyed, this, [this, window]()
     {
-        this->removeWindow(indexOf(window));
-    });
+        const auto windowIndex = indexOf(window);
+        if(windowIndex >= 0)
+            this->removeWindow(windowIndex);
+    }));
 
-    connect(window, &AbstractWindow::activatedChanged, this, [this, window](bool value)
+    connections.append(connect(window, &AbstractWindow::activatedChanged, this, [this, window](bool value)
     {
         if(value)
         {
             this->setActiveWindow(window);
         }
-    });
+    }));
+
+    m_windowConnections.insert(window, connections);
 
     this->beginInsertRows(QModelIndex(), index, index);
     m_windows.append(window);
@@ -54,25 +62,34 @@ void SurfacesModel::addWindow(AbstractWindow *window)
     Q_EMIT this->countChanged();
 }
 
+void SurfacesModel::disconnectWindow(AbstractWindow *window)
+{
+    const auto connections = m_windowConnections.take(window);
+    for(const auto &connection : connections)
+    {
+        QObject::disconnect(connection);
+    }
+}
+
 AbstractWindow* SurfacesModel::popWindow(AbstractWindow *window)
 {
-    if(windowExists(window))
-    {
-        auto index = indexOf(window);
-        this->beginRemoveRows(QModelIndex(), index, index);
-        auto window =  m_windows.takeAt(index);
-        this->endRemoveRows();
-        Q_EMIT this->countChanged();
-        window->disconnect();
+    const auto index = indexOf(window);
+    if(index < 0)
+        return nullptr;
 
-        if(window == m_activeWindow)
-        {
-            setActiveWindow(nullptr);
-        }
-        return window;
+    this->beginRemoveRows(QModelIndex(), index, index);
+    AbstractWindow *removed = m_windows.takeAt(index);
+    this->endRemoveRows();
+
+    disconnectWindow(removed);
+
+    if(removed == m_activeWindow)
+    {
+        setActiveWindow(nullptr);
     }
 
-    return nullptr;
+    Q_EMIT this->countChanged();
+    return removed;
 }
 
 void SurfacesModel::removeWindow(const int &index)
@@ -80,31 +97,18 @@ void SurfacesModel::removeWindow(const int &index)
     if(!indexIsValid(index))
         return;
 
-qDebug() << "REMOVING WINDOW FORM MODEL";
-
-//if(count() > 1)
-//{
-//    if(auto control = m_zpace->control())
-//    {
-//       auto chrome = control->childItems().at(control->childItems().count()-2);
-//       if(chrome)
-//       auto window = chrome->property("window").value<XdgWindow*>();
-//       window->activate();
-//    }
-
-
-//}else
-//{
-//    setActiveWindow(nullptr);
-//}
     this->beginRemoveRows(QModelIndex(), index, index);
-    auto window = this->m_windows.takeAt(index); //it is autodeleted ?
+    AbstractWindow *window = m_windows.takeAt(index);
     this->endRemoveRows();
-    Q_EMIT this->countChanged();
-//    window->disconnect();
-    window->deleteLater();
-    qDebug() << "REMOVING WINDOW FORM MODEL" << this->count();
 
+    disconnectWindow(window);
+
+    if(window == m_activeWindow)
+    {
+        setActiveWindow(nullptr);
+    }
+
+    Q_EMIT this->countChanged();
 }
 
 SurfacesModel::Windows SurfacesModel::windows() const
@@ -224,15 +228,18 @@ int SurfacesModel::rowCount(const QModelIndex &parent) const
 
 QVariant SurfacesModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || index.row() < 0 || index.row() >= m_windows.count())
         return QVariant();
 
-    qDebug() << "REQUESTING FORF A WINDOW <<" << role;
+    const auto window = m_windows.at(index.row());
+    if (!window)
+        return QVariant();
+
     switch(role)
     {
-    case Roles::ShellSurface: return QVariant::fromValue(m_windows[index.row()]->shellSurface());
+    case Roles::ShellSurface: return QVariant::fromValue(window->shellSurface());
 
-    case Roles::Window: return QVariant::fromValue(m_windows[index.row()]);
+    case Roles::Window: return QVariant::fromValue(window);
 
     default: return QVariant();
     }

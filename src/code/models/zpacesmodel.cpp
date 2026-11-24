@@ -11,7 +11,6 @@ ZpacesModel::ZpacesModel(Zpaces *parent) : QAbstractListModel(parent)
 
 ZpacesModel::~ZpacesModel()
 {
-    qDebug() << "DELETIGN ZPACESMODEL" << m_zpacesList.count();
 
     qDeleteAll(m_zpacesList);
 //    for(auto zpace : m_zpacesList)
@@ -59,7 +58,6 @@ Zpace *ZpacesModel::zpace(const int &index)
 
 Zpace *ZpacesModel::addZpace()
 {
-    qDebug() << "trying to add a new zpace";
 
     auto newZpace = createZpace();// this is not the parent but a reference to the model
 
@@ -72,20 +70,14 @@ Zpace *ZpacesModel::addZpace()
     Q_EMIT this->countChanged();
     Q_EMIT this->zpaceAdded(index);
 
-    qDebug() << "trying to add a new zpace" << rowCount(QModelIndex());
 
     return newZpace;
 }
 
 Zpace *ZpacesModel::insertZpace(const int &index)
 {
-    if(!indexIsValid(index))
+    if(index < 0 || index > m_zpacesList.count())
         return nullptr;
-
-//    if(index > m_zpacesList.count() || index < 0) //we want to be able to insert at count+1
-//    {
-//        return nullptr;
-//    }
 
     auto newZpace = createZpace();
     this->beginInsertRows(QModelIndex(), index, index);
@@ -101,12 +93,39 @@ void ZpacesModel::removeZpace(const int &index)
 {
     if(!indexIsValid(index))
         return;
-    qDebug() << "REMOVING THE ZPACE";
+
+    Zpace *zpace = m_zpacesList.at(index);
 
     this->beginRemoveRows(QModelIndex(), index, index);
     m_zpacesList.remove(index);
     this->endRemoveRows();
     Q_EMIT this->countChanged();
+
+    if(!zpace)
+        return;
+
+    // Move the windows to a neighbouring zpace; close them when there is none.
+    Zpace *target = nullptr;
+    if(!m_zpacesList.isEmpty())
+        target = m_zpacesList.at(qMin(index, m_zpacesList.size() - 1));
+
+    const auto windows = zpace->windows()->windows();
+    for(auto *window : windows)
+    {
+        if(!window)
+            continue;
+
+        if(target && target->acceptsWindow(window))
+        {
+            zpace->popWindow(window);
+            target->addWindow(window);
+        }else
+        {
+            window->close();
+        }
+    }
+
+    zpace->deleteLater();
 }
 
 void ZpacesModel::moveZpace(const int &from, const int &to)
