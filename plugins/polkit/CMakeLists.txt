@@ -7,6 +7,10 @@ cmake_minimum_required(VERSION 3.16)
 
 project(CaskPolkit LANGUAGES CXX VERSION 0.5.0)
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix" FORCE)
+endif()
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(AUTOMOC_MOC_OPTIONS -Muri=org.cask.polkit)
 

@@ -12,6 +12,10 @@ set(AUTOMOC_MOC_OPTIONS -Muri=org.maui.cask)
 
 project(CaskCorePlugin LANGUAGES CXX VERSION 1.0.0)
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix" FORCE)
+endif()
+
 include(ECMFindQmlModule)
 include(ECMQmlModule)
 include(ECMGenerateQmlTypes)

@@ -1,5 +1,9 @@
 project(cask VERSION ${CASK_VERSION})
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix" FORCE)
+endif()
+
 set(PROJECT_URI org.cask.shell)
 
 include(GenerateExportHeader)

@@ -6,6 +6,10 @@ cmake_minimum_required(VERSION 3.16)
 
 project(CaskCoreLib LANGUAGES CXX VERSION ${CASK_VERSION})
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix" FORCE)
+endif()
+
 #DEFAULT COMPONENTS DEFINITIONS
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)

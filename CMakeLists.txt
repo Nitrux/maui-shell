@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.16)
 set(CASK_VERSION 0.6.6)
 project(MauiShell VERSION ${CASK_VERSION})
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix" FORCE)
+endif()
+
 set(QT_MAJOR_VERSION 6)
 
 set(REQUIRED_QT_VERSION 6.4)
